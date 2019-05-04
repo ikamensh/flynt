@@ -15,10 +15,8 @@ def test_many_vars():
 
     assert flint_str(txt_in) == expected_out
 
-
-def test_many_lines_one_fmt():
-
-    txt_in = 'a = "my string {}".format(var)'
+def test_var_name():
+    txt_in = 'a = "my string {var_name}".format(var_name = var)'
     expected_out = "a = f'my string {var}'\n"
 
     assert flint_str(txt_in) == expected_out

@@ -1,6 +1,6 @@
 import ast
 from collections import deque
-
+import re
 def wrap_value( val ):
     return ast.FormattedValue(value=val,
                        conversion=-1,
@@ -19,19 +19,32 @@ def matching_call(node):
             and node.func.attr == "format")
 
 
+def prep_var_map(keywords: list):
+    var_map = {}
+    for keyword in keywords:
+        var_map[keyword.arg] = keyword.value
+
+    return var_map
+
+
 def f_stringify(fmt_call: ast.Call):
     string = fmt_call.func.value.s
     values = deque(fmt_call.args)
+    var_map = prep_var_map(fmt_call.keywords)
+    pat = re.compile(r'{([a-zA-Z0-9_]*)}')
 
-    splits = deque( string.split('{}') )
+    splits = deque( pat.split(string) )
 
     new_segments = [wrap_string(splits.popleft())]
 
-    while values:
-        new_segments.append( wrap_value(values.popleft()) )
-        try:
-            new_segments.append( wrap_string(splits.popleft()) )
-        except:
-            pass
+    while len(splits) > 0:
+        var_name = splits.popleft()
+
+        if len(var_name) == 0:
+            new_segments.append( wrap_value(values.popleft()) )
+        else:
+            new_segments.append( wrap_value(var_map[var_name]) )
+
+        new_segments.append(wrap_string(splits.popleft()))
 
     return ast.JoinedStr(new_segments)
