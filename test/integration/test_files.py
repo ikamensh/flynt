@@ -9,3 +9,6 @@ from util import flint_test
 
 def test_two_liner():
     flint_test("two_liner.py")
+
+def test_no_fstring():
+    flint_test("no_fstring_1.py")

@@ -1,7 +1,11 @@
 import ast
 
-with open("ast_example.py", "r") as source, open("ast_example3.py", "w") as source2:
+from fstringify.utils import pp_ast, pp_code_ast
+
+with open("ast_example.py", "r") as source:
     tree = ast.parse(source.read())
+
+pp_ast(tree)
 
 #small comment
 import astor

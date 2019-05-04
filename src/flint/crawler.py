@@ -17,7 +17,8 @@ def recursive_visit(obj, depth):
                 if matching_call(attr):
                     attr = f_stringify(attr)
                     setattr(obj, name, attr)
-                if isinstance(attr, str): return
+                if isinstance(attr, str):
+                    return
                 recursive_visit(attr, depth + 1)
 
 
