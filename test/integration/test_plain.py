@@ -14,3 +14,9 @@ def test_many_vars():
     expected_out = "a = f'my string {var}, but also {a} and {cada_bra}'\n"
 
     assert flint_str(txt_in) == expected_out
+
+def test_var_name():
+    txt_in = 'a = "my string {var_name}".format(var_name = var)'
+    expected_out = "a = f'my string {var}'\n"
+
+    assert flint_str(txt_in) == expected_out
