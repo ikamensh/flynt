@@ -20,9 +20,9 @@ def foo():
 # line: 13
 var = 12345
 # line: 14
-"""my string {}""".format(var)
+a = 'my string {}'.format(var)
 # line: 15
-f"""my string {var}"""
+b = f'my string {var}'
 # line: 17
 with open('decoded.py', 'w') as target:
     # line: 18

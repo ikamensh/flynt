@@ -11,8 +11,8 @@ def foo():
     pass
 
 var = 12345
-"my string {}".format(var)
-f"my string {var}"
+a = "my string {}".format(var)
+b = f"my string {var}"
 
 with open("decoded.py", 'w') as target:
     txt = astor.to_source(tree, add_line_information=True)
