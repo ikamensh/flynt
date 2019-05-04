@@ -1,2 +1,2 @@
-astor==0.7.1
-pytest==4.4.1
+astor
+pytest
