@@ -3,8 +3,8 @@ import ast
 import re
 import sys
 
-import config
-config.add_src_to_path()
+# import config
+# config.add_src_to_path()
 
 assert sys.version_info >= (3, 6, 0), "flint requires Python 3.6+"
 from pathlib import Path

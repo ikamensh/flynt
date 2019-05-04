@@ -1,25 +1,42 @@
-from flint.mutator import matching_call, f_stringify
+from flint.transform import matching_call, f_stringify
 
-def recursive_visit(obj, depth):
+def is_an_ast_node(x):
+    return '_ast' in str(x)
+
+
+def recursive_visit(node, depth: int):
     """
     traverse ast recursively, replacing
     string format calls with f-string literals.
+
+    Keep track of the node depth, for print and debug purposes mainly.
     """
+
+    count_transforms = 0
+
+    # ignore strings
+    if isinstance(node, str):
+        return count_transforms
+
     try:
-        for e in obj:
-            recursive_visit(e, depth)
-        return
+        # handle list / collection nodes
+        for e in node:
+            count_transforms += recursive_visit(e, depth)
     except TypeError:
-        if '_ast' in str(obj):
-            attr_names = obj._fields
+        # current node is not a collection
+        if is_an_ast_node(node):
+            attr_names = node._fields
             for name in attr_names:
-                attr = getattr(obj, name)
+                attr = getattr(node, name)
                 if matching_call(attr):
                     attr = f_stringify(attr)
-                    setattr(obj, name, attr)
-                if isinstance(attr, str):
-                    return
-                recursive_visit(attr, depth + 1)
+                    setattr(node, name, attr)
+                    count_transforms += 1
+                    continue
+
+                count_transforms += recursive_visit(attr, depth + 1)
+
+    return count_transforms
 
 
 

@@ -1,17 +1,17 @@
 import ast
 from collections import deque
 import re
-def wrap_value( val ):
+def ast_formatted_value(val) -> ast.FormattedValue:
     return ast.FormattedValue(value=val,
                        conversion=-1,
                        format_spec=None)
 
-def wrap_string( string ):
+def ast_string_node(string: str) -> ast.Str:
     return ast.Str(s=string)
 
-def matching_call(node):
+def matching_call(node) -> bool:
     """
-    Check is node is a Call node representing string format.
+    Check if a an ast Node represents a "...".format() call.
     """
     return (isinstance(node, ast.Call)
             and hasattr(node.func, 'value')
@@ -27,7 +27,10 @@ def prep_var_map(keywords: list):
     return var_map
 
 
-def f_stringify(fmt_call: ast.Call):
+def f_stringify(fmt_call: ast.Call) -> ast.JoinedStr:
+    """
+    Transform a "...".format() call node into a f-string node.
+    """
     string = fmt_call.func.value.s
     values = deque(fmt_call.args)
     var_map = prep_var_map(fmt_call.keywords)
@@ -35,16 +38,16 @@ def f_stringify(fmt_call: ast.Call):
 
     splits = deque( pat.split(string) )
 
-    new_segments = [wrap_string(splits.popleft())]
+    new_segments = [ast_string_node(splits.popleft())]
 
     while len(splits) > 0:
         var_name = splits.popleft()
 
         if len(var_name) == 0:
-            new_segments.append( wrap_value(values.popleft()) )
+            new_segments.append(ast_formatted_value(values.popleft()))
         else:
-            new_segments.append( wrap_value(var_map[var_name]) )
+            new_segments.append(ast_formatted_value(var_map[var_name]))
 
-        new_segments.append(wrap_string(splits.popleft()))
+        new_segments.append(ast_string_node(splits.popleft()))
 
     return ast.JoinedStr(new_segments)
