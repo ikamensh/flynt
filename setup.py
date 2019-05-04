@@ -3,6 +3,9 @@ import ast
 import re
 import sys
 
+import config
+config.add_src_to_path()
+
 assert sys.version_info >= (3, 6, 0), "flint requires Python 3.6+"
 from pathlib import Path
 from setuptools import setup
@@ -19,14 +22,14 @@ def get_long_description():
 
 
 # forked from black's setup.py
-def get_version():
-    """Use a regex to pull out the version"""
-    flint_py = BASE_DIR / "src/flint/__init__.py"
-    _version_re = re.compile(r"__version__\s+=\s+(?P<version>.*)")
-    with open(flint_py, "r", encoding="utf8") as f:
-        match = _version_re.search(f.read())
-        version = match.group("version") if match is not None else '"unknown"'
-    return str(ast.literal_eval(version))
+# def get_version():
+#     """Use a regex to pull out the version"""
+#     flint_py = BASE_DIR / "src/flint/__init__.py"
+#     _version_re = re.compile(r"__version__\s+=\s+(?P<version>.*)")
+#     with open(flint_py, "r", encoding="utf8") as f:
+#         match = _version_re.search(f.read())
+#         version = match.group("version") if match is not None else '"unknown"'
+#     return str(ast.literal_eval(version))
 
 
 def get_requirements():
@@ -34,17 +37,14 @@ def get_requirements():
         return fp.read()
 
 
-VERSION = get_version()
+VERSION = '0.01'
 
 setup(
     name="flint",
-    packages=["flint"],
+    packages=["src/flint"],
     version=VERSION,
     description="CLI tool to convert a python project's %-formatted strings to f-strings.",
-    author="Jack Angers",
-    author_email="jacktasia@gmail.com",
-    url="https://github.com/jacktasia/flint",
-    download_url="https://github.com/jacktasia/flint/tarball/" + VERSION,
+    author="Hackathon Team",
     keywords=["utility", "strings"],
     classifiers=[
         "Programming Language :: Python",
@@ -58,4 +58,5 @@ setup(
     long_description=get_long_description(),
     install_requires=get_requirements(),
     entry_points={"console_scripts": ["flint=src.flint:main"]},
+
 )
