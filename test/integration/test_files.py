@@ -51,6 +51,7 @@ from fstringify.process import fstringify_code_by_line
                         "no_fstring_1.py",
                         "no_fstring_2.py",
                         "simple.py",
+                        "simple_indent.py",
                         "simple_start.py",
                         "simple_comment.py",
                         "simple_format.py",
