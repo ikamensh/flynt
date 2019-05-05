@@ -8,6 +8,10 @@ from fstringify.process import skip_file, fstringify_code_by_line
 
 
 def fstringify_file(fn):
+    """
+    :param fn:
+    :return: if the file was edited
+    """
     if skip_file(fn):
         return False
 

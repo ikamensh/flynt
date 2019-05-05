@@ -30,6 +30,8 @@ def prep_var_map(keywords: list):
 def f_stringify(fmt_call: ast.Call) -> ast.JoinedStr:
     """
     Transform a "...".format() call node into a f-string node.
+    "Hello {name} lflf {}".format(name="Holger")
+    "Hello ", {}, " lflf ", {}
     """
     string = fmt_call.func.value.s
     values = deque(fmt_call.args)
