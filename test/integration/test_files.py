@@ -47,8 +47,8 @@ def _fs_tst(proc_name: str, processor: Callable, filename: str):
 from flint.api import flint_str
 from fstringify.process import fstringify_code_by_line
 
-@pytest.fixture(params=["two_liner.py",
-                        "no_fstring_1.py",
+test_files = list(sorted(os.listdir(in_dir)))
+@pytest.fixture(params=["no_fstring_1.py",
                         "no_fstring_2.py",
                         "simple.py",
                         "simple_indent.py",
