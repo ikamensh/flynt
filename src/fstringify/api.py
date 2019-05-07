@@ -4,18 +4,19 @@ import time
 
 import astor
 
-from fstringify.process import skip_file, fstringify_code_by_line
+from fstringify.process import fstringify_code_by_line
+from fstringify.utils import skip_file
 
 
-def fstringify_file(fn):
+def fstringify_file(filename):
     """
-    :param fn:
+    :param filename:
     :return: if the file was edited
     """
-    if skip_file(fn):
+    if skip_file(filename):
         return False
 
-    with open(fn) as f:
+    with open(filename) as f:
         contents = f.read()
 
     new_code = fstringify_code_by_line(contents)
@@ -23,7 +24,7 @@ def fstringify_file(fn):
     if new_code == contents:
         return False
 
-    with open(fn, "w") as f:
+    with open(filename, "w") as f:
         f.write(new_code)
 
     return True
