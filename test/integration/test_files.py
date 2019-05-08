@@ -60,14 +60,11 @@ test_files = list(sorted(os.listdir(in_dir)))
                         "multiple.py",
                         "some_named.py",
                         "all_named.py",
-                        "first_string.py"])
+                        "first_string.py",
+                        "def_empty_line.py"])
+# @pytest.fixture(params=["simple_percent.py"])
 def filename(request):
     yield request.param
-
-@pytest.mark.skip(reason="no hope in flint.")
-def test_flint(filename):
-    out, expected = _fs_tst("flint", flint_str, filename)
-    assert out == expected
 
 def test_fstringify(filename):
     out, expected = _fs_tst("fstringify", fstringify_code_by_line, filename)
