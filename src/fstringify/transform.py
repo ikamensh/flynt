@@ -3,8 +3,9 @@ import ast
 from fstringify.node_transformer import fstringify_node
 from fstringify.format import force_double_quote_fstring
 import copy
+from typing import Dict, Tuple
 
-def fstringify_code(code):
+def fstringify_code(code) -> Tuple[str, Dict]:
     """Convert a block of with a %-formatted string to an f-string
 
     Args:

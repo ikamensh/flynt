@@ -1,10 +1,11 @@
 import ast
 from collections import deque
 import re
-def ast_formatted_value(val) -> ast.FormattedValue:
+def ast_formatted_value(val, fmt_str: str) -> ast.FormattedValue:
+    format_spec = None if len(fmt_str) == 0 else ast.JoinedStr([ast_string_node(fmt_str)])
     return ast.FormattedValue(value=val,
                        conversion=-1,
-                       format_spec=None)
+                       format_spec=format_spec)
 
 def ast_string_node(string: str) -> ast.Str:
     return ast.Str(s=string)
@@ -36,7 +37,7 @@ def f_stringify(fmt_call: ast.Call) -> ast.JoinedStr:
     string = fmt_call.func.value.s
     values = deque(fmt_call.args)
     var_map = prep_var_map(fmt_call.keywords)
-    pat = re.compile(r'{([a-zA-Z0-9_]*)}')
+    pat = re.compile(r'{([a-zA-Z0-9_]*):*([.0-9a-z]*)}')
 
     splits = deque( pat.split(string) )
 
@@ -44,12 +45,14 @@ def f_stringify(fmt_call: ast.Call) -> ast.JoinedStr:
 
     while len(splits) > 0:
         var_name = splits.popleft()
+        fmt_str = splits.popleft()
 
         if len(var_name) == 0:
-            new_segments.append(ast_formatted_value(values.popleft()))
+            new_segments.append(ast_formatted_value(values.popleft(), fmt_str))
         else:
-            new_segments.append(ast_formatted_value(var_map[var_name]))
+            new_segments.append(ast_formatted_value(var_map[var_name], fmt_str))
 
         new_segments.append(ast_string_node(splits.popleft()))
+
 
     return ast.JoinedStr(new_segments)

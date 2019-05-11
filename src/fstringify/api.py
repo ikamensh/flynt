@@ -44,7 +44,6 @@ def fstringify_files(files, verbose=False, quiet=False):
         if changed:
             change_count += 1
         status = "yes" if changed else "no"
-        # TODO: only if `verbose` is set
 
         if verbose and not quiet:
             print(f"fstringifying {file_path}...{status}")

@@ -59,7 +59,9 @@ test_files = list(sorted(os.listdir(in_dir)))
                         "some_named.py",
                         "all_named.py",
                         "first_string.py",
-                        "def_empty_line.py"])
+                        "named_inverse.py",
+                        "def_empty_line.py",
+                        "CantAffordActiveException.py"])
 # @pytest.fixture(params=["first_string.py"])
 def filename(request):
     yield request.param
