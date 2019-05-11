@@ -33,15 +33,15 @@ class Chunk:
         self.complete = False
 
     def append(self, t: PyToken):
-        if t.toknum in (token.NEWLINE, token.DEDENT, token.COMMENT):
+        if t.toknum in (token.NEWLINE, token.NL, token.COMMENT):
             self.complete = True
 
-        if t.toknum is not token.COMMENT:
+        if t.toknum not in (token.COMMENT, token.ENCODING):
             self.tokens.append(t)
 
     @property
     def line(self):
-        return self.tokens[0].start[0]
+        return self.tokens[0].start[0] - 1
 
     @property
     def end_idx(self):
@@ -49,6 +49,12 @@ class Chunk:
 
     def __iter__(self):
         return iter(self.tokens)
+
+    def __repr__(self):
+        if self.tokens:
+            return "Chunk: "+self.tokens[0].line[:self.end_idx]
+        else:
+            return "Empty Chunk"
 
 
 

@@ -2,6 +2,7 @@ import astor
 import ast
 from fstringify.node_transformer import fstringify_node
 from fstringify.format import force_double_quote_fstring
+import copy
 
 def fstringify_code(code):
     """Convert a block of with a %-formatted string to an f-string
@@ -25,10 +26,10 @@ def fstringify_code(code):
         return code, meta
 
     try:
-        tree = ast.parse(code)
+        tree = ast.parse(code_strip)
         # if debug:
         #     pp_ast(tree)
-        converted, meta = fstringify_node(tree)
+        converted, meta = fstringify_node(copy.deepcopy(tree))
     except SyntaxError as e:
         meta["skip"] = code.rstrip().endswith(
             ":"

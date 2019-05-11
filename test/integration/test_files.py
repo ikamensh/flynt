@@ -1,6 +1,5 @@
 """ Test str processors on actual file contents """
 import os
-from typing import Callable, Tuple
 import pytest
 import config
 
@@ -27,21 +26,19 @@ def read_expected(name):
 
     return txt
 
-def write_output_file(dirname, name, txt):
-    proc_dir = os.path.join(out_dir, dirname)
-    os.makedirs(proc_dir, exist_ok=True)
-    filepath = os.path.join(proc_dir, name)
+def write_output_file(name, txt):
+    filepath = os.path.join(out_dir, name)
     with open(filepath, 'w') as f:
         f.write(txt)
 
-def _fs_tst(proc_name: str, processor: Callable, filename: str):
+def try_on_file(filename: str):
     """ Given a file name (something.py) find this file in test/integration/samples_in,
     run flint_str on its content, write result to test/integration/actual_out/something.py,
     and compare the result with test/integration/expected_out/something.py"""
     txt_in = read_in(filename)
-    out = processor(txt_in)
+    out, edits = fstringify_code_by_line(txt_in)
 
-    write_output_file(proc_name, os.path.join(filename), out)
+    write_output_file(filename, out)
     return out, read_expected(filename)
 
 from flint.api import flint_str
@@ -54,6 +51,7 @@ test_files = list(sorted(os.listdir(in_dir)))
                         "simple_indent.py",
                         "simple_start.py",
                         "simple_comment.py",
+                        "simple_docstring.py",
                         "simple_format.py",
                         "simple_percent.py",
                         "simple_percent_comment.py",
@@ -62,10 +60,10 @@ test_files = list(sorted(os.listdir(in_dir)))
                         "all_named.py",
                         "first_string.py",
                         "def_empty_line.py"])
-# @pytest.fixture(params=["simple_percent.py"])
+# @pytest.fixture(params=["first_string.py"])
 def filename(request):
     yield request.param
 
 def test_fstringify(filename):
-    out, expected = _fs_tst("fstringify", fstringify_code_by_line, filename)
+    out, expected = try_on_file(filename)
     assert out == expected
