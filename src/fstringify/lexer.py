@@ -24,6 +24,9 @@ class PyToken:
         return self.toknum == token.STRING and \
                not any(s in self.tokval for s in PyToken.percent_cant_handle)
 
+    def is_raw_string(self):
+        return self.toknum == token.STRING and self.tokval[0] == 'r'
+
     def __repr__(self):
         return f"PyToken {self.toknum} : {self.tokval}"
 
@@ -69,6 +72,10 @@ class Chunk:
         else:
             return self.tokens[0].start[0] != self.tokens[-1].end[0]
 
+    @property
+    def contains_raw_strings(self):
+        return any(tok.is_raw_string() for tok in self.tokens)
+
     def __iter__(self):
         return iter(self.tokens)
 
@@ -108,7 +115,7 @@ def get_fstringify_lines(code: str) -> Generator[Tuple[line_num, char_idx], None
 
     prev_implicit_string_concat = False
     for chunk in get_chunks(code):
-        if not chunk or chunk.is_multiline:
+        if not chunk or chunk.is_multiline or chunk.contains_raw_strings:
             continue
 
         format_perc = False

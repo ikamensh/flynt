@@ -45,7 +45,14 @@ def try_on_file(filename: str):
 
 
 test_files = list(sorted(os.listdir(in_dir)))
-@pytest.fixture(params=["no_fstring_1.py",
+@pytest.fixture(params=["all_named.py",
+                        "first_string.py",
+                        "named_inverse.py",
+                        "def_empty_line.py",
+                        "CantAffordActiveException.py",
+                        "multiline.py",
+                        "long.py",
+                        "no_fstring_1.py",
                         "no_fstring_2.py",
                         "simple.py",
                         "simple_indent.py",
@@ -55,15 +62,10 @@ test_files = list(sorted(os.listdir(in_dir)))
                         "simple_format.py",
                         "simple_percent.py",
                         "simple_percent_comment.py",
-                        "multiple.py",
                         "some_named.py",
-                        "all_named.py",
-                        "first_string.py",
-                        "named_inverse.py",
-                        "def_empty_line.py",
-                        "CantAffordActiveException.py",
-                        "multiline.py",
-                        "long.py"])
+                        "raw_string.py",
+                        "tuple_in_list.py"
+                        ])
 # @pytest.fixture(params=["first_string.py"])
 def filename(request):
     yield request.param

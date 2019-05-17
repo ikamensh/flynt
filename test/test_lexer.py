@@ -116,6 +116,18 @@ def test_line_continuation():
     generator = lexer.get_fstringify_lines(line_continuation)
     assert len(list(generator)) == 0
 
+def test_raw_string():
+    code = '''r"^(\s*%s\s*=\s*')(.+?)(')" % pattern'''
+    generator = lexer.get_chunks(code)
+    chunk = list(generator)[0]
+
+    assert chunk.tokens[0].is_raw_string()
+    assert chunk.contains_raw_strings
+
+
+    generator = lexer.get_fstringify_lines(code)
+    assert len(list(generator)) == 0
+
 
 
 

@@ -153,9 +153,9 @@ class FstringifyTransformer(ast.NodeTransformer):
         match = matching_call(node)
 
         # bail in these edge cases...
-        # if match:
-        #     if False:
-        #         return node
+        if match:
+            if any(isinstance(arg, ast.Starred) for arg in node.args):
+                return node
 
         if match:
             self.counter += 1

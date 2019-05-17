@@ -1,7 +1,7 @@
 import ast
 from collections import deque
 import re
-def ast_formatted_value(val, fmt_str: str) -> ast.FormattedValue:
+def ast_formatted_value(val, fmt_str: str = "") -> ast.FormattedValue:
     format_spec = None if len(fmt_str) == 0 else ast.JoinedStr([ast_string_node(fmt_str)])
     return ast.FormattedValue(value=val,
                        conversion=-1,
@@ -39,11 +39,18 @@ def joined_string(fmt_call: ast.Call) -> ast.JoinedStr:
 
     new_segments = [ast_string_node(splits.popleft())]
 
+    manual_field_ordering = False
+
     while len(splits) > 0:
         var_name = splits.popleft()
         fmt_str = splits.popleft()
 
-        if len(var_name) == 0:
+        if var_name.isdigit():
+            manual_field_ordering = True
+            idx = int(var_name)
+            new_segments.append(ast_formatted_value(values[idx], fmt_str))
+        elif len(var_name) == 0:
+            assert not manual_field_ordering
             new_segments.append(ast_formatted_value(values.popleft(), fmt_str))
         else:
             new_segments.append(ast_formatted_value(var_map[var_name], fmt_str))
