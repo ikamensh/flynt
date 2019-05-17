@@ -8,3 +8,27 @@ def test_fmt_spec():
 
     assert meta['changed']
     assert new == expected
+
+
+def test_parenthesis():
+
+    code = '''html_title = "Flask Documentation ({})".format(version)'''
+    expected = '''html_title = f"Flask Documentation ({version})"'''
+
+    new, meta = fstringify_code(code)
+
+    assert meta['changed']
+    assert new == expected
+
+
+def test_numbered():
+
+    code = '''html_title = "Flask Documentation ({0})".format(version)'''
+    expected = '''html_title = f"Flask Documentation ({version})"'''
+
+    new, meta = fstringify_code(code)
+
+    assert meta['changed']
+    assert new == expected
+
+

@@ -2,6 +2,8 @@
 import os
 import pytest
 import config
+from fstringify.process import fstringify_code_by_line
+
 
 int_test_dir = os.path.join(config.home, "test/integration/")
 
@@ -41,8 +43,6 @@ def try_on_file(filename: str):
     write_output_file(filename, out)
     return out, read_expected(filename)
 
-from flint.api import flint_str
-from fstringify.process import fstringify_code_by_line
 
 test_files = list(sorted(os.listdir(in_dir)))
 @pytest.fixture(params=["no_fstring_1.py",
@@ -61,7 +61,9 @@ test_files = list(sorted(os.listdir(in_dir)))
                         "first_string.py",
                         "named_inverse.py",
                         "def_empty_line.py",
-                        "CantAffordActiveException.py"])
+                        "CantAffordActiveException.py",
+                        "multiline.py",
+                        "long.py"])
 # @pytest.fixture(params=["first_string.py"])
 def filename(request):
     yield request.param

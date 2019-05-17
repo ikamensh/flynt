@@ -1,7 +1,7 @@
-from flint import crawler
 import ast
 
 from fstringify.utils import MOD_KEY_PATTERN, MOD_KEY_NAME_PATTERN, VAR_KEY_PATTERN
+from fstringify.transform.format_call_transforms import matching_call, joined_string
 
 
 def handle_from_mod_dict_name(node):
@@ -150,18 +150,18 @@ class FstringifyTransformer(ast.NodeTransformer):
         """Convert `ast.Call` to `ast.JoinedStr` f-string
         """
 
-        match = crawler.matching_call(node)
+        match = matching_call(node)
 
         # bail in these edge cases...
-        if match:
-            if False:
-                return node
+        # if match:
+        #     if False:
+        #         return node
 
         if match:
             self.counter += 1
             self.lineno = node.lineno
             self.col_offset = node.col_offset
-            result_node = crawler.f_stringify(node)
+            result_node = joined_string(node)
             return result_node
 
         return node

@@ -47,8 +47,33 @@ class Chunk:
     def end_idx(self):
         return self.tokens[-1].end[1]
 
+    @property
+    def end_implicit_string_concat(self):
+        if len(self) < 2:
+            return False
+        else:
+            return self.tokens[-2].toknum == token.STRING and \
+                   self.tokens[-1].toknum in (token.NL, token.NEWLINE)
+
+    @property
+    def start_implicit_string_concat(self):
+        if len(self) < 1:
+            return False
+        else:
+            return self.tokens[0].toknum == token.STRING
+
+    @property
+    def is_multiline(self):
+        if len(self) < 2:
+            return False
+        else:
+            return self.tokens[0].start[0] != self.tokens[-1].end[0]
+
     def __iter__(self):
         return iter(self.tokens)
+
+    def __len__(self):
+        return len(self.tokens)
 
     def __repr__(self):
         if self.tokens:
@@ -81,9 +106,10 @@ def get_fstringify_lines(code: str) -> Generator[Tuple[line_num, char_idx], None
     corresponding to the parts of the code where fstring can be formed.
     """
 
+    prev_implicit_string_concat = False
     for chunk in get_chunks(code):
-        line = chunk.line
-        end_idx = chunk.end_idx
+        if not chunk or chunk.is_multiline:
+            continue
 
         format_perc = False
         format_call = False
@@ -101,5 +127,9 @@ def get_fstringify_lines(code: str) -> Generator[Tuple[line_num, char_idx], None
             if t.is_percent_op() and prev_t.is_percent_string():
                 format_perc = True
 
-        if format_perc or format_call:
-            yield line, end_idx
+
+        if (format_perc or format_call) and not (prev_implicit_string_concat and chunk.start_implicit_string_concat):
+            yield chunk.line, chunk.end_idx
+
+        prev_implicit_string_concat = chunk.end_implicit_string_concat
+

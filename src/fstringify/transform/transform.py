@@ -1,6 +1,6 @@
 import astor
 import ast
-from fstringify.node_transformer import fstringify_node
+from fstringify.transform.node_transformer import fstringify_node
 from fstringify.format import force_double_quote_fstring
 import copy
 from typing import Dict, Tuple

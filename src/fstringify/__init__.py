@@ -1,4 +1,4 @@
-__version__ = "0.1.5"
+__version__ = "0.1"
 
 
 import argparse
@@ -20,7 +20,7 @@ def main():
     parser.add_argument(
         "--version", action="store_true", default=False, help="show version and exit"
     )
-    parser.add_argument("src", action="store", help="source file or directory")
+    # parser.add_argument("src", action="store", help="source file or directory")
 
     args = parser.parse_args()
 
@@ -28,7 +28,7 @@ def main():
         print("fstringify", __version__)
         sys.exit(0)
 
-    fstringify(args.src, verbose=args.verbose, quiet=args.quiet)
+    fstringify("C:\\Users\\Ilya\\flask", verbose=args.verbose, quiet=args.quiet)
 
 
 if __name__ == "__main__":

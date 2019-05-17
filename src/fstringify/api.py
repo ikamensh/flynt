@@ -13,21 +13,26 @@ def fstringify_file(filename):
     :param filename:
     :return: if the file was edited
     """
-    if skip_file(filename):
+    # if skip_file(filename):
+    #     return False
+
+    print(f"Working on {filename}")
+    try:
+        with open(filename) as f:
+            contents = f.read()
+
+        new_code, changes = fstringify_code_by_line(contents)
+    except Exception as e:
+        print(f"Skipping file {filename} due to {e}")
         return False
+    else:
+        if new_code == contents:
+            return False
 
-    with open(filename) as f:
-        contents = f.read()
+        with open(filename, "w") as f:
+            f.write(new_code)
 
-    new_code = fstringify_code_by_line(contents)
-
-    if new_code == contents:
-        return False
-
-    with open(filename, "w") as f:
-        f.write(new_code)
-
-    return True
+        return True
 
 
 def fstringify_dir(in_dir):
@@ -57,14 +62,14 @@ def fstringify_files(files, verbose=False, quiet=False):
 
 def fstringify(file_or_path, verbose=False, quiet=False):
     """ determine if a directory or a single file was passed, and f-stringify it."""
-    to_use = os.path.abspath(file_or_path)
-    if not os.path.exists(to_use):
+    abs_path = os.path.abspath(file_or_path)
+    if not os.path.exists(abs_path):
         print(f"`{file_or_path}` not found")
         sys.exit(1)
 
-    if os.path.isdir(to_use):
-        files = astor.code_to_ast.find_py_files(to_use)
+    if os.path.isdir(abs_path):
+        files = astor.code_to_ast.find_py_files(abs_path)
     else:
-        files = ((os.path.dirname(to_use), os.path.basename(to_use)),)
+        files = ((os.path.dirname(abs_path), os.path.basename(abs_path)),)
 
     fstringify_files(files, verbose=verbose, quiet=quiet)

@@ -86,6 +86,36 @@ def test_empty_line():
     assert lines[2][:end_idx] == lines[2]
 
 
+multiline_code = '''
+raise NoAppException(
+            'Detected multiple Flask applications in module "{module}". Use '
+            '"FLASK_APP={module}:name" to specify the correct '
+            "one.".format(module=module.__name__)
+        )
+'''.strip()
+
+def test_multiline():
+    generator = lexer.get_fstringify_lines(multiline_code)
+    assert len(list(generator)) == 0
+
+
+not_implicit_concat = '''
+html_logo = "_static/flask-logo-sidebar.png"
+html_title = "Flask Documentation ({})".format(version)'''.strip()
+
+def test_not_implicit_concat():
+    generator = lexer.get_fstringify_lines(not_implicit_concat)
+    assert len(list(generator)) == 1
+
+
+line_continuation = '''
+a = "Hello {}" \\
+"world".format(',')'''.strip()
+
+def test_line_continuation():
+    generator = lexer.get_fstringify_lines(line_continuation)
+    assert len(list(generator)) == 0
+
 
 
 

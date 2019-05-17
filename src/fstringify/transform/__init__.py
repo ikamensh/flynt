@@ -1,0 +1,1 @@
+from fstringify.transform.transform import fstringify_code
