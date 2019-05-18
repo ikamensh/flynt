@@ -2,10 +2,11 @@ from fstringify import process
 
 def test_one_string():
     s_in = """a = 'my string {}, but also {} and {}'.format(var, f, cada_bra)"""
-    s_expected = '''a = f"my string {var}, but also {f} and {cada_bra}"'''
+    s_expected = """a = f'my string {var}, but also {f} and {cada_bra}'"""
 
     s_out, count = process.fstringify_code_by_line(s_in)
-
+    print(s_out)
+    print(s_expected)
     assert s_out == s_expected
 
 
@@ -27,7 +28,7 @@ def write_row(self, xf, row, row_idx):
     attrs = {'r': '{}'.format(row_idx)}""".strip()
 
 def test_empty_line():
-    s_expected = '''    attrs = {'r': f"{row_idx}"}'''
+    s_expected = '''    attrs = {'r': f'{row_idx}'}'''
     s_out, count = process.fstringify_code_by_line(code_empty_line)
 
     assert count == 1
@@ -35,6 +36,6 @@ def test_empty_line():
 
 def test_dict_perc():
     s_in = "{'r': '%d' % row_idx}"
-    s_expected = """{'r': f"{row_idx}"}"""
+    s_expected = """{'r': f'{row_idx}'}"""
 
     assert process.fstringify_code_by_line(s_in)[0] == s_expected

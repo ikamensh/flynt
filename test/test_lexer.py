@@ -21,10 +21,19 @@ def test_one_string():
     assert len(list(chunks_gen)) == 1
 
     generator = lexer.get_fstringify_lines(s)
-    line, end_idx = next(generator)
+    chunk = next(generator)
 
-    assert line == 0
-    assert s[:end_idx] == s
+    assert chunk.line == 0
+    assert s[:chunk.end_idx] == s
+
+def test_yields_parsable():
+    code_in = """attrs = {'r': '{}'.format(row_idx)}"""
+    generator = lexer.get_fstringify_lines(code_in)
+    chunk = next(generator)
+
+    assert chunk.is_parseable()
+    assert code_in[chunk.start_idx:chunk.end_idx] == "'{}'.format(row_idx)"
+
 
 
 def test_two_strings():
@@ -37,15 +46,15 @@ def test_two_strings():
     generator = lexer.get_fstringify_lines(s)
     lines = s.split('\n')
 
-    line, end_idx = next(generator)
+    chunk = next(generator)
 
-    assert line == 0
-    assert lines[0][:end_idx] == lines[0]
+    assert chunk.line == 0
+    assert lines[0][:chunk.end_idx] == lines[0]
 
-    line, end_idx = next(generator)
+    chunk = next(generator)
 
-    assert line == 1
-    assert lines[1][:end_idx] == lines[1]
+    assert chunk.line == 1
+    assert lines[1][:chunk.end_idx] == lines[1]
 
 
 
@@ -62,10 +71,10 @@ def test_indented():
     generator = lexer.get_fstringify_lines(indented)
     lines = indented.split('\n')
 
-    line, end_idx = next(generator)
+    chunk = next(generator)
 
-    assert line == 2
-    assert lines[2][:end_idx] == lines[2]
+    assert chunk.line == 2
+    assert lines[2][:chunk.end_idx] == lines[2]
 
 
 def test_empty_line():
@@ -80,10 +89,10 @@ def test_empty_line():
     generator = lexer.get_fstringify_lines(code_empty_line)
     lines = code_empty_line.split('\n')
 
-    line, end_idx = next(generator)
+    chunk = next(generator)
 
-    assert line == 2
-    assert lines[2][:end_idx] == lines[2]
+    assert chunk.line == 2
+    assert lines[2][chunk.start_idx:chunk.end_idx] == "'{}'.format(row_idx)"
 
 
 multiline_code = '''
@@ -128,6 +137,14 @@ def test_raw_string():
     generator = lexer.get_fstringify_lines(code)
     assert len(list(generator)) == 0
 
+
+tuple_in_list = '''
+latex_documents = [
+    (master_doc, "Flask-{}.tex".format(version), html_title, author, "manual")
+]'''.strip()
+def test_tuple_list():
+    generator = lexer.get_fstringify_lines(tuple_in_list)
+    assert len(list(generator)) == 1
 
 
 

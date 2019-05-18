@@ -63,6 +63,7 @@ test_files = list(sorted(os.listdir(in_dir)))
                         "simple_percent.py",
                         "simple_percent_comment.py",
                         "some_named.py",
+                        "string_in_string.py",
                         "raw_string.py",
                         "tuple_in_list.py"
                         ])

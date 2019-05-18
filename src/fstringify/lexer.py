@@ -1,8 +1,11 @@
 import io
+import ast
 import token
 from collections import deque
 import tokenize
 from typing import Generator, Tuple, List, Deque
+from fstringify.format import QuoteTypes
+
 
 line_num = int
 char_idx = int
@@ -24,6 +27,13 @@ class PyToken:
         return self.toknum == token.STRING and \
                not any(s in self.tokval for s in PyToken.percent_cant_handle)
 
+    def get_quote_type(self):
+        assert self.toknum is token.STRING
+        for qt in QuoteTypes.all:
+            if self.tokval[:len(qt)] == qt and self.tokval[-len(qt):] == qt:
+                return qt
+        raise Exception("Can't determine quote type of a string.")
+
     def is_raw_string(self):
         return self.toknum == token.STRING and self.tokval[0] == 'r'
 
@@ -31,8 +41,8 @@ class PyToken:
         return f"PyToken {self.toknum} : {self.tokval}"
 
 class Chunk:
-    def __init__(self):
-        self.tokens: List[PyToken] = []
+    def __init__(self, tokens = ()):
+        self.tokens: Deque[PyToken] = deque(tokens)
         self.complete = False
 
     def append(self, t: PyToken):
@@ -42,9 +52,26 @@ class Chunk:
         if t.toknum not in (token.COMMENT, token.ENCODING):
             self.tokens.append(t)
 
+    def discard_beginning(self):
+        while self.tokens[0].toknum != token.STRING:
+            self.tokens.popleft()
+
+    def is_parseable(self):
+        if len(self.tokens) < 1:
+            return False
+        try:
+            ast.parse(self.tokens[0].line[self.start_idx:self.end_idx])
+            return True
+        except SyntaxError:
+            return False
+
     @property
     def line(self):
         return self.tokens[0].start[0] - 1
+
+    @property
+    def start_idx(self):
+        return self.tokens[0].start[1]
 
     @property
     def end_idx(self):
@@ -107,36 +134,40 @@ def is_format_call(history: Deque[PyToken]):
            history[-2].tokval == "." and \
            history[-1].tokval == "format"
 
-def get_fstringify_lines(code: str) -> Generator[Tuple[line_num, char_idx], None, None]:
+def is_percent_formating(history: Deque[PyToken]):
+    return len(history) == 3 and history[0].is_percent_string() and history[1].is_percent_op()
+
+def get_fstringify_lines(code: str) -> Generator[Chunk, None, None]:
     """
-    A generator yielding tuples of line number and ending character
+    A generator yielding tuples of line number, starting and ending character
     corresponding to the parts of the code where fstring can be formed.
     """
 
     prev_implicit_string_concat = False
     for chunk in get_chunks(code):
+
         if not chunk or chunk.is_multiline or chunk.contains_raw_strings:
             continue
-
-        format_perc = False
-        format_call = False
+        if prev_implicit_string_concat and chunk.start_implicit_string_concat:
+            continue
 
         history: Deque[PyToken] = deque(maxlen=3)
 
-        for t in chunk:
+        for i, t in enumerate(chunk):
             history.append(t)
-            if len(history) > 1:
-                prev_t = history[-2]
-            else:
-                continue
 
-            format_call = format_call or is_format_call(history)
-            if t.is_percent_op() and prev_t.is_percent_string():
-                format_perc = True
+            if is_format_call(history) or is_percent_formating(history):
+                c = Chunk(history)
 
+                if is_format_call(history):
+                    i += 1
+                    c.append(chunk.tokens[i])
 
-        if (format_perc or format_call) and not (prev_implicit_string_concat and chunk.start_implicit_string_concat):
-            yield chunk.line, chunk.end_idx
+                while not c.is_parseable():
+                    i += 1
+                    c.append(chunk.tokens[i])
+                yield c
+                break
 
         prev_implicit_string_concat = chunk.end_implicit_string_concat
 

@@ -10,8 +10,9 @@ def fstringify_code_by_line(code: str) -> Tuple[str, int]:
 
     raw_code_lines = code.split("\n")
 
-    for line_idx, end_idx in get_fstringify_lines(code):
-        # for start, end in positions:
+    for chunk in get_fstringify_lines(code):
+
+        line_idx, start_idx, end_idx = chunk.line, chunk.start_idx, chunk.end_idx
 
         while current_line < line_idx:
             result_pieces.append(raw_code_lines[current_line]+'\n')
@@ -19,10 +20,10 @@ def fstringify_code_by_line(code: str) -> Tuple[str, int]:
 
         line = raw_code_lines[line_idx]
 
-        to_process, rest = line[:end_idx], line[end_idx:]
-        new_line, meta = fstringify_code(to_process)
+        before, to_process, rest = line[:start_idx], line[start_idx:end_idx], line[end_idx:]
+        new_line, meta = fstringify_code(to_process, quote_type=chunk.tokens[0].get_quote_type())
         if meta['changed']:
-            result_pieces +=[new_line, rest+"\n"]
+            result_pieces +=[before, new_line, rest+"\n"]
             count_edits += 1
         else:
             result_pieces.append(line+"\n")
