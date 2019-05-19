@@ -1,5 +1,3 @@
-import re
-
 class QuoteTypes:
     single = "'"
     double = '"'
@@ -8,7 +6,7 @@ class QuoteTypes:
     all = [triple_double, triple_single, single, double]
 
 def get_quote_type(code: str):
-    from fstringify import lexer
+    from flynt import lexer
 
     chunk = list(lexer.get_chunks(code))[0]
     assert len(chunk) == 2

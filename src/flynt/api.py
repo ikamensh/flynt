@@ -5,7 +5,7 @@ import traceback
 
 import astor
 
-from fstringify.process import fstringify_code_by_line
+from flynt.process import fstringify_code_by_line
 
 blacklist = {'.tox', 'venv', 'site-packages', '.eggs'}
 

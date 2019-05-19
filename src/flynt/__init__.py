@@ -4,14 +4,14 @@ __version__ = "0.02"
 import argparse
 import sys
 
-from fstringify.api import fstringify_dir, fstringify_file, fstringify
-from fstringify.transform import fstringify_code
-from fstringify.process import fstringify_code_by_line
+from flynt.api import fstringify_dir, fstringify_file, fstringify
+from flynt.transform import fstringify_code
+from flynt.process import fstringify_code_by_line
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description=f"fstringify {__version__}", add_help=True
+        description=f"flynt {__version__}", add_help=True
     )
 
     group = parser.add_mutually_exclusive_group()
@@ -25,7 +25,7 @@ def main():
     args = parser.parse_args()
 
     if args.version:
-        print("fstringify", __version__)
+        print("flynt", __version__)
         sys.exit(0)
 
     fstringify(args.src, verbose=args.verbose, quiet=args.quiet)

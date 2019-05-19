@@ -1,7 +1,7 @@
 import ast
 
-from fstringify.utils import MOD_KEY_PATTERN, MOD_KEY_NAME_PATTERN, VAR_KEY_PATTERN
-from fstringify.transform.format_call_transforms import matching_call, joined_string
+from flynt.utils import MOD_KEY_PATTERN, MOD_KEY_NAME_PATTERN, VAR_KEY_PATTERN
+from flynt.transform.format_call_transforms import matching_call, joined_string
 
 
 def handle_from_mod_dict_name(node):

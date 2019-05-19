@@ -1,5 +1,5 @@
-from fstringify.format import QuoteTypes, get_quote_type, set_quote_type
-from fstringify import lexer
+from flynt.format import QuoteTypes, get_quote_type, set_quote_type
+from flynt import lexer
 import pytest
 
 # @pytest.fixture()

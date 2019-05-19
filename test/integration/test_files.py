@@ -2,7 +2,7 @@
 import os
 import pytest
 import config
-from fstringify.process import fstringify_code_by_line
+from flynt.process import fstringify_code_by_line
 
 
 int_test_dir = os.path.join(config.home, "test/integration/")

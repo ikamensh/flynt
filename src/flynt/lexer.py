@@ -4,7 +4,7 @@ import token
 from collections import deque
 import tokenize
 from typing import Generator, Tuple, List, Deque
-from fstringify.format import QuoteTypes
+from flynt.format import QuoteTypes
 
 
 line_num = int

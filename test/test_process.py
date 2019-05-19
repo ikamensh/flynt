@@ -1,4 +1,4 @@
-from fstringify import process
+from flynt import process
 
 def test_one_string():
     s_in = """a = 'my string {}, but also {} and {}'.format(var, f, cada_bra)"""

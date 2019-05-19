@@ -1,6 +1,6 @@
 from typing import Tuple
-from fstringify.transform import fstringify_code
-from fstringify.lexer import get_fstringify_lines
+from flynt.transform import fstringify_code
+from flynt.lexer import get_fstringify_lines
 
 def fstringify_code_by_line(code: str) -> Tuple[str, int]:
     """ returns fstringified version of the code and amount of lines edited."""

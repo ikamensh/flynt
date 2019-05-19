@@ -1,4 +1,4 @@
-from fstringify.transform import fstringify_code
+from flynt.transform import fstringify_code
 
 def test_fmt_spec():
     code = '''"my string {:.2f}".format(var)'''

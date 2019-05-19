@@ -23,8 +23,8 @@ def get_requirements():
         return fp.read()
 
 setup(
-    name="flint",
-    packages=["src/flint"],
+    name="flynt",
+    packages=["src/flynt"],
     version=VERSION,
     description="CLI tool to convert a python project's %-formatted strings to f-strings.",
     author="Hackathon Team",
@@ -40,6 +40,6 @@ setup(
     license="GNU General Public License v3.0",
     long_description=get_long_description(),
     install_requires=get_requirements(),
-    entry_points={"console_scripts": ["flynt=src.fstringify:main"]},
+    entry_points={"console_scripts": ["flynt=src.flynt:main"]},
 
 )

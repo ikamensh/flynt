@@ -1,4 +1,4 @@
-from fstringify import lexer
+from flynt import lexer
 
 def test_chunks_per_lines():
     code = "a=3\nb=4\nc=5\n"

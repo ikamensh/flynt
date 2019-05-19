@@ -1,8 +1,8 @@
 import astor
 import ast
-from fstringify.transform.node_transformer import fstringify_node
-from fstringify.format import set_quote_type, QuoteTypes
-from fstringify.transform.util import pp_ast
+from flynt.transform.node_transformer import fstringify_node
+from flynt.format import set_quote_type, QuoteTypes
+from flynt.transform.util import pp_ast
 import copy
 from typing import Dict, Tuple
 
