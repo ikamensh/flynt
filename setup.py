@@ -1,9 +1,11 @@
 import sys
 
-from config import VERSION
-# config.add_src_to_path()
+VERSION = '0.12'
 
-assert sys.version_info >= (3, 6, 0), "flint requires Python 3.6+"
+import config
+config.add_src_to_path()
+
+assert sys.version_info >= (3, 7, 0), "flint requires Python 3.7+"
 from pathlib import Path
 from setuptools import setup
 
@@ -24,7 +26,8 @@ def get_requirements():
 
 setup(
     name="flynt",
-    packages=["src/flynt"],
+    packages=["flynt", "flynt.transform"],
+    package_dir={'flynt': 'src/flynt', "flynt.transform": "src/flynt/transform"},
     version=VERSION,
     description="CLI tool to convert a python project's %-formatted strings to f-strings.",
     author="Hackathon Team",
@@ -38,8 +41,10 @@ setup(
         "Topic :: Utilities",
     ],
     license="GNU General Public License v3.0",
-    long_description=get_long_description(),
+    # long_description=get_long_description(),
+    long_description="CLI tool to convert a python project's .format(...) and %-formatted "
+                     "strings to f-strings.",
     install_requires=get_requirements(),
-    entry_points={"console_scripts": ["flynt=src.flynt:main"]},
+    entry_points={"console_scripts": ["flynt=flynt:main"]},
 
 )

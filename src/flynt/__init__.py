@@ -1,5 +1,4 @@
-__version__ = "0.02"
-
+__version__ = "0.12"
 
 import argparse
 import sys
@@ -15,8 +14,10 @@ def main():
     )
 
     group = parser.add_mutually_exclusive_group()
-    group.add_argument("--verbose", action="store_true", help="run with verbose output")
-    group.add_argument("--quiet", action="store_true", help="run without output")
+    group.add_argument("--verbose", action="store_true", help="run with verbose output",
+                       default=True)
+    group.add_argument("--quiet", action="store_true", help="run without output",
+                       default=False)
     parser.add_argument(
         "--version", action="store_true", default=False, help="show version and exit"
     )

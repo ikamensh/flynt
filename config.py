@@ -1,8 +1,6 @@
 import sys
 import os
 
-VERSION = '0.02'
-
 home = os.path.dirname(__file__)
 
 print(sys.path)

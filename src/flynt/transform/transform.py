@@ -22,7 +22,7 @@ def fstringify_code(code: str, quote_type: str = QuoteTypes.triple_double) -> Tu
 
     try:
         tree = ast.parse(code)
-        pp_ast(tree)
+        # pp_ast(tree)
         converted, meta = fstringify_node(copy.deepcopy(tree))
     except SyntaxError as e:
         meta["skip"] = code.rstrip().endswith(

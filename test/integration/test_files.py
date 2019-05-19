@@ -65,6 +65,7 @@ test_files = list(sorted(os.listdir(in_dir)))
                         "simple_format.py",
                         "simple_percent.py",
                         "simple_percent_comment.py",
+                        "slash_quotes.py",
                         "some_named.py",
                         "string_in_string.py",
                         "raw_string.py",

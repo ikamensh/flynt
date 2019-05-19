@@ -14,18 +14,12 @@ def fstringify_file(filename):
     :param filename:
     :return: if the file was edited
     """
-    # if skip_file(filename):
-    #     return False
 
-    print(f"Working on {filename}")
     try:
         with open(filename, encoding='utf-8') as f:
             contents = f.read()
 
         new_code, changes = fstringify_code_by_line(contents)
-    except IndexError as e:
-        print(e)
-        traceback.print_exc()
     except Exception as e:
         print(f"Skipping file {filename} due to {e}")
         traceback.print_exc()
