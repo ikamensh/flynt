@@ -1,12 +1,13 @@
 import os
 import sys
 import time
+import traceback
 
 import astor
 
 from fstringify.process import fstringify_code_by_line
-from fstringify.utils import skip_file
 
+blacklist = {'.tox', 'venv', 'site-packages', '.eggs'}
 
 def fstringify_file(filename):
     """
@@ -18,18 +19,22 @@ def fstringify_file(filename):
 
     print(f"Working on {filename}")
     try:
-        with open(filename) as f:
+        with open(filename, encoding='utf-8') as f:
             contents = f.read()
 
         new_code, changes = fstringify_code_by_line(contents)
+    except IndexError as e:
+        print(e)
+        traceback.print_exc()
     except Exception as e:
         print(f"Skipping file {filename} due to {e}")
+        traceback.print_exc()
         return False
     else:
         if new_code == contents:
             return False
 
-        with open(filename, "w") as f:
+        with open(filename, "w", encoding="utf-8") as f:
             f.write(new_code)
 
         return True
@@ -44,6 +49,8 @@ def fstringify_files(files, verbose=False, quiet=False):
     change_count = 0
     start_time = time.time()
     for f in files:
+        if any(b in f[0] for b in blacklist):
+            continue
         file_path = os.path.join(f[0], f[1])
         changed = fstringify_file(file_path)
         if changed:

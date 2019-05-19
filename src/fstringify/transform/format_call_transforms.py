@@ -33,7 +33,7 @@ def joined_string(fmt_call: ast.Call) -> ast.JoinedStr:
     string = fmt_call.func.value.s
     values = deque(fmt_call.args)
     var_map = prep_var_map(fmt_call.keywords)
-    pat = re.compile(r'{([a-zA-Z0-9_]*):*([.0-9a-z]*)}')
+    pat = re.compile(r'{([a-zA-Z0-9_\[\]]*):*([.0-9a-z]*)}')
 
     splits = deque( pat.split(string) )
 
@@ -43,6 +43,8 @@ def joined_string(fmt_call: ast.Call) -> ast.JoinedStr:
 
     while len(splits) > 0:
         var_name = splits.popleft()
+        if '[' in var_name:
+            raise Exception(f"Skipping f-stringify of a fmt call with indexed name {var_name}")
         fmt_str = splits.popleft()
 
         if var_name.isdigit():

@@ -51,9 +51,12 @@ test_files = list(sorted(os.listdir(in_dir)))
                         "def_empty_line.py",
                         "CantAffordActiveException.py",
                         "multiline.py",
+                        "indexed_fmt_name.py",
+                        "indexed_percent.py",
                         "long.py",
                         "no_fstring_1.py",
                         "no_fstring_2.py",
+                        "percent_op.py",
                         "simple.py",
                         "simple_indent.py",
                         "simple_start.py",
@@ -67,7 +70,7 @@ test_files = list(sorted(os.listdir(in_dir)))
                         "raw_string.py",
                         "tuple_in_list.py"
                         ])
-# @pytest.fixture(params=["first_string.py"])
+# @pytest.fixture(params=["indexed_percent.py"])
 def filename(request):
     yield request.param
 

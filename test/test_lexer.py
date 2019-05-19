@@ -31,9 +31,28 @@ def test_yields_parsable():
     generator = lexer.get_fstringify_lines(code_in)
     chunk = next(generator)
 
-    assert chunk.is_parseable()
+    assert chunk.is_parseable
     assert code_in[chunk.start_idx:chunk.end_idx] == "'{}'.format(row_idx)"
 
+
+def test_percent_attribute():
+    code_in = """src_info = 'application "%s"' % srcobj.import_name"""
+
+    generator = lexer.get_fstringify_lines(code_in)
+    chunk = next(generator)
+
+    expected = """'application "%s"' % srcobj.import_name"""
+    assert code_in[chunk.start_idx:chunk.end_idx] == expected
+
+
+def test_percent_call():
+    code_in = """"filename*": "UTF-8''%s" % url_quote(attachment_filename)"""
+
+    generator = lexer.get_fstringify_lines(code_in)
+    chunk = next(generator)
+
+    expected = """"UTF-8''%s" % url_quote(attachment_filename)"""
+    assert code_in[chunk.start_idx:chunk.end_idx] == expected
 
 
 def test_two_strings():
@@ -145,6 +164,16 @@ latex_documents = [
 def test_tuple_list():
     generator = lexer.get_fstringify_lines(tuple_in_list)
     assert len(list(generator)) == 1
+
+
+def test_indexed_percent():
+    code = 'return "Hello %s!" % flask.request.args[name]'
+    generator = lexer.get_fstringify_lines(code)
+    chunk = next(generator)
+
+    assert code[chunk.start_idx:chunk.end_idx] == '"Hello %s!" % flask.request.args[name]'
+
+
 
 
 

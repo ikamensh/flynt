@@ -1,8 +1,8 @@
 from fstringify.transform import fstringify_code
 
 def test_fmt_spec():
-    code = '''a = "my string {:.2f}".format(var)'''
-    expected = '''a = f"my string {var:.2f}"'''
+    code = '''"my string {:.2f}".format(var)'''
+    expected = '''f"""my string {var:.2f}"""'''
 
     new, meta = fstringify_code(code)
 
@@ -12,8 +12,8 @@ def test_fmt_spec():
 
 def test_parenthesis():
 
-    code = '''html_title = "Flask Documentation ({})".format(version)'''
-    expected = '''html_title = f"Flask Documentation ({version})"'''
+    code = '''"Flask Documentation ({})".format(version)'''
+    expected = '''f"""Flask Documentation ({version})"""'''
 
     new, meta = fstringify_code(code)
 
@@ -23,8 +23,8 @@ def test_parenthesis():
 
 def test_numbered():
 
-    code = '''html_title = "Flask Documentation ({0})".format(version)'''
-    expected = '''html_title = f"Flask Documentation ({version})"'''
+    code = '''"""Flask Documentation ({0})""".format(version)'''
+    expected = '''f"""Flask Documentation ({version})"""'''
 
     new, meta = fstringify_code(code)
 
@@ -33,8 +33,8 @@ def test_numbered():
 
 
 def test_mixed_numbered():
-    code = '''html_title = "Flask Documentation ({1} {0:.2f} {name})".format(version,sprt,name=NAME)'''
-    expected = '''html_title = f"Flask Documentation ({sprt} {version:.2f} {NAME})"'''
+    code = '''"Flask Documentation ({1} {0:.2f} {name})".format(version,sprt,name=NAME)'''
+    expected = '''f"""Flask Documentation ({sprt} {version:.2f} {NAME})"""'''
 
     new, meta = fstringify_code(code)
 

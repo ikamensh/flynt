@@ -23,6 +23,24 @@ class PyToken:
     def is_percent_op(self):
         return self.toknum == token.OP and self.tokval == "%"
 
+    def is_expr_continuation_op(self):
+        return self.is_sq_brack_op() or \
+               self.is_paren_op() or \
+               self.is_dot_op() or \
+               self.is_exponentiation_op()
+
+    def is_sq_brack_op(self):
+        return self.toknum == token.OP and self.tokval == "["
+
+    def is_dot_op(self):
+        return self.toknum == token.OP and self.tokval == "."
+
+    def is_paren_op(self):
+        return self.toknum == token.OP and self.tokval == "("
+
+    def is_exponentiation_op(self):
+        return self.toknum == token.OP and self.tokval == "**"
+
     def is_percent_string(self):
         return self.toknum == token.STRING and \
                not any(s in self.tokval for s in PyToken.percent_cant_handle)
@@ -56,6 +74,7 @@ class Chunk:
         while self.tokens[0].toknum != token.STRING:
             self.tokens.popleft()
 
+    @property
     def is_parseable(self):
         if len(self.tokens) < 1:
             return False
@@ -103,6 +122,13 @@ class Chunk:
     def contains_raw_strings(self):
         return any(tok.is_raw_string() for tok in self.tokens)
 
+    @property
+    def contains_multiple_string_tokens(self):
+        return sum(t.toknum == token.STRING for t in self.tokens) > 1
+
+    def __getitem__(self, item):
+        return self.tokens[item]
+
     def __iter__(self):
         return iter(self.tokens)
 
@@ -148,7 +174,9 @@ def get_fstringify_lines(code: str) -> Generator[Chunk, None, None]:
 
         if not chunk or chunk.is_multiline or chunk.contains_raw_strings:
             continue
+
         if prev_implicit_string_concat and chunk.start_implicit_string_concat:
+            prev_implicit_string_concat = chunk.end_implicit_string_concat
             continue
 
         history: Deque[PyToken] = deque(maxlen=3)
@@ -157,17 +185,35 @@ def get_fstringify_lines(code: str) -> Generator[Chunk, None, None]:
             history.append(t)
 
             if is_format_call(history) or is_percent_formating(history):
-                c = Chunk(history)
+                c = smallest_chunk(chunk, history, i)
 
-                if is_format_call(history):
-                    i += 1
-                    c.append(chunk.tokens[i])
-
-                while not c.is_parseable():
-                    i += 1
-                    c.append(chunk.tokens[i])
-                yield c
+                if c and not c.contains_multiple_string_tokens:
+                    yield c
                 break
 
         prev_implicit_string_concat = chunk.end_implicit_string_concat
+
+
+def smallest_chunk(chunk, history, i):
+    c = Chunk(history)
+    if is_format_call(history):
+        i += 1
+        c.append(chunk[i])
+    try:
+        while not c.is_parseable:
+            i += 1
+            c.append(chunk[i])
+    except IndexError:
+        return None
+    if is_percent_formating(history):
+        try:
+            while chunk[i + 1].is_expr_continuation_op():
+                i += 1
+                c.append(chunk[i])
+                while not c.is_parseable:
+                    i += 1
+                    c.append(chunk[i])
+        except IndexError:
+            pass
+    return c
 

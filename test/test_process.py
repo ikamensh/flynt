@@ -39,3 +39,12 @@ def test_dict_perc():
     s_expected = """{'r': f'{row_idx}'}"""
 
     assert process.fstringify_code_by_line(s_in)[0] == s_expected
+
+
+def test_percent_attr():
+    s_in = """src_info = 'application "%s"' % srcobj.import_name"""
+    s_expected = """src_info = f'application "{srcobj.import_name}"'"""
+
+    out, count = process.fstringify_code_by_line(s_in)
+    print(out, s_expected)
+    assert out == s_expected

@@ -1,5 +1,48 @@
-# flint - format- to f-string converter
+# flynt - string formatting converter
+
+**This is an alpha release. Do NOT use on uncommitted code!**
+
+`flynt` is a command line tool to automatically convert a project's Python code from old "%-formatted" and .format(...) strings into Python 3.6+'s "f-strings".
+
+### About
+
+F-Strings:
+
+> Not only are they more readable, more concise, and less prone to error than other ways of formatting, but they are also faster!
+
+After obsessively refactoring a project at work, and not even covering 50% of f-string candidates, I realized there was some place for automation. Also it was very interesting to work with ast module. 
+
+### Installation
+
+`flynt` can be installed by running `pip install flynt`.  It requires
+Python 3.6.0+ to run and effectively turns the code it runs on into Python 3.6+,
+since 3.6 is when "f-strings" were introduced.
+
+
+### Usage
+
+To run: `fstringify {source_file_or_directory}`
+
+
+### Command line options
+```
+usage: fstringify [-h] [--verbose | --quiet] [--version] src
+
+fstringify 0.x.x
+
+positional arguments:
+  src         source file or directory
+
+optional arguments:
+  -h, --help  show this help message and exit
+  --verbose   run with verbose output
+  --quiet     run without output
+  --version   show version and exit
 
 ```
-flint file
-```
+
+### Other Credits / Dependencies / Links
+
+- [fstringify](https://github.com/jacktasia/fstringify) - this project was forked from fstringify, but undergone some heavy refactoring.
+- [astor](https://github.com/berkerpeksag/astor) is used to turn the transformed AST back into code.
+- Thanks to folks from [pyddf](https://www.pyddf.de/) for their support, advice and participation during spring hackathon 2019, in particular Holger Hass, Farid Muradov, Charlie Clark.
