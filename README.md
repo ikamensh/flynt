@@ -21,14 +21,12 @@ since 3.6 is when "f-strings" were introduced.
 
 ### Usage
 
-To run: `fstringify {source_file_or_directory}`
+To run: `flynt {source_file_or_directory}`
 
 
 ### Command line options
 ```
-usage: fstringify [-h] [--verbose | --quiet] [--version] src
-
-fstringify 0.x.x
+usage: flynt [-h] [--verbose | --quiet] [--version] src
 
 positional arguments:
   src         source file or directory
