@@ -4,6 +4,10 @@
 
 `flynt` is a command line tool to automatically convert a project's Python code from old "%-formatted" and .format(...) strings into Python 3.6+'s "f-strings".
 
+Read up on f-strings here: 
+- https://realpython.com/python-f-strings/
+- https://www.python.org/dev/peps/pep-0498/
+
 ### About
 
 F-Strings:
