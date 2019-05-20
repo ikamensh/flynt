@@ -1,6 +1,6 @@
 import sys
 
-VERSION = '0.12'
+VERSION = '0.13'
 
 import config
 config.add_src_to_path()
