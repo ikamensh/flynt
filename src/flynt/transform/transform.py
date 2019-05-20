@@ -36,6 +36,13 @@ def fstringify_code(code: str, quote_type: str = QuoteTypes.triple_double) -> Tu
         new_code = new_code.strip()
         new_code = set_quote_type(new_code, quote_type)
         new_code = new_code.replace('\n', '')
-        return new_code, meta
+
+        try:
+            ast.parse(new_code)
+        except Exception:
+            meta["changed"] = False
+            return code, meta
+        else:
+            return new_code, meta
 
     return code, meta
