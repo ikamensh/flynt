@@ -9,6 +9,16 @@ def test_one_string():
     print(s_expected)
     assert s_out == s_expected
 
+    
+def test_percent_newline():
+    s_in = """a = '%s\n' % var"""
+    s_expected = """a = f'{}\n'"""
+
+    s_out, count = process.fstringify_code_by_line(s_in)
+    print(s_out)
+    print(s_expected)
+    assert s_out == s_expected
+
 
 indented = """
 var = 5

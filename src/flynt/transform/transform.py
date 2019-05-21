@@ -35,7 +35,6 @@ def fstringify_code(code: str, quote_type: str = QuoteTypes.triple_double) -> Tu
         new_code = astor.to_source(converted)
         new_code = new_code.strip()
         new_code = set_quote_type(new_code, quote_type)
-        new_code = new_code.replace('\n', '')
 
         try:
             ast.parse(new_code)

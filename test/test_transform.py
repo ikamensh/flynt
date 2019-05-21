@@ -10,6 +10,16 @@ def test_fmt_spec():
     assert new == expected
 
 
+def test_newline():
+    code = r'''"echo '{}'\n".format(self.FLUSH_CMD)'''
+    expected = '''f"""echo '{self.FLUSH_CMD}'\n"""'''
+
+    new, meta = fstringify_code(code)
+
+    assert meta['changed']
+    assert new == expected
+
+
 def test_parenthesis():
 
     code = '''"Flask Documentation ({})".format(version)'''

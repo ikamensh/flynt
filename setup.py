@@ -1,6 +1,6 @@
 import sys
 
-VERSION = '0.13'
+VERSION = '0.14'
 
 import config
 config.add_src_to_path()
@@ -35,7 +35,6 @@ setup(
     classifiers=[
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: Utilities",
