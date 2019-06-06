@@ -19,7 +19,7 @@ After obsessively refactoring a project at work, and not even covering 50% of f-
 ### Installation
 
 `flynt` can be installed by running `pip install flynt`.  It requires
-Python 3.6.0+ to run and effectively turns the code it runs on into Python 3.6+,
+Python 3.7+ to run and effectively turns the code it runs on into Python 3.6+,
 since 3.6 is when "f-strings" were introduced.
 
 
