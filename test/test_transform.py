@@ -12,7 +12,7 @@ def test_fmt_spec():
 
 def test_newline():
     code = r'''"echo '{}'\n".format(self.FLUSH_CMD)'''
-    expected = '''f"""echo '{self.FLUSH_CMD}'\n"""'''
+    expected = '''f"""echo '{self.FLUSH_CMD}'\\n"""'''
 
     new, meta = fstringify_code(code)
 

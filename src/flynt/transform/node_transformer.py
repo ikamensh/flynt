@@ -187,7 +187,7 @@ class FstringifyTransformer(ast.NodeTransformer):
 
         # bail in these edge cases...
         if percent_stringify:
-            no_good = ["}", "{", "\n"]
+            no_good = ["}", "{"]
             for ng in no_good:
                 if ng in node.left.s:
                     return node

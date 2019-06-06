@@ -10,7 +10,7 @@ from flynt.format import QuoteTypes
 line_num = int
 char_idx = int
 class PyToken:
-    percent_cant_handle = ("\\n", "\n", "%%")
+    percent_cant_handle = ("%%",)
 
     def __init__(self, t):
         toknum, tokval, start, end, line = t

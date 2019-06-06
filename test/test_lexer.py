@@ -17,7 +17,7 @@ def test_chunks_per_lines_if():
 
 
 def test_str_newline():
-    s_in = """a = '%s\n' % var"""
+    s_in = """a = '%s\\n' % var"""
     generator = lexer.get_chunks(s_in)
     assert len(list(generator)) == 1
 
