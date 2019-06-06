@@ -15,6 +15,12 @@ def test_chunks_per_lines_if():
     generator = lexer.get_chunks(code)
     assert len(list(generator)) == 3
 
+
+def test_str_newline():
+    s_in = """a = '%s\n' % var"""
+    generator = lexer.get_chunks(s_in)
+    assert len(list(generator)) == 1
+
 def test_one_string():
     s = """"my string {}, but also {} and {}".format(var, f, cada_bra)"""
     chunks_gen = lexer.get_chunks(s)
