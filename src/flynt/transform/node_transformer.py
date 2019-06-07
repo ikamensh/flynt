@@ -1,7 +1,13 @@
 import ast
 
-from flynt.utils import MOD_KEY_PATTERN, MOD_KEY_NAME_PATTERN, VAR_KEY_PATTERN
 from flynt.transform.format_call_transforms import matching_call, joined_string
+from flynt.exceptions import FlyntException
+
+import re
+
+MOD_KEY_PATTERN = re.compile(r"(%\([^)]+\)s)")
+MOD_KEY_NAME_PATTERN = re.compile(r"%\(([^)]+)\)s")
+VAR_KEY_PATTERN = re.compile("(%[sd])")
 
 
 def handle_from_mod_dict_name(node):
@@ -15,14 +21,14 @@ def handle_from_mod_dict_name(node):
 
     Returns ast.JoinedStr (f-string)
     """
-    # raise ValueError("blah")
+
     format_str = node.left.s
     matches = MOD_KEY_PATTERN.findall(format_str)
     var_keys = []
     for idx, m in enumerate(matches):
         var_key = MOD_KEY_NAME_PATTERN.match(m)
         if not var_key:
-            raise ValueError("could not find dict key")
+            raise FlyntException("could not find dict key")
         var_keys.append(var_key[1])
 
     # build result node
@@ -65,7 +71,7 @@ def handle_from_mod_tuple(node):
     matches = VAR_KEY_PATTERN.findall(format_str)
 
     if len(node.right.elts) != len(matches):
-        raise ValueError("string formatting length mismatch")
+        raise FlyntException("string formatting length mismatch")
 
     str_vars = list(map(lambda x: x, node.right.elts))
 

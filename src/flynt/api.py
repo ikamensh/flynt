@@ -64,8 +64,8 @@ def fstringify_files(files, verbose=False, quiet=False):
     if not quiet:
         file_s = "s" if change_count != 1 else ""
         print(f"\nfstringified {change_count} file{file_s} in {total_time}s")
-        charcount_percent_reduction = 100 *(total_charcount_original - total_charcount_new) / total_charcount_original
-        print(f"character count in python source files was reduced by {charcount_percent_reduction:.2f}%")
+        charcount_percent_reduction = (total_charcount_original - total_charcount_new) / total_charcount_original
+        print(f"character count in python source files was reduced by {charcount_percent_reduction:.2%}")
 
 
 def fstringify(file_or_path, verbose=False, quiet=False):

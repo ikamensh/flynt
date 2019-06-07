@@ -151,7 +151,7 @@ def test_line_continuation():
     assert len(list(generator)) == 0
 
 def test_raw_string():
-    code = '''r"^(\s*%s\s*=\s*')(.+?)(')" % pattern'''
+    code = '''r"^(s*%ss*=s*')(.+?)(')" % pattern'''
     generator = lexer.get_chunks(code)
     chunk = list(generator)[0]
 

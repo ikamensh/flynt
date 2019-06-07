@@ -1,17 +1,17 @@
 import astor
 import ast
-from flynt.transform.node_transformer import fstringify_node
-from flynt.format import set_quote_type, QuoteTypes
-from flynt.transform.util import pp_ast
 import copy
 from typing import Dict, Tuple
+
+from flynt.transform.node_transformer import fstringify_node
+from flynt.exceptions import FlyntException
+from flynt.format import set_quote_type, QuoteTypes
 
 def fstringify_code(code: str, quote_type: str = QuoteTypes.triple_double) -> Tuple[str, Dict]:
     """Convert a block of with a %-formatted string to an f-string
 
     Args:
         code (str): The code to convert.
-
 
     Returns:
        The code formatted with f-strings if possible else it's left unchanged.
@@ -22,12 +22,15 @@ def fstringify_code(code: str, quote_type: str = QuoteTypes.triple_double) -> Tu
 
     try:
         tree = ast.parse(code)
+        # from flynt.transform.util import pp_ast
         # pp_ast(tree)
         converted, meta = fstringify_node(copy.deepcopy(tree))
     except SyntaxError as e:
         meta["skip"] = code.rstrip().endswith(
             ":"
         ) or "cannot include a blackslash" in str(e)
+    except FlyntException:
+        meta["skip"] = False
     except Exception as e2:
         meta["skip"] = False
 
