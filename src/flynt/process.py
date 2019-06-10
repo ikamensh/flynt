@@ -4,7 +4,7 @@ from flynt.lexer import get_fstringify_lines
 
 def fstringify_code_by_line(code: str) -> Tuple[str, int]:
     """ returns fstringified version of the code and amount of lines edited."""
-    count_edits = 0
+    count_expressions = 0
     current_line = 0
     result_pieces = []
 
@@ -24,7 +24,7 @@ def fstringify_code_by_line(code: str) -> Tuple[str, int]:
         new_line, meta = fstringify_code(to_process, quote_type=chunk.tokens[0].get_quote_type())
         if meta['changed']:
             result_pieces +=[before, new_line, rest+"\n"]
-            count_edits += 1
+            count_expressions += 1
         else:
             result_pieces.append(line+"\n")
 
@@ -34,7 +34,7 @@ def fstringify_code_by_line(code: str) -> Tuple[str, int]:
         result_pieces.append(raw_code_lines[current_line] + '\n')
         current_line += 1
 
-    return "".join(result_pieces)[:-1], count_edits  #last new line is extra.
+    return "".join(result_pieces)[:-1], count_expressions  #last new line is extra.
 
 
 
