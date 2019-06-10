@@ -81,6 +81,12 @@ def test_dict_perc():
     assert process.fstringify_code_by_line(s_in)[0] == s_expected
 
 
+def test_legacy_unicode():
+    s_in = """u'%s, Cadabra' % datetime.now().year"""
+    s_expected = """f'{datetime.now().year}, Cadabra'"""
+
+    assert process.fstringify_code_by_line(s_in)[0] == s_expected
+
 def test_double_percent_no_prob():
     s_in = "{'r': '%%%s%%' % row_idx}"
     s_expected = "{'r': '%%%s%%' % row_idx}"

@@ -50,7 +50,16 @@ class PyToken:
         for qt in QuoteTypes.all:
             if self.tokval[:len(qt)] == qt and self.tokval[-len(qt):] == qt:
                 return qt
-        raise Exception("Can't determine quote type of a string.")
+
+        if self.is_legacy_unicode_string():
+            for qt in QuoteTypes.all:
+                if self.tokval[1:len(qt)+1] == qt and self.tokval[-len(qt):] == qt:
+                    return qt
+
+        raise Exception(f"Can't determine quote type of the string {self.tokval}.")
+
+    def is_legacy_unicode_string(self):
+        return self.toknum == token.STRING and self.tokval[0] == 'u'
 
     def is_raw_string(self):
         return self.toknum == token.STRING and self.tokval[0] == 'r'
