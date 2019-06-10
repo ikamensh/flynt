@@ -2,7 +2,11 @@ import sys
 
 import config
 config.add_src_to_path()
-from flynt import __version__ as VERSION
+import flynt
+
+VERSION = '0.15'
+
+assert VERSION == flynt.__version__
 
 assert sys.version_info >= (3, 7, 0), "flint requires Python 3.7+"
 from pathlib import Path
