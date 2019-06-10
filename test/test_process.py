@@ -5,8 +5,6 @@ def test_one_string():
     s_expected = """a = f'my string {var}, but also {f} and {cada_bra}'"""
 
     s_out, count = process.fstringify_code_by_line(s_in)
-    print(s_out)
-    print(s_expected)
     assert s_out == s_expected
 
 def test_conversion():
@@ -14,8 +12,6 @@ def test_conversion():
     s_expected = """a = f'my string {var}, but also {f!r} and {cada_bra!a}'"""
 
     s_out, count = process.fstringify_code_by_line(s_in)
-    print(s_out)
-    print(s_expected)
     assert s_out == s_expected
 
 
@@ -24,8 +20,6 @@ def test_invalid_conversion():
     s_expected = """a = 'my string {}, but also {!b} and {!a}'.format(var, f, cada_bra)"""
 
     s_out, count = process.fstringify_code_by_line(s_in)
-    print(s_out)
-    print(s_expected)
     assert s_out == s_expected
 
     
@@ -43,8 +37,6 @@ def test_format_newline():
     s_expected = """a = f'{var}\\n'"""
 
     s_out, count = process.fstringify_code_by_line(s_in)
-    print(s_out)
-    print(s_expected)
     assert s_out == s_expected
 
 
@@ -53,8 +45,6 @@ def test_format_tab():
     s_expected = """a = f'{var}\\t'"""
 
     s_out, count = process.fstringify_code_by_line(s_in)
-    print(s_out)
-    print(s_expected)
     assert s_out == s_expected
 
 
@@ -89,10 +79,55 @@ def test_dict_perc():
     assert process.fstringify_code_by_line(s_in)[0] == s_expected
 
 
+def test_double_percent_no_prob():
+    s_in = "{'r': '%%%s%%' % row_idx}"
+    s_expected = "{'r': '%%%s%%' % row_idx}"
+
+    assert process.fstringify_code_by_line(s_in)[0] == s_expected
+
+
 def test_percent_attr():
     s_in = """src_info = 'application "%s"' % srcobj.import_name"""
     s_expected = """src_info = f'application "{srcobj.import_name}"'"""
 
     out, count = process.fstringify_code_by_line(s_in)
-    print(out, s_expected)
     assert out == s_expected
+
+
+def test_legacy_fmtspec():
+    s_in = """d = '%i' % var"""
+    s_expected = """d = f'{var:d}'"""
+
+    out, count = process.fstringify_code_by_line(s_in)
+    assert out == s_expected
+
+
+def test_decimal_precision():
+    s_in = """e = '%.03f' % var"""
+    s_expected = """e = f'{var:.03f}'"""
+
+    out, count = process.fstringify_code_by_line(s_in)
+    assert out == s_expected
+
+def test_width_spec():
+    s_in = "{'r': '%03d' % row_idx}"
+    s_expected = """{'r': f'{row_idx:03d}'}"""
+
+    assert process.fstringify_code_by_line(s_in)[0] == s_expected
+
+def test_equiv_expressions_repr():
+    name = 'bla'
+
+    s_in = """'Setting %20r must be uppercase.' % name"""
+
+    out, count = process.fstringify_code_by_line(s_in)
+    assert eval(out) == eval(s_in)
+
+
+def test_equiv_expressions_s():
+    name = 'bla'
+
+    s_in = """'Setting %20s must be uppercase.' % name"""
+
+    out, count = process.fstringify_code_by_line(s_in)
+    assert eval(out) == eval(s_in)

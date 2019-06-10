@@ -8,7 +8,9 @@ import re
 
 MOD_KEY_PATTERN = re.compile(r"(%\([^)]+\)s)")
 MOD_KEY_NAME_PATTERN = re.compile(r"%\(([^)]+)\)s")
-VAR_KEY_PATTERN = re.compile("%[hlL]?([diouxXeEfFgGcrsa])") # specs at https://docs.python.org/3/library/stdtypes.html#string-formatting
+VAR_KEY_PATTERN = re.compile("%([.]?[0-9]*)[hlL]?([diouxXeEfFgGcrsa])") # specs at https://docs.python.org/3/library/stdtypes.html#string-formatting
+obsolete_specifiers = 'hlL'
+
 
 translate_conversion_types = {'i': 'd', 'u': 'd'}
 conversion_methods = {'r' : '!r', 'a': '!a', 's': None}
@@ -85,12 +87,22 @@ def handle_from_mod_tuple(node):
 
     while len(blocks) > 0:
 
+        fmt_prefix = blocks.popleft()
         fmt_spec = blocks.popleft()
+        for c in obsolete_specifiers:
+            fmt_spec = fmt_spec.replace(c, '')
+
         if fmt_spec in conversion_methods:
-            fv = ast_formatted_value(str_vars.popleft(), conversion=conversion_methods[fmt_spec])
+            if fmt_prefix:
+                raise FlyntException("Default text alignment has changed between percent fmt and fstrings. "
+                                     "Proceeding would result in changed code behaviour.")
+            fv = ast_formatted_value(str_vars.popleft(),
+                                     fmt_str=fmt_prefix,
+                                     conversion=conversion_methods[fmt_spec])
         else:
             fmt_spec = translate_conversion_types.get(fmt_spec, fmt_spec)
-            fv = ast_formatted_value(str_vars.popleft(), fmt_str=fmt_spec)
+            fv = ast_formatted_value(str_vars.popleft(),
+                                     fmt_str=fmt_prefix+fmt_spec)
 
         result_node.values.append(fv)
         result_node.values.append(ast_string_node(blocks.popleft()))

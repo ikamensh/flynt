@@ -44,16 +44,16 @@ def try_on_file(filename: str):
     return out, read_expected(filename)
 
 
-test_files = list(sorted(os.listdir(in_dir)))
 @pytest.fixture(params=["all_named.py",
                         "first_string.py",
-                        "named_inverse.py",
                         "def_empty_line.py",
                         "CantAffordActiveException.py",
-                        "multiline.py",
+                        "hard_percent.py",
                         "indexed_fmt_name.py",
                         "indexed_percent.py",
                         "long.py",
+                        "multiline.py",
+                        "named_inverse.py",
                         "no_fstring_1.py",
                         "no_fstring_2.py",
                         "percent_op.py",
@@ -80,6 +80,7 @@ test_files = list(sorted(os.listdir(in_dir)))
 # @pytest.fixture(params=["indexed_percent.py"])
 def filename(request):
     yield request.param
+test_files = list(sorted(os.listdir(in_dir)))
 
 def test_fstringify(filename):
     out, expected = try_on_file(filename)
