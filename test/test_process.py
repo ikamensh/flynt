@@ -84,7 +84,7 @@ def test_empty_line():
 
 def test_dict_perc():
     s_in = "{'r': '%d' % row_idx}"
-    s_expected = """{'r': f'{row_idx}'}"""
+    s_expected = """{'r': f'{row_idx:d}'}"""
 
     assert process.fstringify_code_by_line(s_in)[0] == s_expected
 

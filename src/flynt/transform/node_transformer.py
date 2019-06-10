@@ -1,14 +1,17 @@
 import ast
+from collections import deque
 
-from flynt.transform.format_call_transforms import matching_call, joined_string
+from flynt.transform.format_call_transforms import matching_call, ast_string_node, joined_string, ast_formatted_value
 from flynt.exceptions import FlyntException
 
 import re
 
 MOD_KEY_PATTERN = re.compile(r"(%\([^)]+\)s)")
 MOD_KEY_NAME_PATTERN = re.compile(r"%\(([^)]+)\)s")
-VAR_KEY_PATTERN = re.compile("(%[sd])")
+VAR_KEY_PATTERN = re.compile("%[hlL]?([diouxXeEfFgGcrsa])") # specs at https://docs.python.org/3/library/stdtypes.html#string-formatting
 
+translate_conversion_types = {'i': 'd', 'u': 'd'}
+conversion_methods = {'r' : '!r', 'a': '!a', 's': None}
 
 def handle_from_mod_dict_name(node):
     """Convert a `BinOp` `%` formatted str with a name representing a Dict on the right to an f-string.
@@ -54,7 +57,6 @@ def handle_from_mod_dict_name(node):
             result_node.values.append(ast.Str(s=block))
     return result_node
 
-
 def handle_from_mod_tuple(node):
     """Convert a `BinOp` `%` formatted str with a tuple on the right to an f-string.
 
@@ -73,21 +75,25 @@ def handle_from_mod_tuple(node):
     if len(node.right.elts) != len(matches):
         raise FlyntException("string formatting length mismatch")
 
-    str_vars = list(map(lambda x: x, node.right.elts))
+    str_vars = deque(node.right.elts)
 
     # build result node
     result_node = ast.JoinedStr()
     result_node.values = []
-    str_vars.reverse()
-    blocks = VAR_KEY_PATTERN.split(format_str)
-    for block in blocks:
-        if VAR_KEY_PATTERN.match(block):
-            fv = ast.FormattedValue(
-                value=str_vars.pop(), conversion=-1, format_spec=None
-            )
-            result_node.values.append(fv)
+    blocks = deque(VAR_KEY_PATTERN.split(format_str))
+    result_node.values.append(ast_string_node(blocks.popleft()))
+
+    while len(blocks) > 0:
+
+        fmt_spec = blocks.popleft()
+        if fmt_spec in conversion_methods:
+            fv = ast_formatted_value(str_vars.popleft(), conversion=conversion_methods[fmt_spec])
         else:
-            result_node.values.append(ast.Str(s=block))
+            fmt_spec = translate_conversion_types.get(fmt_spec, fmt_spec)
+            fv = ast_formatted_value(str_vars.popleft(), fmt_str=fmt_spec)
+
+        result_node.values.append(fv)
+        result_node.values.append(ast_string_node(blocks.popleft()))
 
     return result_node
 
