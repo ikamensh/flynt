@@ -1,6 +1,6 @@
 # flynt - string formatting converter
 
-**This is an beta release. Do NOT use on uncommitted code!**
+**This is a beta release. Do NOT use on uncommitted code!**
 
 `flynt` is a command line tool to automatically convert a project's Python code from old "%-formatted" and .format(...) strings into Python 3.6+'s "f-strings".
 
