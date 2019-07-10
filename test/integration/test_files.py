@@ -47,6 +47,7 @@ def try_on_file(filename: str):
 @pytest.fixture(params=["all_named.py",
                         "first_string.py",
                         "def_empty_line.py",
+                        "digit_ordering.py",
                         "CantAffordActiveException.py",
                         "hard_percent.py",
                         "indexed_fmt_name.py",

@@ -63,5 +63,26 @@ def test_kw_unpacking_no_change():
     assert not meta['changed']
     assert new == code
 
+def test_digit_grouping():
+    code = '''"Failed after {:,}".format(x)'''
+    expected = '''f"""Failed after {x:,}"""'''
 
+    new, meta = fstringify_code(code)
+
+    assert meta['changed']
+    assert new == expected
+
+
+def test_digit_grouping_2():
+    code = '''
+    "Search: finished in {0:,} ms.".format(vm.search_time_elapsed_ms)
+    '''.strip()
+    expected = '''
+    f"""Search: finished in {vm.search_time_elapsed_ms:,} ms."""
+    '''.strip()
+
+    new, meta = fstringify_code(code)
+
+    assert meta['changed']
+    assert new == expected
 
