@@ -18,6 +18,9 @@ since 3.6 is when "f-strings" were introduced.
 
 To run: `flynt {source_file_or_directory}`
 
+* Given a single file, it will 'f-stringify' it: replace all applicable single line string formatting in this file (file will be modified).
+* Given a folder, it will search the folder recursively and f-stringify all the .py files it finds. It skips some hard-coded folder names: `blacklist = {'.tox', 'venv', 'site-packages', '.eggs'}`.
+
 ### Command line options
 ```
 usage: flynt [-h] [--verbose | --quiet] [--version] src
