@@ -18,14 +18,6 @@ since 3.6 is when "f-strings" were introduced.
 
 To run: `flynt {source_file_or_directory}`
 
-### About
-
-F-Strings:
-
-> Not only are they more readable, more concise, and less prone to error than other ways of formatting, but they are also faster!
-
-After obsessively refactoring a project at work, and not even covering 50% of f-string candidates, I realized there was some place for automation. Also it was very interesting to work with ast module. 
-
 ### Command line options
 ```
 usage: flynt [-h] [--verbose | --quiet] [--version] src
@@ -70,6 +62,14 @@ Thank you for using flynt! Fstringify more projects and recommend it to your col
 _-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_.
 38f9d3a65222:~ ikkamens$
 ```
+
+### About
+
+F-Strings:
+
+> Not only are they more readable, more concise, and less prone to error than other ways of formatting, but they are also faster!
+
+After obsessively refactoring a project at work, and not even covering 50% of f-string candidates, I realized there was some place for automation. Also it was very interesting to work with ast module. 
 
 ### Other Credits / Dependencies / Links
 
