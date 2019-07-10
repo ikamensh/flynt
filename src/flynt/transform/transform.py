@@ -40,6 +40,8 @@ def fstringify_code(code: str, quote_type: str = QuoteTypes.triple_double) -> Tu
         new_code = set_quote_type(new_code, quote_type)
         new_code = new_code.replace("\n", "\\n")
         new_code = new_code.replace("\t", "\\t")
+        new_code = new_code.replace("{{{{", "{{")
+        new_code = new_code.replace("}}}}", "}}")
 
         try:
             ast.parse(new_code)

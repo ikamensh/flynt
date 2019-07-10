@@ -19,7 +19,14 @@ def test_conversion():
 
 def test_invalid_conversion():
     s_in = """a = 'my string {}, but also {!b} and {!a}'.format(var, f, cada_bra)"""
-    s_expected = """a = 'my string {}, but also {!b} and {!a}'.format(var, f, cada_bra)"""
+    s_expected = s_in
+
+    s_out, count = process.fstringify_code_by_line(s_in)
+    assert s_out == s_expected
+
+def test_invalid_conversion_names():
+    s_in = """a = 'my string {var}, but also {f!b} and {cada_bra!a}'.format(var, f, cada_bra)"""
+    s_expected = s_in
 
     s_out, count = process.fstringify_code_by_line(s_in)
     assert s_out == s_expected

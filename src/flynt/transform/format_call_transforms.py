@@ -69,5 +69,7 @@ def joined_string(fmt_call: ast.Call) -> ast.JoinedStr:
 
         new_segments.append(ast_string_node(splits.popleft()))
 
+    if values and not manual_field_ordering:
+        raise Exception("Mismatch between the number of formatting locations and provided variables")
 
     return ast.JoinedStr(new_segments)
