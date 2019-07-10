@@ -4,7 +4,7 @@ import config
 config.add_src_to_path()
 import flynt
 
-VERSION = '0.15'
+VERSION = '0.16'
 
 assert VERSION == flynt.__version__
 
