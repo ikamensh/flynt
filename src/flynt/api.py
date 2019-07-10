@@ -14,7 +14,7 @@ def fstringify_file(filename) -> Tuple[int, int, int]:
     """
     :param filename:
     :return: tuple: (n_changes, length of original code,
-    length of new code, amount of expressions changed)
+    length of new code)
     """
 
     try:
