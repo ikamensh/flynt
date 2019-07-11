@@ -1,4 +1,5 @@
 # flynt - string formatting converter
+[![Build Status](https://dev.azure.com/ikamenshchikov/flynt/_apis/build/status/ikamensh.flynt?branchName=master)](https://dev.azure.com/ikamenshchikov/flynt/_build/latest?definitionId=1&branchName=master)
 
 **This is a beta release. Do NOT use on uncommitted code!**
 
