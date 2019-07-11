@@ -31,6 +31,33 @@ def test_parenthesis():
     assert new == expected
 
 
+
+
+def test_implicit_string_concat():
+
+    code = '''"Helloo {}" "!!!".format(world)'''
+    expected = '''f"""Helloo {world}!!!"""'''
+
+    new, meta = fstringify_code(code)
+
+    assert meta['changed']
+    assert new == expected
+
+def test_multiline():
+
+    code = '''
+    "Flask Documentation ({})".format(
+    version
+)
+    '''.strip()
+    expected = '''f"""Flask Documentation ({version})"""'''
+
+    new, meta = fstringify_code(code)
+
+    assert meta['changed']
+    assert new == expected
+
+
 def test_numbered():
 
     code = '''"""Flask Documentation ({0})""".format(version)'''

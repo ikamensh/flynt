@@ -10,7 +10,6 @@ except ImportError:
 
     sys.path.append(home)
     sys.path.append(os.path.join(home, "src"))
-    
 else:
     config.add_src_to_path()
 

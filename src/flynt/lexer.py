@@ -113,6 +113,11 @@ class Chunk:
             return self.tokens[-2].toknum == token.STRING and \
                    self.tokens[-1].toknum in (token.NL, token.NEWLINE)
 
+
+    @property
+    def n_lines(self):
+        return 1 + self.tokens[0].start[0] - self.tokens[-1].end[0]
+
     @property
     def start_implicit_string_concat(self):
         if len(self) < 1:
@@ -122,10 +127,7 @@ class Chunk:
 
     @property
     def is_multiline(self):
-        if len(self) < 2:
-            return False
-        else:
-            return self.tokens[0].start[0] != self.tokens[-1].end[0]
+        return self.n_lines > 1
 
     @property
     def contains_raw_strings(self):
@@ -172,7 +174,7 @@ def is_format_call(history: Deque[PyToken]):
 def is_percent_formating(history: Deque[PyToken]):
     return len(history) == 3 and history[0].is_percent_string() and history[1].is_percent_op()
 
-def get_fstringify_lines(code: str) -> Generator[Chunk, None, None]:
+def get_fstringify_chunks(code: str) -> Generator[Chunk, None, None]:
     """
     A generator yielding tuples of line number, starting and ending character
     corresponding to the parts of the code where fstring can be formed.
