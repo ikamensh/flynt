@@ -8,10 +8,9 @@ except ImportError:
     test_dir = os.path.dirname(__file__)
     home = os.path.join(test_dir, os.path.pardir)
 
-
-    def add_src_to_path():
-        sys.path.append(home)
-        sys.path.append(os.path.join(home, "src"))
+    sys.path.append(home)
+    sys.path.append(os.path.join(home, "src"))
+    
 else:
     config.add_src_to_path()
 
