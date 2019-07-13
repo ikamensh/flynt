@@ -5,9 +5,9 @@
 
 `flynt` is a command line tool to automatically convert a project's Python code from old "%-formatted" and .format(...) strings into Python 3.6+'s "f-strings".
 
-Read up on f-strings here: 
-- https://realpython.com/python-f-strings/
-- https://www.python.org/dev/peps/pep-0498/
+F-Strings:
+
+> Not only are they more readable, more concise, and less prone to error than other ways of formatting, but they are also faster!
 
 ### Installation
 
@@ -69,9 +69,9 @@ _-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_.
 
 ### About
 
-F-Strings:
-
-> Not only are they more readable, more concise, and less prone to error than other ways of formatting, but they are also faster!
+Read up on f-strings here: 
+- https://realpython.com/python-f-strings/
+- https://www.python.org/dev/peps/pep-0498/
 
 After obsessively refactoring a project at work, and not even covering 50% of f-string candidates, I realized there was some place for automation. Also it was very interesting to work with ast module. 
 
