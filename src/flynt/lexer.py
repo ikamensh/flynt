@@ -73,11 +73,13 @@ class Chunk:
         self.complete = False
 
     def append(self, t: PyToken):
-        if t.toknum in (token.NEWLINE, token.NL, token.COMMENT):
+        if t.toknum in (token.COMMENT):
             self.complete = True
-
-        if t.toknum not in (token.COMMENT, token.ENCODING):
+        #todo complete multiline
+        if t.toknum not in (token.COMMENT, token.ENCODING, token.NEWLINE, token.NL):
             self.tokens.append(t)
+
+        self.discard_beginning()
 
     def discard_beginning(self):
         while self.tokens[0].toknum != token.STRING:
