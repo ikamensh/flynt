@@ -78,7 +78,7 @@ After obsessively refactoring a project at work, and not even covering 50% of f-
 ### Dangers of conversion
 It is not guaranteed that formatted strings will be exactly the same as before conversion.
 
-`'%s' % var` is converted to `f'{var}`. There is a case when this will behave different from the original -  if var is a tuple of one element. In this case, %s displays the element, and f-string displays the tuple. Example:
+`'%s' % var` is converted to `f'{var}'`. There is a case when this will behave different from the original -  if var is a tuple of one element. In this case, %s displays the element, and f-string displays the tuple. Example:
 
 ```
 foo = (1,)
