@@ -29,7 +29,7 @@ def get_requirements():
 setup(
     name="flynt",
     packages=["flynt", "flynt.transform"],
-    package_dir={'flynt': 'src/flynt', "flynt.transform": "src/flynt/transform"},
+    package_dir={'': 'src'},
     version=version,
     description="CLI tool to convert a python project's %-formatted strings to f-strings.",
     author="Hackathon Team",
