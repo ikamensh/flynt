@@ -75,6 +75,19 @@ Read up on f-strings here:
 
 After obsessively refactoring a project at work, and not even covering 50% of f-string candidates, I realized there was some place for automation. Also it was very interesting to work with ast module. 
 
+### Dangers of conversion
+It is not guaranteed that formatted strings will be exactly the same as before conversion.
+
+`'%s' % var` is converted to `f'{var}`. There is a case when this will behave different from the original -  if var is a tuple of one element. In this case, %s displays the element, and f-string displays the tuple. Example:
+
+```
+foo = (1,)
+print('%s' % foo) # prints '1'
+print(f'{foo}')   # prints '(1,)'
+```
+
+Furthermore, some arguments cause formatting of strings to throw exceptions, e.g. print('%d' % 'bla'). While most cases are covered by taking the formatting specifiers to the f-strings format, the precise exception behaviour might differ as well.
+
 ### Other Credits / Dependencies / Links
 
 - [fstringify](https://github.com/jacktasia/fstringify) - this project was forked from fstringify, but undergone some heavy refactoring.
