@@ -3,7 +3,7 @@ import ast
 import token
 from collections import deque
 import tokenize
-from typing import Generator, Tuple, List, Deque
+from typing import Generator, Tuple, Deque
 from flynt.format import QuoteTypes
 
 
@@ -18,7 +18,6 @@ class PyToken:
         self.tokval: str = tokval
         self.start: Tuple[line_num, char_idx] = start
         self.end: Tuple[line_num, char_idx] = end
-        self.line: str = line
 
     def is_percent_op(self):
         return self.toknum == token.OP and self.tokval == "%"
@@ -40,6 +39,9 @@ class PyToken:
 
     def is_exponentiation_op(self):
         return self.toknum == token.OP and self.tokval == "**"
+
+    def is_string(self):
+        return self.toknum == token.STRING
 
     def is_percent_string(self):
         return self.toknum == token.STRING and \
@@ -67,30 +69,115 @@ class PyToken:
     def __repr__(self):
         return f"PyToken {self.toknum} : {self.tokval}"
 
+REUSE = "Token was not used"
+
 class Chunk:
     def __init__(self, tokens = ()):
         self.tokens: Deque[PyToken] = deque(tokens)
         self.complete = False
 
-    def append(self, t: PyToken):
-        if t.toknum in (token.COMMENT):
-            self.complete = True
-        #todo complete multiline
-        if t.toknum not in (token.COMMENT, token.ENCODING, token.NEWLINE, token.NL):
+        self.is_percent_chunk = False
+        self.percent_ongoing = False
+
+        self.is_call_chunk = False
+        self.successful = False
+
+    def empty_append(self, t: PyToken):
+        if t.is_string() and not t.is_raw_string():
             self.tokens.append(t)
 
-        self.discard_beginning()
+    def second_append(self, t: PyToken):
+        if t.is_string():
+            self.tokens[0].tokval += t.tokval
+            self.tokens[0].end = t.end
+        elif t.is_percent_op():
+            self.tokens.append(t)
+            self.is_percent_chunk = True
+        elif t.is_dot_op():
+            self.tokens.append(t)
+            self.is_call_chunk = True
+        else:
+            self.complete = True
 
-    def discard_beginning(self):
-        while self.tokens[0].toknum != token.STRING:
-            self.tokens.popleft()
+    def percent_append(self, t: PyToken):
+
+        # No string in string
+        if t.is_string():
+            self.complete = True
+            self.successful = self.is_parseable
+            return REUSE
+
+        #todo handle all cases?
+        if not self[0].is_percent_string():
+            self.complete = True
+            return
+
+        if len(self) == 2:
+            self.tokens.append(t)
+            if self.is_parseable:
+                self.successful = True
+            else:
+                self.percent_ongoing = True
+
+        else:
+            if self.percent_ongoing:
+                self.tokens.append(t)
+                if self.is_parseable:
+                    self.percent_ongoing = False
+                    self.successful = True
+            elif t.is_expr_continuation_op():
+                self.tokens.append(t)
+                self.percent_ongoing = True
+            else:
+                self.complete = True
+                self.successful = self.is_parseable
+                return REUSE
+
+    def call_append(self, t: PyToken):
+
+        # no string in string
+        if t.is_string():
+            self.complete = True
+            self.successful = False
+            return
+
+        self.tokens.append(t)
+        if len(self) > 3 and self.is_parseable:
+            self.complete = True
+            self.successful = True
+
+    def append(self, t: PyToken):
+        # stop on a comment or too long chunk
+        if t.toknum == token.COMMENT:
+            self.complete = True
+            self.successful = self.is_parseable and \
+                              (self.is_percent_chunk or self.is_call_chunk)
+            return
+
+        if len(self) > 50:
+            self.complete = True
+            self.successful = False
+            return
+
+        if t.toknum in (token.NEWLINE, token.NL):
+            return
+
+        if len(self) == 0:
+            self.empty_append(t)
+        elif not (self.is_call_chunk or self.is_percent_chunk):
+            self.second_append(t)
+        elif self.is_call_chunk:
+            self.call_append(t)
+        elif self.is_percent_chunk:
+            return self.percent_append(t)
+
 
     @property
     def is_parseable(self):
         if len(self.tokens) < 1:
             return False
         try:
-            ast.parse(self.tokens[0].line[self.start_idx:self.end_idx])
+            ast.parse(str(self))
             return True
         except SyntaxError:
             return False
@@ -107,6 +194,8 @@ class Chunk:
     def end_idx(self):
         return self.tokens[-1].end[1]
 
+
+    #todo test multiline for comment between implicit concat
     @property
     def end_implicit_string_concat(self):
         if len(self) < 2:
@@ -115,10 +204,9 @@ class Chunk:
             return self.tokens[-2].toknum == token.STRING and \
                    self.tokens[-1].toknum in (token.NL, token.NEWLINE)
 
-
     @property
     def n_lines(self):
-        return 1 + self.tokens[0].start[0] - self.tokens[-1].end[0]
+        return 1 + self.tokens[-1].end[0] - self.tokens[0].start[0]
 
     @property
     def start_implicit_string_concat(self):
@@ -148,12 +236,14 @@ class Chunk:
     def __len__(self):
         return len(self.tokens)
 
+    def __str__(self):
+        return " ".join(t.tokval for t in self)
+
     def __repr__(self):
         if self.tokens:
-            return "Chunk: "+self.tokens[0].line[:self.end_idx]
+            return "Chunk: " + str(self)
         else:
             return "Empty Chunk"
-
 
 
 def get_chunks(code) -> Generator[Chunk, None, None]:
@@ -161,72 +251,23 @@ def get_chunks(code) -> Generator[Chunk, None, None]:
     chunk = Chunk()
     for item in g:
         t = PyToken(item)
-        chunk.append(t)
+        reuse = chunk.append(t)
         if chunk.complete:
             yield chunk
             chunk = Chunk()
+            if reuse:
+                chunk.append(t)
 
-format_call_sequence = [token.STRING, token.OP, token.NAME]
-def is_format_call(history: Deque[PyToken]):
-    toknums = [e.toknum for e in history]
-    return toknums == format_call_sequence and \
-           history[-2].tokval == "." and \
-           history[-1].tokval == "format"
+    yield chunk
 
-def is_percent_formating(history: Deque[PyToken]):
-    return len(history) == 3 and history[0].is_percent_string() and history[1].is_percent_op()
 
 def get_fstringify_chunks(code: str) -> Generator[Chunk, None, None]:
     """
-    A generator yielding tuples of line number, starting and ending character
-    corresponding to the parts of the code where fstring can be formed.
+    A generator yielding Chunks of the code where fstring can be formed.
     """
-
-    prev_implicit_string_concat = False
     for chunk in get_chunks(code):
-
-        if not chunk or chunk.is_multiline or chunk.contains_raw_strings:
-            continue
-
-        if prev_implicit_string_concat and chunk.start_implicit_string_concat:
-            prev_implicit_string_concat = chunk.end_implicit_string_concat
-            continue
-
-        history: Deque[PyToken] = deque(maxlen=3)
-
-        for i, t in enumerate(chunk):
-            history.append(t)
-
-            if is_format_call(history) or is_percent_formating(history):
-                c = smallest_chunk(chunk, history, i)
-
-                if c and not c.contains_multiple_string_tokens:
-                    yield c
-                break
-
-        prev_implicit_string_concat = chunk.end_implicit_string_concat
+        if chunk.successful:
+            yield chunk
 
 
-def smallest_chunk(chunk, history, i):
-    c = Chunk(history)
-    if is_format_call(history):
-        i += 1
-        c.append(chunk[i])
-    try:
-        while not c.is_parseable:
-            i += 1
-            c.append(chunk[i])
-    except IndexError:
-        return None
-    if is_percent_formating(history):
-        try:
-            while chunk[i + 1].is_expr_continuation_op():
-                i += 1
-                c.append(chunk[i])
-                while not c.is_parseable:
-                    i += 1
-                    c.append(chunk[i])
-        except IndexError:
-            pass
-    return c
 

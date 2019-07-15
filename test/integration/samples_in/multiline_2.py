@@ -1,5 +1,5 @@
 var, a, b = 12345, 4, "Beew"
-my_string = "Hello %s %s %s".format(var,
+my_string = "Hello {} {} {}".format(var,
                                      a,
                                      b
                                      )  # Ok

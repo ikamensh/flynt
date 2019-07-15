@@ -1,19 +1,24 @@
 from flynt import lexer
 
-def test_chunks_per_lines():
-    code = "a=3\nb=4\nc=5\n"
+def test_comment_splits():
+    code = "a=3\nb=4 #comment \nc=5\n"
     generator = lexer.get_chunks(code)
-    assert len(list(generator)) == 3
+    assert len(list(generator)) == 2
 
-def test_chunks_per_lines_no_newline():
+def test_chunk_continues():
     code = "a=3\nb=4\nc=5"
     generator = lexer.get_chunks(code)
-    assert len(list(generator)) == 3
+    assert len(list(generator)) == 1
 
-def test_chunks_per_lines_if():
-    code = "a=3\nif a: b=4\nc=5"
+def test_chunks_not_started():
+    code = "a=3\nif a: b=4\nc=5\n"*1000
     generator = lexer.get_chunks(code)
-    assert len(list(generator)) == 3
+    assert len(list(generator)) == 1
+
+def test_chunks_len_limit():
+    code = "a='%s' % (a" + ', b, a '*1000+')'
+    generator = lexer.get_chunks(code)
+    assert len(list(generator)) > 1
 
 # def test_multiline():
 #     code = """a = 'my string {}, but also {} and {}'.format(\nvar, \nf, \ncada_bra)"""
@@ -25,12 +30,12 @@ def test_chunks_per_lines_if():
 
 def test_str_newline():
     s_in = """a = '%s\\n' % var"""
-    generator = lexer.get_chunks(s_in)
+    generator = lexer.get_fstringify_chunks(s_in)
     assert len(list(generator)) == 1
 
 def test_one_string():
     s = """"my string {}, but also {} and {}".format(var, f, cada_bra)"""
-    chunks_gen = lexer.get_chunks(s)
+    chunks_gen = lexer.get_fstringify_chunks(s)
     assert len(list(chunks_gen)) == 1
 
     generator = lexer.get_fstringify_chunks(s)
@@ -72,7 +77,7 @@ def test_two_strings():
     s = 'a = "my string {}, but also {} and {}".format(var, f, cada_bra)\n' + \
     'b = "my string {}, but also {} and {}".format(var, what, cada_bra)'
 
-    chunks_gen = lexer.get_chunks(s)
+    chunks_gen = lexer.get_fstringify_chunks(s)
     assert len(list(chunks_gen)) == 2
 
     generator = lexer.get_fstringify_chunks(s)
@@ -97,12 +102,12 @@ def test_indented():
     if var % 3 == 0:
         a = "my string {}".format(var)""".strip()
 
-    chunks_gen = lexer.get_chunks(indented)
-    assert len(list(chunks_gen)) == 3
 
     generator = lexer.get_fstringify_chunks(indented)
+    assert len(list(generator)) == 1
     lines = indented.split('\n')
 
+    generator = lexer.get_fstringify_chunks(indented)
     chunk = next(generator)
 
     assert chunk.line == 2
@@ -137,7 +142,7 @@ raise NoAppException(
 
 def test_multiline():
     generator = lexer.get_fstringify_chunks(multiline_code)
-    assert len(list(generator)) == 0
+    assert len(list(generator)) == 1
 
 
 not_implicit_concat = '''
@@ -155,18 +160,6 @@ a = "Hello {}" \\
 
 def test_line_continuation():
     generator = lexer.get_fstringify_chunks(line_continuation)
-    assert len(list(generator)) == 0
-
-def test_raw_string():
-    code = '''r"^(s*%ss*=s*')(.+?)(')" % pattern'''
-    generator = lexer.get_chunks(code)
-    chunk = list(generator)[0]
-
-    assert chunk.tokens[0].is_raw_string()
-    assert chunk.contains_raw_strings
-
-
-    generator = lexer.get_fstringify_chunks(code)
     assert len(list(generator)) == 0
 
 

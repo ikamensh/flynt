@@ -2,6 +2,8 @@ import ast
 from collections import deque
 import re
 
+from flynt.exceptions import FlyntException
+
 def ast_formatted_value(val, fmt_str: str = None, conversion = None) -> ast.FormattedValue:
     if fmt_str:
         format_spec = ast.JoinedStr([ast_string_node(fmt_str.replace(':', ''))])
@@ -50,10 +52,17 @@ def joined_string(fmt_call: ast.Call) -> ast.JoinedStr:
 
     manual_field_ordering = False
 
+    seen_varnames = set()
+
     while len(splits) > 0:
         var_name = splits.popleft()
+        if var_name in seen_varnames:
+            raise FlyntException("A variable is used multiple times - better not to replace it.")
+        if var_name.isalnum():
+            seen_varnames.add(var_name)
+
         if '[' in var_name:
-            raise Exception(f"Skipping f-stringify of a fmt call with indexed name {var_name}")
+            raise FlyntException(f"Skipping f-stringify of a fmt call with indexed name {var_name}")
         conversion = splits.popleft()
         fmt_str = splits.popleft()
 
@@ -70,6 +79,6 @@ def joined_string(fmt_call: ast.Call) -> ast.JoinedStr:
         new_segments.append(ast_string_node(splits.popleft()))
 
     if values and not manual_field_ordering:
-        raise Exception("Mismatch between the number of formatting locations and provided variables")
+        raise FlyntException("Mismatch between the number of formatting locations and provided variables")
 
     return ast.JoinedStr(new_segments)

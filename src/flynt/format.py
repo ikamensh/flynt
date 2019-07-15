@@ -1,3 +1,6 @@
+import tokenize
+import io
+
 class QuoteTypes:
     single = "'"
     double = '"'
@@ -6,11 +9,10 @@ class QuoteTypes:
     all = [triple_double, triple_single, single, double]
 
 def get_quote_type(code: str):
-    from flynt import lexer
-
-    chunk = list(lexer.get_chunks(code))[0]
-    assert len(chunk) == 2
-    token = chunk.tokens[0]
+    from flynt.lexer import PyToken
+    g = tokenize.tokenize(io.BytesIO(code.encode("utf-8")).readline)
+    next(g)
+    token = PyToken(next(g))
 
     return token.get_quote_type()
 

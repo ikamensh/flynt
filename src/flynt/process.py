@@ -40,10 +40,7 @@ def fstringify_code_by_line(code: str) -> Tuple[str, int]:
         if meta['changed']:
             result_pieces +=[before, processed, rest+"\n"]
             count_expressions += 1
-        else:
-            result_pieces.append(line+"\n")
-
-        current_line += ( 1 + contract_lines)
+            current_line += (1 + contract_lines)
 
     while len(raw_code_lines) > current_line:
         result_pieces.append(raw_code_lines[current_line] + '\n')
