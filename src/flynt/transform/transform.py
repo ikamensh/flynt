@@ -7,7 +7,7 @@ from flynt.transform.node_transformer import fstringify_node
 from flynt.exceptions import FlyntException
 from flynt.format import set_quote_type, QuoteTypes
 
-def fstringify_code(code: str, quote_type: str = QuoteTypes.triple_double) -> Tuple[str, Dict]:
+def transform_chunk(code: str, quote_type: str = QuoteTypes.triple_double) -> Tuple[str, Dict]:
     """Convert a block of with a %-formatted string to an f-string
 
     Args:

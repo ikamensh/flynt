@@ -4,7 +4,7 @@ import argparse
 import sys
 
 from flynt.api import fstringify_dir, fstringify_file, fstringify
-from flynt.transform import fstringify_code
+from flynt.transform import transform_chunk
 from flynt.process import fstringify_code_by_line
 
 

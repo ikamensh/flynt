@@ -33,12 +33,12 @@ def write_output_file(name, txt):
     with open(filepath, 'w') as f:
         f.write(txt)
 
-def try_on_file(filename: str):
+def try_on_file(filename: str, multiline):
     """ Given a file name (something.py) find this file in test/integration/samples_in,
     run flint_str on its content, write result to test/integration/actual_out/something.py,
     and compare the result with test/integration/expected_out/something.py"""
     txt_in = read_in(filename)
-    out, edits = fstringify_code_by_line(txt_in)
+    out, edits = fstringify_code_by_line(txt_in, transform_multiline=multiline)
 
     write_output_file(filename, out)
     return out, read_expected(filename)
@@ -87,8 +87,30 @@ all_files = pytest.fixture(params=["all_named.py",
 @all_files
 def filename(request):
     yield request.param
-test_files = list(sorted(os.listdir(in_dir)))
 
 def test_fstringify(filename):
-    out, expected = try_on_file(filename)
+    out, expected = try_on_file(filename, multiline=True)
+    assert out == expected
+
+
+def try_on_file_expect_no_change(filename: str, multiline):
+    """ Given a file name (something.py) find this file in test/integration/samples_in,
+    run flint_str on its content, write result to test/integration/actual_out/something.py,
+    and compare the result with test/integration/expected_out/something.py"""
+    txt_in = read_in(filename)
+    out, edits = fstringify_code_by_line(txt_in, transform_multiline=multiline)
+    return out, txt_in
+
+multiline_transform_files = pytest.fixture(params=[
+                                "multiline.py",
+                                "multiline_1.py",
+                                "multiline_2.py",
+                                "multiline_3.py",
+                                ])
+@multiline_transform_files
+def multiline_filename(request):
+    yield request.param
+
+def test_single_line(multiline_filename):
+    out, expected = try_on_file_expect_no_change(multiline_filename, multiline=False)
     assert out == expected

@@ -72,6 +72,21 @@ class PyToken:
 REUSE = "Token was not used"
 
 class Chunk:
+
+    skip_tokens = ()
+    break_tokens = ()
+
+    @staticmethod
+    def set_multiline():
+        Chunk.skip_tokens = (token.NEWLINE, token.NL)
+        Chunk.break_tokens = (token.COMMENT,)
+
+    @staticmethod
+    def set_single_line():
+        Chunk.skip_tokens = ()
+        Chunk.break_tokens = (token.COMMENT, token.NEWLINE, token.NL)
+
+
     def __init__(self, tokens = ()):
         self.tokens: Deque[PyToken] = deque(tokens)
         self.complete = False
@@ -148,7 +163,7 @@ class Chunk:
 
     def append(self, t: PyToken):
         # stop on a comment or too long chunk
-        if t.toknum == token.COMMENT:
+        if t.toknum in self.break_tokens:
             self.complete = True
             self.successful = self.is_parseable and \
                               (self.is_percent_chunk or self.is_call_chunk)
@@ -159,7 +174,7 @@ class Chunk:
             self.successful = False
             return
 
-        if t.toknum in (token.NEWLINE, token.NL):
+        if t.toknum in self.skip_tokens:
             return
 
         if len(self) == 0:
@@ -245,6 +260,10 @@ class Chunk:
         else:
             return "Empty Chunk"
 
+set_multiline = Chunk.set_multiline
+set_single_line = Chunk.set_single_line
+# multiline mode is the default
+set_multiline()
 
 def get_chunks(code) -> Generator[Chunk, None, None]:
     g = tokenize.tokenize(io.BytesIO(code.encode("utf-8")).readline)

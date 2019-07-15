@@ -1,9 +1,15 @@
 from typing import Tuple
-from flynt.transform import fstringify_code
-from flynt.lexer import get_fstringify_chunks
+from flynt.transform import transform_chunk
+from flynt.lexer import get_fstringify_chunks, set_multiline, set_single_line
 
-def fstringify_code_by_line(code: str) -> Tuple[str, int]:
+def fstringify_code_by_line(code: str, transform_multiline = True, len_limit = 99) -> Tuple[str, int]:
     """ returns fstringified version of the code and amount of lines edited."""
+
+    if transform_multiline:
+        set_multiline()
+    else:
+        set_single_line()
+
     count_expressions = 0
     current_line = 0
     result_pieces = []
@@ -36,8 +42,8 @@ def fstringify_code_by_line(code: str) -> Tuple[str, int]:
             to_process += next_line[:end_idx]
             rest = next_line[end_idx:]
 
-        processed, meta = fstringify_code(to_process, quote_type=chunk.tokens[0].get_quote_type())
-        if meta['changed']:
+        processed, meta = transform_chunk(to_process, quote_type=chunk.tokens[0].get_quote_type())
+        if meta['changed'] and len( "".join([before, processed, rest]) ) <= len_limit:
             result_pieces +=[before, processed, rest+"\n"]
             count_expressions += 1
             current_line += (1 + contract_lines)

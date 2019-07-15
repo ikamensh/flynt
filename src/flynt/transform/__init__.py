@@ -1,1 +1,1 @@
-from flynt.transform.transform import fstringify_code
+from flynt.transform.transform import transform_chunk
