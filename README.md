@@ -24,16 +24,23 @@ To run: `flynt {source_file_or_directory}`
 
 ### Command line options
 ```
-usage: flynt [-h] [--verbose | --quiet] [--version] src
+usage: flynt [-h] [--verbose | --quiet]
+             [--no_multiline | --line_length LINE_LENGTH] [--version]
+             src
 
 positional arguments:
-  src         source file or directory
+  src                   source file or directory
 
 optional arguments:
-  -h, --help  show this help message and exit
-  --verbose   run with verbose output
-  --quiet     run without output
-  --version   show version and exit
+  -h, --help            show this help message and exit
+  --verbose             run with verbose output
+  --quiet               run without output
+  --no_multiline        convert only single line expressions
+  --line_length LINE_LENGTH
+                        for expressions spanning multiple lines, convert only
+                        if the resulting single line will fit into the line
+                        length limit. Default value is 79 characters.
+  --version             show version and exit
 
 ```
 
@@ -47,13 +54,10 @@ Receiving objects: 100% (17693/17693), 6.98 MiB | 6.96 MiB/s, done.
 Resolving deltas: 100% (12203/12203), done.
 
 38f9d3a65222:~ ikkamens$ flynt flask
-fstringifying /Users/ikkamens/flask/setup.py...no
-...
-fstringifying /Users/ikkamens/flask/src/flask/json/tag.py...yes
 
 Flynt run has finished. Stats:
 
-Execution time: 0.818s
+Execution time: 0.623s
 Files modified: 18
 Expressions transformed: 43
 Character count reduction: 241 (0.04%)
