@@ -1,10 +1,7 @@
 from flynt.format import QuoteTypes, get_quote_type, set_quote_type
-from flynt.lexer import lexer
+from flynt.lexer.split import get_chunks
 import pytest
 
-# @pytest.fixture()
-# def string():
-#     yield
 
 @pytest.mark.parametrize(argnames=['code', 'quote_type'],
                          argvalues=[("'abra'", QuoteTypes.single),
@@ -13,7 +10,9 @@ import pytest
                                     ('"""bobro"""', QuoteTypes.triple_double)])
 def test_get_quote_type_token(code, quote_type):
 
-    chunk = list(lexer.get_chunks(code))[0]
+    g = get_chunks(code)
+    next(g)
+    chunk = next(g)
     token = chunk.tokens[0]
 
     assert token.get_quote_type() == quote_type

@@ -1,32 +1,4 @@
-from flynt.lexer import lexer
-
-
-def test_comment_splits():
-    code = "a=3\nb=4 #comment \nc=5\n"
-    generator = lexer.get_chunks(code)
-    assert len(list(generator)) == 2
-
-def test_chunk_continues():
-    code = "a=3\nb=4\nc=5"
-    generator = lexer.get_chunks(code)
-    assert len(list(generator)) == 1
-
-def test_chunks_not_started():
-    code = "a=3\nif a: b=4\nc=5\n"*1000
-    generator = lexer.get_chunks(code)
-    assert len(list(generator)) == 1
-
-def test_chunks_len_limit():
-    code = "a='%s' % (a" + ', b, a '*1000+')'
-    generator = lexer.get_chunks(code)
-    assert len(list(generator)) > 1
-
-# def test_multiline():
-#     code = """a = 'my string {}, but also {} and {}'.format(\nvar, \nf, \ncada_bra)"""
-#
-#     s_out, count = lexer.get_fstringify_chunks(code)
-#     assert s_out == s_expected
-
+from flynt import lexer
 
 
 def test_str_newline():
@@ -120,9 +92,6 @@ def test_empty_line():
     def write_row(self, xf, row, row_idx):
     
         attrs = {'r': '{}'.format(row_idx)}""".strip()
-
-    chunks_gen = lexer.get_chunks(code_empty_line)
-    assert len(list(chunks_gen)) == 3
 
     generator = lexer.get_fstringify_chunks(code_empty_line)
     lines = code_empty_line.split('\n')
