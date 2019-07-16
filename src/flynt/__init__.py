@@ -3,9 +3,7 @@ __version__ = "0.17"
 import argparse
 import sys
 
-from flynt.api import fstringify_dir, fstringify_file, fstringify
-from flynt.transform import transform_chunk
-from flynt.process import fstringify_code_by_line
+from flynt.api import fstringify
 
 
 def main():
@@ -15,9 +13,21 @@ def main():
 
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--verbose", action="store_true", help="run with verbose output",
-                       default=True)
+                       default=False)
     group.add_argument("--quiet", action="store_true", help="run without output",
                        default=False)
+
+    group.add_argument("--no_multiline",
+                       action="store_true",
+                       help="convert only single line expressions",
+                       default=False)
+
+    group.add_argument("--line_length",
+                       action="store",
+                       help="for expressions spanning multiple lines, convert only if "
+                            "the resulting single line will fit into the line length limit",
+                       default=79)
+
     parser.add_argument(
         "--version", action="store_true", default=False, help="show version and exit"
     )
@@ -29,7 +39,11 @@ def main():
         print("flynt", __version__)
         sys.exit(0)
 
-    fstringify(args.src, verbose=args.verbose, quiet=args.quiet)
+    fstringify(args.src,
+               verbose = args.verbose,
+               quiet = args.quiet,
+               multiline = not args.no_multiline,
+               len_limit = int(args.line_length) )
 
 
 if __name__ == "__main__":

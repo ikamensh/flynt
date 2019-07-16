@@ -10,7 +10,7 @@ from flynt.process import fstringify_code_by_line
 
 blacklist = {'.tox', 'venv', 'site-packages', '.eggs'}
 
-def fstringify_file(filename) -> Tuple[int, int, int]:
+def fstringify_file(filename, multiline, len_limit) -> Tuple[int, int, int]:
     """
     :param filename:
     :return: tuple: (n_changes, length of original code,
@@ -21,7 +21,9 @@ def fstringify_file(filename) -> Tuple[int, int, int]:
         with open(filename, encoding='utf-8') as f:
             contents = f.read()
 
-        new_code, changes = fstringify_code_by_line(contents)
+        new_code, changes = fstringify_code_by_line(contents,
+                                                    transform_multiline=multiline,
+                                                    len_limit=len_limit)
     except Exception as e:
         print(f"Skipping file {filename} due to {e}")
         traceback.print_exc()
@@ -35,13 +37,7 @@ def fstringify_file(filename) -> Tuple[int, int, int]:
 
         return changes, len(contents), len(new_code)
 
-
-def fstringify_dir(in_dir):
-    files = astor.code_to_ast.find_py_files(in_dir)
-    return fstringify_files(files)
-
-
-def fstringify_files(files, verbose=False, quiet=False):
+def fstringify_files(files, verbose, quiet, multiline, len_limit):
     changed_files = 0
     total_charcount_original = 0
     total_charcount_new = 0
@@ -51,7 +47,9 @@ def fstringify_files(files, verbose=False, quiet=False):
         if any(b in f[0] for b in blacklist):
             continue
         file_path = os.path.join(f[0], f[1])
-        count_expressions, charcount_original, charcount_new = fstringify_file(file_path)
+        count_expressions, charcount_original, charcount_new = fstringify_file(file_path,
+                                                                               multiline,
+                                                                               len_limit)
         if count_expressions:
             changed_files += 1
             total_expressions += count_expressions
@@ -78,17 +76,8 @@ def fstringify_files(files, verbose=False, quiet=False):
         print("Thank you for using flynt! Fstringify more projects and recommend it to your colleagues!\n")
         print('_-_.'*25)
 
-# def check_in_workdir():
-#     import subprocess
-#
-#     inside_git_output = "true"
-#
-#     out = subprocess.run(["git", "rev-parse", "--is-inside-work-tree"])
-#     if out != inside_git_output:
-#         print("Git verification failed. Running on code that is not in version control is risky.")
-#         choice = input(f"Do you want to run Flynt on {} (y/n)")
 
-def fstringify(file_or_path, verbose=False, quiet=False):
+def fstringify(file_or_path, verbose, quiet, multiline, len_limit):
     """ determine if a directory or a single file was passed, and f-stringify it."""
     abs_path = os.path.abspath(file_or_path)
 
@@ -101,4 +90,4 @@ def fstringify(file_or_path, verbose=False, quiet=False):
     else:
         files = ((os.path.dirname(abs_path), os.path.basename(abs_path)),)
 
-    fstringify_files(files, verbose=verbose, quiet=quiet)
+    fstringify_files(files, verbose=verbose, quiet=quiet, multiline=multiline, len_limit=len_limit)
