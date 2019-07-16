@@ -1,73 +1,9 @@
-import io
 import ast
 import token
 from collections import deque
-import tokenize
-from typing import Generator, Tuple, Deque
-from flynt.format import QuoteTypes
+from typing import Deque
 
-
-line_num = int
-char_idx = int
-class PyToken:
-    percent_cant_handle = ("%%",)
-
-    def __init__(self, t):
-        toknum, tokval, start, end, line = t
-        self.toknum: int = toknum
-        self.tokval: str = tokval
-        self.start: Tuple[line_num, char_idx] = start
-        self.end: Tuple[line_num, char_idx] = end
-
-    def is_percent_op(self):
-        return self.toknum == token.OP and self.tokval == "%"
-
-    def is_expr_continuation_op(self):
-        return self.is_sq_brack_op() or \
-               self.is_paren_op() or \
-               self.is_dot_op() or \
-               self.is_exponentiation_op()
-
-    def is_sq_brack_op(self):
-        return self.toknum == token.OP and self.tokval == "["
-
-    def is_dot_op(self):
-        return self.toknum == token.OP and self.tokval == "."
-
-    def is_paren_op(self):
-        return self.toknum == token.OP and self.tokval == "("
-
-    def is_exponentiation_op(self):
-        return self.toknum == token.OP and self.tokval == "**"
-
-    def is_string(self):
-        return self.toknum == token.STRING
-
-    def is_percent_string(self):
-        return self.toknum == token.STRING and \
-               not any(s in self.tokval for s in PyToken.percent_cant_handle)
-
-    def get_quote_type(self):
-        assert self.toknum is token.STRING
-        for qt in QuoteTypes.all:
-            if self.tokval[:len(qt)] == qt and self.tokval[-len(qt):] == qt:
-                return qt
-
-        if self.is_legacy_unicode_string():
-            for qt in QuoteTypes.all:
-                if self.tokval[1:len(qt)+1] == qt and self.tokval[-len(qt):] == qt:
-                    return qt
-
-        raise Exception(f"Can't determine quote type of the string {self.tokval}.")
-
-    def is_legacy_unicode_string(self):
-        return self.toknum == token.STRING and self.tokval[0] == 'u'
-
-    def is_raw_string(self):
-        return self.toknum == token.STRING and self.tokval[0] == 'r'
-
-    def __repr__(self):
-        return f"PyToken {self.toknum} : {self.tokval}"
+from flynt.lexer.PyToken import PyToken
 
 REUSE = "Token was not used"
 
@@ -75,16 +11,19 @@ class Chunk:
 
     skip_tokens = ()
     break_tokens = ()
+    multiline = None
 
     @staticmethod
     def set_multiline():
         Chunk.skip_tokens = (token.NEWLINE, token.NL)
         Chunk.break_tokens = (token.COMMENT,)
+        Chunk.multiline = True
 
     @staticmethod
     def set_single_line():
         Chunk.skip_tokens = ()
         Chunk.break_tokens = (token.COMMENT, token.NEWLINE, token.NL)
+        Chunk.multiline = False
 
 
     def __init__(self, tokens = ()):
@@ -99,7 +38,11 @@ class Chunk:
 
     def empty_append(self, t: PyToken):
         if t.is_string() and not t.is_raw_string():
-            self.tokens.append(t)
+            pass
+        else:
+            self.complete = True
+
+        self.tokens.append(t)
 
     def second_append(self, t: PyToken):
         if t.is_string():
@@ -210,26 +153,9 @@ class Chunk:
     def end_idx(self):
         return self.tokens[-1].end[1]
 
-
-    #todo test multiline for comment between implicit concat
-    @property
-    def end_implicit_string_concat(self):
-        if len(self) < 2:
-            return False
-        else:
-            return self.tokens[-2].toknum == token.STRING and \
-                   self.tokens[-1].toknum in (token.NL, token.NEWLINE)
-
     @property
     def n_lines(self):
         return 1 + self.tokens[-1].end[0] - self.tokens[0].start[0]
-
-    @property
-    def start_implicit_string_concat(self):
-        if len(self) < 1:
-            return False
-        else:
-            return self.tokens[0].toknum == token.STRING
 
     @property
     def is_multiline(self):
@@ -260,45 +186,3 @@ class Chunk:
             return "Chunk: " + str(self)
         else:
             return "Empty Chunk"
-
-set_multiline = Chunk.set_multiline
-set_single_line = Chunk.set_single_line
-# multiline mode is the default
-set_multiline()
-
-def get_chunks(code) -> Generator[Chunk, None, None]:
-    g = tokenize.tokenize(io.BytesIO(code.encode("utf-8")).readline)
-    chunk = Chunk()
-
-    for item in g:
-        t = PyToken(item)
-        reuse = chunk.append(t)
-        if chunk.complete:
-
-
-
-            yield chunk
-            chunk = Chunk()
-            if reuse:
-                chunk.append(t)
-
-    yield chunk
-
-
-def get_fstringify_chunks(code: str) -> Generator[Chunk, None, None]:
-    """
-    A generator yielding Chunks of the code where fstring can be formed.
-    """
-    last_concat = False
-
-    for chunk in get_chunks(code):
-        if chunk.successful and not last_concat:
-            yield chunk
-
-        if len(chunk) and chunk[-1].is_string():
-            last_concat = True
-        else:
-            last_concat = False
-
-
-

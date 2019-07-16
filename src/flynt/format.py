@@ -9,7 +9,7 @@ class QuoteTypes:
     all = [triple_double, triple_single, single, double]
 
 def get_quote_type(code: str):
-    from flynt.lexer import PyToken
+    from flynt.lexer.PyToken import PyToken
     g = tokenize.tokenize(io.BytesIO(code.encode("utf-8")).readline)
     next(g)
     token = PyToken(next(g))

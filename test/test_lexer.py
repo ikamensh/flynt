@@ -1,4 +1,5 @@
-from flynt import lexer
+from flynt.lexer import lexer
+
 
 def test_comment_splits():
     code = "a=3\nb=4 #comment \nc=5\n"

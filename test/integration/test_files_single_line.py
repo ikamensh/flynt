@@ -1,5 +1,6 @@
 """ Test str processors on actual file contents """
 import os
+import pytest
 import config
 from flynt.process import fstringify_code_by_line
 
@@ -7,8 +8,8 @@ from flynt.process import fstringify_code_by_line
 int_test_dir = os.path.join(config.home, "test/integration/")
 
 in_dir = os.path.join(int_test_dir, "samples_in")
-out_dir = os.path.join(int_test_dir, "actual_out")
-expected_dir = os.path.join(int_test_dir, "expected_out")
+out_dir = os.path.join(int_test_dir, "actual_out_single_line")
+expected_dir = os.path.join(int_test_dir, "expected_out_single_line")
 
 os.makedirs(out_dir, exist_ok=True)
 
@@ -42,9 +43,9 @@ def try_on_file(filename: str, multiline):
     write_output_file(filename, out)
     return out, read_expected(filename)
 
-
-
-def test_fstringify(filename):
-    out, expected = try_on_file(filename, multiline=True)
+def test_fstringify_single_line(filename):
+    out, expected = try_on_file(filename, multiline=False)
     assert out == expected
+
+
 

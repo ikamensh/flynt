@@ -28,7 +28,7 @@ def get_requirements():
 
 setup(
     name="flynt",
-    packages=["flynt", "flynt.transform"],
+    packages=["flynt", "flynt.transform", "flynt.lexer"],
     package_dir={'': 'src'},
     version=version,
     description="CLI tool to convert a python project's %-formatted strings to f-strings.",
