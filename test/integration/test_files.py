@@ -38,7 +38,7 @@ def try_on_file(filename: str, multiline):
     run flint_str on its content, write result to test/integration/actual_out/something.py,
     and compare the result with test/integration/expected_out/something.py"""
     txt_in = read_in(filename)
-    out, edits = fstringify_code_by_line(txt_in, transform_multiline=multiline)
+    out, edits = fstringify_code_by_line(txt_in, transform_multiline=multiline, len_limit=None)
 
     write_output_file(filename, out)
     return out, read_expected(filename)
@@ -52,6 +52,10 @@ all_files = pytest.fixture(params=["all_named.py",
                         "hard_percent.py",
                         "indexed_fmt_name.py",
                         "indexed_percent.py",
+                        "implicit_concat.py",
+                        "implicit_concat_comment.py",
+                        "implicit_concat_named1.py",
+                        "implicit_concat_named2.py",
                         "long.py",
                         "multiline.py",
                         "multiline_1.py",
@@ -83,7 +87,7 @@ all_files = pytest.fixture(params=["all_named.py",
                         "tuple_in_list.py"
                         ])
 
-# @pytest.fixture(params=["multiline_2.py"])
+# @pytest.fixture(params=["implicit_concat.py"])
 @all_files
 def filename(request):
     yield request.param

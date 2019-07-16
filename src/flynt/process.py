@@ -1,9 +1,13 @@
 from typing import Tuple
 from flynt.transform import transform_chunk
 from flynt.lexer import get_fstringify_chunks, set_multiline, set_single_line
+import math
 
-def fstringify_code_by_line(code: str, transform_multiline = True, len_limit = 99) -> Tuple[str, int]:
+def fstringify_code_by_line(code: str, transform_multiline = True, len_limit = 79) -> Tuple[str, int]:
     """ returns fstringified version of the code and amount of lines edited."""
+
+    if len_limit is None:
+        len_limit = math.inf
 
     if transform_multiline:
         set_multiline()
@@ -42,7 +46,7 @@ def fstringify_code_by_line(code: str, transform_multiline = True, len_limit = 9
             to_process += next_line[:end_idx]
             rest = next_line[end_idx:]
 
-        processed, meta = transform_chunk(to_process, quote_type=chunk.tokens[0].get_quote_type())
+        processed, meta = transform_chunk(str(chunk), quote_type=chunk.tokens[0].get_quote_type())
         if meta['changed'] and len( "".join([before, processed, rest]) ) <= len_limit:
             result_pieces +=[before, processed, rest+"\n"]
             count_expressions += 1
