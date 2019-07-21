@@ -1,3 +1,7 @@
+""" `flynt` is a command line tool to automatically convert a project's Python code
+from old "%-formatted" and .format(...) strings into Python 3.6+'s f-strings.
+Learn more about f-strings at https://www.python.org/dev/peps/pep-0498/"""
+
 __version__ = "0.18"
 
 import argparse
@@ -5,27 +9,28 @@ import sys
 
 from flynt.api import fstringify
 
-
 def main():
     parser = argparse.ArgumentParser(
-        description=f"flynt {__version__}", add_help=True
+        description=f"flynt {__version__}", add_help=True, epilog=__doc__
     )
 
-    group = parser.add_mutually_exclusive_group()
-    group.add_argument("--verbose", action="store_true", help="run with verbose output",
+    verbosity_group = parser.add_mutually_exclusive_group()
+    verbosity_group.add_argument("--verbose", action="store_true", help="run with verbose output",
                        default=False)
-    group.add_argument("--quiet", action="store_true", help="run without output",
+    verbosity_group.add_argument("--quiet", action="store_true", help="run without output",
                        default=False)
 
-    group.add_argument("--no_multiline",
+    multiline_group = parser.add_mutually_exclusive_group()
+    multiline_group.add_argument("--no_multiline",
                        action="store_true",
                        help="convert only single line expressions",
                        default=False)
 
-    group.add_argument("--line_length",
+    multiline_group.add_argument("--line_length",
                        action="store",
                        help="for expressions spanning multiple lines, convert only if "
-                            "the resulting single line will fit into the line length limit",
+                            "the resulting single line will fit into the line length limit. "
+                            "Default value is 79 characters.",
                        default=79)
 
     parser.add_argument(
