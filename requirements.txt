@@ -1,1 +1,4 @@
 astor
+forbiddenfruit
+pyupgrade
+colorama

@@ -2,7 +2,7 @@
 from old "%-formatted" and .format(...) strings into Python 3.6+'s f-strings.
 Learn more about f-strings at https://www.python.org/dev/peps/pep-0498/"""
 
-__version__ = "0.18"
+__version__ = "0.19"
 
 import argparse
 import sys
@@ -36,6 +36,11 @@ def main():
     parser.add_argument(
         "--version", action="store_true", default=False, help="show version and exit"
     )
+
+    parser.add_argument(
+        "--upgrade", action="store_true", default=False, help="run pyupgrade on .py files"
+    )
+
     parser.add_argument("src", action="store", help="source file or directory")
 
     args = parser.parse_args()
@@ -48,7 +53,8 @@ def main():
                verbose = args.verbose,
                quiet = args.quiet,
                multiline = not args.no_multiline,
-               len_limit = int(args.line_length) )
+               len_limit = int(args.line_length),
+               pyup = args.upgrade)
 
 
 if __name__ == "__main__":
