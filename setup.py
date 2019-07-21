@@ -47,5 +47,5 @@ setup(
                      "strings to f-strings.",
     install_requires=get_requirements(),
     entry_points={"console_scripts": ["flynt=flynt:main"]},
-
+    url="https://github.com/ikamensh/flynt",
 )
