@@ -104,14 +104,14 @@ def fstringify_files(files, verbose, quiet, multiline, len_limit, pyup, original
         print("\nPlease run your tests before commiting. Report bugs as github issues at: https://github.com/ikamensh/flynt")
 
         if not pyup:
-            print(f"{Fore.LIGHTGREEN_EX}\n\nYour code is now compatible only with python versions 3.6 or higher."
+            print(f"{Style.DIM}\n\nYour code is now compatible only with python versions 3.6 or higher."
                   " Would you like to remove legacy expressions and get a bunch of safe best practice changes for free?"
                   f"\nRun {Style.BRIGHT}flynt --upgrade {original_arg} {Style.RESET_ALL}"
-                  f"{Fore.LIGHTGREEN_EX} to run pyupgrade on all .py files."
+                  f"{Style.DIM} to run pyupgrade on all .py files."
                   "\nSee full list of upgradable expressions at: https://github.com/asottile/pyupgrade#implemented-features "
                   f"Flynt only wraps the pyupgrade call and gives stats, all credit goes to original authors of pyupgrade.\n{Style.RESET_ALL}")
         else:
-            print(f"{Fore.LIGHTGREEN_EX}\n\nYour code is now pyupgraded!"
+            print(f"{Style.DIM}\n\nYour code is now pyupgraded!"
                   " See full list of modified expressions at: https://github.com/asottile/pyupgrade#implemented-features."
                   f" Flynt only wraps the pyupgrade call and gives stats, all credit goes to original authors of pyupgrade.\n{Style.RESET_ALL}")
 
