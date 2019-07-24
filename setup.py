@@ -32,7 +32,7 @@ setup(
     package_dir={'': 'src'},
     version=version,
     description="CLI tool to convert a python project's %-formatted strings to f-strings.",
-    author="Hackathon Team",
+    author="Ilya Kamenshchikov",
     keywords=["utility", "strings"],
     classifiers=[
         "Programming Language :: Python",
