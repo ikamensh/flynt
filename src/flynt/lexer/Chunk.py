@@ -7,6 +7,23 @@ from flynt.lexer.PyToken import PyToken
 
 REUSE = "Token was not used"
 
+import sys
+
+is_36 = (sys.version_info.major == 3 and sys.version_info.minor == 6)
+if is_36:
+    multiline_skip = (token.NEWLINE, 58)
+    multiline_break = (57,)
+
+    single_skip = ()
+    single_break = (token.NEWLINE, 57, 58)
+else:
+    multiline_skip = (token.NEWLINE, token.NL)
+    multiline_break = (token.COMMENT,)
+
+    single_skip = ()
+    single_break = (token.COMMENT, token.NEWLINE, token.NL)
+
+
 class Chunk:
 
     skip_tokens = ()
@@ -15,14 +32,14 @@ class Chunk:
 
     @staticmethod
     def set_multiline():
-        Chunk.skip_tokens = (token.NEWLINE, token.NL)
-        Chunk.break_tokens = (token.COMMENT,)
+        Chunk.skip_tokens = multiline_skip
+        Chunk.break_tokens = multiline_break
         Chunk.multiline = True
 
     @staticmethod
     def set_single_line():
-        Chunk.skip_tokens = ()
-        Chunk.break_tokens = (token.COMMENT, token.NEWLINE, token.NL)
+        Chunk.skip_tokens = single_skip
+        Chunk.break_tokens = single_break
         Chunk.multiline = False
 
 

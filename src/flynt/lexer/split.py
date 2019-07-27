@@ -33,6 +33,9 @@ def get_fstringify_chunks(code: str) -> Generator[Chunk, None, None]:
         if chunk.successful and not last_concat:
             yield chunk
 
+        if len(chunk):
+            print(chunk[-1])
+
         if len(chunk) and chunk[-1].is_string():
             last_concat = True
         else:
