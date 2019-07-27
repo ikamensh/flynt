@@ -1,4 +1,3 @@
-import sys
 import re
 
 import config
@@ -7,7 +6,6 @@ config.add_src_to_path()
 with open("src/flynt/__init__.py") as f:
     version = re.search('__version__ = "(.*?)"', f.read()).group(1)
 
-assert sys.version_info >= (3, 7, 0), "flint requires Python 3.7+"
 from pathlib import Path
 from setuptools import setup
 
