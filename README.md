@@ -48,9 +48,7 @@ optional arguments:
 ```
 38f9d3a65222:~ ikkamens$ git clone https://github.com/pallets/flask.git
 Cloning into 'flask'...
-remote: Enumerating objects: 17693, done.
-remote: Total 17693 (delta 0), reused 0 (delta 0), pack-reused 17693
-Receiving objects: 100% (17693/17693), 6.98 MiB | 6.96 MiB/s, done.
+...
 Resolving deltas: 100% (12203/12203), done.
 
 38f9d3a65222:~ ikkamens$ flynt flask
