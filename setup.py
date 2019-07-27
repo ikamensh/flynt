@@ -47,6 +47,7 @@ setup(
     long_description="CLI tool to convert a python project's .format(...) and %-formatted "
                      "strings to f-strings.",
     install_requires=get_requirements(),
+    python_requires=">=3.7",
     entry_points={"console_scripts": ["flynt=flynt:main"]},
     url="https://github.com/ikamensh/flynt",
 )
