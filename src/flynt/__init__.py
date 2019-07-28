@@ -2,10 +2,9 @@
 from old "%-formatted" and .format(...) strings into Python 3.6+'s f-strings.
 Learn more about f-strings at https://www.python.org/dev/peps/pep-0498/"""
 
-__version__ = "0.22"
+__version__ = "0.23"
 
 import argparse
-import sys
 
 from flynt.api import fstringify
 
@@ -34,20 +33,12 @@ def main():
                        default=79)
 
     parser.add_argument(
-        "--version", action="store_true", default=False, help="show version and exit"
-    )
-
-    parser.add_argument(
         "--upgrade", action="store_true", default=False, help="run pyupgrade on .py files"
     )
 
     parser.add_argument("src", action="store", help="source file or directory")
 
     args = parser.parse_args()
-
-    if args.version:
-        print("flynt", __version__)
-        sys.exit(0)
 
     fstringify(args.src,
                verbose = args.verbose,
