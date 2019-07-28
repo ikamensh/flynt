@@ -40,7 +40,7 @@ optional arguments:
                         for expressions spanning multiple lines, convert only
                         if the resulting single line will fit into the line
                         length limit. Default value is 79 characters.
-  --version             show version and exit
+  --upgrade             run pyupgrade on .py files
 
 ```
 
