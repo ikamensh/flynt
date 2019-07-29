@@ -1,6 +1,5 @@
 import ast
 from collections import deque
-import re
 
 from flynt.exceptions import FlyntException
 
