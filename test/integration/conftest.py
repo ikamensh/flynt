@@ -5,6 +5,7 @@ all_files = pytest.fixture(params=[
     "all_named.py",
     "def_empty_line.py",
     "digit_ordering.py",
+    "dict_func.py",
     "first_string.py",
     "hard_percent.py",
     "implicit_concat.py",
