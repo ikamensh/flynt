@@ -40,6 +40,9 @@ def prep_var_map(keywords: list):
 
 format_location_pattern = re.compile(r'{([a-zA-Z0-9_\[\]]*)(![rsa])?(:[.0-9a-z,%]*)?}(?!})')
 
+import string
+stdlib_parse = string.Formatter().parse
+
 def joined_string(fmt_call: ast.Call) -> ast.JoinedStr:
     """ Transform a "...".format() call node into a f-string node. """
     string = fmt_call.func.value.s
