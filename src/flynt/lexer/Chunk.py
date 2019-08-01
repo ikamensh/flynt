@@ -159,7 +159,7 @@ class Chunk:
             return False
 
     @property
-    def line(self):
+    def start_line(self):
         return self.tokens[0].start[0] - 1
 
     @property
@@ -171,8 +171,12 @@ class Chunk:
         return self.tokens[-1].end[1]
 
     @property
+    def end_line(self):
+        return self.tokens[-1].end[0] - 1
+
+    @property
     def n_lines(self):
-        return 1 + self.tokens[-1].end[0] - self.tokens[0].start[0]
+        return 1 + self.end_line - self.start_line
 
     @property
     def is_multiline(self):

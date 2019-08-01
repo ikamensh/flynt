@@ -14,7 +14,7 @@ def test_one_string():
     generator = lexer.get_fstringify_chunks(s)
     chunk = next(generator)
 
-    assert chunk.line == 0
+    assert chunk.start_line == 0
     assert s[:chunk.end_idx] == s
 
 def test_yields_parsable():
@@ -58,12 +58,12 @@ def test_two_strings():
 
     chunk = next(generator)
 
-    assert chunk.line == 0
+    assert chunk.start_line == 0
     assert lines[0][:chunk.end_idx] == lines[0]
 
     chunk = next(generator)
 
-    assert chunk.line == 1
+    assert chunk.start_line == 1
     assert lines[1][:chunk.end_idx] == lines[1]
 
 
@@ -83,7 +83,7 @@ def test_indented():
     generator = lexer.get_fstringify_chunks(indented)
     chunk = next(generator)
 
-    assert chunk.line == 2
+    assert chunk.start_line == 2
     assert lines[2][:chunk.end_idx] == lines[2]
 
 
@@ -98,7 +98,7 @@ def test_empty_line():
 
     chunk = next(generator)
 
-    assert chunk.line == 2
+    assert chunk.start_line == 2
     assert lines[2][chunk.start_idx:chunk.end_idx] == "'{}'.format(row_idx)"
 
 

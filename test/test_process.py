@@ -77,6 +77,17 @@ def test_indented():
     assert count == 1
     assert s_out.split('\n')[2] == s_expected
 
+
+
+def test_openpyxl():
+    s_in = """sheet['B{}'.format(i) : 'E{}'.format(i)]"""
+    s_expected = """sheet[f'B{i}' : f'E{i}']"""
+    s_out, count = process.fstringify_code_by_line(s_in)
+
+    assert count == 2
+    assert s_out == s_expected
+
+
 code_empty_line = """
 def write_row(self, xf, row, row_idx):
 
