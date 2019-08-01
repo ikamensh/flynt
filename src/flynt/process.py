@@ -4,79 +4,68 @@ from flynt import lexer
 from flynt.exceptions import FlyntException
 import math
 
-# class JoinTransformer:
-#     def __init__(self, code: str, transform_multiline, len_limit):
-#         self.result_pieces = []
-#         self.count_expressions = 0
-#         self.code_in = code
-#         self.raw_code_lines = code.split("\n")
-#
-#         if len_limit is None:
-#             len_limit = math.inf
-#
-#         self.len_limit = len_limit
-#         self.transform_multiline = transform_multiline
-#
-#         self.processed_line = 0
-#         self.processed_idx = None
-#         self.used_up = False
-#
-#     def fstringify_code_by_line(self):
+class JoinTransformer:
+    """ JoinTransformer fills up the resulting code by tracking
+    the last line number and char index. Failed transformations do not need to do anything -
+    not adding results is safe, as original code will be filled in."""
 
+    def __init__(self, code: str, len_limit):
+        self.results = []
+        self.count_expressions = 0
+        self.code_in = code
+        self.src_lines = code.split("\n")
 
-def fstringify_code_by_line(code: str, transform_multiline = True, len_limit = 79) -> Tuple[str, int]:
-    """ returns fstringified version of the code and amount of lines edited."""
+        if len_limit is None:
+            len_limit = math.inf
 
-    if len_limit is None:
-        len_limit = math.inf
+        self.len_limit = len_limit
 
-    if transform_multiline:
-        lexer.set_multiline()
-    else:
-        lexer.set_single_line()
+        self.last_line = 0
+        self.last_idx = None
+        self.used_up = False
 
-    count_expressions = 0
+    def fstringify_code_by_line(self):
+        assert not self.used_up, "Tried to use JT twice."
+        for chunk in lexer.get_fstringify_chunks(self.code_in):
+            self.fill_up_to(chunk)
+            self.try_chunk(chunk)
 
-    result_pieces = []
-    raw_code_lines = code.split("\n")
+        self.add_rest()
+        self.used_up = True
+        return "".join(self.results)[:-1], self.count_expressions
 
-    processed_line = 0
-    processed_idx = None
-
-    for chunk in lexer.get_fstringify_chunks(code):
-
+    def fill_up_to(self, chunk):
         start_line, start_idx, end_idx = chunk.start_line, chunk.start_idx, chunk.end_idx
-        line = raw_code_lines[start_line]
+        line = self.src_lines[start_line]
 
-        if processed_idx is None:
-
-            while processed_line < start_line:
-                result_pieces.append(raw_code_lines[processed_line] + '\n')
-                processed_line += 1
-
-            result_pieces.append(line[:start_idx])
-            processed_idx = start_idx
+        if self.last_idx is None:
+            self.fill_up_to_line(start_line)
+            self.results.append(line[:start_idx])
         else:
-            if start_line == processed_line:
-                result_pieces.append(raw_code_lines[processed_line][processed_idx:start_idx])
-                processed_idx = start_idx
+            if start_line == self.last_line:
+                self.results.append(self.src_lines[self.last_line][self.last_idx:start_idx])
             else:
-                result_pieces.append(raw_code_lines[processed_line][processed_idx:]+'\n')
-                processed_line += 1
+                self.results.append(self.src_lines[self.last_line][self.last_idx:] + '\n')
+                self.last_line += 1
+                self.fill_up_to_line(start_line)
+                self.results.append(line[:start_idx])
 
-                while processed_line < start_line:
-                    result_pieces.append(raw_code_lines[processed_line] + '\n')
-                    processed_line += 1
+        self.last_idx = start_idx
 
-                result_pieces.append(line[:start_idx])
-                processed_idx = None
+    def fill_up_to_line(self, start_line):
+        while self.last_line < start_line:
+            self.results.append(self.src_lines[self.last_line] + '\n')
+            self.last_line += 1
 
+    def try_chunk(self, chunk):
+        start_line, start_idx, end_idx = chunk.start_line, chunk.start_idx, chunk.end_idx
+        line = self.src_lines[start_line]
 
         contract_lines = chunk.n_lines - 1
         if contract_lines == 0:
             rest = line[end_idx:]
         else:
-            next_line = raw_code_lines[start_line + contract_lines]
+            next_line = self.src_lines[start_line + contract_lines]
             rest = next_line[end_idx:]
 
         try:
@@ -86,27 +75,37 @@ def fstringify_code_by_line(code: str, transform_multiline = True, len_limit = 7
         else:
             converted, meta = transform_chunk(str(chunk), quote_type=quote_type)
             if meta['changed']:
-                # if we use multiline, we either transform a single long line,
-                # or multiple with result within the limit
                 multiline_condition = (
                         not contract_lines
-                        or len( "".join([converted, rest]) ) <= len_limit - start_idx
+                        or len( "".join([converted, rest]) ) <= self.len_limit - start_idx
                 )
                 if multiline_condition:
-                    result_pieces.append(converted)
-                    count_expressions += 1
-                    processed_line += contract_lines
-                    processed_idx = end_idx
+                    self.results.append(converted)
+                    self.count_expressions += 1
+                    self.last_line += contract_lines
+                    self.last_idx = end_idx
 
-    if processed_idx is not None:
-        result_pieces.append(raw_code_lines[processed_line][processed_idx:] + '\n')
-        processed_line += 1
+    def add_rest(self):
+        if self.last_idx is not None:
+            self.results.append(self.src_lines[self.last_line][self.last_idx:] + '\n')
+            self.last_line += 1
 
-    while len(raw_code_lines) > processed_line:
-        result_pieces.append(raw_code_lines[processed_line] + '\n')
-        processed_line += 1
+        while len(self.src_lines) > self.last_line:
+            self.results.append(self.src_lines[self.last_line] + '\n')
+            self.last_line += 1
 
-    return "".join(result_pieces)[:-1], count_expressions  #last new line is extra.
+
+def fstringify_code_by_line(code: str, multiline = True, len_limit = 79) -> Tuple[str, int]:
+    """ returns fstringified version of the code and amount of lines edited."""
+    if not multiline:
+        len_limit = 0
+        lexer.set_single_line()
+    else:
+        lexer.set_multiline()
+
+    jt = JoinTransformer(code, len_limit)
+
+    return jt.fstringify_code_by_line()
 
 
 

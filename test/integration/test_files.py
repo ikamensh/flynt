@@ -37,7 +37,7 @@ def try_on_file(filename: str, multiline):
     run flint_str on its content, write result to test/integration/actual_out/something.py,
     and compare the result with test/integration/expected_out/something.py"""
     txt_in = read_in(filename)
-    out, edits = fstringify_code_by_line(txt_in, transform_multiline=multiline, len_limit=None)
+    out, edits = fstringify_code_by_line(txt_in, multiline=multiline, len_limit=None)
 
     write_output_file(filename, out)
     return out, read_expected(filename)

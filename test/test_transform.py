@@ -1,4 +1,5 @@
 from flynt.transform import transform_chunk
+import pytest
 
 def test_fmt_spec():
     code = '''"my string {:.2f}".format(var)'''
@@ -9,6 +10,15 @@ def test_fmt_spec():
     assert meta['changed']
     assert new == expected
 
+@pytest.mark.xfail
+def test_expr_no_paren():
+    code = '''"my string {:.2f}".format(var+1)'''
+    expected = '''f"""my string {var + 1:.2f}"""'''
+
+    new, meta = transform_chunk(code)
+
+    assert meta['changed']
+    assert new == expected
 
 def test_newline():
     code = r'''"echo '{}'\n".format(self.FLUSH_CMD)'''

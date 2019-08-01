@@ -6,6 +6,7 @@ all_files = pytest.fixture(params=[
     "def_empty_line.py",
     "digit_ordering.py",
     "dict_func.py",
+    "double_conv.py",
     "first_string.py",
     "hard_percent.py",
     "implicit_concat.py",
@@ -48,7 +49,7 @@ all_files = pytest.fixture(params=[
     "two_liner.py"
                         ])
 
-# @pytest.fixture(params=["simple_format_double_brace.py"])
-@all_files
+@pytest.fixture(params=["double_conv.py"])
+# @all_files
 def filename(request):
     yield request.param

@@ -1,1 +1,2 @@
-a = f"my string {var}, but also {f} and {cada_bra}"
+a = "my string {}, but also " \
+    "{} and {}".format(var, f, cada_bra)

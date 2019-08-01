@@ -25,7 +25,7 @@ def fstringify_file(filename, multiline, len_limit, pyup = False) -> Tuple[bool,
             contents = f.read()
 
         new_code, changes = fstringify_code_by_line(contents,
-                                                    transform_multiline=multiline,
+                                                    multiline=multiline,
                                                     len_limit=len_limit)
 
     except Exception as e:
