@@ -41,7 +41,7 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: Utilities",
     ],
-    license="GNU General Public License v3.0",
+    license="MIT",
     # long_description=get_long_description(),
     long_description="CLI tool to convert a python project's .format(...) and %-formatted "
                      "strings to f-strings.",
