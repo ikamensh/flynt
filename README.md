@@ -11,7 +11,7 @@ F-Strings:
 
 ### Installation
 
-`flynt` can be installed by running `pip install flynt`. It requires Python version 3.6+.  
+`pip install flynt`. It requires Python version 3.6+.  
  
 ### Usage
 
