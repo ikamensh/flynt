@@ -49,7 +49,7 @@ all_files = pytest.fixture(params=[
     "two_liner.py"
                         ])
 
-@pytest.fixture(params=["double_conv.py"])
-# @all_files
+# @pytest.fixture(params=["double_conv.py"])
+@all_files
 def filename(request):
     yield request.param

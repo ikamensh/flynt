@@ -6,6 +6,12 @@ def test_str_newline():
     generator = lexer.get_fstringify_chunks(s_in)
     assert len(list(generator)) == 1
 
+def test_triple():
+    s_in = """print("{}".format(Bar + 1), '%d' % var, "{s}".format(s=foo))"""
+    generator = lexer.get_fstringify_chunks(s_in)
+    assert len(list(generator)) == 3
+
+
 def test_one_string():
     s = """"my string {}, but also {} and {}".format(var, f, cada_bra)"""
     chunks_gen = lexer.get_fstringify_chunks(s)

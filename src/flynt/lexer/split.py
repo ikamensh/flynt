@@ -13,12 +13,20 @@ def get_chunks(code) -> Generator[Chunk, None, None]:
     for item in g:
         t = PyToken(item)
         reuse = chunk.append(t)
+
+        print(item)
+        print(chunk)
+
         if chunk.complete:
 
             yield chunk
             chunk = Chunk()
             if reuse:
-                chunk.append(t)
+                reuse = chunk.append(t)
+                # assert not reuse
+                if chunk.complete:
+                    yield chunk
+                    chunk = Chunk()
 
     yield chunk
 
