@@ -92,6 +92,5 @@ Furthermore, some arguments cause formatting of strings to throw exceptions, e.g
 
 ### Other Credits / Dependencies / Links
 
-- [fstringify](https://github.com/jacktasia/fstringify) - this project was forked from fstringify, but undergone some heavy refactoring.
 - [astor](https://github.com/berkerpeksag/astor) is used to turn the transformed AST back into code.
 - Thanks to folks from [pyddf](https://www.pyddf.de/) for their support, advice and participation during spring hackathon 2019, in particular Holger Hass, Farid Muradov, Charlie Clark.
