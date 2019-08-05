@@ -10,7 +10,7 @@ from flynt.api import fstringify
 
 def main():
     parser = argparse.ArgumentParser(
-        description=f"flynt {__version__}", add_help=True, epilog=__doc__
+        description=f"flynt v.{__version__}", add_help=True, epilog=__doc__
     )
 
     verbosity_group = parser.add_mutually_exclusive_group()
