@@ -17,7 +17,7 @@ F-Strings:
 
 To run: `flynt {source_file_or_directory}`
 
-* Given a single file, it will 'f-stringify' it: replace all applicable single line string formatting in this file (file will be modified).
+* Given a single file, it will 'f-stringify' it: replace all applicable string formatting in this file (file will be modified).
 * Given a folder, it will search the folder recursively and f-stringify all the .py files it finds. It skips some hard-coded folder names: `blacklist = {'.tox', 'venv', 'site-packages', '.eggs'}`.
 
 It turns the code it runs on into Python 3.6+, since 3.6 is when "f-strings" were introduced.
@@ -25,7 +25,7 @@ It turns the code it runs on into Python 3.6+, since 3.6 is when "f-strings" wer
 ### Command line options
 ```
 usage: flynt [-h] [--verbose | --quiet]
-             [--no_multiline | --line_length LINE_LENGTH] [--version]
+             [--no_multiline | --line_length LINE_LENGTH]
              src
 
 positional arguments:
