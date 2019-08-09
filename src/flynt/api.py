@@ -101,7 +101,6 @@ def fstringify_files(files, verbose, quiet, multiline, len_limit, pyup, original
         charcount_percent_reduction =  cc_reduction / total_charcount_original
         print(f"Character count reduction: {cc_reduction} ({charcount_percent_reduction:.2%})\n")
         print('_-_.'*25)
-        print("\nPlease run your tests before commiting. Report bugs as github issues at: https://github.com/ikamensh/flynt")
 
         if not pyup:
             print(f"{Style.DIM}\n\nYour code is now compatible only with python versions 3.6 or higher."
@@ -115,8 +114,9 @@ def fstringify_files(files, verbose, quiet, multiline, len_limit, pyup, original
                   " See full list of modified expressions at: https://github.com/asottile/pyupgrade#implemented-features."
                   f" Flynt only wraps the pyupgrade call and gives stats, all credit goes to original authors of pyupgrade.\n{Style.RESET_ALL}")
 
-
-        print("Thank you for using flynt! Upgrade more projects and recommend it to your colleagues!\n")
+        print('_-_.'*25)
+        print("\nPlease run your tests before commiting. Report bugs as github issues at: https://github.com/ikamensh/flynt, or give a star if it just worked!")
+        print("Thank you for using flynt. Upgrade more projects and recommend it to your colleagues!\n")
         print('_-_.'*25)
 
 

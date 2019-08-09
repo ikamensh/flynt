@@ -14,9 +14,6 @@ def get_chunks(code) -> Generator[Chunk, None, None]:
         t = PyToken(item)
         reuse = chunk.append(t)
 
-        print(item)
-        print(chunk)
-
         if chunk.complete:
 
             yield chunk
