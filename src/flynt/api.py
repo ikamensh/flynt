@@ -88,7 +88,6 @@ def fstringify_files(files, verbose, quiet, multiline, len_limit, pyup, original
 
         if verbose and not quiet:
             print(f"fstringifying {file_path}...{status}")
-
     total_time = round(time.time() - start_time, 3)
 
     if not quiet:
@@ -119,8 +118,10 @@ def fstringify_files(files, verbose, quiet, multiline, len_limit, pyup, original
         print("Thank you for using flynt. Upgrade more projects and recommend it to your colleagues!\n")
         print('_-_.'*25)
 
+    return changed_files
 
-def fstringify(files_or_paths, verbose, quiet, multiline, len_limit, pyup):
+
+def fstringify(files_or_paths, verbose, quiet, multiline, len_limit, pyup, fail_on_changes=False):
     """ determine if a directory or a single file was passed, and f-stringify it."""
 
     files = []
@@ -135,12 +136,17 @@ def fstringify(files_or_paths, verbose, quiet, multiline, len_limit, pyup):
         if os.path.isdir(abs_path):
             files.extend(astor.code_to_ast.find_py_files(abs_path))
         else:
-            files.append((os.path.dirname(abs_path), os.path.basename(abs_path)),)
+            files.append((os.path.dirname(abs_path), os.path.basename(abs_path)))
 
-    fstringify_files(files,
-                     verbose=verbose,
-                     quiet=quiet,
-                     multiline=multiline,
-                     len_limit=len_limit,
-                     pyup=pyup,
-                     original_arg=file_or_path)
+    status = fstringify_files(files,
+                              verbose=verbose,
+                              quiet=quiet,
+                              multiline=multiline,
+                              len_limit=len_limit,
+                              pyup=pyup,
+                              original_arg=file_or_path)
+
+    if fail_on_changes:
+        return status
+    else:
+        return 0
