@@ -120,18 +120,22 @@ def fstringify_files(files, verbose, quiet, multiline, len_limit, pyup, original
         print('_-_.'*25)
 
 
-def fstringify(file_or_path, verbose, quiet, multiline, len_limit, pyup):
+def fstringify(files_or_paths, verbose, quiet, multiline, len_limit, pyup):
     """ determine if a directory or a single file was passed, and f-stringify it."""
-    abs_path = os.path.abspath(file_or_path)
 
-    if not os.path.exists(abs_path):
-        print(f"`{file_or_path}` not found")
-        sys.exit(1)
+    files = []
 
-    if os.path.isdir(abs_path):
-        files = astor.code_to_ast.find_py_files(abs_path)
-    else:
-        files = ((os.path.dirname(abs_path), os.path.basename(abs_path)),)
+    for file_or_path in files_or_paths:
+        abs_path = os.path.abspath(file_or_path)
+
+        if not os.path.exists(abs_path):
+            print(f"`{file_or_path}` not found")
+            sys.exit(1)
+
+        if os.path.isdir(abs_path):
+            files.extend(astor.code_to_ast.find_py_files(abs_path))
+        else:
+            files.append((os.path.dirname(abs_path), os.path.basename(abs_path)),)
 
     fstringify_files(files,
                      verbose=verbose,

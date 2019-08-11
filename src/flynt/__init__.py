@@ -36,7 +36,7 @@ def main():
         "--upgrade", action="store_true", default=False, help="run pyupgrade on .py files"
     )
 
-    parser.add_argument("src", action="store", help="source file or directory")
+    parser.add_argument("src", action="store", nargs="+", help="source file(s) or directory")
 
     args = parser.parse_args()
 
