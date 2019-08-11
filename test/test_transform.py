@@ -160,14 +160,14 @@ def test_fix_fstrings_noop(s):
 @pytest.mark.parametrize(
     ('s', 'expected'),
     (
-        ('"{} {}".format(a, b)', 'f"{a} {b}"'),
-        ('"{1} {0}".format(a, b)', 'f"{b} {a}"'),
-        ('"{x.y}".format(x=z)', 'f"{z.y}"'),
-        ('"{.x} {.y}".format(a, b)', 'f"{a.x} {b.y}"'),
-        ('"{} {}".format(a.b, c.d)', 'f"{a.b} {c.d}"'),
-        ('"hello {}!".format(name)', 'f"hello {name}!"'),
-        ('"{}{{}}{}".format(escaped, y)', 'f"{escaped}{{}}{y}"'),
-        ('"{}{b}{}".format(a, c, b=b)', 'f"{a}{b}{c}"'),
+        ('"{} {}".format(a, b)', 'f"""{a} {b}"""'),
+        ('"{1} {0}".format(a, b)', 'f"""{b} {a}"""'),
+        ('"{x.y}".format(x=z)', 'f"""{z.y}"""'),
+        ('"{.x} {.y}".format(a, b)', 'f"""{a.x} {b.y}"""'),
+        ('"{} {}".format(a.b, c.d)', 'f"""{a.b} {c.d}"""'),
+        ('"hello {}!".format(name)', 'f"""hello {name}!"""'),
+        ('"{}{{}}{}".format(escaped, y)', 'f"""{escaped}{{}}{y}"""'),
+        ('"{}{b}{}".format(a, c, b=b)', 'f"""{a}{b}{c}"""'),
         # TODO: poor man's f-strings?
         # '"{foo}".format(**locals())'
     ),
