@@ -10,7 +10,7 @@ def test_fmt_spec():
     assert meta['changed']
     assert new == expected
 
-@pytest.mark.xfail
+@pytest.mark.xfail(reason="problem in dependency - astor https://github.com/berkerpeksag/astor/issues/153")
 def test_expr_no_paren():
     code = '''"my string {:.2f}".format(var+1)'''
     expected = '''f"""my string {var + 1:.2f}"""'''
@@ -170,7 +170,7 @@ def test_fix_fstrings_noop(s):
         ('"{}" . format(x)', 'f"""{x}"""'),
         # spans multiple lines
         ('"{}".format(\n    a,\n)', 'f"""{a}"""'),
-        pytest.param('"{:{}}".format(x, y)', 'f"""{x:{{}}}"""', marks=pytest.mark.xfail(reason='Possible not correct bevaviour')),
+        pytest.param('"{:{}}".format(x, y)', 'f"""{x:{{y}}}"""', marks=pytest.mark.xfail(reason='Possible not correct bevaviour')),
     ),
 )
 def test_fix_fstrings(s, expected):
