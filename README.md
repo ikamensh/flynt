@@ -69,6 +69,28 @@ _-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_.
 38f9d3a65222:~ ikkamens$
 ```
 
+### Pre-commit hook
+
+To make sure all formatted strings are always converted to f-strings, you can
+add flynt to your [pre-commit](https://www.pre-commit.com) hooks.
+
+Add a new section to `.pre-commit-config.yaml`:
+```
+   - repo: local
+     hooks:
+         - id: flynt
+           name: flynt
+           entry: flynt
+           args: [--fail-on-change]
+           types: [python]
+           language: python
+           additional_dependencies:
+               - flynt
+```
+
+This will run flynt on all modified files before commiting.
+
+
 ### About
 
 Read up on f-strings here: 
