@@ -123,3 +123,58 @@ def test_digit_grouping_2():
     assert meta['changed']
     assert new == expected
 
+
+@pytest.mark.parametrize(
+    's',
+    (
+        # syntax error
+        '(',
+        # invalid format strings
+        "'{'.format(a)", "'}'.format(a)",
+        # starargs
+        '"{} {}".format(*a)', '"{foo} {bar}".format(**b)"',
+        # likely makes the format longer
+        '"{0} {0}".format(arg)', '"{x} {x}".format(arg)',
+        '"{x.y} {x.z}".format(arg)',
+        # bytestrings don't participate in `.format()` or `f''`
+        # but are legal in python 2
+        'b"{} {}".format(a, b)',
+        # for now, too difficult to rewrite correctly
+        '"{a[b]}".format(a=a)',
+        '"{a.a[b]}".format(a=a)',
+        # not enough placeholders / placeholders missing
+        '"{}{}".format(a)', '"{a}{b}".format(a=a)',
+    ),
+)
+def test_fix_fstrings_noop(s):
+    new, meta = transform_chunk(s)
+    assert not meta['changed']
+    assert new == s
+
+
+@pytest.mark.parametrize(
+    ('s', 'expected'),
+    (
+        ('"{} {}".format(a, b)', 'f"""{a} {b}"""'),
+        ('"{1} {0}".format(a, b)', 'f"""{b} {a}"""'),
+        pytest.param('"{x.y}".format(x=z)', 'f"""{z.y}"""', marks=pytest.mark.xfail(reason='Possible not correct bevaviour')),
+        pytest.param('"{.x} {.y}".format(a, b)', 'f"""{a.x} {b.y}"""', marks=pytest.mark.xfail(reason='Possible not correct bevaviour')),
+        ('"{} {}".format(a.b, c.d)', 'f"""{a.b} {c.d}"""'),
+        ('"hello {}!".format(name)', 'f"""hello {name}!"""'),
+        ('"{}{{}}{}".format(escaped, y)', 'f"""{escaped}{{}}{y}"""'),
+        ('"{}{b}{}".format(a, c, b=b)', 'f"""{a}{b}{c}"""'),
+        # TODO: poor man's f-strings?
+        # '"{foo}".format(**locals())'
+        # TODO: re-evaluate edge cases ported over by #11
+        # weird syntax
+        ('"{}" . format(x)', 'f"""{x}"""'),
+        # spans multiple lines
+        ('"{}".format(\n    a,\n)', 'f"""{a}"""'),
+        pytest.param('"{:{}}".format(x, y)', 'f"""{x:{{}}}"""', marks=pytest.mark.xfail(reason='Possible not correct bevaviour')),
+    ),
+)
+def test_fix_fstrings(s, expected):
+    new, meta = transform_chunk(s)
+    assert meta['changed']
+    assert new == expected
+
