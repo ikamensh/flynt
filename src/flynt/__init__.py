@@ -5,6 +5,7 @@ Learn more about f-strings at https://www.python.org/dev/peps/pep-0498/"""
 __version__ = "0.26"
 
 import argparse
+import sys
 
 from flynt.api import fstringify
 
@@ -36,17 +37,19 @@ def main():
         "--upgrade", action="store_true", default=False, help="run pyupgrade on .py files"
     )
 
-    parser.add_argument("src", action="store", help="source file or directory")
+    parser.add_argument("--fail-on-change", action="store_true", default=False, help="Fail when changing files (for linting purposes)")
+    parser.add_argument("src", action="store", nargs="+", help="source file(s) or directory")
 
     args = parser.parse_args()
 
-    fstringify(args.src,
-               verbose = args.verbose,
-               quiet = args.quiet,
-               multiline = not args.no_multiline,
-               len_limit = int(args.line_length),
-               pyup = args.upgrade)
+    return fstringify(args.src,
+                      verbose = args.verbose,
+                      quiet = args.quiet,
+                      multiline = not args.no_multiline,
+                      len_limit = int(args.line_length),
+                      pyup = args.upgrade,
+                      fail_on_changes=args.fail_on_change)
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
