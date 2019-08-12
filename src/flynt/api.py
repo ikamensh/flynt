@@ -6,7 +6,7 @@ from typing import Tuple
 
 import astor
 import pyupgrade
-from colorama import Fore, Style
+from colorama import Style
 
 from flynt.file_spy import spy_on_file_io, charcount_stats
 from flynt.process import fstringify_code_by_line
@@ -65,7 +65,7 @@ def fstringify_file(filename, multiline, len_limit, pyup = False) -> Tuple[bool,
 
 
 
-def fstringify_files(files, verbose, quiet, multiline, len_limit, pyup, original_arg):
+def fstringify_files(files, verbose, quiet, multiline, len_limit, pyup):
     changed_files = 0
     total_charcount_original = 0
     total_charcount_new = 0
@@ -104,7 +104,7 @@ def fstringify_files(files, verbose, quiet, multiline, len_limit, pyup, original
         if not pyup:
             print(f"{Style.DIM}\n\nYour code is now compatible only with python versions 3.6 or higher."
                   " Would you like to remove legacy expressions and get a bunch of safe best practice changes for free?"
-                  f"\nRun {Style.BRIGHT}flynt --upgrade {original_arg} {Style.RESET_ALL}"
+                  f"\nRun {Style.BRIGHT}flynt --upgrade [file(s) and/or folder(s)] {Style.RESET_ALL}"
                   f"{Style.DIM} to run pyupgrade on all .py files."
                   "\nSee full list of upgradable expressions at: https://github.com/asottile/pyupgrade#implemented-features "
                   f"Flynt only wraps the pyupgrade call and gives stats, all credit goes to original authors of pyupgrade.\n{Style.RESET_ALL}")
@@ -143,8 +143,7 @@ def fstringify(files_or_paths, verbose, quiet, multiline, len_limit, pyup, fail_
                               quiet=quiet,
                               multiline=multiline,
                               len_limit=len_limit,
-                              pyup=pyup,
-                              original_arg=file_or_path)
+                              pyup=pyup)
 
     if fail_on_changes:
         return status
