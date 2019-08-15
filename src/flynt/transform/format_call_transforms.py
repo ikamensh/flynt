@@ -59,17 +59,26 @@ def joined_string(fmt_call: ast.Call) -> ast.JoinedStr:
         if '[' in var_name:
             raise FlyntException(f"Skipping f-stringify of a fmt call with indexed name {var_name}")
 
+        suffix = ''
+        if '.' in var_name:
+            idx = var_name.find('.')
+            var_name, suffix = var_name[:idx], var_name[idx+1:]
+
+        if var_name.isdigit():
+            manual_field_ordering = True
+            identifier = int(var_name)
+        elif len(var_name) == 0:
+            assert not manual_field_ordering
+            identifier = seq_ctr
+            seq_ctr += 1
+        else:
+            identifier = var_name
+
         try:
-            if var_name.isdigit():
-                manual_field_ordering = True
-                idx = int(var_name)
-                new_segments.append(ast_formatted_value(var_map.pop(idx), fmt_str, conversion))
-            elif len(var_name) == 0:
-                assert not manual_field_ordering
-                new_segments.append(ast_formatted_value(var_map.pop(seq_ctr), fmt_str, conversion))
-                seq_ctr += 1
-            else:
-                new_segments.append(ast_formatted_value(var_map.pop(var_name), fmt_str, conversion))
+            ast_name = var_map.pop(identifier)
+            if suffix:
+                ast_name = ast.Attribute(value=ast_name, attr=suffix)
+            new_segments.append(ast_formatted_value(ast_name, fmt_str, conversion))
         except IndexError as e:
             raise FlyntException("A variable is used multiple times - better not to replace it.") from e
 

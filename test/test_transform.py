@@ -159,8 +159,10 @@ def test_fix_fstrings_noop(s):
     (
         ('"{} {}".format(a, b)', 'f"""{a} {b}"""'),
         ('"{1} {0}".format(a, b)', 'f"""{b} {a}"""'),
-        pytest.param('"{x.y}".format(x=z)', 'f"""{z.y}"""', marks=pytest.mark.xfail(reason='Possible not correct bevaviour')),
-        pytest.param('"{.x} {.y}".format(a, b)', 'f"""{a.x} {b.y}"""', marks=pytest.mark.xfail(reason='Possible not correct bevaviour')),
+        ('"{x.y}".format(x=z)', 'f"""{z.y}"""'),
+        ('"{0.y}".format(z)', 'f"""{z.y}"""'),
+        ('"{.y}".format(z)', 'f"""{z.y}"""'),
+        ('"{.x} {.y}".format(a, b)', 'f"""{a.x} {b.y}"""'),
         ('"{} {}".format(a.b, c.d)', 'f"""{a.b} {c.d}"""'),
         ('"hello {}!".format(name)', 'f"""hello {name}!"""'),
         ('"{}{{}}{}".format(escaped, y)', 'f"""{escaped}{{}}{y}"""'),
