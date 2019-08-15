@@ -30,8 +30,6 @@ def matching_call(node) -> bool:
             and node.func.attr == "format")
 
 
-def prep_var_map(keywords: list):
-    return {kw.arg: kw.value for kw in keywords}
 
 import string
 stdlib_parse = string.Formatter().parse
@@ -39,14 +37,13 @@ stdlib_parse = string.Formatter().parse
 def joined_string(fmt_call: ast.Call) -> ast.JoinedStr:
     """ Transform a "...".format() call node into a f-string node. """
     string = fmt_call.func.value.s
-    var_map = prep_var_map(fmt_call.keywords)
+    var_map = {kw.arg: kw.value for kw in fmt_call.keywords}
 
     for i, val in enumerate(fmt_call.args):
         var_map[i] = val
 
     splits = deque(stdlib_parse(string))
 
-    seen_varnames = set()
     seq_ctr = 0
     new_segments = []
     manual_field_ordering = False
@@ -56,27 +53,29 @@ def joined_string(fmt_call: ast.Call) -> ast.JoinedStr:
         if raw:
             new_segments.append( ast_string_node(raw) )
 
-
-        if var_name in seen_varnames:
-            raise FlyntException("A variable is used multiple times - better not to replace it.")
-
         if var_name is None:
             continue
-        elif var_name != '':
-            seen_varnames.add(var_name)
 
         if '[' in var_name:
             raise FlyntException(f"Skipping f-stringify of a fmt call with indexed name {var_name}")
 
-        if var_name.isdigit():
-            manual_field_ordering = True
-            idx = int(var_name)
-            new_segments.append(ast_formatted_value(var_map[idx], fmt_str, conversion))
-        elif len(var_name) == 0:
-            assert not manual_field_ordering
-            new_segments.append(ast_formatted_value(var_map[seq_ctr], fmt_str, conversion))
-            seq_ctr += 1
-        else:
-            new_segments.append(ast_formatted_value(var_map[var_name], fmt_str, conversion))
+        try:
+            if var_name.isdigit():
+                manual_field_ordering = True
+                idx = int(var_name)
+                new_segments.append(ast_formatted_value(var_map.pop(idx), fmt_str, conversion))
+            elif len(var_name) == 0:
+                assert not manual_field_ordering
+                new_segments.append(ast_formatted_value(var_map.pop(seq_ctr), fmt_str, conversion))
+                seq_ctr += 1
+            else:
+                new_segments.append(ast_formatted_value(var_map.pop(var_name), fmt_str, conversion))
+        except IndexError as e:
+            raise FlyntException("A variable is used multiple times - better not to replace it.") from e
+
+
+    if var_map:
+        raise FlyntException("A variable was never used - a risk of bug.")
+
 
     return ast.JoinedStr(new_segments)

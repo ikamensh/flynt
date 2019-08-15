@@ -144,12 +144,14 @@ def test_digit_grouping_2():
         '"{a.a[b]}".format(a=a)',
         # not enough placeholders / placeholders missing
         '"{}{}".format(a)', '"{a}{b}".format(a=a)',
+        # too complex syntax
+        '"{:{}}".format(x, y)',
     ),
 )
 def test_fix_fstrings_noop(s):
     new, meta = transform_chunk(s)
-    assert not meta['changed']
     assert new == s
+    assert not meta['changed']
 
 
 @pytest.mark.parametrize(
@@ -170,7 +172,6 @@ def test_fix_fstrings_noop(s):
         ('"{}" . format(x)', 'f"""{x}"""'),
         # spans multiple lines
         ('"{}".format(\n    a,\n)', 'f"""{a}"""'),
-        pytest.param('"{:{}}".format(x, y)', 'f"""{x:{{y}}}"""', marks=pytest.mark.xfail(reason='Possible not correct bevaviour')),
     ),
 )
 def test_fix_fstrings(s, expected):
