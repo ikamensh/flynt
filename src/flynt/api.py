@@ -102,19 +102,18 @@ def fstringify_files(files, verbose, quiet, multiline, len_limit, pyup):
         print('_-_.'*25)
 
         if not pyup:
-            print(f"{Style.DIM}\n\nYour code is now compatible only with python versions 3.6 or higher."
+            print(f"{Style.DIM}\nYour code is now compatible only with python versions 3.6 or higher."
                   " Would you like to remove legacy expressions and get a bunch of safe best practice changes for free?"
-                  f"\nRun {Style.BRIGHT}flynt --upgrade [file(s) and/or folder(s)] {Style.RESET_ALL}"
+                  f"Run {Style.BRIGHT}flynt --upgrade [file(s) and/or folder(s)] {Style.RESET_ALL}"
                   f"{Style.DIM} to run pyupgrade on all .py files."
-                  "\nSee full list of upgradable expressions at: https://github.com/asottile/pyupgrade#implemented-features "
+                  "See full list of upgradable expressions at: https://github.com/asottile/pyupgrade#implemented-features "
                   f"Flynt only wraps the pyupgrade call and gives stats, all credit goes to original authors of pyupgrade.\n{Style.RESET_ALL}")
         else:
             print(f"{Style.DIM}\n\nYour code is now pyupgraded!"
                   " See full list of modified expressions at: https://github.com/asottile/pyupgrade#implemented-features."
                   f" Flynt only wraps the pyupgrade call and gives stats, all credit goes to original authors of pyupgrade.\n{Style.RESET_ALL}")
 
-        print('_-_.'*25)
-        print("\nPlease run your tests before commiting. Report bugs as github issues at: https://github.com/ikamensh/flynt, or give a star if it just worked!")
+        print("Please run your tests before commiting. Report bugs as github issues at: https://github.com/ikamensh/flynt, or give a star if it just worked!")
         print("Thank you for using flynt. Upgrade more projects and recommend it to your colleagues!\n")
         print('_-_.'*25)
 
