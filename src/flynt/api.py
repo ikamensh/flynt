@@ -9,7 +9,11 @@ import pyupgrade
 
 from flynt.file_spy import spy_on_file_io, charcount_stats
 from flynt.process import fstringify_code_by_line
-from flynt.cli_messages import message_pyup_success, message_suggest_pyup, farewell_message
+from flynt.cli_messages import (
+    message_pyup_success,
+    message_suggest_pyup,
+    farewell_message,
+)
 
 blacklist = {".tox", "venv", "site-packages", ".eggs"}
 
@@ -92,13 +96,21 @@ def fstringify_files(files, verbose, quiet, multiline, len_limit, pyup):
     total_time = round(time.time() - start_time, 3)
 
     if not quiet:
-        print_report(changed_files, pyup, total_charcount_new, total_charcount_original,
-                     total_expressions, total_time)
+        print_report(
+            changed_files,
+            pyup,
+            total_charcount_new,
+            total_charcount_original,
+            total_expressions,
+            total_time,
+        )
 
     return changed_files
 
 
-def print_report(changed_files, pyup, total_cc_new, total_cc_original, total_expr, total_time):
+def print_report(
+    changed_files, pyup, total_cc_new, total_cc_original, total_expr, total_time
+):
     print("\nFlynt run has finished. Stats:")
     print(f"\nExecution time: {total_time}s")
     print(f"Files modified: {changed_files}")

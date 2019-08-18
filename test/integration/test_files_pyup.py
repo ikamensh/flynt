@@ -20,6 +20,7 @@ def read_in(name) -> str:
 
     return txt
 
+
 def read_expected(name):
     filepath = os.path.join(expected_dir, name)
     with open(filepath) as f:
@@ -27,11 +28,13 @@ def read_expected(name):
 
     return txt
 
+
 def write_output_file(name, txt):
     filepath = os.path.join(out_dir, name)
-    with open(filepath, 'w') as f:
+    with open(filepath, "w") as f:
         f.write(txt)
     return filepath
+
 
 def try_on_file(filename: str):
     """ Given a file name (something.py) find this file in test/integration/samples_in,
@@ -48,9 +51,6 @@ def try_on_file(filename: str):
     return out, read_expected(filename)
 
 
-
-
 def test_fstringify():
-    out, expected = try_on_file('pyup.py')
+    out, expected = try_on_file("pyup.py")
     assert out == expected
-

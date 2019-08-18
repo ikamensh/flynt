@@ -9,7 +9,7 @@ REUSE = "Token was not used"
 
 import sys
 
-is_36 = (sys.version_info.major == 3 and sys.version_info.minor == 6)
+is_36 = sys.version_info.major == 3 and sys.version_info.minor == 6
 if is_36:
     multiline_skip = (token.NEWLINE, 58)
     multiline_break = (57,)
@@ -42,8 +42,7 @@ class Chunk:
         Chunk.break_tokens = single_break
         Chunk.multiline = False
 
-
-    def __init__(self, tokens = ()):
+    def __init__(self, tokens=()):
         self.tokens: Deque[PyToken] = deque(tokens)
         self.complete = False
 
@@ -83,7 +82,7 @@ class Chunk:
             self.successful = self.is_parseable
             return REUSE
 
-        #todo handle all cases?
+        # todo handle all cases?
         if not self[0].is_percent_string():
             self.complete = True
             return
@@ -126,8 +125,9 @@ class Chunk:
         # stop on a comment or too long chunk
         if t.toknum in self.break_tokens:
             self.complete = True
-            self.successful = self.is_parseable and \
-                              (self.is_percent_chunk or self.is_call_chunk)
+            self.successful = self.is_parseable and (
+                self.is_percent_chunk or self.is_call_chunk
+            )
             return
 
         if len(self) > 50:
@@ -146,7 +146,6 @@ class Chunk:
             self.call_append(t)
         elif self.is_percent_chunk:
             return self.percent_append(t)
-
 
     @property
     def is_parseable(self):

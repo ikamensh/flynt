@@ -43,6 +43,3 @@ def get_fstringify_chunks(code: str) -> Generator[Chunk, None, None]:
         else:
             if Chunk.multiline or len(chunk) > 0:
                 last_concat = False
-
-
-
