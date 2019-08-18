@@ -4,3 +4,4 @@ forbiddenfruit
 pyupgrade
 colorama
 black
+pre-commit
