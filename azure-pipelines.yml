@@ -34,5 +34,5 @@ steps:
 
 - script: |
     pip install pytest pytest-azurepipelines
-    pytest
+    pytest --cov=src
   displayName: 'pytest'
