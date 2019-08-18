@@ -21,6 +21,7 @@ def read_in(name):
 
     return txt
 
+
 def read_expected(name):
     filepath = os.path.join(expected_dir, name)
     with open(filepath) as f:
@@ -28,10 +29,12 @@ def read_expected(name):
 
     return txt
 
+
 def write_output_file(name, txt):
     filepath = os.path.join(out_dir, name)
-    with open(filepath, 'w') as f:
+    with open(filepath, "w") as f:
         f.write(txt)
+
 
 def try_on_file(filename: str, multiline):
     """ Given a file name (something.py) find this file in test/integration/samples_in,
@@ -43,9 +46,7 @@ def try_on_file(filename: str, multiline):
     write_output_file(filename, out)
     return out, read_expected(filename)
 
+
 def test_fstringify_single_line(filename):
     out, expected = try_on_file(filename, multiline=False)
     assert out == expected
-
-
-

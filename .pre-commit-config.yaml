@@ -4,4 +4,4 @@ repos:
     hooks:
     - id: black
       language_version: python3.7
-      exclude: test
+      exclude: test/integration/actual_out|test/integration/actual_out_single_line|test/integration/expected_out|test/integration/expected_out_single_line|test/integration/samples_in
