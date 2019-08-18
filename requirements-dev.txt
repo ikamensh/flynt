@@ -1,7 +1,8 @@
 astor
-pytest
 forbiddenfruit
 pyupgrade
 colorama
+pytest
+pytest-cov
 black
 pre-commit
