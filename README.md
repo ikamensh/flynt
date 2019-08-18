@@ -1,5 +1,5 @@
 # flynt - string formatting converter
-[![Build Status](https://dev.azure.com/ikamenshchikov/flynt/_apis/build/status/ikamensh.flynt?branchName=master)](https://dev.azure.com/ikamenshchikov/flynt/_build/latest?definitionId=1&branchName=master)  [![PyPI version](https://badge.fury.io/py/flynt.svg)](https://badge.fury.io/py/flynt)  [![Downloads](https://pepy.tech/badge/flynt)](https://pepy.tech/project/flynt)
+[![Build Status](https://dev.azure.com/ikamenshchikov/flynt/_apis/build/status/ikamensh.flynt?branchName=master)](https://dev.azure.com/ikamenshchikov/flynt/_build/latest?definitionId=1&branchName=master)  [![PyPI version](https://badge.fury.io/py/flynt.svg)](https://badge.fury.io/py/flynt)  [![Downloads](https://pepy.tech/badge/flynt)](https://pepy.tech/project/flynt)  [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 **This is a beta release. Do NOT use on uncommitted code!**
 

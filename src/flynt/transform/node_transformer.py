@@ -1,19 +1,27 @@
 import ast
 from collections import deque
 
-from flynt.transform.format_call_transforms import matching_call, ast_string_node, joined_string, ast_formatted_value
+from flynt.transform.format_call_transforms import (
+    matching_call,
+    ast_string_node,
+    joined_string,
+    ast_formatted_value,
+)
 from flynt.exceptions import FlyntException
 
 import re
 
 MOD_KEY_PATTERN = re.compile(r"(%\([^)]+\)s)")
 MOD_KEY_NAME_PATTERN = re.compile(r"%\(([^)]+)\)s")
-VAR_KEY_PATTERN = re.compile("%([.]?[0-9]*)[hlL]?([diouxXeEfFgGcrsa])") # specs at https://docs.python.org/3/library/stdtypes.html#string-formatting
-obsolete_specifiers = 'hlL'
+VAR_KEY_PATTERN = re.compile(
+    "%([.]?[0-9]*)[hlL]?([diouxXeEfFgGcrsa])"
+)  # specs at https://docs.python.org/3/library/stdtypes.html#string-formatting
+obsolete_specifiers = "hlL"
 
 
-translate_conversion_types = {'i': 'd', 'u': 'd'}
-conversion_methods = {'r' : '!r', 'a': '!a', 's': None}
+translate_conversion_types = {"i": "d", "u": "d"}
+conversion_methods = {"r": "!r", "a": "!a", "s": None}
+
 
 def handle_from_mod_dict_name(node):
     """Convert a `BinOp` `%` formatted str with a name representing a Dict on the right to an f-string.
@@ -59,6 +67,7 @@ def handle_from_mod_dict_name(node):
             result_node.values.append(ast.Str(s=block))
     return result_node
 
+
 def handle_from_mod_tuple(node):
     """Convert a `BinOp` `%` formatted str with a tuple on the right to an f-string.
 
@@ -90,19 +99,22 @@ def handle_from_mod_tuple(node):
         fmt_prefix = blocks.popleft()
         fmt_spec = blocks.popleft()
         for c in obsolete_specifiers:
-            fmt_spec = fmt_spec.replace(c, '')
+            fmt_spec = fmt_spec.replace(c, "")
 
         if fmt_spec in conversion_methods:
             if fmt_prefix:
-                raise FlyntException("Default text alignment has changed between percent fmt and fstrings. "
-                                     "Proceeding would result in changed code behaviour.")
-            fv = ast_formatted_value(str_vars.popleft(),
-                                     fmt_str=fmt_prefix,
-                                     conversion=conversion_methods[fmt_spec])
+                raise FlyntException(
+                    "Default text alignment has changed between percent fmt and fstrings. "
+                    "Proceeding would result in changed code behaviour."
+                )
+            fv = ast_formatted_value(
+                str_vars.popleft(),
+                fmt_str=fmt_prefix,
+                conversion=conversion_methods[fmt_spec],
+            )
         else:
             fmt_spec = translate_conversion_types.get(fmt_spec, fmt_spec)
-            fv = ast_formatted_value(str_vars.popleft(),
-                                     fmt_str=fmt_prefix+fmt_spec)
+            fv = ast_formatted_value(str_vars.popleft(), fmt_str=fmt_prefix + fmt_spec)
 
         result_node.values.append(fv)
         result_node.values.append(ast_string_node(blocks.popleft()))
@@ -135,6 +147,7 @@ def handle_from_mod_generic_name(node):
     node.right = ast.Tuple(elts=[node.right])
     return handle_from_mod_tuple(node)
 
+
 def fstringify_node(node):
     ft = FstringifyTransformer()
     result = ft.visit(node)
@@ -149,8 +162,11 @@ def fstringify_node(node):
         ),
     )
 
+
 def handle_from_mod(node):
-    if isinstance(node.right, (ast.Name, ast.Attribute, ast.Str, ast.BinOp, ast.Subscript)):
+    if isinstance(
+        node.right, (ast.Name, ast.Attribute, ast.Str, ast.BinOp, ast.Subscript)
+    ):
         return handle_from_mod_generic_name(node)
 
     elif isinstance(node.right, ast.Tuple):
@@ -162,13 +178,13 @@ def handle_from_mod(node):
 
     raise RuntimeError("unexpected `node.right` class")
 
+
 class FstringifyTransformer(ast.NodeTransformer):
     def __init__(self):
         super().__init__()
         self.counter = 0
         self.lineno = -1
         self.col_offset = -1
-
 
     def visit_Call(self, node: ast.Call):
         """Convert `ast.Call` to `ast.JoinedStr` f-string
@@ -205,7 +221,9 @@ class FstringifyTransformer(ast.NodeTransformer):
         percent_stringify = (
             isinstance(node.left, ast.Str)
             and isinstance(node.op, ast.Mod)
-            and isinstance(node.right, (ast.Tuple, ast.Name, ast.Attribute, ast.Str, ast.Subscript))
+            and isinstance(
+                node.right, (ast.Tuple, ast.Name, ast.Attribute, ast.Str, ast.Subscript)
+            )
             # ignore ast.Dict on right
         )
 

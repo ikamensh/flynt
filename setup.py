@@ -1,6 +1,7 @@
 import re
 
 import config
+
 config.add_src_to_path()
 
 with open("src/flynt/__init__.py") as f:
@@ -24,10 +25,11 @@ def get_requirements():
     with open("requirements.txt") as fp:
         return fp.read()
 
+
 setup(
     name="flynt",
     packages=["flynt", "flynt.transform", "flynt.lexer"],
-    package_dir={'': 'src'},
+    package_dir={"": "src"},
     version=version,
     description="CLI tool to convert a python project's %-formatted strings to f-strings.",
     author="Ilya Kamenshchikov",
@@ -44,7 +46,7 @@ setup(
     license="MIT",
     # long_description=get_long_description(),
     long_description="CLI tool to convert a python project's .format(...) and %-formatted "
-                     "strings to f-strings.",
+    "strings to f-strings.",
     install_requires=get_requirements(),
     python_requires=">=3.6",
     entry_points={"console_scripts": ["flynt=flynt:main"]},

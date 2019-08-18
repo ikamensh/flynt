@@ -1,6 +1,7 @@
 import ast
 import json
 
+
 def pp_code_ast(code, convert=False):
     from flynt.transform.transform import fstringify_node
 
@@ -60,6 +61,7 @@ def ast_to_dict(node):
             fields[k] = str(v)
 
     return {classname(node): fields}
+
 
 def pp_ast(node):
     """Pretty print an AST to stdout"""
