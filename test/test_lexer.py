@@ -1,24 +1,24 @@
-from flynt import lexer
+from flynt.lexer import split
 
 
 def test_str_newline():
     s_in = """a = '%s\\n' % var"""
-    generator = lexer.get_fstringify_chunks(s_in)
+    generator = split.get_fstringify_chunks(s_in)
     assert len(list(generator)) == 1
 
 
 def test_triple():
     s_in = """print("{}".format(Bar + 1), '%d' % var, "{s}".format(s=foo))"""
-    generator = lexer.get_fstringify_chunks(s_in)
+    generator = split.get_fstringify_chunks(s_in)
     assert len(list(generator)) == 3
 
 
 def test_one_string():
     s = """"my string {}, but also {} and {}".format(var, f, cada_bra)"""
-    chunks_gen = lexer.get_fstringify_chunks(s)
+    chunks_gen = split.get_fstringify_chunks(s)
     assert len(list(chunks_gen)) == 1
 
-    generator = lexer.get_fstringify_chunks(s)
+    generator = split.get_fstringify_chunks(s)
     chunk = next(generator)
 
     assert chunk.start_line == 0
@@ -27,7 +27,7 @@ def test_one_string():
 
 def test_yields_parsable():
     code_in = """attrs = {'r': '{}'.format(row_idx)}"""
-    generator = lexer.get_fstringify_chunks(code_in)
+    generator = split.get_fstringify_chunks(code_in)
     chunk = next(generator)
 
     assert chunk.is_parseable
@@ -37,7 +37,7 @@ def test_yields_parsable():
 def test_percent_attribute():
     code_in = """src_info = 'application "%s"' % srcobj.import_name"""
 
-    generator = lexer.get_fstringify_chunks(code_in)
+    generator = split.get_fstringify_chunks(code_in)
     chunk = next(generator)
 
     expected = """'application "%s"' % srcobj.import_name"""
@@ -47,7 +47,7 @@ def test_percent_attribute():
 def test_percent_call():
     code_in = """"filename*": "UTF-8''%s" % url_quote(attachment_filename)"""
 
-    generator = lexer.get_fstringify_chunks(code_in)
+    generator = split.get_fstringify_chunks(code_in)
     chunk = next(generator)
 
     expected = """"UTF-8''%s" % url_quote(attachment_filename)"""
@@ -60,10 +60,10 @@ def test_two_strings():
         + 'b = "my string {}, but also {} and {}".format(var, what, cada_bra)'
     )
 
-    chunks_gen = lexer.get_fstringify_chunks(s)
+    chunks_gen = split.get_fstringify_chunks(s)
     assert len(list(chunks_gen)) == 2
 
-    generator = lexer.get_fstringify_chunks(s)
+    generator = split.get_fstringify_chunks(s)
     lines = s.split("\n")
 
     chunk = next(generator)
@@ -83,11 +83,11 @@ def test_indented():
     if var % 3 == 0:
         a = "my string {}".format(var)""".strip()
 
-    generator = lexer.get_fstringify_chunks(indented)
+    generator = split.get_fstringify_chunks(indented)
     assert len(list(generator)) == 1
     lines = indented.split("\n")
 
-    generator = lexer.get_fstringify_chunks(indented)
+    generator = split.get_fstringify_chunks(indented)
     chunk = next(generator)
 
     assert chunk.start_line == 2
@@ -100,7 +100,7 @@ def test_empty_line():
     
         attrs = {'r': '{}'.format(row_idx)}""".strip()
 
-    generator = lexer.get_fstringify_chunks(code_empty_line)
+    generator = split.get_fstringify_chunks(code_empty_line)
     lines = code_empty_line.split("\n")
 
     chunk = next(generator)
@@ -119,7 +119,7 @@ raise NoAppException(
 
 
 def test_multiline():
-    generator = lexer.get_fstringify_chunks(multiline_code)
+    generator = split.get_fstringify_chunks(multiline_code)
     assert len(list(generator)) == 1
 
 
@@ -129,7 +129,7 @@ html_title = "Flask Documentation ({})".format(version)""".strip()
 
 
 def test_not_implicit_concat():
-    generator = lexer.get_fstringify_chunks(not_implicit_concat)
+    generator = split.get_fstringify_chunks(not_implicit_concat)
     assert len(list(generator)) == 1
 
 
@@ -139,7 +139,7 @@ a = "Hello {}" \\
 
 
 def test_line_continuation():
-    generator = lexer.get_fstringify_chunks(line_continuation)
+    generator = split.get_fstringify_chunks(line_continuation)
     assert len(list(generator)) == 0
 
 
@@ -150,13 +150,13 @@ latex_documents = [
 
 
 def test_tuple_list():
-    generator = lexer.get_fstringify_chunks(tuple_in_list)
+    generator = split.get_fstringify_chunks(tuple_in_list)
     assert len(list(generator)) == 1
 
 
 def test_indexed_percent():
     code = 'return "Hello %s!" % flask.request.args[name]'
-    generator = lexer.get_fstringify_chunks(code)
+    generator = split.get_fstringify_chunks(code)
     chunk = next(generator)
 
     assert (

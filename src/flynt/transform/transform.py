@@ -34,7 +34,7 @@ def transform_chunk(
         ) or "cannot include a blackslash" in str(e)
     except FlyntException:
         meta["skip"] = False
-    except Exception as e2:
+    except Exception:
         meta["skip"] = False
 
     if meta["changed"] and converted:

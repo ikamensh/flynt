@@ -1,6 +1,7 @@
 from typing import Tuple
-from flynt.transform import transform_chunk
+from flynt.transform.transform import transform_chunk
 from flynt import lexer
+from flynt.lexer import split
 from flynt.exceptions import FlyntException
 import math
 
@@ -27,7 +28,7 @@ class JoinTransformer:
 
     def fstringify_code_by_line(self):
         assert not self.used_up, "Tried to use JT twice."
-        for chunk in lexer.get_fstringify_chunks(self.code_in):
+        for chunk in split.get_fstringify_chunks(self.code_in):
             self.fill_up_to(chunk)
             self.try_chunk(chunk)
 
@@ -36,11 +37,7 @@ class JoinTransformer:
         return "".join(self.results)[:-1], self.count_expressions
 
     def fill_up_to(self, chunk):
-        start_line, start_idx, end_idx = (
-            chunk.start_line,
-            chunk.start_idx,
-            chunk.end_idx,
-        )
+        start_line, start_idx, _ = (chunk.start_line, chunk.start_idx, chunk.end_idx)
         line = self.src_lines[start_line]
 
         if self.last_idx is None:

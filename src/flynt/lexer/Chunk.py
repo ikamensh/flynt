@@ -1,4 +1,5 @@
 import ast
+import sys
 import token
 from collections import deque
 from typing import Deque
@@ -7,7 +8,6 @@ from flynt.lexer.PyToken import PyToken
 
 REUSE = "Token was not used"
 
-import sys
 
 is_36 = sys.version_info.major == 3 and sys.version_info.minor == 6
 if is_36:
