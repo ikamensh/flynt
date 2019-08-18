@@ -33,6 +33,6 @@ steps:
   displayName: 'Install dependencies'
 
 - script: |
-    pip install pytest pytest-azurepipelines
+    pip install -r requirements-dev.txt
     pytest --cov=src
   displayName: 'pytest'
