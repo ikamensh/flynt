@@ -24,6 +24,6 @@ message_pyup_success = (
 
 farewell_message = (
     "Please run your tests before commiting. Report bugs as github issues at: "
-    "https://github.com/ikamensh/flynt, or give a star if it just worked!"
+    "https://github.com/ikamensh/flynt or give it a star if it just worked!"
     "\nThank you for using flynt. Upgrade more projects and recommend it to your colleagues!\n"
 )
