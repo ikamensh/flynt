@@ -52,6 +52,8 @@ class Chunk:
         self.is_call_chunk = False
         self.successful = False
 
+        self.string_in_string = False
+
     def empty_append(self, t: PyToken):
         if t.is_string() and not t.is_raw_string():
             pass
@@ -110,11 +112,8 @@ class Chunk:
 
     def call_append(self, t: PyToken):
 
-        # no string in string
         if t.is_string():
-            self.complete = True
-            self.successful = False
-            return
+            self.string_in_string = True
 
         self.tokens.append(t)
         if len(self) > 3 and self.is_parseable:

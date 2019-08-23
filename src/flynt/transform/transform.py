@@ -9,7 +9,7 @@ from flynt.format import set_quote_type, QuoteTypes
 
 
 def transform_chunk(
-    code: str, quote_type: str = QuoteTypes.triple_double
+    code: str, quote_type: str = QuoteTypes.triple_double,
 ) -> Tuple[str, Dict]:
     """Convert a block of with a %-formatted string to an f-string
 

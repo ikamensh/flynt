@@ -202,6 +202,7 @@ class FstringifyTransformer(ast.NodeTransformer):
             self.lineno = node.lineno
             self.col_offset = node.col_offset
             result_node = joined_string(node)
+            self.visit(result_node)
             return result_node
 
         return node
