@@ -35,6 +35,7 @@ steps:
 - script: |
     pip install -r requirements-dev.txt
     flake8
+    pylint
     pytest --junitxml=junit/test-results.xml --cov=src --cov-report=xml --cov-report=html
   displayName: 'pytest'
   

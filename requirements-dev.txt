@@ -8,3 +8,4 @@ black
 pre-commit
 flake8
 flake8-black
+pylint
