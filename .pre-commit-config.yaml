@@ -3,7 +3,7 @@ repos:
     rev: 19.3b0
     hooks:
     - id: black
-      language_version: python3.7
+      language_version: python3
       exclude: test/integration/actual_out|test/integration/actual_out_single_line|test/integration/expected_out|test/integration/expected_out_single_line|test/integration/samples_in
 -   repo: https://github.com/PyCQA/flake8
     rev: 3.7.8
