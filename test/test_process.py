@@ -93,6 +93,40 @@ def test_openpyxl():
     assert s_out == s_expected
 
 
+def test_str_in_str():
+    s_in = """a = "beautiful numbers to follow: {}".format(" ".join(lst))"""
+    s_expected = """a = f"beautiful numbers to follow: {' '.join(lst)}\""""
+    s_out, count = process.fstringify_code_by_line(s_in)
+
+    assert count == 1
+    assert s_out == s_expected
+
+
+def test_str_in_str_single_quote():
+    s_in = """a = 'beautiful numbers to follow: {}'.format(" ".join(lst))"""
+    s_expected = """a = f"beautiful numbers to follow: {' '.join(lst)}\""""
+    s_out, count = process.fstringify_code_by_line(s_in)
+
+    assert count == 1
+    assert s_out == s_expected
+
+
+def test_chain_fmt():
+    s_in = """a = "Hello {}".format(d["a{}".format(key)])"""
+    s_expected = """a = f"Hello {d[f'a{key}']}\""""
+    s_out, count = process.fstringify_code_by_line(s_in)
+
+    assert count == 1
+    assert s_out == s_expected
+
+
+def test_chain_fmt_3():
+    s_in = """a = "Hello {}".format(d["a{}".format( d["a{}".format(key) ]) ] )"""
+    s_out, count = process.fstringify_code_by_line(s_in)
+
+    assert count == 0
+
+
 code_empty_line = """
 def write_row(self, xf, row, row_idx):
 
@@ -187,7 +221,7 @@ def test_integers_equivalence(number, fmt_spec):
 
 
 @pytest.mark.parametrize("fmt_spec", "egf")
-@pytest.mark.parametrize("number", [3.33333333, 15e-44, 3.142854])
+@pytest.mark.parametrize("number", [3.333_333_33, 15e-44, 3.142_854])
 def test_floats_equivalence(number, fmt_spec):
     percent_fmt_string = f"""'Setting %{fmt_spec} must be uppercase.' % number"""
     out, count = process.fstringify_code_by_line(percent_fmt_string)
@@ -196,7 +230,7 @@ def test_floats_equivalence(number, fmt_spec):
 
 
 @pytest.mark.parametrize("fmt_spec", [".02f", ".01e", ".04g", "05f"])
-@pytest.mark.parametrize("number", [3.33333333, 15e-44, 3.142854])
+@pytest.mark.parametrize("number", [3.333_333_33, 15e-44, 3.142_854])
 def test_floats_precision_equiv(number, fmt_spec):
     percent_fmt_string = f"""'Setting %{fmt_spec} must be uppercase.' % number"""
     out, count = process.fstringify_code_by_line(percent_fmt_string)

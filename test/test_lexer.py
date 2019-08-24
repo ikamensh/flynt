@@ -139,8 +139,8 @@ a = "Hello {}" \\
 
 
 def test_line_continuation():
-    generator = split.get_fstringify_chunks(line_continuation)
-    assert len(list(generator)) == 0
+    generator = lexer.get_fstringify_chunks(line_continuation)
+    assert len(list(generator)) == 1
 
 
 tuple_in_list = """

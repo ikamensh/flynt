@@ -3,6 +3,7 @@ from flynt.transform.transform import transform_chunk
 from flynt import lexer
 from flynt.lexer import split
 from flynt.exceptions import FlyntException
+from flynt.format import QuoteTypes
 import math
 
 
@@ -80,6 +81,8 @@ class JoinTransformer:
 
         try:
             quote_type = chunk.tokens[0].get_quote_type()
+            if chunk.string_in_string:
+                quote_type = QuoteTypes.double
         except FlyntException:
             pass
         else:
