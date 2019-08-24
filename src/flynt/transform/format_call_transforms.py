@@ -73,7 +73,7 @@ def joined_string(fmt_call: ast.Call) -> ast.JoinedStr:
         if var_name.isdigit():
             manual_field_ordering = True
             identifier = int(var_name)
-        elif len(var_name) == 0:
+        elif not var_name:
             assert not manual_field_ordering
             identifier = seq_ctr
             seq_ctr += 1

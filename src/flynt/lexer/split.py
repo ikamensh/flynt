@@ -38,8 +38,8 @@ def get_fstringify_chunks(code: str) -> Generator[Chunk, None, None]:
         if chunk.successful and not last_concat:
             yield chunk
 
-        if len(chunk) and chunk[-1].is_string():
+        if chunk and chunk[-1].is_string():
             last_concat = True
         else:
-            if Chunk.multiline or len(chunk) > 0:
+            if Chunk.multiline or chunk:
                 last_concat = False

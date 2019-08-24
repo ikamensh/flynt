@@ -94,7 +94,7 @@ def handle_from_mod_tuple(node):
     blocks = deque(VAR_KEY_PATTERN.split(format_str))
     result_node.values.append(ast_string_node(blocks.popleft()))
 
-    while len(blocks) > 0:
+    while blocks:
 
         fmt_prefix = blocks.popleft()
         fmt_spec = blocks.popleft()

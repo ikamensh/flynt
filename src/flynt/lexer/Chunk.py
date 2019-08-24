@@ -137,7 +137,7 @@ class Chunk:
         if t.toknum in self.skip_tokens:
             return
 
-        if len(self) == 0:
+        if not self:
             self.empty_append(t)
         elif not (self.is_call_chunk or self.is_percent_chunk):
             self.second_append(t)
@@ -148,11 +148,9 @@ class Chunk:
 
     @property
     def is_parseable(self):
-        if len(self.tokens) < 1:
-            return False
         try:
             ast.parse(str(self))
-            return True
+            return bool(self.tokens)
         except SyntaxError:
             return False
 
