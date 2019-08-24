@@ -20,8 +20,8 @@ def ast_formatted_value(
     return ast.FormattedValue(value=val, conversion=conversion, format_spec=format_spec)
 
 
-def ast_string_node(string: str) -> ast.Str:
-    return ast.Str(s=string)
+def ast_string_node(ast_str: str) -> ast.Str:
+    return ast.Str(s=ast_str)
 
 
 def matching_call(node) -> bool:
@@ -41,13 +41,12 @@ stdlib_parse = string.Formatter().parse
 
 def joined_string(fmt_call: ast.Call) -> ast.JoinedStr:
     """ Transform a "...".format() call node into a f-string node. """
-    string = fmt_call.func.value.s
     var_map = {kw.arg: kw.value for kw in fmt_call.keywords}
 
     for i, val in enumerate(fmt_call.args):
         var_map[i] = val
 
-    splits = deque(stdlib_parse(string))
+    splits = deque(stdlib_parse(fmt_call.func.value.s))
 
     seq_ctr = 0
     new_segments = []
