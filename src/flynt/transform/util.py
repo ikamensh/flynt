@@ -18,6 +18,10 @@ def pp_code_ast(code, convert=False):
     pp_ast(tree)
 
 
+def _get_classname(cls):
+    return cls.__class__.__name__
+
+
 def ast_to_dict(node):
     """Convert an AST node to a dictionary for debugging.
 
@@ -35,7 +39,6 @@ def ast_to_dict(node):
     if not node:
         return None
     fields = {}
-    classname = lambda cls: cls.__class__.__name__
     for k in node._fields:
         if not hasattr(node, k):
             continue
@@ -44,7 +47,7 @@ def ast_to_dict(node):
             if v._fields:
                 fields[k] = ast_to_dict(v)
             else:
-                fields[k] = classname(v)
+                fields[k] = _get_classname(v)
 
         elif isinstance(v, list):
             fields[k] = []
@@ -60,7 +63,7 @@ def ast_to_dict(node):
         else:
             fields[k] = str(v)
 
-    return {classname(node): fields}
+    return {_get_classname(node): fields}
 
 
 def pp_ast(node):

@@ -1,4 +1,4 @@
-from flynt.transform import transform_chunk
+from flynt.transform.transform import transform_chunk
 import pytest
 
 
@@ -13,7 +13,8 @@ def test_fmt_spec():
 
 
 @pytest.mark.xfail(
-    reason="problem in dependency - astor https://github.com/berkerpeksag/astor/issues/153"
+    reason="problem in dependency - "
+    "astor https://github.com/berkerpeksag/astor/issues/153"
 )
 def test_expr_no_paren():
     code = """"my string {:.2f}".format(var+1)"""

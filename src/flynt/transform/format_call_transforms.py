@@ -1,5 +1,6 @@
 import ast
 from collections import deque
+import string
 
 from flynt.exceptions import FlyntException
 
@@ -34,8 +35,6 @@ def matching_call(node) -> bool:
         and node.func.attr == "format"
     )
 
-
-import string
 
 stdlib_parse = string.Formatter().parse
 

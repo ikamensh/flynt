@@ -22,7 +22,8 @@ def fstringify_file(
     filename, multiline, len_limit, pyup=False
 ) -> Tuple[bool, int, int, int]:
     """
-    :return: tuple: (changes_made, n_changes, length of original code, length of new code)
+    :return: tuple: (changes_made, n_changes,
+    length of original code, length of new code)
     """
 
     try:

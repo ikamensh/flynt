@@ -36,7 +36,8 @@ def test_invalid_conversion():
 
 
 def test_invalid_conversion_names():
-    s_in = """a = 'my string {var}, but also {f!b} and {cada_bra!a}'.format(var, f, cada_bra)"""
+    s_in = """a = 'my string {var}, but also {f!b}
+     and {cada_bra!a}'.format(var, f, cada_bra)"""
     s_expected = s_in
 
     s_out, count = process.fstringify_code_by_line(s_in)
@@ -193,7 +194,7 @@ def test_width_spec():
 
 
 def test_equiv_expressions_repr():
-    name = "bla"
+    name = "bla"  # noqa: F841
 
     s_in = """'Setting %20r must be uppercase.' % name"""
 
@@ -202,7 +203,7 @@ def test_equiv_expressions_repr():
 
 
 def test_equiv_expressions_s():
-    name = "bla"
+    name = "bla"  # noqa: F841
 
     s_in = """'Setting %20s must be uppercase.' % name"""
 

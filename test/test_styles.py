@@ -1,6 +1,7 @@
 from flynt.format import QuoteTypes, get_quote_type, set_quote_type
 from flynt.lexer.split import get_chunks
 import pytest
+import random
 
 
 @pytest.mark.parametrize(
@@ -40,9 +41,6 @@ def test_get_quote_type(code, quote_type):
 )
 def test_cycle(code):
     assert set_quote_type(code, get_quote_type(code)) == code
-
-
-import random
 
 
 @pytest.mark.parametrize(argnames="quote_type", argvalues=QuoteTypes.all)

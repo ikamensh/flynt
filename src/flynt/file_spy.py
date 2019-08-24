@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 import io
 import forbiddenfruit
 
@@ -25,9 +26,6 @@ def spy_write(func):
 
 def charcount_stats(filename):
     return read_history[filename], write_history[filename]
-
-
-from contextlib import contextmanager
 
 
 @contextmanager

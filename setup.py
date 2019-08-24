@@ -1,14 +1,14 @@
-import re
-
 import config
+from pathlib import Path
+import re
+from setuptools import setup
+
 
 config.add_src_to_path()
 
 with open("src/flynt/__init__.py") as f:
     version = re.search('__version__ = "(.*?)"', f.read()).group(1)
 
-from pathlib import Path
-from setuptools import setup
 
 BASE_DIR = Path(__file__).parent
 
@@ -31,7 +31,8 @@ setup(
     packages=["flynt", "flynt.transform", "flynt.lexer"],
     package_dir={"": "src"},
     version=version,
-    description="CLI tool to convert a python project's %-formatted strings to f-strings.",
+    description="CLI tool to convert a python project's %-formatted strings "
+    "to f-strings.",
     author="Ilya Kamenshchikov",
     keywords=["utility", "strings"],
     classifiers=[
@@ -45,7 +46,8 @@ setup(
     ],
     license="MIT",
     # long_description=get_long_description(),
-    long_description="CLI tool to convert a python project's .format(...) and %-formatted "
+    long_description="CLI tool to convert a python project's .format(...) "
+    "and %-formatted "
     "strings to f-strings.",
     install_requires=get_requirements(),
     python_requires=">=3.6",
