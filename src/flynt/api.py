@@ -118,7 +118,9 @@ def print_report(
         print(f"String expressions transformed: {total_expr}")
         cc_reduction = total_cc_original - total_cc_new
         cc_percent_reduction = cc_reduction / total_cc_original
-        print(f"Character count reduction: {cc_reduction} ({cc_percent_reduction:.2%})\n")
+        print(
+            f"Character count reduction: {cc_reduction} ({cc_percent_reduction:.2%})\n"
+        )
     print("_-_." * 25)
     if not pyup:
         print(message_suggest_pyup)

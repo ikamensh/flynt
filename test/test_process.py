@@ -220,7 +220,7 @@ def test_integers_equivalence(number, fmt_spec):
 
 
 @pytest.mark.parametrize("fmt_spec", "egf")
-@pytest.mark.parametrize("number", [3.33333333, 15e-44, 3.142854])
+@pytest.mark.parametrize("number", [3.333_333_33, 15e-44, 3.142_854])
 def test_floats_equivalence(number, fmt_spec):
     percent_fmt_string = f"""'Setting %{fmt_spec} must be uppercase.' % number"""
     out, count = process.fstringify_code_by_line(percent_fmt_string)
@@ -229,7 +229,7 @@ def test_floats_equivalence(number, fmt_spec):
 
 
 @pytest.mark.parametrize("fmt_spec", [".02f", ".01e", ".04g", "05f"])
-@pytest.mark.parametrize("number", [3.33333333, 15e-44, 3.142854])
+@pytest.mark.parametrize("number", [3.333_333_33, 15e-44, 3.142_854])
 def test_floats_precision_equiv(number, fmt_spec):
     percent_fmt_string = f"""'Setting %{fmt_spec} must be uppercase.' % number"""
     out, count = process.fstringify_code_by_line(percent_fmt_string)
