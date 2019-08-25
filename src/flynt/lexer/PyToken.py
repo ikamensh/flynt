@@ -12,7 +12,7 @@ class PyToken:
     percent_cant_handle = ("%%",)
 
     def __init__(self, t):
-        toknum, tokval, start, end, line = t
+        toknum, tokval, start, end, _ = t
         self.toknum: int = toknum
         self.tokval: str = tokval
         self.start: Tuple[line_num, char_idx] = start

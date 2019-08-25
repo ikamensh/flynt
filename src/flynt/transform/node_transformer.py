@@ -38,7 +38,7 @@ def handle_from_mod_dict_name(node):
     format_str = node.left.s
     matches = MOD_KEY_PATTERN.findall(format_str)
     var_keys = []
-    for idx, m in enumerate(matches):
+    for _, m in enumerate(matches):
         var_key = MOD_KEY_NAME_PATTERN.match(m)
         if not var_key:
             raise FlyntException("could not find dict key")

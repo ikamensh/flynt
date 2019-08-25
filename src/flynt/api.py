@@ -66,7 +66,7 @@ def fstringify_file(
             changed = pyupgrade.fix_file(filename, args)
 
         if changed:
-            len_before, len_after = charcount_stats(filename)
+            _, len_after = charcount_stats(filename)
             return True, result[1], result[2], len_after
         else:
             return result
