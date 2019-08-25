@@ -168,10 +168,10 @@ def handle_from_mod(node):
     ):
         return handle_from_mod_generic_name(node)
 
-    elif isinstance(node.right, ast.Tuple):
+    if isinstance(node.right, ast.Tuple):
         return handle_from_mod_tuple(node)
 
-    elif isinstance(node.right, ast.Dict):
+    if isinstance(node.right, ast.Dict):
         # print("~~~~ Dict mod strings don't make sense to f-strings")
         return node
 
@@ -238,7 +238,7 @@ class FstringifyTransformer(ast.NodeTransformer):
                 if isinstance(ch, ast.BinOp):
                     return node
                 # f-string expression part cannot include a backslash
-                elif isinstance(ch, ast.Str) and (
+                if isinstance(ch, ast.Str) and (
                     any(
                         map(
                             lambda x: x in ch.s,

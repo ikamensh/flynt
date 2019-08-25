@@ -4,6 +4,7 @@ import time
 import traceback
 from typing import Tuple
 
+from argparse import Namespace
 import astor
 import pyupgrade
 
@@ -49,27 +50,21 @@ def fstringify_file(
 
     if not pyup:
         return result
-    else:
 
-        class Args:
-            def __init__(self, **kwargs):
-                self.__dict__.update(kwargs)
+    args = Namespace(
+        py36_plus=True,
+        py3_plus=True,
+        keep_percent_format=False,
+        exit_zero_even_if_changed=False,
+    )
 
-        args = Args(
-            py36_plus=True,
-            py3_plus=True,
-            keep_percent_format=False,
-            exit_zero_even_if_changed=False,
-        )
+    with spy_on_file_io():
+        changed = pyupgrade.fix_file(filename, args)
 
-        with spy_on_file_io():
-            changed = pyupgrade.fix_file(filename, args)
-
-        if changed:
-            _, len_after = charcount_stats(filename)
-            return True, result[1], result[2], len_after
-        else:
-            return result
+    if changed:
+        _, len_after = charcount_stats(filename)
+        return True, result[1], result[2], len_after
+    return result
 
 
 def fstringify_files(files, verbose, quiet, multiline, len_limit, pyup):
@@ -161,5 +156,4 @@ def fstringify(
 
     if fail_on_changes:
         return status
-    else:
-        return 0
+    return 0

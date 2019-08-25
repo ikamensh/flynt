@@ -201,5 +201,4 @@ class Chunk:
     def __repr__(self):
         if self.tokens:
             return "Chunk: " + str(self)
-        else:
-            return "Empty Chunk"
+        return "Empty Chunk"
