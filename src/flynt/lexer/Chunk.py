@@ -4,24 +4,23 @@ import token
 from collections import deque
 from typing import Deque
 
-from flynt.lexer.PyToken import PyToken
+from flynt.lexer.py_token import PyToken
 
 REUSE = "Token was not used"
 
 
-is_36 = sys.version_info.major == 3 and sys.version_info.minor == 6
-if is_36:
-    multiline_skip = (token.NEWLINE, 58)
-    multiline_break = (57,)
+if sys.version_info.major == 3 and sys.version_info.minor == 6:
+    MULTILINE_SKIP = (token.NEWLINE, 58)
+    MULTILINE_BREAK = (57,)
 
-    single_skip = ()
-    single_break = (token.NEWLINE, 57, 58)
+    SINGLE_SKIP = ()
+    SINGLE_BREAK = (token.NEWLINE, 57, 58)
 else:
-    multiline_skip = (token.NEWLINE, token.NL)
-    multiline_break = (token.COMMENT,)
+    MULTILINE_SKIP = (token.NEWLINE, token.NL)
+    MULTILINE_BREAK = (token.COMMENT,)
 
-    single_skip = ()
-    single_break = (token.COMMENT, token.NEWLINE, token.NL)
+    SINGLE_SKIP = ()
+    SINGLE_BREAK = (token.COMMENT, token.NEWLINE, token.NL)
 
 
 class Chunk:
@@ -30,17 +29,17 @@ class Chunk:
     break_tokens = ()
     multiline = None
 
-    @staticmethod
-    def set_multiline():
-        Chunk.skip_tokens = multiline_skip
-        Chunk.break_tokens = multiline_break
-        Chunk.multiline = True
+    @classmethod
+    def set_multiline(cls):
+        cls.skip_tokens = MULTILINE_SKIP
+        cls.break_tokens = MULTILINE_BREAK
+        cls.multiline = True
 
-    @staticmethod
-    def set_single_line():
-        Chunk.skip_tokens = single_skip
-        Chunk.break_tokens = single_break
-        Chunk.multiline = False
+    @classmethod
+    def set_single_line(cls):
+        cls.skip_tokens = SINGLE_SKIP
+        cls.break_tokens = SINGLE_BREAK
+        cls.multiline = False
 
     def __init__(self, tokens=()):
         self.tokens: Deque[PyToken] = deque(tokens)
@@ -54,32 +53,32 @@ class Chunk:
 
         self.string_in_string = False
 
-    def empty_append(self, t: PyToken):
-        if t.is_string() and not t.is_raw_string():
+    def empty_append(self, py_token: PyToken):
+        if py_token.is_string() and not py_token.is_raw_string():
             pass
         else:
             self.complete = True
 
-        self.tokens.append(t)
+        self.tokens.append(py_token)
 
-    def second_append(self, t: PyToken):
-        if t.is_string():
-            self.tokens[0].tokval += t.tokval
-            self.tokens[0].end = t.end
-        elif t.is_percent_op():
-            self.tokens.append(t)
+    def second_append(self, py_token: PyToken):
+        if py_token.is_string():
+            self.tokens[0].tokval += py_token.tokval
+            self.tokens[0].end = py_token.end
+        elif py_token.is_percent_op():
+            self.tokens.append(py_token)
             self.is_percent_chunk = True
-        elif t.is_dot_op():
-            self.tokens.append(t)
+        elif py_token.is_dot_op():
+            self.tokens.append(py_token)
             self.is_call_chunk = True
         else:
-            self.tokens.append(t)
+            self.tokens.append(py_token)
             self.complete = True
 
-    def percent_append(self, t: PyToken):
+    def percent_append(self, py_token: PyToken):
 
         # No string in string
-        if t.is_string():
+        if py_token.is_string():
             self.complete = True
             self.successful = self.is_parseable
             return REUSE
@@ -90,7 +89,7 @@ class Chunk:
             return
 
         if len(self) == 2:
-            self.tokens.append(t)
+            self.tokens.append(py_token)
             if self.is_parseable:
                 self.successful = True
             else:
@@ -98,31 +97,31 @@ class Chunk:
 
         else:
             if self.percent_ongoing:
-                self.tokens.append(t)
+                self.tokens.append(py_token)
                 if self.is_parseable:
                     self.percent_ongoing = False
                     self.successful = True
-            elif t.is_expr_continuation_op():
-                self.tokens.append(t)
+            elif py_token.is_expr_continuation_op():
+                self.tokens.append(py_token)
                 self.percent_ongoing = True
             else:
                 self.complete = True
                 self.successful = self.is_parseable
                 return REUSE
 
-    def call_append(self, t: PyToken):
+    def call_append(self, py_token: PyToken):
 
-        if t.is_string():
+        if py_token.is_string():
             self.string_in_string = True
 
-        self.tokens.append(t)
+        self.tokens.append(py_token)
         if len(self) > 3 and self.is_parseable:
             self.complete = True
             self.successful = True
 
-    def append(self, t: PyToken):
+    def append(self, py_token: PyToken):
         # stop on a comment or too long chunk
-        if t.toknum in self.break_tokens:
+        if py_token.toknum in self.break_tokens:
             self.complete = True
             self.successful = self.is_parseable and (
                 self.is_percent_chunk or self.is_call_chunk
@@ -134,17 +133,17 @@ class Chunk:
             self.successful = False
             return
 
-        if t.toknum in self.skip_tokens:
+        if py_token.toknum in self.skip_tokens:
             return
 
         if not self:
-            self.empty_append(t)
+            self.empty_append(py_token)
         elif not (self.is_call_chunk or self.is_percent_chunk):
-            self.second_append(t)
+            self.second_append(py_token)
         elif self.is_call_chunk:
-            self.call_append(t)
+            self.call_append(py_token)
         elif self.is_percent_chunk:
-            return self.percent_append(t)
+            return self.percent_append(py_token)
 
     @property
     def is_parseable(self):

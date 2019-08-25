@@ -2,24 +2,24 @@ import io
 import tokenize
 from typing import Generator
 
-from flynt.lexer.Chunk import Chunk
-from flynt.lexer.PyToken import PyToken
+from flynt.lexer.chunk import Chunk
+from flynt.lexer.py_token import PyToken
 
 
 def get_chunks(code) -> Generator[Chunk, None, None]:
-    g = tokenize.tokenize(io.BytesIO(code.encode("utf-8")).readline)
+    token_line = tokenize.tokenize(io.BytesIO(code.encode("utf-8")).readline)
     chunk = Chunk()
 
-    for item in g:
-        t = PyToken(item)
-        reuse = chunk.append(t)
+    for item in token_line:
+        py_token = PyToken(item)
+        reuse = chunk.append(py_token)
 
         if chunk.complete:
 
             yield chunk
             chunk = Chunk()
             if reuse:
-                reuse = chunk.append(t)
+                reuse = chunk.append(py_token)
                 # assert not reuse
                 if chunk.complete:
                     yield chunk

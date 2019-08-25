@@ -36,7 +36,7 @@ def matching_call(node) -> bool:
     )
 
 
-stdlib_parse = string.Formatter().parse
+STDLIB_PARSE = string.Formatter().parse
 
 
 def joined_string(fmt_call: ast.Call) -> ast.JoinedStr:
@@ -46,7 +46,7 @@ def joined_string(fmt_call: ast.Call) -> ast.JoinedStr:
     for i, val in enumerate(fmt_call.args):
         var_map[i] = val
 
-    splits = deque(stdlib_parse(fmt_call.func.value.s))
+    splits = deque(STDLIB_PARSE(fmt_call.func.value.s))
 
     seq_ctr = 0
     new_segments = []
@@ -84,10 +84,10 @@ def joined_string(fmt_call: ast.Call) -> ast.JoinedStr:
             if suffix:
                 ast_name = ast.Attribute(value=ast_name, attr=suffix)
             new_segments.append(ast_formatted_value(ast_name, fmt_str, conversion))
-        except IndexError as e:
+        except IndexError as exception:
             raise FlyntException(
                 "A variable is used multiple times - better not to replace it."
-            ) from e
+            ) from exception
 
     if var_map:
         raise FlyntException("A variable was never used - a risk of bug.")

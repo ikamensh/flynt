@@ -15,11 +15,11 @@ MOD_KEY_NAME_PATTERN = re.compile(r"%\(([^)]+)\)s")
 VAR_KEY_PATTERN = re.compile(
     "%([.]?[0-9]*)[hlL]?([diouxXeEfFgGcrsa])"
 )  # specs at https://docs.python.org/3/library/stdtypes.html#string-formatting
-obsolete_specifiers = "hlL"
+OBSOLETE_SPECIFIERS = "hlL"
 
 
-translate_conversion_types = {"i": "d", "u": "d"}
-conversion_methods = {"r": "!r", "a": "!a", "s": None}
+TRANSLATE_CONVERSION_TYPES = {"i": "d", "u": "d"}
+CONVERSION_METHODS = {"r": "!r", "a": "!a", "s": None}
 
 
 def handle_from_mod_dict_name(node):
@@ -37,8 +37,8 @@ def handle_from_mod_dict_name(node):
     format_str = node.left.s
     matches = MOD_KEY_PATTERN.findall(format_str)
     var_keys = []
-    for _, m in enumerate(matches):
-        var_key = MOD_KEY_NAME_PATTERN.match(m)
+    for _, match in enumerate(matches):
+        var_key = MOD_KEY_NAME_PATTERN.match(match)
         if not var_key:
             raise FlyntException("could not find dict key")
         var_keys.append(var_key[1])
@@ -52,7 +52,7 @@ def handle_from_mod_dict_name(node):
     for block in blocks:
         # if this block matches a %(arg)s pattern then inject f-string instead
         if MOD_KEY_PATTERN.match(block):
-            fv = ast.FormattedValue(
+            formatted_value = ast.FormattedValue(
                 value=ast.Subscript(
                     value=node.right, slice=ast.Index(value=ast.Str(s=var_keys.pop()))
                 ),
@@ -60,7 +60,7 @@ def handle_from_mod_dict_name(node):
                 format_spec=None,
             )
 
-            result_node.values.append(fv)
+            result_node.values.append(formatted_value)
         else:
             # no match means it's just a literal string
             result_node.values.append(ast.Str(s=block))
@@ -97,25 +97,27 @@ def handle_from_mod_tuple(node):
 
         fmt_prefix = blocks.popleft()
         fmt_spec = blocks.popleft()
-        for c in obsolete_specifiers:
-            fmt_spec = fmt_spec.replace(c, "")
+        for char in OBSOLETE_SPECIFIERS:
+            fmt_spec = fmt_spec.replace(char, "")
 
-        if fmt_spec in conversion_methods:
+        if fmt_spec in CONVERSION_METHODS:
             if fmt_prefix:
                 raise FlyntException(
                     "Default text alignment has changed between percent fmt and fstrings. "
                     "Proceeding would result in changed code behaviour."
                 )
-            fv = ast_formatted_value(
+            formatted_value = ast_formatted_value(
                 str_vars.popleft(),
                 fmt_str=fmt_prefix,
-                conversion=conversion_methods[fmt_spec],
+                conversion=CONVERSION_METHODS[fmt_spec],
             )
         else:
-            fmt_spec = translate_conversion_types.get(fmt_spec, fmt_spec)
-            fv = ast_formatted_value(str_vars.popleft(), fmt_str=fmt_prefix + fmt_spec)
+            fmt_spec = TRANSLATE_CONVERSION_TYPES.get(fmt_spec, fmt_spec)
+            formatted_value = ast_formatted_value(
+                str_vars.popleft(), fmt_str=fmt_prefix + fmt_spec
+            )
 
-        result_node.values.append(fv)
+        result_node.values.append(formatted_value)
         result_node.values.append(ast_string_node(blocks.popleft()))
 
     return result_node
@@ -148,15 +150,15 @@ def handle_from_mod_generic_name(node):
 
 
 def fstringify_node(node):
-    ft = FstringifyTransformer()
-    result = ft.visit(node)
+    fstring_transformer = FstringifyTransformer()
+    result = fstring_transformer.visit(node)
 
     return (
         result,
         dict(
-            changed=ft.counter > 0,
-            lineno=ft.lineno,
-            col_offset=ft.col_offset,
+            changed=fstring_transformer.counter > 0,
+            lineno=fstring_transformer.lineno,
+            col_offset=fstring_transformer.col_offset,
             skip=True,
         ),
     )
@@ -185,7 +187,7 @@ class FstringifyTransformer(ast.NodeTransformer):
         self.lineno = -1
         self.col_offset = -1
 
-    def visit_Call(self, node: ast.Call):
+    def visit_call(self, node: ast.Call):
         """Convert `ast.Call` to `ast.JoinedStr` f-string
         """
 
@@ -206,7 +208,7 @@ class FstringifyTransformer(ast.NodeTransformer):
 
         return node
 
-    def visit_BinOp(self, node):
+    def visit_bin_op(self, node):
         """Convert `ast.BinOp` to `ast.JoinedStr` f-string
 
         Currently only if a string literal `ast.Str` is on the left side of the `%`
@@ -229,23 +231,22 @@ class FstringifyTransformer(ast.NodeTransformer):
 
         # bail in these edge cases...
         if percent_stringify:
-            no_good = ["}", "{"]
-            for ng in no_good:
-                if ng in node.left.s:
+            for no_good in ["}", "{"]:
+                if no_good in node.left.s:
                     return node
-            for ch in ast.walk(node.right):
+            for char in ast.walk(node.right):
                 # no nested binops!
-                if isinstance(ch, ast.BinOp):
+                if isinstance(char, ast.BinOp):
                     return node
                 # f-string expression part cannot include a backslash
-                if isinstance(ch, ast.Str) and (
+                if isinstance(char, ast.Str) and (
                     any(
                         map(
-                            lambda x: x in ch.s,
+                            lambda x: x in char.s,
                             ("\n", "\t", "\r", "'", '"', "%s", "%%"),
                         )
                     )
-                    or "\\" in ch.s
+                    or "\\" in char.s
                 ):
                     return node
 

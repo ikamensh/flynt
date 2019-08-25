@@ -113,10 +113,10 @@ def fstringify_code_by_line(code: str, multiline=True, len_limit=79) -> Tuple[st
     """ returns fstringified version of the code and amount of lines edited."""
     if not multiline:
         len_limit = 0
-        lexer.set_single_line()
+        lexer.Chunk.set_single_line()
     else:
-        lexer.set_multiline()
+        lexer.Chunk.set_multiline()
 
-    jt = JoinTransformer(code, len_limit)
+    join_transformer = JoinTransformer(code, len_limit)
 
-    return jt.fstringify_code_by_line()
+    return join_transformer.fstringify_code_by_line()

@@ -11,11 +11,11 @@ class QuoteTypes:
 
 
 def get_quote_type(code: str):
-    from flynt.lexer.PyToken import PyToken
+    from flynt.lexer.py_token import PyToken
 
-    g = tokenize.tokenize(io.BytesIO(code.encode("utf-8")).readline)
-    next(g)
-    token = PyToken(next(g))
+    line_token = tokenize.tokenize(io.BytesIO(code.encode("utf-8")).readline)
+    next(line_token)
+    token = PyToken(next(line_token))
 
     return token.get_quote_type()
 

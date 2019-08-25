@@ -11,12 +11,12 @@ import pyupgrade
 from flynt.file_spy import spy_on_file_io, charcount_stats
 from flynt.process import fstringify_code_by_line
 from flynt.cli_messages import (
-    message_pyup_success,
-    message_suggest_pyup,
-    farewell_message,
+    MESSAGE_PYUP_SUCCESS,
+    MESSAGE_SUGGEST_PYUP,
+    FAREWELL_MESSAGE,
 )
 
-blacklist = {".tox", "venv", "site-packages", ".eggs"}
+BLACKLIST = {".tox", "venv", "site-packages", ".eggs"}
 
 
 def fstringify_file(
@@ -28,23 +28,23 @@ def fstringify_file(
     """
 
     try:
-        with open(filename, encoding="utf-8") as f:
-            contents = f.read()
+        with open(filename, encoding="utf-8") as file:
+            contents = file.read()
 
         new_code, changes = fstringify_code_by_line(
             contents, multiline=multiline, len_limit=len_limit
         )
 
-    except Exception as e:
-        print(f"Skipping fstrings transform of file {filename} due to {e}")
+    except Exception as exception:
+        print(f"Skipping fstrings transform of file {filename} due to {exception}")
         traceback.print_exc()
         result = False, 0, len(contents), len(contents)
     else:
         if new_code == contents:
             result = False, 0, len(contents), len(contents)
         else:
-            with open(filename, "w", encoding="utf-8") as f:
-                f.write(new_code)
+            with open(filename, "w", encoding="utf-8") as file:
+                file.write(new_code)
 
             result = True, changes, len(contents), len(new_code)
 
@@ -73,10 +73,10 @@ def fstringify_files(files, verbose, quiet, multiline, len_limit, pyup):
     total_charcount_new = 0
     total_expressions = 0
     start_time = time.time()
-    for f in files:
-        if any(b in f[0] for b in blacklist):
+    for file in files:
+        if any(b in file[0] for b in BLACKLIST):
             continue
-        file_path = os.path.join(f[0], f[1])
+        file_path = os.path.join(file[0], file[1])
         changed, count_expressions, charcount_original, charcount_new = fstringify_file(
             file_path, multiline, len_limit, pyup
         )
@@ -119,10 +119,10 @@ def print_report(
         )
     print("_-_." * 25)
     if not pyup:
-        print(message_suggest_pyup)
+        print(MESSAGE_SUGGEST_PYUP)
     else:
-        print(message_pyup_success)
-    print(farewell_message)
+        print(MESSAGE_PYUP_SUCCESS)
+    print(FAREWELL_MESSAGE)
     print("_-_." * 25)
 
 

@@ -39,29 +39,29 @@ def ast_to_dict(node):
     if not node:
         return None
     fields = {}
-    for k in node._fields:
-        if not hasattr(node, k):
+    for key in node._fields:
+        if not hasattr(node, key):
             continue
-        v = getattr(node, k)
-        if isinstance(v, ast.AST):
-            if v._fields:
-                fields[k] = ast_to_dict(v)
+        value = getattr(node, key)
+        if isinstance(value, ast.AST):
+            if value._fields:
+                fields[key] = ast_to_dict(value)
             else:
-                fields[k] = _get_classname(v)
+                fields[key] = _get_classname(value)
 
-        elif isinstance(v, list):
-            fields[k] = []
-            for e in v:
-                fields[k].append(ast_to_dict(e))
+        elif isinstance(value, list):
+            fields[key] = []
+            for element in value:
+                fields[key].append(ast_to_dict(element))
 
-        elif isinstance(v, (str, int, float)):
-            fields[k] = v
+        elif isinstance(value, (str, int, float)):
+            fields[key] = value
 
-        elif v is None:
-            fields[k] = None
+        elif value is None:
+            fields[key] = None
 
         else:
-            fields[k] = str(v)
+            fields[key] = str(value)
 
     return {_get_classname(node): fields}
 

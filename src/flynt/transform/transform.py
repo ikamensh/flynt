@@ -28,10 +28,10 @@ def transform_chunk(
         # from flynt.transform.util import pp_ast
         # pp_ast(tree)
         converted, meta = fstringify_node(copy.deepcopy(tree))
-    except SyntaxError as e:
+    except SyntaxError as exception:
         meta["skip"] = code.rstrip().endswith(
             ":"
-        ) or "cannot include a blackslash" in str(e)
+        ) or "cannot include a blackslash" in str(exception)
     except FlyntException:
         meta["skip"] = False
     except Exception:
