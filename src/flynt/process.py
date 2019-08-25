@@ -1,10 +1,11 @@
+import math
 from typing import Tuple
+
 from flynt.transform.transform import transform_chunk
 from flynt import lexer
 from flynt.lexer import split
 from flynt.exceptions import FlyntException
 from flynt.format import QuoteTypes
-import math
 
 
 class JoinTransformer:

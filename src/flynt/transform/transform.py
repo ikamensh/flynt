@@ -1,11 +1,11 @@
-import astor
 import ast
 import copy
 from typing import Dict, Tuple
 
-from flynt.transform.node_transformer import fstringify_node
+import astor
 from flynt.exceptions import FlyntException
 from flynt.format import set_quote_type, QuoteTypes
+from flynt.transform.node_transformer import fstringify_node
 
 
 def transform_chunk(

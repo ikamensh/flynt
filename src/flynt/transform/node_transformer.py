@@ -1,5 +1,6 @@
 import ast
 from collections import deque
+import re
 
 from flynt.transform.format_call_transforms import (
     matching_call,
@@ -8,8 +9,6 @@ from flynt.transform.format_call_transforms import (
     ast_formatted_value,
 )
 from flynt.exceptions import FlyntException
-
-import re
 
 MOD_KEY_PATTERN = re.compile(r"(%\([^)]+\)s)")
 MOD_KEY_NAME_PATTERN = re.compile(r"%\(([^)]+)\)s")
