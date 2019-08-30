@@ -63,7 +63,7 @@ def fstringify_file(
         )
 
         with spy_on_file_io():
-            changed = pyupgrade.fix_file(filename, args)
+            changed = pyupgrade._fix_file(filename, args)
 
         if changed:
             len_before, len_after = charcount_stats(filename)
