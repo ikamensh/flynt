@@ -2,12 +2,20 @@ import ast
 from collections import deque
 import string
 
+import astor
+
 from flynt.exceptions import FlyntException
 
 
 def ast_formatted_value(
     val, fmt_str: str = None, conversion=None
 ) -> ast.FormattedValue:
+
+    if astor.to_source(val)[0] == "{":
+        raise FlyntException(
+            "values starting with '{' are better left not transformed."
+        )
+
     if fmt_str:
         format_spec = ast.JoinedStr([ast_string_node(fmt_str.replace(":", ""))])
     else:

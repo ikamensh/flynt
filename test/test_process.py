@@ -178,6 +178,13 @@ def test_legacy_fmtspec():
     assert out == s_expected
 
 
+def test_str_in_str_curly():
+    s_in = """desired_info += ["'clusters_options' items: {}. ".format({'random_option'})]"""
+
+    out, count = process.fstringify_code_by_line(s_in)
+    assert count == 0
+
+
 def test_decimal_precision():
     s_in = """e = '%.03f' % var"""
     s_expected = """e = f'{var:.03f}'"""
