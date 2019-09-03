@@ -46,6 +46,7 @@ all_files = pytest.fixture(
         "slash_quotes.py",
         "some_named.py",
         "string_in_string.py",
+        "str_literal.py",
         "tuple_in_list.py",
         "two_liner.py",
     ]

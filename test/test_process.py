@@ -185,6 +185,17 @@ def test_str_in_str_curly():
     assert count == 0
 
 
+def test_str_in_str_methods():
+    s_in = r"""string += '{} = {}\n'.format(('.').join(listKeys), json.JSONEncoder().encode(val))"""
+    s_out = (
+        """string += f"{'.'.join(listKeys)} = {json.JSONEncoder().encode(val)}\\n\""""
+    )
+
+    out, count = process.fstringify_code_by_line(s_in)
+    assert out == s_out
+    assert count > 0
+
+
 def test_decimal_precision():
     s_in = """e = '%.03f' % var"""
     s_expected = """e = f'{var:.03f}'"""
