@@ -9,8 +9,6 @@ char_idx = int
 
 
 class PyToken:
-    percent_cant_handle = ("%%",)
-
     def __init__(self, t):
         toknum, tokval, start, end, line = t
         self.toknum: int = toknum
@@ -43,11 +41,6 @@ class PyToken:
 
     def is_string(self):
         return self.toknum == token.STRING
-
-    def is_percent_string(self):
-        return self.toknum == token.STRING and not any(
-            s in self.tokval for s in PyToken.percent_cant_handle
-        )
 
     def get_quote_type(self):
         assert self.toknum is token.STRING

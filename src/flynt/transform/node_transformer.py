@@ -64,7 +64,7 @@ def handle_from_mod_dict_name(node):
             result_node.values.append(fv)
         else:
             # no match means it's just a literal string
-            result_node.values.append(ast.Str(s=block))
+            result_node.values.append(ast.Str(s=block).replace("%%", "%"))
     return result_node
 
 
@@ -92,7 +92,7 @@ def handle_from_mod_tuple(node):
     result_node = ast.JoinedStr()
     result_node.values = []
     blocks = deque(VAR_KEY_PATTERN.split(format_str))
-    result_node.values.append(ast_string_node(blocks.popleft()))
+    result_node.values.append(ast_string_node(blocks.popleft().replace("%%", "%")))
 
     while len(blocks) > 0:
 
@@ -117,7 +117,7 @@ def handle_from_mod_tuple(node):
             fv = ast_formatted_value(str_vars.popleft(), fmt_str=fmt_prefix + fmt_spec)
 
         result_node.values.append(fv)
-        result_node.values.append(ast_string_node(blocks.popleft()))
+        result_node.values.append(ast_string_node(blocks.popleft().replace("%%", "%")))
 
     return result_node
 

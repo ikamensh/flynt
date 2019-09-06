@@ -157,7 +157,21 @@ def test_legacy_unicode():
 
 def test_double_percent_no_prob():
     s_in = "{'r': '%%%s%%' % row_idx}"
-    s_expected = "{'r': '%%%s%%' % row_idx}"
+    s_expected = "{'r': f'%{row_idx}%'}"
+
+    assert process.fstringify_code_by_line(s_in)[0] == s_expected
+
+
+def test_percent_dict():
+    s_in = """a = '%(?)s world' % {'?': var}"""
+    s_expected = """a = f'{var} world'"""
+
+    assert process.fstringify_code_by_line(s_in)[0] == s_expected
+
+
+def test_double_percent_dict():
+    s_in = """a = '%(?)s%%' % {'?': var}"""
+    s_expected = """a = f'{var}%'"""
 
     assert process.fstringify_code_by_line(s_in)[0] == s_expected
 

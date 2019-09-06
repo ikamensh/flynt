@@ -85,7 +85,7 @@ class Chunk:
             return REUSE
 
         # todo handle all cases?
-        if not self[0].is_percent_string():
+        if not self[0].is_string():
             self.complete = True
             return
 
