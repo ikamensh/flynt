@@ -175,8 +175,6 @@ class FstringifyTransformer(ast.NodeTransformer):
     def __init__(self):
         super().__init__()
         self.counter = 0
-        self.lineno = -1
-        self.col_offset = -1
 
     def visit_Call(self, node: ast.Call):
         """Convert `ast.Call` to `ast.JoinedStr` f-string
@@ -191,8 +189,6 @@ class FstringifyTransformer(ast.NodeTransformer):
 
         if match:
             self.counter += 1
-            self.lineno = node.lineno
-            self.col_offset = node.col_offset
             result_node = joined_string(node)
             self.visit(result_node)
             return result_node
@@ -244,8 +240,6 @@ class FstringifyTransformer(ast.NodeTransformer):
 
         if percent_stringify:
             self.counter += 1
-            self.lineno = node.lineno
-            self.col_offset = node.col_offset
             result_node = handle_from_mod(node)
             return result_node
 
