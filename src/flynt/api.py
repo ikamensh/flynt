@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+import ast
 import traceback
 from typing import Tuple
 
@@ -26,22 +27,41 @@ def fstringify_file(
     length of original code, length of new code)
     """
 
-    try:
-        with open(filename, encoding="utf-8") as f:
-            contents = f.read()
+    with open(filename, encoding="utf-8") as f:
+        contents = f.read()
 
+    def default_result():
+        return False, 0, len(contents), len(contents)
+
+    try:
+        ast_before = ast.parse(contents)
+    except SyntaxError:
+        print(f"Can't parse {filename} as a python file.")
+        return default_result()
+
+    try:
         new_code, changes = fstringify_code_by_line(
             contents, multiline=multiline, len_limit=len_limit
         )
-
     except Exception as e:
         print(f"Skipping fstrings transform of file {filename} due to {e}")
         traceback.print_exc()
-        result = False, 0, len(contents), len(contents)
+        result = default_result()
     else:
         if new_code == contents:
-            result = False, 0, len(contents), len(contents)
+            result = default_result()
         else:
+
+            try:
+                ast_after = ast.parse(new_code)
+            except SyntaxError:
+                print(f"Faulty result during conversion on {filename} - skipping.")
+                return default_result()
+
+            if not len(ast_before.body) == len(ast_after.body):
+                print(f"Faulty result during conversion on {filename} - skipping.")
+                return default_result()
+
             with open(filename, "w", encoding="utf-8") as f:
                 f.write(new_code)
 

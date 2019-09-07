@@ -53,5 +53,5 @@ def try_on_file(filename: str):
 
 
 def test_fstringify():
-    out, expected = try_on_file("pyup.py")
+    out, expected = try_on_file("class.py")
     assert out == expected

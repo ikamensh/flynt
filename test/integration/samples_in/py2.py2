@@ -1,0 +1,3 @@
+print "Hello World"
+print("{} w".format(val))
+print("%s w" % val)
