@@ -1,7 +1,7 @@
 try:
     import config
 except ImportError:
-    # assume remote server enters the application in tests/, home would be tests/..
+    # assume remote server enters the application in test_str_concat/, home would be test_str_concat/..
     import sys
     import os
 

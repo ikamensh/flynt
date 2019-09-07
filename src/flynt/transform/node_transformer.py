@@ -177,7 +177,8 @@ class FstringifyTransformer(ast.NodeTransformer):
         self.counter = 0
 
     def visit_Call(self, node: ast.Call):
-        """Convert `ast.Call` to `ast.JoinedStr` f-string
+        """
+        Convert `ast.Call` to `ast.JoinedStr` f-string
         """
 
         match = matching_call(node)

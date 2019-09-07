@@ -1,4 +1,4 @@
 [flake8]
 exclude = test/integration/actual_out/*,test/integration/actual_out_single_line/*,test/integration/expected_out/*,test/integration/expected_out_single_line/*,test/integration/samples_in/*
 max-line-length = 88
-ignore = E501,W503,E203,W293
+ignore = E501,W503,E203,W293,E402
