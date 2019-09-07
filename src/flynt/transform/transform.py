@@ -3,7 +3,7 @@ import ast
 import copy
 from typing import Tuple
 
-from flynt.transform.node_transformer import fstringify_node
+from flynt.transform.FstringifyTransformer import fstringify_node
 from flynt.exceptions import FlyntException
 from flynt.format import set_quote_type, QuoteTypes
 
@@ -21,32 +21,25 @@ def transform_chunk(
        Tuple: resulting code, boolean: was it changed?
     """
 
-    converted = None
-    changed = False
-
     try:
         tree = ast.parse(code)
-        converted, changed = fstringify_node(copy.deepcopy(tree))
-    except SyntaxError:
-        pass
-    except FlyntException:
-        pass
-    except Exception:
-        pass
+        converted, changed, str_in_str = fstringify_node(copy.deepcopy(tree))
+    except (SyntaxError, FlyntException, Exception):
+        return code, False
+    else:
+        if changed:
+            new_code = astor.to_source(converted)
+            new_code = new_code.strip()
+            new_code = set_quote_type(
+                new_code, quote_type if not str_in_str else QuoteTypes.double
+            )
+            new_code = new_code.replace("\n", "\\n")
+            new_code = new_code.replace("\t", "\\t")
+            try:
+                ast.parse(new_code)
+            except Exception:
+                return code, False
+            else:
+                return new_code, changed
 
-    if changed and converted:
-        new_code = astor.to_source(converted)
-        new_code = new_code.strip()
-        new_code = set_quote_type(new_code, quote_type)
-        new_code = new_code.replace("\n", "\\n")
-        new_code = new_code.replace("\t", "\\t")
-
-        try:
-            ast.parse(new_code)
-        except Exception:
-            changed = False
-            return code, changed
-        else:
-            return new_code, changed
-
-    return code, changed
+        return code, False

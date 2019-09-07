@@ -169,6 +169,13 @@ def test_percent_dict():
     assert process.fstringify_code_by_line(s_in)[0] == s_expected
 
 
+def test_percent_dict_name():
+    s_in = """a = '%(?)s world' % var"""
+    s_expected = """a = f"{var['?']} world\""""
+
+    assert process.fstringify_code_by_line(s_in)[0] == s_expected
+
+
 def test_double_percent_dict():
     s_in = """a = '%(?)s%%' % {'?': var}"""
     s_expected = """a = f'{var}%'"""

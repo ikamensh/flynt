@@ -1,12 +1,7 @@
 import ast
 from collections import deque
 
-from flynt.transform.format_call_transforms import (
-    matching_call,
-    ast_string_node,
-    joined_string,
-    ast_formatted_value,
-)
+from flynt.transform.format_call_transforms import ast_string_node, ast_formatted_value
 from flynt.exceptions import FlyntException
 
 import re
@@ -18,12 +13,11 @@ VAR_KEY_PATTERN = re.compile(
 )  # specs at https://docs.python.org/3/library/stdtypes.html#string-formatting
 obsolete_specifiers = "hlL"
 
-
 translate_conversion_types = {"i": "d", "u": "d"}
 conversion_methods = {"r": "!r", "a": "!a", "s": None}
 
 
-def handle_from_mod_dict_name(node):
+def transform_dict(node):
     """Convert a `BinOp` `%` formatted str with a name representing a Dict on the right to an f-string.
 
     Takes an ast.BinOp representing `"1. %(key1)s 2. %(key2)s" % mydict`
@@ -45,11 +39,9 @@ def handle_from_mod_dict_name(node):
         var_keys.append(var_key[1])
 
     # build result node
-    result_node = ast.JoinedStr()
-    result_node.values = []
+    segments = []
     var_keys.reverse()
     blocks = MOD_KEY_PATTERN.split(format_str)
-    # loop through the blocks of a string to build up dateh JoinStr.values
     for block in blocks:
         # if this block matches a %(arg)s pattern then inject f-string instead
         if MOD_KEY_PATTERN.match(block):
@@ -61,14 +53,14 @@ def handle_from_mod_dict_name(node):
                 format_spec=None,
             )
 
-            result_node.values.append(fv)
+            segments.append(fv)
         else:
             # no match means it's just a literal string
-            result_node.values.append(ast.Str(s=block).replace("%%", "%"))
-    return result_node
+            segments.append(ast.Str(s=block.replace("%%", "%")))
+    return ast.JoinedStr(segments)
 
 
-def handle_from_mod_tuple(node):
+def transform_tuple(node):
     """Convert a `BinOp` `%` formatted str with a tuple on the right to an f-string.
 
     Takes an ast.BinOp representing `"1. %s 2. %s" % (a, b)`
@@ -88,11 +80,9 @@ def handle_from_mod_tuple(node):
 
     str_vars = deque(node.right.elts)
 
-    # build result node
-    result_node = ast.JoinedStr()
-    result_node.values = []
+    segments = []
     blocks = deque(VAR_KEY_PATTERN.split(format_str))
-    result_node.values.append(ast_string_node(blocks.popleft().replace("%%", "%")))
+    segments.append(ast_string_node(blocks.popleft().replace("%%", "%")))
 
     while len(blocks) > 0:
 
@@ -116,132 +106,46 @@ def handle_from_mod_tuple(node):
             fmt_spec = translate_conversion_types.get(fmt_spec, fmt_spec)
             fv = ast_formatted_value(str_vars.popleft(), fmt_str=fmt_prefix + fmt_spec)
 
-        result_node.values.append(fv)
-        result_node.values.append(ast_string_node(blocks.popleft().replace("%%", "%")))
+        segments.append(fv)
+        segments.append(ast_string_node(blocks.popleft().replace("%%", "%")))
 
-    return result_node
+    return ast.JoinedStr(segments)
 
 
-def handle_from_mod_generic_name(node):
+def transform_generic(node):
     """Convert a `BinOp` `%` formatted str with a unknown name on the `node.right` to an f-string.
 
     When `node.right` is a Name since we don't know if it's a single var or a dict so we sniff the string.
 
-    `"val: %(key_name1)s val2: %(key_name2)s" % some_dict`
-    Sniffs the left string for Dict style usage and calls: `handle_from_mod_dict_name`
+    Sniffs the left string for Dict style usage
+    e.g. `"val: %(key_name1)s val2: %(key_name2)s" % some_dict`
 
-    `"val: %s" % some_var`
+    else (e.g. `"val: %s" % some_var`):
     Borrow the core logic by injecting the name into a ast.Tuple
 
-    Args:
-       node (ast.BinOp): The node to convert to a f-string
-
-    Returns ast.JoinedStr (f-string)
+    Returns ast.JoinedStr (f-string), bool: str-in-str
     """
 
     has_dict_str_format = MOD_KEY_PATTERN.findall(node.left.s)
     if has_dict_str_format:
-        return handle_from_mod_dict_name(node)
+        return transform_dict(node), True
 
     # if it's just a name then pretend it's tuple to use that code
     node.right = ast.Tuple(elts=[node.right])
-    return handle_from_mod_tuple(node)
+    return transform_tuple(node), False
 
 
-def fstringify_node(node):
-    ft = FstringifyTransformer()
-    result = ft.visit(node)
-
-    return (result, ft.counter > 0)
-
-
-def handle_from_mod(node):
+def transform_binop(node):
     if isinstance(
         node.right, (ast.Name, ast.Attribute, ast.Str, ast.BinOp, ast.Subscript)
     ):
-        return handle_from_mod_generic_name(node)
+        return transform_generic(node)
 
     elif isinstance(node.right, ast.Tuple):
-        return handle_from_mod_tuple(node)
+        return transform_tuple(node), False
 
     elif isinstance(node.right, ast.Dict):
-        # print("~~~~ Dict mod strings don't make sense to f-strings")
-        return node
+        # todo adapt transform dict to Dict literal
+        return transform_dict(node), False
 
-    raise RuntimeError("unexpected `node.right` class")
-
-
-class FstringifyTransformer(ast.NodeTransformer):
-    def __init__(self):
-        super().__init__()
-        self.counter = 0
-
-    def visit_Call(self, node: ast.Call):
-        """
-        Convert `ast.Call` to `ast.JoinedStr` f-string
-        """
-
-        match = matching_call(node)
-
-        # bail in these edge cases...
-        if match:
-            if any(isinstance(arg, ast.Starred) for arg in node.args):
-                return node
-
-        if match:
-            self.counter += 1
-            result_node = joined_string(node)
-            self.visit(result_node)
-            return result_node
-
-        return node
-
-    def visit_BinOp(self, node):
-        """Convert `ast.BinOp` to `ast.JoinedStr` f-string
-
-        Currently only if a string literal `ast.Str` is on the left side of the `%`
-        and one of `ast.Tuple`, `ast.Name`, `ast.Dict` is on the right
-
-        Args:
-            node (ast.BinOp): The node to convert to a f-string
-
-        Returns ast.JoinedStr (f-string)
-        """
-
-        percent_stringify = (
-            isinstance(node.left, ast.Str)
-            and isinstance(node.op, ast.Mod)
-            and isinstance(
-                node.right, (ast.Tuple, ast.Name, ast.Attribute, ast.Str, ast.Subscript)
-            )
-            # ignore ast.Dict on right
-        )
-
-        # bail in these edge cases...
-        if percent_stringify:
-            no_good = ["}", "{"]
-            for ng in no_good:
-                if ng in node.left.s:
-                    return node
-            for ch in ast.walk(node.right):
-                # no nested binops!
-                if isinstance(ch, ast.BinOp):
-                    return node
-                # f-string expression part cannot include a backslash
-                elif isinstance(ch, ast.Str) and (
-                    any(
-                        map(
-                            lambda x: x in ch.s,
-                            ("\n", "\t", "\r", "'", '"', "%s", "%%"),
-                        )
-                    )
-                    or "\\" in ch.s
-                ):
-                    return node
-
-        if percent_stringify:
-            self.counter += 1
-            result_node = handle_from_mod(node)
-            return result_node
-
-        return node
+    raise FlyntException("unexpected `node.right` class")

@@ -78,12 +78,6 @@ class Chunk:
 
     def percent_append(self, t: PyToken):
 
-        # No string in string
-        if t.is_string():
-            self.complete = True
-            self.successful = self.is_parseable
-            return REUSE
-
         # todo handle all cases?
         if not self[0].is_string():
             self.complete = True

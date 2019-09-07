@@ -3,7 +3,7 @@ import json
 
 
 def pp_code_ast(code, convert=False):
-    from flynt.transform.transform import fstringify_node
+    from flynt.transform.FstringifyTransformer import fstringify_node
 
     """Pretty print code's AST to stdout.
 
