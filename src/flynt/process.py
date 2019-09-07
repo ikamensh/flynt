@@ -86,8 +86,8 @@ class JoinTransformer:
         except FlyntException:
             pass
         else:
-            converted, meta = transform_chunk(str(chunk), quote_type=quote_type)
-            if meta["changed"]:
+            converted, changed = transform_chunk(str(chunk), quote_type=quote_type)
+            if changed:
                 multiline_condition = (
                     not contract_lines
                     or len("".join([converted, rest])) <= self.len_limit - start_idx

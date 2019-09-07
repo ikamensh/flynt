@@ -1,7 +1,7 @@
 import astor
 import ast
 import copy
-from typing import Dict, Tuple
+from typing import Tuple
 
 from flynt.transform.node_transformer import fstringify_node
 from flynt.exceptions import FlyntException
@@ -10,34 +10,31 @@ from flynt.format import set_quote_type, QuoteTypes
 
 def transform_chunk(
     code: str, quote_type: str = QuoteTypes.triple_double
-) -> Tuple[str, Dict]:
-    """Convert a block of with a %-formatted string to an f-string
+) -> Tuple[str, bool]:
+    """Convert a block of code to an f-string
 
     Args:
-        code (str): The code to convert.
+        code: The code to convert.
+        quote_type: the quote type to use for the transformed result
 
     Returns:
-       The code formatted with f-strings if possible else it's left unchanged.
+       Tuple: resulting code, boolean: was it changed?
     """
 
     converted = None
-    meta = dict(changed=False, lineno=1, col_offset=-22, skip=True)
+    changed = False
 
     try:
         tree = ast.parse(code)
-        # from flynt.transform.util import pp_ast
-        # pp_ast(tree)
-        converted, meta = fstringify_node(copy.deepcopy(tree))
-    except SyntaxError as e:
-        meta["skip"] = code.rstrip().endswith(
-            ":"
-        ) or "cannot include a blackslash" in str(e)
+        converted, changed = fstringify_node(copy.deepcopy(tree))
+    except SyntaxError:
+        pass
     except FlyntException:
-        meta["skip"] = False
+        pass
     except Exception:
-        meta["skip"] = False
+        pass
 
-    if meta["changed"] and converted:
+    if changed and converted:
         new_code = astor.to_source(converted)
         new_code = new_code.strip()
         new_code = set_quote_type(new_code, quote_type)
@@ -47,9 +44,9 @@ def transform_chunk(
         try:
             ast.parse(new_code)
         except Exception:
-            meta["changed"] = False
-            return code, meta
+            changed = False
+            return code, changed
         else:
-            return new_code, meta
+            return new_code, changed
 
-    return code, meta
+    return code, changed

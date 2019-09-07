@@ -6,9 +6,9 @@ def test_fmt_spec():
     code = """"my string {:.2f}".format(var)"""
     expected = '''f"""my string {var:.2f}"""'''
 
-    new, meta = transform_chunk(code)
+    new, changed = transform_chunk(code)
 
-    assert meta["changed"]
+    assert changed
     assert new == expected
 
 
@@ -20,9 +20,9 @@ def test_expr_no_paren():
     code = """"my string {:.2f}".format(var+1)"""
     expected = '''f"""my string {var + 1:.2f}"""'''
 
-    new, meta = transform_chunk(code)
+    new, changed = transform_chunk(code)
 
-    assert meta["changed"]
+    assert changed
     assert new == expected
 
 
@@ -30,9 +30,9 @@ def test_newline():
     code = r""""echo '{}'\n".format(self.FLUSH_CMD)"""
     expected = '''f"""echo '{self.FLUSH_CMD}'\\n"""'''
 
-    new, meta = transform_chunk(code)
+    new, changed = transform_chunk(code)
 
-    assert meta["changed"]
+    assert changed
     assert new == expected
 
 
@@ -41,9 +41,9 @@ def test_parenthesis():
     code = """"Flask Documentation ({})".format(version)"""
     expected = '''f"""Flask Documentation ({version})"""'''
 
-    new, meta = transform_chunk(code)
+    new, changed = transform_chunk(code)
 
-    assert meta["changed"]
+    assert changed
     assert new == expected
 
 
@@ -52,9 +52,9 @@ def test_implicit_string_concat():
     code = """"Helloo {}" "!!!".format(world)"""
     expected = '''f"""Helloo {world}!!!"""'''
 
-    new, meta = transform_chunk(code)
+    new, changed = transform_chunk(code)
 
-    assert meta["changed"]
+    assert changed
     assert new == expected
 
 
@@ -67,9 +67,9 @@ def test_multiline():
     """.strip()
     expected = '''f"""Flask Documentation ({version})"""'''
 
-    new, meta = transform_chunk(code)
+    new, changed = transform_chunk(code)
 
-    assert meta["changed"]
+    assert changed
     assert new == expected
 
 
@@ -78,9 +78,9 @@ def test_numbered():
     code = '''"""Flask Documentation ({0})""".format(version)'''
     expected = '''f"""Flask Documentation ({version})"""'''
 
-    new, meta = transform_chunk(code)
+    new, changed = transform_chunk(code)
 
-    assert meta["changed"]
+    assert changed
     assert new == expected
 
 
@@ -90,23 +90,23 @@ def test_mixed_numbered():
     )
     expected = '''f"""Flask Documentation ({sprt} {version:.2f} {NAME})"""'''
 
-    new, meta = transform_chunk(code)
+    new, changed = transform_chunk(code)
 
-    assert meta["changed"]
+    assert changed
     assert new == expected
 
 
 def test_unpacking_no_change():
     code = """e.description = "KeyError: '{}'".format(*e.args)"""
-    new, meta = transform_chunk(code)
-    assert not meta["changed"]
+    new, changed = transform_chunk(code)
+    assert not changed
     assert new == code
 
 
 def test_kw_unpacking_no_change():
     code = """e.description = "KeyError: '{some_name}'".format(**kwargs)"""
-    new, meta = transform_chunk(code)
-    assert not meta["changed"]
+    new, changed = transform_chunk(code)
+    assert not changed
     assert new == code
 
 
@@ -114,9 +114,9 @@ def test_digit_grouping():
     code = """"Failed after {:,}".format(x)"""
     expected = '''f"""Failed after {x:,}"""'''
 
-    new, meta = transform_chunk(code)
+    new, changed = transform_chunk(code)
 
-    assert meta["changed"]
+    assert changed
     assert new == expected
 
 
@@ -128,9 +128,9 @@ def test_digit_grouping_2():
     f"""Search: finished in {vm.search_time_elapsed_ms:,} ms."""
     '''.strip()
 
-    new, meta = transform_chunk(code)
+    new, changed = transform_chunk(code)
 
-    assert meta["changed"]
+    assert changed
     assert new == expected
 
 
@@ -163,9 +163,9 @@ def test_digit_grouping_2():
     ),
 )
 def test_fix_fstrings_noop(s):
-    new, meta = transform_chunk(s)
+    new, changed = transform_chunk(s)
     assert new == s
-    assert not meta["changed"]
+    assert not changed
 
 
 @pytest.mark.parametrize(
@@ -191,6 +191,6 @@ def test_fix_fstrings_noop(s):
     ),
 )
 def test_fix_fstrings(s, expected):
-    new, meta = transform_chunk(s)
-    assert meta["changed"]
+    new, changed = transform_chunk(s)
+    assert changed
     assert new == expected

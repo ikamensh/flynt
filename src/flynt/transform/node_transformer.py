@@ -152,15 +152,7 @@ def fstringify_node(node):
     ft = FstringifyTransformer()
     result = ft.visit(node)
 
-    return (
-        result,
-        dict(
-            changed=ft.counter > 0,
-            lineno=ft.lineno,
-            col_offset=ft.col_offset,
-            skip=True,
-        ),
-    )
+    return (result, ft.counter > 0)
 
 
 def handle_from_mod(node):
