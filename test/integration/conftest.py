@@ -26,6 +26,7 @@ all_files = pytest.fixture(
         "named_inverse.py",
         "no_fstring_1.py",
         "no_fstring_2.py",
+        "percent_dict.py",
         "percent_numerics.py",
         "percent_op.py",
         "percent_strings.py",

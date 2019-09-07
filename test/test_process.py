@@ -169,9 +169,9 @@ def test_percent_dict():
     assert process.fstringify_code_by_line(s_in)[0] == s_expected
 
 
-def test_percent_dict_name():
-    s_in = """a = '%(?)s world' % var"""
-    s_expected = """a = f"{var['?']} world\""""
+def test_percent_dict_fmt():
+    s_in = """a = '%(?)ld world' % {'?': var}"""
+    s_expected = """a = f'{var:d} world'"""
 
     assert process.fstringify_code_by_line(s_in)[0] == s_expected
 
@@ -179,6 +179,20 @@ def test_percent_dict_name():
 def test_double_percent_dict():
     s_in = """a = '%(?)s%%' % {'?': var}"""
     s_expected = """a = f'{var}%'"""
+
+    assert process.fstringify_code_by_line(s_in)[0] == s_expected
+
+
+def test_percent_dict_name():
+    s_in = """a = '%(?)s world' % var"""
+    s_expected = """a = f"{var['?']} world\""""
+
+    assert process.fstringify_code_by_line(s_in)[0] == s_expected
+
+
+def test_percent_dict_names():
+    s_in = """a = '%(?)s %(world)s' % var"""
+    s_expected = """a = f"{var['?']} {var['world']}\""""
 
     assert process.fstringify_code_by_line(s_in)[0] == s_expected
 

@@ -6,15 +6,39 @@ from flynt.exceptions import FlyntException
 
 import re
 
-MOD_KEY_PATTERN = re.compile(r"(%\([^)]+\)s)")
-MOD_KEY_NAME_PATTERN = re.compile(r"%\(([^)]+)\)s")
+FORMATS = "diouxXeEfFgGcrsa"
+
+FORMAT_GROUP = f"[hlL]?[{FORMATS}]"
+FORMAT_GROUP_MATCH = f"[hlL]?([{FORMATS}])"
+
+PREFIX_GROUP = "[.]?[0-9]*"
+
+DICT_PATTERN = re.compile(rf"(%{PREFIX_GROUP}\([^)]+\){FORMAT_GROUP})")
+SPLIT_DICT_PATTERN = re.compile(rf"%({PREFIX_GROUP})\(([^)]+)\){FORMAT_GROUP_MATCH}")
 VAR_KEY_PATTERN = re.compile(
-    "%([.]?[0-9]*)[hlL]?([diouxXeEfFgGcrsa])"
+    f"%({PREFIX_GROUP}){FORMAT_GROUP_MATCH}"
 )  # specs at https://docs.python.org/3/library/stdtypes.html#string-formatting
 obsolete_specifiers = "hlL"
 
 translate_conversion_types = {"i": "d", "u": "d"}
 conversion_methods = {"r": "!r", "a": "!a", "s": None}
+
+
+def formatted_value(fmt_prefix, fmt_spec, val):
+
+    if fmt_spec in conversion_methods:
+        if fmt_prefix:
+            raise FlyntException(
+                "Default text alignment has changed between percent fmt and fstrings. "
+                "Proceeding would result in changed code behaviour."
+            )
+        fv = ast_formatted_value(
+            val, fmt_str=fmt_prefix, conversion=conversion_methods[fmt_spec]
+        )
+    else:
+        fmt_spec = translate_conversion_types.get(fmt_spec, fmt_spec)
+        fv = ast_formatted_value(val, fmt_str=fmt_prefix + fmt_spec)
+    return fv
 
 
 def transform_dict(node):
@@ -30,33 +54,47 @@ def transform_dict(node):
     """
 
     format_str = node.left.s
-    matches = MOD_KEY_PATTERN.findall(format_str)
-    var_keys = []
+    matches = DICT_PATTERN.findall(format_str)
+    spec = []
     for idx, m in enumerate(matches):
-        var_key = MOD_KEY_NAME_PATTERN.match(m)
+        _, prefix, var_key, fmt_str, _ = SPLIT_DICT_PATTERN.split(m)
         if not var_key:
             raise FlyntException("could not find dict key")
-        var_keys.append(var_key[1])
+        spec.append((prefix, var_key, fmt_str))
 
     # build result node
     segments = []
-    var_keys.reverse()
-    blocks = MOD_KEY_PATTERN.split(format_str)
-    for block in blocks:
-        # if this block matches a %(arg)s pattern then inject f-string instead
-        if MOD_KEY_PATTERN.match(block):
-            fv = ast.FormattedValue(
-                value=ast.Subscript(
-                    value=node.right, slice=ast.Index(value=ast.Str(s=var_keys.pop()))
-                ),
-                conversion=-1,
-                format_spec=None,
+    spec.reverse()
+    blocks = DICT_PATTERN.split(format_str)
+
+    mapping = {}
+    if isinstance(node.right, ast.Dict):
+        for k, v in zip(node.right.keys, node.right.values):
+            mapping[str(ast.literal_eval(k))] = v
+
+        def make_fv(key: str):
+            return mapping.pop(key)
+
+    else:
+
+        def make_fv(key: str):
+            return ast.Subscript(
+                value=node.right, slice=ast.Index(value=ast.Str(s=key))
             )
 
+    for block in blocks:
+        # if this block matches a %(arg)s pattern then inject f-string instead
+        if DICT_PATTERN.match(block):
+            prefix, var_key, fmt_str = spec.pop()
+            fv = formatted_value(prefix, fmt_str, make_fv(var_key))
             segments.append(fv)
         else:
             # no match means it's just a literal string
             segments.append(ast.Str(s=block.replace("%%", "%")))
+
+    if mapping:
+        raise FlyntException("Not all keys were matched - probably an error.")
+
     return ast.JoinedStr(segments)
 
 
@@ -88,23 +126,9 @@ def transform_tuple(node):
 
         fmt_prefix = blocks.popleft()
         fmt_spec = blocks.popleft()
-        for c in obsolete_specifiers:
-            fmt_spec = fmt_spec.replace(c, "")
+        val = str_vars.popleft()
 
-        if fmt_spec in conversion_methods:
-            if fmt_prefix:
-                raise FlyntException(
-                    "Default text alignment has changed between percent fmt and fstrings. "
-                    "Proceeding would result in changed code behaviour."
-                )
-            fv = ast_formatted_value(
-                str_vars.popleft(),
-                fmt_str=fmt_prefix,
-                conversion=conversion_methods[fmt_spec],
-            )
-        else:
-            fmt_spec = translate_conversion_types.get(fmt_spec, fmt_spec)
-            fv = ast_formatted_value(str_vars.popleft(), fmt_str=fmt_prefix + fmt_spec)
+        fv = formatted_value(fmt_prefix, fmt_spec, val)
 
         segments.append(fv)
         segments.append(ast_string_node(blocks.popleft().replace("%%", "%")))
@@ -126,7 +150,7 @@ def transform_generic(node):
     Returns ast.JoinedStr (f-string), bool: str-in-str
     """
 
-    has_dict_str_format = MOD_KEY_PATTERN.findall(node.left.s)
+    has_dict_str_format = DICT_PATTERN.findall(node.left.s)
     if has_dict_str_format:
         return transform_dict(node), True
 
