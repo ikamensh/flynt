@@ -1,5 +1,6 @@
 import os
 import ast
+import sys
 
 import pytest
 
@@ -17,6 +18,7 @@ def pycode_with_2_concats():
 from flynt.string_concat.candidates import ConcatHound
 
 
+@pytest.mark.skipif(sys.version_info < (3, 8), reason="requires python3.8 or higher")
 def test_find_victims(pycode_with_2_concats: str):
     tree = ast.parse(pycode_with_2_concats)
 
