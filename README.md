@@ -39,7 +39,7 @@ optional arguments:
   --line_length LINE_LENGTH
                         for expressions spanning multiple lines, convert only
                         if the resulting single line will fit into the line
-                        length limit. Default value is 79 characters.
+                        length limit. Default value is 88 characters.
   --upgrade             run pyupgrade on .py files
 
 ```
