@@ -48,6 +48,13 @@ def main():
     )
 
     parser.add_argument(
+        "--transform-concats",
+        action="store_true",
+        default=False,
+        help="replace string concatenations with literals to f-strings",
+    )
+
+    parser.add_argument(
         "--fail-on-change",
         action="store_true",
         default=False,
@@ -59,6 +66,13 @@ def main():
 
     args = parser.parse_args()
 
+    if args.transform_concats:
+        if not sys.version_info >= (3, 8):
+            raise Exception(
+                f"Transforming string concatenations is only possible with flynt "
+                f"installed to a python3.8+ interpreter. Currently using {sys.version_info}"
+            )
+
     return fstringify(
         args.src,
         verbose=args.verbose,
@@ -67,6 +81,7 @@ def main():
         len_limit=int(args.line_length),
         pyup=args.upgrade,
         fail_on_changes=args.fail_on_change,
+        transform_concat=args.transform_concats,
     )
 
 

@@ -9,7 +9,7 @@ import astor
 import pyupgrade
 
 from flynt.file_spy import spy_on_file_io, charcount_stats
-from flynt.process import fstringify_code_by_line
+from flynt.process import fstringify_code_by_line, fstringify_concats
 from flynt.cli_messages import (
     message_pyup_success,
     message_suggest_pyup,
@@ -20,7 +20,7 @@ blacklist = {".tox", "venv", "site-packages", ".eggs"}
 
 
 def fstringify_file(
-    filename, multiline, len_limit, pyup=False
+    filename, multiline, len_limit, pyup=False, transform_concat=False
 ) -> Tuple[bool, int, int, int]:
     """
     :return: tuple: (changes_made, n_changes,
@@ -43,6 +43,11 @@ def fstringify_file(
         new_code, changes = fstringify_code_by_line(
             contents, multiline=multiline, len_limit=len_limit
         )
+        if transform_concat:
+            new_code, concat_changes = fstringify_concats(
+                new_code, multiline=multiline, len_limit=len_limit
+            )
+            changes += concat_changes
     except Exception as e:
         print(f"Skipping fstrings transform of file {filename} due to {e}")
         traceback.print_exc()
@@ -91,7 +96,9 @@ def fstringify_file(
             return result
 
 
-def fstringify_files(files, verbose, quiet, multiline, len_limit, pyup):
+def fstringify_files(
+    files, verbose, quiet, multiline, len_limit, pyup, transform_concat
+):
     changed_files = 0
     total_charcount_original = 0
     total_charcount_new = 0
@@ -102,7 +109,7 @@ def fstringify_files(files, verbose, quiet, multiline, len_limit, pyup):
             continue
         file_path = os.path.join(f[0], f[1])
         changed, count_expressions, charcount_original, charcount_new = fstringify_file(
-            file_path, multiline, len_limit, pyup
+            file_path, multiline, len_limit, pyup, transform_concat
         )
         if changed:
             changed_files += 1
@@ -151,7 +158,14 @@ def print_report(
 
 
 def fstringify(
-    files_or_paths, verbose, quiet, multiline, len_limit, pyup, fail_on_changes=False
+    files_or_paths,
+    verbose,
+    quiet,
+    multiline,
+    len_limit,
+    pyup,
+    fail_on_changes=False,
+    transform_concat=False,
 ):
     """ determine if a directory or a single file was passed, and f-stringify it."""
 
@@ -176,6 +190,7 @@ def fstringify(
         multiline=multiline,
         len_limit=len_limit,
         pyup=pyup,
+        transform_concat=transform_concat,
     )
 
     if fail_on_changes:
