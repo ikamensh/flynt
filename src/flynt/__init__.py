@@ -2,7 +2,7 @@
 from old "%-formatted" and .format(...) strings into Python 3.6+'s f-strings.
 Learn more about f-strings at https://www.python.org/dev/peps/pep-0498/"""
 
-__version__ = "0.33"
+__version__ = "0.34"
 
 import argparse
 import sys
@@ -51,7 +51,8 @@ def main():
         "--transform-concats",
         action="store_true",
         default=False,
-        help="replace string concatenations with literals to f-strings",
+        help="Replace string concatenations with literals to f-strings. "
+        "Available only if flynt is installed with 3.8+ interpreter.",
     )
 
     parser.add_argument(
