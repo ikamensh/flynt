@@ -280,6 +280,14 @@ def test_equiv_expressions_s():
     assert eval(out) == eval(s_in)
 
 
+def test_concat():
+    s_in = """msg = a + " World\""""
+    s_expected = """msg = f"{a} World\""""
+
+    s_out, count = process.fstringify_concats(s_in)
+    assert s_out == s_expected
+
+
 @pytest.mark.parametrize("fmt_spec", "egdixXu")
 @pytest.mark.parametrize("number", [0, 11, 0b111])
 def test_integers_equivalence(number, fmt_spec):

@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, Callable
 import math
 import re
 
@@ -17,17 +17,24 @@ class JoinTransformer:
     the last line number and char index. Failed transformations do not need to do anything -
     not adding results is safe, as original code will be filled in."""
 
-    def __init__(self, code: str, len_limit: int):
+    def __init__(
+        self,
+        code: str,
+        len_limit: int,
+        candidates_constructor: Callable = split.get_fstringify_chunks,
+        transform_func: Callable = transform_chunk,
+    ):
 
         if len_limit is None:
             len_limit = math.inf
 
         self.len_limit = len_limit
+        self.candidates_generator = candidates_constructor(code)
+        self.transform_func = transform_func
+        self.src_lines = code.split("\n")
 
         self.results = []
         self.count_expressions = 0
-        self.code_in = code
-        self.src_lines = code.split("\n")
 
         self.last_line = 0
         self.last_idx = None
@@ -35,7 +42,7 @@ class JoinTransformer:
 
     def fstringify_code_by_line(self):
         assert not self.used_up, "Tried to use JT twice."
-        for chunk in split.get_fstringify_chunks(self.code_in):
+        for chunk in self.candidates_generator:
             self.fill_up_to(chunk)
             self.try_chunk(chunk)
 
@@ -87,13 +94,15 @@ class JoinTransformer:
             rest = next_line[chunk.end_idx :]
 
         try:
-            quote_type = chunk.tokens[0].get_quote_type()
             if chunk.string_in_string:
                 quote_type = QuoteTypes.double
+            else:
+                quote_type = chunk.quote_type
+
         except FlyntException:
             pass
         else:
-            converted, changed = transform_chunk(str(chunk), quote_type=quote_type)
+            converted, changed = self.transform_func(str(chunk), quote_type=quote_type)
             if changed:
                 multiline_condition = (
                     not contract_lines
@@ -116,7 +125,7 @@ class JoinTransformer:
             self.last_line += 1
 
 
-def fstringify_code_by_line(code: str, multiline=True, len_limit=79) -> Tuple[str, int]:
+def fstringify_code_by_line(code: str, multiline=True, len_limit=88) -> Tuple[str, int]:
     """ returns fstringified version of the code and amount of lines edited."""
     if not multiline:
         len_limit = 0
@@ -125,5 +134,26 @@ def fstringify_code_by_line(code: str, multiline=True, len_limit=79) -> Tuple[st
         lexer.set_multiline()
 
     jt = JoinTransformer(code, len_limit)
+
+    return jt.fstringify_code_by_line()
+
+
+from flynt.string_concat import transform_concat, concat_candidates
+
+
+def fstringify_concats(code: str, multiline=True, len_limit=88) -> Tuple[str, int]:
+    """ returns fstringified version of the code and amount of lines edited."""
+    if not multiline:
+        len_limit = 0
+        lexer.set_single_line()
+    else:
+        lexer.set_multiline()
+
+    jt = JoinTransformer(
+        code,
+        len_limit,
+        candidates_constructor=concat_candidates,
+        transform_func=transform_concat,
+    )
 
     return jt.fstringify_code_by_line()

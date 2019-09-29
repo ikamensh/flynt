@@ -182,6 +182,10 @@ class Chunk:
     def contains_multiple_string_tokens(self):
         return sum(t.toknum == token.STRING for t in self.tokens) > 1
 
+    @property
+    def quote_type(self):
+        return self.tokens[0].get_quote_type()
+
     def __getitem__(self, item):
         return self.tokens[item]
 

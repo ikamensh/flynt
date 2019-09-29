@@ -36,8 +36,8 @@ def main():
         action="store",
         help="for expressions spanning multiple lines, convert only if "
         "the resulting single line will fit into the line length limit. "
-        "Default value is 79 characters.",
-        default=79,
+        "Default value is 88 characters.",
+        default=88,
     )
 
     parser.add_argument(

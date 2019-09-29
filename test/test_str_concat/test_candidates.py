@@ -15,11 +15,11 @@ def pycode_with_2_concats():
     yield content
 
 
-from flynt.string_concat.candidates import ConcatHound
+from flynt.string_concat.candidates import ConcatHound, concat_candidates
 
 
 @pytest.mark.skipif(sys.version_info < (3, 8), reason="requires python3.8 or higher")
-def test_find_victims(pycode_with_2_concats: str):
+def test_find_victims_primitives(pycode_with_2_concats: str):
     tree = ast.parse(pycode_with_2_concats)
 
     ch = ConcatHound()
@@ -27,7 +27,18 @@ def test_find_victims(pycode_with_2_concats: str):
 
     assert len(ch.victims) == 2
 
-    for victim in ch.victims:
-        print(
-            victim.lineno, victim.col_offset, victim.end_lineno, victim.end_col_offset
-        )
+    v1, v2 = ch.victims
+    assert str(v1) == "a + ' World'"
+    assert 'a + " World"' in pycode_with_2_concats.split("\n")[v1.start_line]
+
+
+@pytest.mark.skipif(sys.version_info < (3, 8), reason="requires python3.8 or higher")
+def test_find_victims_api(pycode_with_2_concats: str):
+    gen = concat_candidates(pycode_with_2_concats)
+    lst = list(gen)
+
+    assert len(lst) == 2
+
+    v1, v2 = lst
+    assert str(v1) == "a + ' World'"
+    assert 'a + " World"' in pycode_with_2_concats.split("\n")[v1.start_line]

@@ -73,7 +73,7 @@ class FstringifyTransformer(ast.NodeTransformer):
 from flynt.format import QuoteTypes, set_quote_type
 
 
-def transform(code: str) -> Tuple[str, bool]:
+def transform_concat(code: str, *args, **kwargs) -> Tuple[str, bool]:
     tree = ast.parse(code)
 
     ft = FstringifyTransformer()

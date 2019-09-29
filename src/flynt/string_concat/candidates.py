@@ -1,4 +1,9 @@
 import ast
+from typing import List
+
+import astor
+
+from flynt.format import QuoteTypes
 
 
 def is_str_literal(node):
@@ -41,14 +46,62 @@ def is_string_concat(node):
     return contains_literal(node)
 
 
+class AstChunk:
+    def __init__(self, node: ast.AST):
+        self.node = node
+
+    @property
+    def start_line(self):
+        return self.node.lineno - 1
+
+    @property
+    def start_idx(self):
+        return self.node.col_offset
+
+    @property
+    def end_idx(self):
+        return self.node.end_col_offset
+
+    @property
+    def end_line(self):
+        return self.node.end_lineno - 1
+
+    @property
+    def n_lines(self):
+        return 1 + self.end_line - self.start_line
+
+    @property
+    def string_in_string(self):
+        return False
+
+    @property
+    def quote_type(self):
+        return QuoteTypes.double
+
+    def __str__(self):
+        return astor.to_source(self.node)[1:-2]
+
+    def __repr__(self):
+        return "AstChunk: " + str(self)
+
+
 class ConcatHound(ast.NodeVisitor):
     def __init__(self):
         super().__init__()
-        self.victims = []
+        self.victims: List[AstChunk] = []
 
     def visit_BinOp(self, node: ast.BinOp):
         """
         Finds all nodes that are string concatenations with a literal
         """
         if is_string_concat(node):
-            self.victims.append(node)
+            self.victims.append(AstChunk(node))
+
+
+def concat_candidates(code: str):
+    tree = ast.parse(code)
+
+    ch = ConcatHound()
+    ch.visit(tree)
+
+    yield from ch.victims

@@ -3,7 +3,7 @@ import sys
 
 import pytest
 
-from flynt.string_concat.transformer import unpack_binop, transform
+from flynt.string_concat.transformer import unpack_binop, transform_concat
 
 
 @pytest.mark.skipif(sys.version_info < (3, 8), reason="requires python3.8 or higher")
@@ -35,7 +35,7 @@ def test_transform():
     txt = """a + 'Hello' + b + 'World'"""
     expected = '''f"{a}Hello{b}World"'''
 
-    new, changed = transform(txt)
+    new, changed = transform_concat(txt)
 
     assert changed
     assert new == expected
