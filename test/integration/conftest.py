@@ -57,3 +57,13 @@ all_files = pytest.fixture(
 @all_files
 def filename(request):
     yield request.param
+
+
+all_files_concat = pytest.fixture(
+    params=["multiple.py", "parens.py", "no_parens.py", "index.py"]
+)
+
+# @pytest.fixture(params=["double_conv.py"])
+@all_files_concat
+def filename_concat(request):
+    yield request.param

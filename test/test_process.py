@@ -290,6 +290,15 @@ def test_concat():
     assert s_out == s_expected
 
 
+@pytest.mark.skipif(sys.version_info < (3, 8), reason="requires python3.8 or higher")
+def test_concat_two_sides():
+    s_in = """t = 'T is a string of value: ' + val + ' and thats great!'"""
+    s_expected = """t = f"T is a string of value: {val} and thats great!\""""
+
+    s_out, count = process.fstringify_concats(s_in)
+    assert s_out == s_expected
+
+
 @pytest.mark.parametrize("fmt_spec", "egdixXu")
 @pytest.mark.parametrize("number", [0, 11, 0b111])
 def test_integers_equivalence(number, fmt_spec):

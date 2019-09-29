@@ -23,7 +23,7 @@ def is_str_compatible(node):
             return False
         else:
             return is_str_compatible(node.right) and is_str_compatible(node.left)
-    elif isinstance(node, ast.Name):
+    elif isinstance(node, (ast.Name, ast.Call, ast.Subscript)):
         return True
     else:
         return False
