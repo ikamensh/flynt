@@ -1,3 +1,4 @@
+import sys
 import pytest
 
 from flynt import process
@@ -280,6 +281,7 @@ def test_equiv_expressions_s():
     assert eval(out) == eval(s_in)
 
 
+@pytest.mark.skipif(sys.version_info < (3, 8), reason="requires python3.8 or higher")
 def test_concat():
     s_in = """msg = a + " World\""""
     s_expected = """msg = f"{a} World\""""
