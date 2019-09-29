@@ -1,10 +1,15 @@
 from typing import Tuple
+import math
+import re
+
 from flynt.transform.transform import transform_chunk
 from flynt import lexer
 from flynt.lexer import split
 from flynt.exceptions import FlyntException
 from flynt.format import QuoteTypes
-import math
+
+
+noqa_regex = re.compile("#[ ]*noqa.*flynt")
 
 
 class JoinTransformer:
@@ -12,16 +17,17 @@ class JoinTransformer:
     the last line number and char index. Failed transformations do not need to do anything -
     not adding results is safe, as original code will be filled in."""
 
-    def __init__(self, code: str, len_limit):
-        self.results = []
-        self.count_expressions = 0
-        self.code_in = code
-        self.src_lines = code.split("\n")
+    def __init__(self, code: str, len_limit: int):
 
         if len_limit is None:
             len_limit = math.inf
 
         self.len_limit = len_limit
+
+        self.results = []
+        self.count_expressions = 0
+        self.code_in = code
+        self.src_lines = code.split("\n")
 
         self.last_line = 0
         self.last_idx = None
@@ -65,19 +71,20 @@ class JoinTransformer:
             self.last_line += 1
 
     def try_chunk(self, chunk):
-        start_line, start_idx, end_idx = (
-            chunk.start_line,
-            chunk.start_idx,
-            chunk.end_idx,
-        )
-        line = self.src_lines[start_line]
+
+        for line in self.src_lines[chunk.start_line : chunk.start_line + chunk.n_lines]:
+            if noqa_regex.findall(line):
+                # user does not wish for this line to be converted.
+                return
+
+        line = self.src_lines[chunk.start_line]
 
         contract_lines = chunk.n_lines - 1
         if contract_lines == 0:
-            rest = line[end_idx:]
+            rest = line[chunk.end_idx :]
         else:
-            next_line = self.src_lines[start_line + contract_lines]
-            rest = next_line[end_idx:]
+            next_line = self.src_lines[chunk.start_line + contract_lines]
+            rest = next_line[chunk.end_idx :]
 
         try:
             quote_type = chunk.tokens[0].get_quote_type()
@@ -90,13 +97,14 @@ class JoinTransformer:
             if changed:
                 multiline_condition = (
                     not contract_lines
-                    or len("".join([converted, rest])) <= self.len_limit - start_idx
+                    or len("".join([converted, rest]))
+                    <= self.len_limit - chunk.start_idx
                 )
                 if multiline_condition:
                     self.results.append(converted)
                     self.count_expressions += 1
                     self.last_line += contract_lines
-                    self.last_idx = end_idx
+                    self.last_idx = chunk.end_idx
 
     def add_rest(self):
         if self.last_idx is not None:

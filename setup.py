@@ -1,24 +1,9 @@
-import config
-from pathlib import Path
 import re
 from setuptools import setup
 
 
-config.add_src_to_path()
-
 with open("src/flynt/__init__.py") as f:
     version = re.search('__version__ = "(.*?)"', f.read()).group(1)
-
-
-BASE_DIR = Path(__file__).parent
-
-
-# forked from black's setup.py
-def get_long_description():
-    """Load README for long description"""
-    readme_md = BASE_DIR / "README.md"
-    with open(readme_md, encoding="utf8") as readme_f:
-        return readme_f.read()
 
 
 def get_requirements():
