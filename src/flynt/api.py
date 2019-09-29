@@ -76,8 +76,7 @@ def fstringify_file(
                 self.__dict__.update(kwargs)
 
         args = Args(
-            py36_plus=True,
-            py3_plus=True,
+            min_version=(3, 6),
             keep_percent_format=False,
             exit_zero_even_if_changed=False,
         )
