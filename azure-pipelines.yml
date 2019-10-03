@@ -6,6 +6,11 @@
 trigger:
 - master
 
+schedules:
+- cron: '30 17 * * *' # cron syntax defining a schedule
+  displayName: 'string' # friendly name given to a specific schedule
+  always: 'true' # whether to always run the pipeline or only if there have been source code changes since the last run. The default is false.
+
 strategy:
   matrix:
     LPython37:
