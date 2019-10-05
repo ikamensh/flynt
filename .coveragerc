@@ -1,0 +1,2 @@
+[run]
+omit = flynt/string_concat/*
