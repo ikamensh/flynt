@@ -1,2 +1,2 @@
 [run]
-omit = flynt/string_concat/*
+omit = */flynt/string_concat/*
