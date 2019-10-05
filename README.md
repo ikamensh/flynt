@@ -1,5 +1,5 @@
 # flynt - string formatting converter
-[![Build Status](https://dev.azure.com/ikamenshchikov/flynt/_apis/build/status/ikamensh.flynt?branchName=master)](https://dev.azure.com/ikamenshchikov/flynt/_build/latest?definitionId=1&branchName=master) [![Coverage](https://img.shields.io/azure-devops/coverage/ikamenshchikov/flynt/1)] (https://img.shields.io/azure-devops/coverage/ikamenshchikov/flynt/1) [![PyPI version](https://badge.fury.io/py/flynt.svg)](https://badge.fury.io/py/flynt)  [![Downloads](https://pepy.tech/badge/flynt)](https://pepy.tech/project/flynt)  [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Build Status](https://dev.azure.com/ikamenshchikov/flynt/_apis/build/status/ikamensh.flynt?branchName=master)](https://dev.azure.com/ikamenshchikov/flynt/_build/latest?definitionId=1&branchName=master) ![Coverage](https://img.shields.io/azure-devops/coverage/ikamenshchikov/flynt/1)[![PyPI version](https://badge.fury.io/py/flynt.svg)](https://badge.fury.io/py/flynt)  [![Downloads](https://pepy.tech/badge/flynt)](https://pepy.tech/project/flynt)  [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 
 
