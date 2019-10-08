@@ -1,2 +1,5 @@
 [run]
-omit = */flynt/string_concat/*
+source = src/*
+omit =
+    src/flynt/string_concat/*
+    test/*
