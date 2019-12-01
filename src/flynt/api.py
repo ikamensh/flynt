@@ -4,6 +4,7 @@ import time
 import ast
 import traceback
 from typing import Tuple
+import warnings
 
 import astor
 import pyupgrade
@@ -149,12 +150,18 @@ def print_report(
             f"Character count reduction: {cc_reduction} ({cc_percent_reduction:.2%})\n"
         )
     print("_-_." * 25)
-    if not pyup:
-        print(message_suggest_pyup)
-    else:
+    if pyup:
         print(message_pyup_success)
+    else:
+        print(message_suggest_pyup)
+
     print(farewell_message)
     print("_-_." * 25)
+
+    if pyup:
+        warnings.warn(
+            "--upgrade flag is scheduled for deprecation and will stop working in future versions. For more details see https://github.com/ikamensh/flynt/pull/32."
+        )
 
 
 def fstringify(
