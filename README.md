@@ -16,6 +16,8 @@ F-Strings:
 
 To run: `flynt {source_file_or_directory}`
 
+*Flynt will modify the files it runs on. Add your project to version control system before using flynt.*
+
 * Given a single file, it will 'f-stringify' it: replace all applicable string formatting in this file (file will be modified).
 * Given a folder, it will search the folder recursively and f-stringify all the .py files it finds. It skips some hard-coded folder names: `blacklist = {'.tox', 'venv', 'site-packages', '.eggs'}`.
 
