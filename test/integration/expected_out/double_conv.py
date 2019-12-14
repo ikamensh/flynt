@@ -1,1 +1,1 @@
-print(f"{(Bar + 1)}", f'{var:d}', f"{foo}")
+print(f"{Bar + 1}", f'{var:d}', f"{foo}")

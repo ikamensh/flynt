@@ -12,10 +12,6 @@ def test_fmt_spec():
     assert new == expected
 
 
-@pytest.mark.xfail(
-    reason="problem in dependency - "
-    "astor https://github.com/berkerpeksag/astor/issues/153"
-)
 def test_expr_no_paren():
     code = """"my string {:.2f}".format(var+1)"""
     expected = '''f"""my string {var + 1:.2f}"""'''
@@ -37,7 +33,6 @@ def test_newline():
 
 
 def test_parenthesis():
-
     code = """"Flask Documentation ({})".format(version)"""
     expected = '''f"""Flask Documentation ({version})"""'''
 
@@ -48,7 +43,6 @@ def test_parenthesis():
 
 
 def test_implicit_string_concat():
-
     code = """"Helloo {}" "!!!".format(world)"""
     expected = '''f"""Helloo {world}!!!"""'''
 
@@ -59,7 +53,6 @@ def test_implicit_string_concat():
 
 
 def test_multiline():
-
     code = """
     "Flask Documentation ({})".format(
     version
@@ -74,7 +67,6 @@ def test_multiline():
 
 
 def test_numbered():
-
     code = '''"""Flask Documentation ({0})""".format(version)'''
     expected = '''f"""Flask Documentation ({version})"""'''
 
