@@ -1,4 +1,4 @@
-astor
-forbiddenfruit
+astor==0.8.1
+forbiddenfruit==0.1.3
 pyupgrade==1.24.0
-colorama
+colorama==0.4.3

@@ -11,6 +11,7 @@ from flynt.api import fstringify
 
 
 def main():
+    print(f"Running flynt v.{__version__}")
     parser = argparse.ArgumentParser(
         description=f"flynt v.{__version__}", add_help=True, epilog=__doc__
     )
