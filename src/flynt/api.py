@@ -11,11 +11,7 @@ import pyupgrade
 
 from flynt.file_spy import spy_on_file_io, charcount_stats
 from flynt.process import fstringify_code_by_line, fstringify_concats
-from flynt.cli_messages import (
-    message_pyup_success,
-    message_suggest_pyup,
-    farewell_message,
-)
+from flynt.cli_messages import message_pyup_success, farewell_message
 
 blacklist = {".tox", "venv", "site-packages", ".eggs"}
 
@@ -152,8 +148,6 @@ def print_report(
     print("_-_." * 25)
     if pyup:
         print(message_pyup_success)
-    else:
-        print(message_suggest_pyup)
 
     print(farewell_message)
     print("_-_." * 25)

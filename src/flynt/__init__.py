@@ -2,7 +2,7 @@
 from old "%-formatted" and .format(...) strings into Python 3.6+'s f-strings.
 Learn more about f-strings at https://www.python.org/dev/peps/pep-0498/"""
 
-__version__ = "0.37b"
+__version__ = "0.38"
 
 import argparse
 import sys
