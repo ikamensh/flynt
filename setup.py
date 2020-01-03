@@ -1,14 +1,17 @@
+from pathlib import Path
 import re
 from setuptools import setup
 
+_DIR = Path(__file__).parent
 
-with open("src/flynt/__init__.py") as f:
+
+with (_DIR / "src/flynt/__init__.py").open() as f:
     version = re.search('__version__ = "(.*?)"', f.read()).group(1)
 
 
 def get_requirements():
-    with open("requirements.txt") as fp:
-        return fp.read()
+    with (_DIR / "requirements.txt").open() as f:
+        return f.read()
 
 
 setup(
@@ -30,10 +33,8 @@ setup(
         "Topic :: Utilities",
     ],
     license="MIT",
-    # long_description=get_long_description(),
-    long_description="CLI tool to convert a python project's .format(...) "
-    "and %-formatted "
-    "strings to f-strings.",
+    long_description=(_DIR / "README.md").read_text().strip(),
+    long_description_content_type="text/markdown",
     install_requires=get_requirements(),
     python_requires=">=3.6",
     entry_points={"console_scripts": ["flynt=flynt:main"]},
