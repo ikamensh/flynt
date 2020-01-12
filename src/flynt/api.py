@@ -124,11 +124,11 @@ def print_report(
         print("Per expression type:")
         percent_fraction = state.percent_transforms / state.percent_candidates
         print(
-            f"Old style (`%`) expressions attempted:   {state.percent_transforms}/"
+            f"Old style (`%`) expressions attempted:     {state.percent_transforms}/"
             f"{state.percent_candidates} ({percent_fraction:.1%})"
         )
         print(
-            f"`.format(...)` calls attempted:          {state.call_transforms}/"
+            f"`.format(...)` calls attempted:            {state.call_transforms}/"
             f"{state.call_candidates} ({state.call_transforms / state.call_candidates:.1%})"
         )
         print(f"F-string expressions created:              {total_expr}")
@@ -141,7 +141,6 @@ def print_report(
 
     print("\n" + ("_-_." * 25))
     print(farewell_message)
-    print("_-_." * 25)
 
 
 def fstringify(
