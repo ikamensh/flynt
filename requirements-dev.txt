@@ -1,5 +1,4 @@
 astor
-forbiddenfruit
 pytest
 pytest-cov
 black

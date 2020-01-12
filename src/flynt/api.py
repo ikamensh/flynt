@@ -4,11 +4,9 @@ import time
 import ast
 import traceback
 from typing import Tuple
-import warnings
 
 import astor
 
-from flynt.file_spy import spy_on_file_io, charcount_stats
 from flynt.process import fstringify_code_by_line, fstringify_concats
 from flynt.cli_messages import farewell_message
 
