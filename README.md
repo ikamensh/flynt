@@ -50,21 +50,27 @@ Cloning into 'flask'...
 ...
 Resolving deltas: 100% (12203/12203), done.
 
-38f9d3a65222:~ ikkamens$ flynt flask
+38f9d3a65222:open_source ikkamens$ flynt flask
+Running flynt v.0.40
 
 Flynt run has finished. Stats:
 
-Execution time: 0.623s
-Files modified: 18
-Expressions transformed: 43
-Character count reduction: 241 (0.04%)
+Execution time:                            0.789s
+Files modified:                            21
+Character count reduction:                 299 (0.06%)
+
+Per expression type:
+Old style (`%`) expressions attempted:     40/42 (95.2%)
+`.format(...)` calls attempted:            26/33 (78.8%)
+F-string expressions created:              48
+Out of all attempted transforms, 7 resulted in errors.
+To find out specific error messages, use --verbose flag.
 
 _-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_.
+Please run your tests before commiting. Did flynt get a perfect conversion? give it a star at:
+~ https://github.com/ikamensh/flynt ~
+Thank you for using flynt. Upgrade more projects and recommend it to your colleagues!
 
-Please run your tests before commiting. Report bugs as github issues at: https://github.com/ikamensh/flynt
-Thank you for using flynt! Fstringify more projects and recommend it to your colleagues!
-
-_-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_.
 38f9d3a65222:~ ikkamens$
 ```
 
