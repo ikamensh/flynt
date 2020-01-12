@@ -42,13 +42,6 @@ def main():
     )
 
     parser.add_argument(
-        "--upgrade",
-        action="store_true",
-        default=False,
-        help="run pyupgrade on .py files",
-    )
-
-    parser.add_argument(
         "--transform-concats",
         action="store_true",
         default=False,
@@ -81,7 +74,6 @@ def main():
         quiet=args.quiet,
         multiline=not args.no_multiline,
         len_limit=int(args.line_length),
-        pyup=args.upgrade,
         fail_on_changes=args.fail_on_change,
         transform_concat=args.transform_concats,
     )

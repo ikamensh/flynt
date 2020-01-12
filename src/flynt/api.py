@@ -7,17 +7,16 @@ from typing import Tuple
 import warnings
 
 import astor
-import pyupgrade
 
 from flynt.file_spy import spy_on_file_io, charcount_stats
 from flynt.process import fstringify_code_by_line, fstringify_concats
-from flynt.cli_messages import message_pyup_success, farewell_message
+from flynt.cli_messages import farewell_message
 
 blacklist = {".tox", "venv", "site-packages", ".eggs"}
 
 
 def fstringify_file(
-    filename, multiline, len_limit, pyup=False, transform_concat=False
+    filename, multiline, len_limit, transform_concat=False
 ) -> Tuple[bool, int, int, int]:
     """
     :return: tuple: (changes_made, n_changes,
@@ -69,33 +68,10 @@ def fstringify_file(
 
             result = True, changes, len(contents), len(new_code)
 
-    if not pyup:
-        return result
-    else:
-
-        class Args:
-            def __init__(self, **kwargs):
-                self.__dict__.update(kwargs)
-
-        args = Args(
-            min_version=(3, 6),
-            keep_percent_format=False,
-            exit_zero_even_if_changed=False,
-        )
-
-        with spy_on_file_io():
-            changed = pyupgrade._fix_file(filename, args)
-
-        if changed:
-            len_before, len_after = charcount_stats(filename)
-            return True, result[1], result[2], len_after
-        else:
-            return result
+    return result
 
 
-def fstringify_files(
-    files, verbose, quiet, multiline, len_limit, pyup, transform_concat
-):
+def fstringify_files(files, verbose, quiet, multiline, len_limit, transform_concat):
     changed_files = 0
     total_charcount_original = 0
     total_charcount_new = 0
@@ -106,7 +82,7 @@ def fstringify_files(
             continue
         file_path = os.path.join(f[0], f[1])
         changed, count_expressions, charcount_original, charcount_new = fstringify_file(
-            file_path, multiline, len_limit, pyup, transform_concat
+            file_path, multiline, len_limit, transform_concat
         )
         if changed:
             changed_files += 1
@@ -122,7 +98,6 @@ def fstringify_files(
     if not quiet:
         print_report(
             changed_files,
-            pyup,
             total_charcount_new,
             total_charcount_original,
             total_expressions,
@@ -133,7 +108,7 @@ def fstringify_files(
 
 
 def print_report(
-    changed_files, pyup, total_cc_new, total_cc_original, total_expr, total_time
+    changed_files, total_cc_new, total_cc_original, total_expr, total_time
 ):
     print("\nFlynt run has finished. Stats:")
     print(f"\nExecution time: {total_time}s")
@@ -146,16 +121,8 @@ def print_report(
             f"Character count reduction: {cc_reduction} ({cc_percent_reduction:.2%})\n"
         )
     print("_-_." * 25)
-    if pyup:
-        print(message_pyup_success)
-
     print(farewell_message)
     print("_-_." * 25)
-
-    if pyup:
-        warnings.warn(
-            "--upgrade flag is scheduled for deprecation and will stop working in future versions. For more details see https://github.com/ikamensh/flynt/pull/32."
-        )
 
 
 def fstringify(
@@ -164,7 +131,6 @@ def fstringify(
     quiet,
     multiline,
     len_limit,
-    pyup,
     fail_on_changes=False,
     transform_concat=False,
 ):
@@ -190,7 +156,6 @@ def fstringify(
         quiet=quiet,
         multiline=multiline,
         len_limit=len_limit,
-        pyup=pyup,
         transform_concat=transform_concat,
     )
 

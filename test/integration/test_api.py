@@ -18,16 +18,6 @@ def formattable_file(tmpdir):
 
 
 @pytest.fixture()
-def pyup_file(tmpdir):
-    folder = os.path.dirname(__file__)
-    source_path = os.path.join(folder, "samples_in", "pyup.py")
-    tmp_path = os.path.join(tmpdir, "input.py")
-
-    shutil.copy2(source_path, tmp_path)
-    yield tmp_path
-
-
-@pytest.fixture()
 def py2_file(tmpdir):
     folder = os.path.dirname(__file__)
     py2_path = os.path.join(folder, "samples_in", "py2.py2")
@@ -59,20 +49,6 @@ def test_works(formattable_file):
     modified, _, _, _ = fstringify_file(formattable_file, True, 1000)
 
     with open(formattable_file) as f:
-        content_after = f.read()
-
-    assert modified
-    assert content_after != content_before
-
-
-def test_pyup_trivia(pyup_file):
-
-    with open(pyup_file) as f:
-        content_before = f.read()
-
-    modified, _, _, _ = fstringify_file(pyup_file, True, 1000, pyup=True)
-
-    with open(pyup_file) as f:
         content_after = f.read()
 
     assert modified
