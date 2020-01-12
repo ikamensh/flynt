@@ -2,19 +2,9 @@ import ast
 import json
 
 
-def pp_code_ast(code, convert=False):
-    from flynt.transform.FstringifyTransformer import fstringify_node
-
-    """Pretty print code's AST to stdout.
-
-    Args:
-        code (str): The code you want the ast for.
-
-    Returns nothing print AST representation to stdout
-    """
+def pp_code_ast(code):
+    """Pretty print code's AST to stdout."""
     tree = ast.parse(code)
-    if convert:
-        tree, _ = fstringify_node(tree)
     pp_ast(tree)
 
 

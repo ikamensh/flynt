@@ -9,6 +9,7 @@ import astor
 
 from flynt.process import fstringify_code_by_line, fstringify_concats
 from flynt.cli_messages import farewell_message
+from flynt import state
 
 blacklist = {".tox", "venv", "site-packages", ".eggs"}
 
@@ -30,7 +31,8 @@ def fstringify_file(
     try:
         ast_before = ast.parse(contents)
     except SyntaxError:
-        print(f"Can't parse {filename} as a python file.")
+        if not state.quiet:
+            print(f"Can't parse {filename} as a python file.")
         return default_result()
 
     try:
@@ -43,8 +45,9 @@ def fstringify_file(
             )
             changes += concat_changes
     except Exception as e:
-        print(f"Skipping fstrings transform of file {filename} due to {e}")
-        traceback.print_exc()
+        if not state.quiet:
+            print(f"Skipping fstrings transform of file {filename} due to {e}")
+            traceback.print_exc()
         result = default_result()
     else:
         if new_code == contents:
@@ -69,7 +72,7 @@ def fstringify_file(
     return result
 
 
-def fstringify_files(files, verbose, quiet, multiline, len_limit, transform_concat):
+def fstringify_files(files, multiline, len_limit, transform_concat):
     changed_files = 0
     total_charcount_original = 0
     total_charcount_new = 0
@@ -87,13 +90,13 @@ def fstringify_files(files, verbose, quiet, multiline, len_limit, transform_conc
             total_expressions += count_expressions
         total_charcount_original += charcount_original
         total_charcount_new += charcount_new
-        status = "yes" if count_expressions else "no"
 
-        if verbose and not quiet:
+        if state.verbose:
+            status = "yes" if count_expressions else "no"
             print(f"fstringifying {file_path}...{status}")
     total_time = round(time.time() - start_time, 3)
 
-    if not quiet:
+    if not state.quiet:
         print_report(
             changed_files,
             total_charcount_new,
@@ -109,16 +112,34 @@ def print_report(
     changed_files, total_cc_new, total_cc_original, total_expr, total_time
 ):
     print("\nFlynt run has finished. Stats:")
-    print(f"\nExecution time: {total_time}s")
-    print(f"Files modified: {changed_files}")
+    print(f"\nExecution time:                            {total_time}s")
+    print(f"Files modified:                            {changed_files}")
     if changed_files:
-        print(f"String expressions transformed: {total_expr}")
         cc_reduction = total_cc_original - total_cc_new
         cc_percent_reduction = cc_reduction / total_cc_original
         print(
-            f"Character count reduction: {cc_reduction} ({cc_percent_reduction:.2%})\n"
+            f"Character count reduction:                 {cc_reduction} ({cc_percent_reduction:.2%})\n"
         )
-    print("_-_." * 25)
+
+        print("Per expression type:")
+        percent_fraction = state.percent_transforms / state.percent_candidates
+        print(
+            f"Old style (`%`) expressions attempted:   {state.percent_transforms}/"
+            f"{state.percent_candidates} ({percent_fraction:.1%})"
+        )
+        print(
+            f"`.format(...)` calls attempted:          {state.call_transforms}/"
+            f"{state.call_candidates} ({state.call_transforms / state.call_candidates:.1%})"
+        )
+        print(f"F-string expressions created:              {total_expr}")
+
+        if state.invalid_conversions:
+            print(
+                f"Out of all attempted transforms, {state.invalid_conversions} resulted in errors."
+            )
+            print("To find out specific error messages, use --verbose flag.")
+
+    print("\n" + ("_-_." * 25))
     print(farewell_message)
     print("_-_." * 25)
 
@@ -133,6 +154,9 @@ def fstringify(
     transform_concat=False,
 ):
     """ determine if a directory or a single file was passed, and f-stringify it."""
+
+    state.verbose = verbose
+    state.quiet = quiet
 
     files = []
 
@@ -150,8 +174,6 @@ def fstringify(
 
     status = fstringify_files(
         files,
-        verbose=verbose,
-        quiet=quiet,
         multiline=multiline,
         len_limit=len_limit,
         transform_concat=transform_concat,

@@ -2,10 +2,12 @@ import astor
 import ast
 import copy
 from typing import Tuple
+import traceback
 
 from flynt.transform.FstringifyTransformer import fstringify_node
 from flynt.exceptions import FlyntException
 from flynt.format import set_quote_type, QuoteTypes
+from flynt import state
 
 
 def transform_chunk(
@@ -24,7 +26,11 @@ def transform_chunk(
     try:
         tree = ast.parse(code)
         converted, changed, str_in_str = fstringify_node(copy.deepcopy(tree))
-    except (SyntaxError, FlyntException, Exception):
+    except (SyntaxError, FlyntException, Exception) as e:
+        if state.verbose:
+            print(f"Exception {e} during conversion of code '{code}'")
+            traceback.print_exc()
+        state.invalid_conversions += 1
         return code, False
     else:
         if changed:
@@ -37,7 +43,14 @@ def transform_chunk(
             new_code = new_code.replace("\t", "\\t")
             try:
                 ast.parse(new_code)
-            except Exception:
+            except Exception as e:
+                if state.verbose:
+                    print(
+                        f"Failed to parse transformed code '{new_code}' given original '{code}'"
+                    )
+                    print(e)
+                    traceback.print_exc()
+                state.invalid_conversions += 1
                 return code, False
             else:
                 return new_code, changed

@@ -3,6 +3,7 @@ from typing import Tuple
 
 from flynt.transform.format_call_transforms import matching_call, joined_string
 from flynt.transform.percent_transformer import transform_binop
+from flynt import state
 
 
 class FstringifyTransformer(ast.NodeTransformer):
@@ -18,15 +19,17 @@ class FstringifyTransformer(ast.NodeTransformer):
 
         match = matching_call(node)
 
-        # bail in these edge cases...
         if match:
+            state.call_candidates += 1
+
+            # bail in these edge cases...
             if any(isinstance(arg, ast.Starred) for arg in node.args):
                 return node
 
-        if match:
-            self.counter += 1
             result_node = joined_string(node)
             self.visit(result_node)
+            self.counter += 1
+            state.call_transforms += 1
             return result_node
 
         return node
@@ -52,8 +55,10 @@ class FstringifyTransformer(ast.NodeTransformer):
             )
         )
 
-        # bail in these edge cases...
         if percent_stringify:
+            state.percent_candidates += 1
+
+            # bail in these edge cases...
             no_good = ["}", "{"]
             for ng in no_good:
                 if ng in node.left.s:
@@ -74,10 +79,10 @@ class FstringifyTransformer(ast.NodeTransformer):
                 ):
                     return node
 
-        if percent_stringify:
-            self.counter += 1
             result_node, str_in_str = transform_binop(node)
             self.string_in_string = str_in_str
+            self.counter += 1
+            state.percent_transforms += 1
             return result_node
 
         return node
