@@ -27,10 +27,11 @@ It turns the code it runs on into Python 3.6+, since 3.6 is when "f-strings" wer
 ```
 usage: flynt [-h] [--verbose | --quiet]
              [--no_multiline | --line_length LINE_LENGTH]
-             src
+             [--transform-concats] [--fail-on-change]
+             src [src ...]
 
 positional arguments:
-  src                   source file or directory
+  src                   source file(s) or directory
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -41,6 +42,10 @@ optional arguments:
                         for expressions spanning multiple lines, convert only
                         if the resulting single line will fit into the line
                         length limit. Default value is 88 characters.
+  --transform-concats   Replace string concatenations with literals to
+                        f-strings. Available only if flynt is installed with
+                        3.8+ interpreter.
+  --fail-on-change      Fail when changing files (for linting purposes)
 ```
 
 ### Sample output of a successful run:
