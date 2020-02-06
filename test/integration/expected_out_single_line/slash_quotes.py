@@ -1,4 +1,4 @@
 OUTPUT_FILE = "{home}/{name}.txt"
-STATUS_CMD = "echo \"SCREEN_EXIT:$?\" ; echo \"{EOS}\"\n".format(EOS=END_OF_STREAM)
-ENTRY_CMD = "echo \"{}\"".format(START_STREAM)
+STATUS_CMD = f"echo \"SCREEN_EXIT:$?\" ; echo \"{END_OF_STREAM}\"\n"
+ENTRY_CMD = f"echo \"{START_STREAM}\""
 SCREEN_TIMEOUT = 3600  # seconds

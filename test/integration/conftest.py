@@ -8,6 +8,7 @@ all_files = pytest.fixture(
         "digit_ordering.py",
         "dict_func.py",
         "double_conv.py",
+        "escaped_dq.py",
         "first_string.py",
         "hard_percent.py",
         "implicit_concat.py",
@@ -55,7 +56,7 @@ all_files = pytest.fixture(
 )
 
 # @pytest.fixture(params=[
-# "multiline_limit.py",
+# "escaped_dq.py",
 # ])
 @all_files
 def filename(request):

@@ -1,5 +1,8 @@
 import tokenize
 import io
+import re
+
+lonely_quote = re.compile(r"(?<!\\)\"")
 
 
 class QuoteTypes:
@@ -34,4 +37,7 @@ def set_quote_type(code: str, quote_type: str):
     if quote_type in (QuoteTypes.single, QuoteTypes.triple_double):
         if body[-2:] == '\\"':
             body = body[:-2] + '"'
+    elif quote_type is QuoteTypes.double:
+        body = lonely_quote.sub('\\"', body)
+
     return prefix + quote_type + body + quote_type
