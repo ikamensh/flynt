@@ -1,12 +1,14 @@
 from typing import Tuple, Callable
 import math
 import re
+import traceback
 
 from flynt.transform.transform import transform_chunk
 from flynt import lexer
 from flynt.lexer import split
 from flynt.exceptions import FlyntException
-from flynt.format import QuoteTypes
+from flynt.format import QuoteTypes as qt, get_quote_type
+from flynt import state
 
 
 noqa_regex = re.compile("#[ ]*noqa.*flynt")
@@ -95,25 +97,41 @@ class JoinTransformer:
 
         try:
             if chunk.string_in_string:
-                quote_type = QuoteTypes.double
+                quote_type = qt.double
             else:
                 quote_type = chunk.quote_type
 
-        except FlyntException:
-            pass
+        except FlyntException as e:
+            if state.verbose:
+                print(f"Exception {e} during conversion of code '{str(chunk)}'")
+                traceback.print_exc()
+
         else:
             converted, changed = self.transform_func(str(chunk), quote_type=quote_type)
             if changed:
-                multiline_condition = (
-                    not contract_lines
-                    or len("".join([converted, rest]))
-                    <= self.len_limit - chunk.start_idx
+                self.maybe_replace(chunk, contract_lines, converted, rest)
+
+    def maybe_replace(self, chunk, contract_lines, converted, rest):
+        if contract_lines:
+            if get_quote_type(str(chunk)) in (qt.triple_double, qt.triple_single):
+                lines = converted.split("\\n")
+                lines[-1] += rest
+                lines_fit = all(
+                    len(l) <= self.len_limit - chunk.start_idx for l in lines
                 )
-                if multiline_condition:
-                    self.results.append(converted)
-                    self.count_expressions += 1
-                    self.last_line += contract_lines
-                    self.last_idx = chunk.end_idx
+                converted = converted.replace("\\n", "\n")
+            else:
+                lines_fit = (
+                    len("".join([converted, rest])) <= self.len_limit - chunk.start_idx
+                )
+
+        else:
+            lines_fit = True
+        if not contract_lines or lines_fit:
+            self.results.append(converted)
+            self.count_expressions += 1
+            self.last_line += contract_lines
+            self.last_idx = chunk.end_idx
 
     def add_rest(self):
         if self.last_idx is not None:

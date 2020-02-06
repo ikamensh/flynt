@@ -23,6 +23,7 @@ all_files = pytest.fixture(
         "multiline_3.py",
         "multiline_twice.py",
         "multiple.py",
+        "multiline_keep.py",
         "named_inverse.py",
         "no_fstring_1.py",
         "no_fstring_2.py",
@@ -53,7 +54,9 @@ all_files = pytest.fixture(
     ]
 )
 
-# @pytest.fixture(params=["double_conv.py"])
+# @pytest.fixture(params=[
+# "multiline_limit.py",
+# ])
 @all_files
 def filename(request):
     yield request.param

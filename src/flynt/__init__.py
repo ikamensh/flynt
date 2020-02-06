@@ -64,8 +64,8 @@ def main():
     if args.transform_concats:
         if sys.version_info < (3, 8):
             raise Exception(
-                f"Transforming string concatenations is only possible with flynt "
-                f"installed to a python3.8+ interpreter. Currently using {sys.version_info}"
+                f"""Transforming string concatenations is only possible with flynt 
+                installed to a python3.8+ interpreter. Currently using {sys.version_info}."""
             )
 
     return fstringify(
