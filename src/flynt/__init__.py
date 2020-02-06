@@ -2,7 +2,7 @@
 from old "%-formatted" and .format(...) strings into Python 3.6+'s f-strings.
 Learn more about f-strings at https://www.python.org/dev/peps/pep-0498/"""
 
-__version__ = "0.40.1"
+__version__ = "0.41"
 
 import argparse
 import sys
@@ -64,8 +64,8 @@ def main():
     if args.transform_concats:
         if sys.version_info < (3, 8):
             raise Exception(
-                f"Transforming string concatenations is only possible with flynt "
-                f"installed to a python3.8+ interpreter. Currently using {sys.version_info}"
+                f"""Transforming string concatenations is only possible with flynt 
+                installed to a python3.8+ interpreter. Currently using {sys.version_info}."""
             )
 
     return fstringify(
