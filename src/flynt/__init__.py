@@ -45,7 +45,7 @@ def main():
         "--transform-concats",
         action="store_true",
         default=False,
-        help="Replace string concatenations with literals to f-strings. "
+        help="Replace string concatenations with literals with f-strings. "
         "Available only if flynt is installed with 3.8+ interpreter.",
     )
 
