@@ -42,7 +42,7 @@ optional arguments:
                         for expressions spanning multiple lines, convert only
                         if the resulting single line will fit into the line
                         length limit. Default value is 88 characters.
-  --transform-concats   Replace string concatenations with literals to
+  --transform-concats   Replace string concatenations with literals with
                         f-strings. Available only if flynt is installed with
                         3.8+ interpreter.
   --fail-on-change      Fail when changing files (for linting purposes)
