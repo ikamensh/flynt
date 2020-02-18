@@ -28,12 +28,26 @@ def main():
     multiline_group.add_argument(
         "--no_multiline",
         action="store_true",
+        help=argparse.SUPPRESS,
+        default=False,
+    )
+
+    multiline_group.add_argument(
+        "--no-multiline",
+        action="store_true",
         help="convert only single line expressions",
         default=False,
     )
 
     multiline_group.add_argument(
         "--line_length",
+        action="store",
+        help=argparse.SUPPRESS,
+        default=88,
+    )
+
+    multiline_group.add_argument(
+        "--line-length",
         action="store",
         help="for expressions spanning multiple lines, convert only if "
         "the resulting single line will fit into the line length limit. "
