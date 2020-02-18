@@ -26,7 +26,7 @@ It turns the code it runs on into Python 3.6+, since 3.6 is when "f-strings" wer
 ### Command line options
 ```
 usage: flynt [-h] [--verbose | --quiet]
-             [--no_multiline | --line_length LINE_LENGTH]
+             [--no-multiline | --line-length LINE_LENGTH]
              [--transform-concats] [--fail-on-change]
              src [src ...]
 
@@ -37,8 +37,8 @@ optional arguments:
   -h, --help            show this help message and exit
   --verbose             run with verbose output
   --quiet               run without output
-  --no_multiline        convert only single line expressions
-  --line_length LINE_LENGTH
+  --no-multiline        convert only single line expressions
+  --line-length LINE_LENGTH
                         for expressions spanning multiple lines, convert only
                         if the resulting single line will fit into the line
                         length limit. Default value is 88 characters.
