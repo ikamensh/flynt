@@ -2,7 +2,7 @@
 from old "%-formatted" and .format(...) strings into Python 3.6+'s f-strings.
 Learn more about f-strings at https://www.python.org/dev/peps/pep-0498/"""
 
-__version__ = "0.42"
+__version__ = "0.43.1"
 
 import argparse
 import sys
@@ -26,10 +26,7 @@ def main():
 
     multiline_group = parser.add_mutually_exclusive_group()
     multiline_group.add_argument(
-        "--no_multiline",
-        action="store_true",
-        help=argparse.SUPPRESS,
-        default=False,
+        "--no_multiline", action="store_true", help=argparse.SUPPRESS, default=False
     )
 
     multiline_group.add_argument(
@@ -40,10 +37,7 @@ def main():
     )
 
     multiline_group.add_argument(
-        "--line_length",
-        action="store",
-        help=argparse.SUPPRESS,
-        default=88,
+        "--line_length", action="store", help=argparse.SUPPRESS, default=88
     )
 
     multiline_group.add_argument(

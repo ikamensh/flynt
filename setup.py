@@ -39,4 +39,5 @@ setup(
     python_requires=">=3.6",
     entry_points={"console_scripts": ["flynt=flynt:main"]},
     url="https://github.com/ikamensh/flynt",
+    include_package_data=True,
 )
