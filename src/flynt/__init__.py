@@ -53,8 +53,8 @@ def main():
         "--transform-concats",
         action="store_true",
         default=False,
-        help="Replace string concatenations with literals with f-strings. "
-        "Available only if flynt is installed with 3.8+ interpreter.",
+        help="Replace string concatenations (defined as + operations involving string literals) "
+        "with f-strings. Available only if flynt is installed with 3.8+ interpreter.",
     )
 
     parser.add_argument(
