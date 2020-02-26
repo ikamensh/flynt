@@ -1,5 +1,6 @@
-from pathlib import Path
 import re
+from pathlib import Path
+
 from setuptools import setup
 
 _DIR = Path(__file__).parent

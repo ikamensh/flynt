@@ -3,7 +3,7 @@ import sys
 
 import pytest
 
-from flynt.string_concat.transformer import unpack_binop, transform_concat
+from flynt.string_concat.transformer import transform_concat, unpack_binop
 
 
 @pytest.mark.skipif(sys.version_info < (3, 8), reason="requires python3.8 or higher")

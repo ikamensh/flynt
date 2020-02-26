@@ -1,4 +1,5 @@
 import sys
+
 import pytest
 
 from flynt import process

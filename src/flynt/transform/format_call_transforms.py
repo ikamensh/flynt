@@ -1,6 +1,6 @@
 import ast
-from collections import deque
 import string
+from collections import deque
 
 import astor
 

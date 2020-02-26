@@ -1,10 +1,10 @@
 import os
 import shutil
 
-from flynt.api import fstringify_file
-from flynt import api
-
 import pytest
+
+from flynt import api
+from flynt.api import fstringify_file
 
 
 @pytest.fixture()

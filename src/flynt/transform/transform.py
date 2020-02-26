@@ -1,13 +1,14 @@
-import astor
 import ast
 import copy
-from typing import Tuple
 import traceback
+from typing import Tuple
 
-from flynt.transform.FstringifyTransformer import fstringify_node
-from flynt.exceptions import FlyntException
-from flynt.format import set_quote_type, QuoteTypes
+import astor
+
 from flynt import state
+from flynt.exceptions import FlyntException
+from flynt.format import QuoteTypes, set_quote_type
+from flynt.transform.FstringifyTransformer import fstringify_node
 
 
 def transform_chunk(

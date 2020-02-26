@@ -1,5 +1,6 @@
-from flynt.transform.transform import transform_chunk
 import pytest
+
+from flynt.transform.transform import transform_chunk
 
 
 def test_fmt_spec():

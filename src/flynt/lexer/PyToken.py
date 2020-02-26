@@ -1,8 +1,8 @@
 import token
 from typing import Tuple
 
-from flynt.format import QuoteTypes
 from flynt.exceptions import FlyntException
+from flynt.format import QuoteTypes
 
 line_num = int
 char_idx = int

@@ -1,8 +1,8 @@
 """ Test str processors on actual file contents """
 import os
+
 import config
 from flynt.process import fstringify_code_by_line
-
 
 int_test_dir = os.path.join(config.home, "test/integration/")
 

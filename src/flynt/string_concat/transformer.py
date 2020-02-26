@@ -4,6 +4,7 @@ from typing import List, Tuple
 import astor
 
 from flynt.exceptions import FlyntException
+from flynt.format import QuoteTypes, set_quote_type
 from flynt.string_concat.candidates import is_string_concat
 from flynt.string_concat.string_in_string import check_sns_depth
 
@@ -90,9 +91,6 @@ class ConcatTransformer(ast.NodeTransformer):
             return ast.JoinedStr(segments)
         else:
             return self.generic_visit(node)
-
-
-from flynt.format import QuoteTypes, set_quote_type
 
 
 def transform_concat(code: str, *args, **kwargs) -> Tuple[str, bool]:

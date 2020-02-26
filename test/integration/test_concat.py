@@ -1,11 +1,11 @@
 """ Test str processors on actual file contents """
 import os
 import sys
-import config
-from flynt.api import fstringify_file
 
 import pytest
 
+import config
+from flynt.api import fstringify_file
 
 int_test_dir = os.path.join(config.home, "test/integration/")
 

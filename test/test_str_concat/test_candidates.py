@@ -1,8 +1,10 @@
-import os
 import ast
+import os
 import sys
 
 import pytest
+
+from flynt.string_concat.candidates import ConcatHound, concat_candidates
 
 
 @pytest.fixture()
@@ -13,9 +15,6 @@ def pycode_with_2_concats():
         content = f.read()
 
     yield content
-
-
-from flynt.string_concat.candidates import ConcatHound, concat_candidates
 
 
 @pytest.mark.skipif(sys.version_info < (3, 8), reason="requires python3.8 or higher")

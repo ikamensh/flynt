@@ -1,15 +1,15 @@
-from typing import Tuple, Callable
 import math
 import re
 import traceback
+from typing import Callable, Tuple
 
-from flynt.transform.transform import transform_chunk
-from flynt import lexer
-from flynt.lexer import split
+from flynt import lexer, state
 from flynt.exceptions import FlyntException
-from flynt.format import QuoteTypes as qt, get_quote_type
-from flynt import state
-
+from flynt.format import QuoteTypes as qt
+from flynt.format import get_quote_type
+from flynt.lexer import split
+from flynt.string_concat import concat_candidates, transform_concat
+from flynt.transform.transform import transform_chunk
 
 noqa_regex = re.compile("#[ ]*noqa.*flynt")
 
@@ -155,9 +155,6 @@ def fstringify_code_by_line(code: str, multiline=True, len_limit=88) -> Tuple[st
     jt = JoinTransformer(code, len_limit)
 
     return jt.fstringify_code_by_line()
-
-
-from flynt.string_concat import transform_concat, concat_candidates
 
 
 def fstringify_concats(code: str, multiline=True, len_limit=88) -> Tuple[str, int]:

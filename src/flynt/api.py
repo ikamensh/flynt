@@ -1,15 +1,15 @@
+import ast
 import os
 import sys
 import time
-import ast
 import traceback
 from typing import Tuple
 
 import astor
 
-from flynt.process import fstringify_code_by_line, fstringify_concats
-from flynt.cli_messages import farewell_message
 from flynt import state
+from flynt.cli_messages import farewell_message
+from flynt.process import fstringify_code_by_line, fstringify_concats
 
 blacklist = {".tox", "venv", "site-packages", ".eggs"}
 

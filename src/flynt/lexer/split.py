@@ -1,11 +1,11 @@
 import io
 import tokenize
-from typing import Generator
 import traceback
+from typing import Generator
 
+from flynt import state
 from flynt.lexer.Chunk import Chunk
 from flynt.lexer.PyToken import PyToken
-from flynt import state
 
 
 def get_chunks(code) -> Generator[Chunk, None, None]:

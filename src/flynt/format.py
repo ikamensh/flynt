@@ -1,6 +1,6 @@
-import tokenize
 import io
 import re
+import tokenize
 
 lonely_quote = re.compile(r"(?<!\\)\"")
 
