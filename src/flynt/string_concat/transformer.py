@@ -96,7 +96,7 @@ from flynt.format import QuoteTypes, set_quote_type
 
 
 def transform_concat(code: str, *args, **kwargs) -> Tuple[str, bool]:
-    tree = ast.parse(code)
+    tree = ast.parse(f"({code})")
 
     ft = ConcatTransformer()
     ft.visit(tree)

@@ -55,7 +55,7 @@ def try_on_file_string_concat(filename: str, multiline):
     txt_in = read_in(filename)
     path = write_output_file(filename, txt_in)
 
-    fstringify_file(path, multiline=multiline, len_limit=None, transform_concat=True)
+    fstringify_file(path, multiline=multiline, len_limit=120, transform_concat=True)
     out = read_output_file(filename)
 
     return out, read_expected(filename)

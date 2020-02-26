@@ -64,7 +64,14 @@ def filename(request):
 
 
 all_files_concat = pytest.fixture(
-    params=["multiple.py", "parens.py", "no_parens.py", "index.py", "mixed_format.py"]
+    params=[
+        "multiple.py",
+        "parens.py",
+        "no_parens.py",
+        "index.py",
+        "mixed_format.py",
+        "longer_line.py",
+    ]
 )
 
 # @pytest.fixture(params=["mixed_format.py"])

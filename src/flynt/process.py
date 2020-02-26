@@ -107,6 +107,7 @@ class JoinTransformer:
                 traceback.print_exc()
 
         else:
+            print(chunk, type(chunk))
             converted, changed = self.transform_func(str(chunk), quote_type=quote_type)
             if changed:
                 self.maybe_replace(chunk, contract_lines, converted, rest)
