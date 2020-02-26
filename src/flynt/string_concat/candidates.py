@@ -4,6 +4,7 @@ from typing import List
 import astor
 
 from flynt.format import QuoteTypes
+from flynt import state
 
 
 def is_str_literal(node):
@@ -82,5 +83,7 @@ def concat_candidates(code: str):
 
     ch = ConcatHound()
     ch.visit(tree)
+
+    state.concat_candidates += len(ch.victims)
 
     yield from ch.victims

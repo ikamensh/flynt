@@ -36,8 +36,7 @@ def fstringify_file(
         return default_result()
 
     try:
-        changes = 0
-        new_code, fmt_changes = fstringify_code_by_line(
+        new_code, changes = fstringify_code_by_line(
             contents, multiline=multiline, len_limit=len_limit
         )
         if transform_concat:
@@ -45,6 +44,7 @@ def fstringify_file(
                 new_code, multiline=multiline, len_limit=len_limit
             )
             changes += concat_changes
+            state.concat_changes += concat_changes
     except Exception as e:
         if not state.quiet:
             print(f"Skipping fstrings transform of file {filename} due to {e}")
@@ -142,6 +142,15 @@ def print_report(
             )
         else:
             print("No `.format(...)` calls attempted.")
+
+        if state.concat_candidates:
+            print(
+                f"String concatenations attempted:           {state.concat_changes}/"
+                f"{state.concat_candidates} ({state.concat_changes / state.concat_candidates:.1%})"
+            )
+        else:
+            print("No `.format(...)` calls attempted.")
+
         print(f"F-string expressions created:              {total_expr}")
 
         if state.invalid_conversions:
