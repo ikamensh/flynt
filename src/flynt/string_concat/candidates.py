@@ -14,36 +14,13 @@ def is_str_literal(node):
         return False
 
 
-def is_str_compatible(node):
-    """ Returns False if any nodes can't be a part of string concatenation """
-    if is_str_literal(node):
-        return True
-    if isinstance(node, ast.BinOp):
-        if not isinstance(node.op, ast.Add):
-            return False
-        else:
-            return is_str_compatible(node.right) and is_str_compatible(node.left)
-    elif isinstance(node, (ast.Name, ast.Call, ast.Subscript)):
-        return True
-    else:
-        return False
-
-
-def contains_literal(node):
-    """ Returns true if a node or its BinOp children are string literals """
-    if is_str_literal(node):
-        return True
-    elif isinstance(node, ast.BinOp):
-        return contains_literal(node.left) or contains_literal(node.right)
-
-
 def is_string_concat(node):
     """ Returns True for nodes representing a string concatenation """
-    if not is_str_compatible(node):
-        return False
-    if not isinstance(node, ast.BinOp):
-        return False
-    return contains_literal(node)
+    if is_str_literal(node):
+        return True
+    if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Add):
+        return is_string_concat(node.left) or is_string_concat(node.right)
+    return False
 
 
 class AstChunk:
@@ -96,6 +73,8 @@ class ConcatHound(ast.NodeVisitor):
         """
         if is_string_concat(node):
             self.victims.append(AstChunk(node))
+        else:
+            self.generic_visit(node)
 
 
 def concat_candidates(code: str):

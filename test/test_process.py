@@ -12,6 +12,14 @@ def test_one_string():
     assert s_out == s_expected
 
 
+def test_nonatomic():
+    s_in = """'blah{0}'.format(thing - 1)"""
+    s_expected = """f'blah{thing - 1}'"""
+
+    s_out, count = process.fstringify_code_by_line(s_in)
+    assert s_out == s_expected
+
+
 def test_noqa():
     s_in = """a = 'my string {}, but also {} and {}'.format(var, f, cada_bra)  # noqa: flynt"""
     s_expected = """a = 'my string {}, but also {} and {}'.format(var, f, cada_bra)  # noqa: flynt"""

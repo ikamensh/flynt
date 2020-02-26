@@ -4,11 +4,16 @@ from typing import List, Tuple
 import astor
 
 from flynt.exceptions import FlyntException
+from flynt.string_concat.candidates import is_string_concat
+from flynt.string_concat.string_in_string import check_sns_depth
 
 
 def ast_formatted_value(
     val, fmt_str: str = None, conversion=None
 ) -> ast.FormattedValue:
+
+    if isinstance(val, ast.FormattedValue):
+        return val
 
     if astor.to_source(val)[0] == "{":
         raise FlyntException(
@@ -57,17 +62,34 @@ class FstringifyTransformer(ast.NodeTransformer):
         """
         Transforms a string concat to an f-string
         """
-        self.counter += 1
-        pieces = unpack_binop(node)
+        if is_string_concat(node):
+            self.counter += 1
+            left, right = node.left, node.right
+            left = self.visit(left)
+            right = self.visit(right)
 
-        segments = []
-        for p in pieces:
-            if isinstance(p, ast.Constant):
-                segments.append(ast_string_node(p.value))
-            else:
-                segments.append(ast_formatted_value(p))
+            if not check_sns_depth(left) or not check_sns_depth(right):
+                node.left = left
+                node.right = right
+                return node
 
-        return ast.JoinedStr(segments)
+            parts = []
+            for p in [left, right]:
+                if isinstance(p, ast.JoinedStr):
+                    parts += p.values
+                else:
+                    parts.append(p)
+
+            segments = []
+            for p in parts:
+                if isinstance(p, ast.Constant):
+                    segments.append(ast_string_node(p.value))
+                else:
+                    segments.append(ast_formatted_value(p))
+
+            return ast.JoinedStr(segments)
+        else:
+            return self.generic_visit(node)
 
 
 from flynt.format import QuoteTypes, set_quote_type
@@ -82,6 +104,7 @@ def transform_concat(code: str, *args, **kwargs) -> Tuple[str, bool]:
     new_code = astor.to_source(tree)
     if new_code[-1] == "\n":
         new_code = new_code[:-1]
-    new_code = set_quote_type(new_code, QuoteTypes.double)
+    if new_code[:4] == 'f"""':
+        new_code = set_quote_type(new_code, QuoteTypes.double)
 
     return new_code, ft.counter > 0
