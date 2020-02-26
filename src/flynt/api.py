@@ -40,7 +40,6 @@ def fstringify_file(
         new_code, fmt_changes = fstringify_code_by_line(
             contents, multiline=multiline, len_limit=len_limit
         )
-        print(new_code)
         if transform_concat:
             new_code, concat_changes = fstringify_concats(
                 new_code, multiline=multiline, len_limit=len_limit
