@@ -48,7 +48,8 @@ def fstringify_file(
     except Exception as e:
         if not state.quiet:
             print(f"Skipping fstrings transform of file {filename} due to {e}")
-            traceback.print_exc()
+            if state.verbose:
+                traceback.print_exc()
         result = default_result()
     else:
         if new_code == contents:
@@ -59,6 +60,8 @@ def fstringify_file(
                 ast_after = ast.parse(new_code)
             except SyntaxError:
                 print(f"Faulty result during conversion on {filename} - skipping.")
+                if state.verbose:
+                    traceback.print_exc()
                 return default_result()
 
             if not len(ast_before.body) == len(ast_after.body):

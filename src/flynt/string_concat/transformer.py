@@ -102,6 +102,8 @@ def transform_concat(code: str, *args, **kwargs) -> Tuple[str, bool]:
     new_code = astor.to_source(tree)
     if new_code[-1] == "\n":
         new_code = new_code[:-1]
+
+    new_code = new_code.replace("\n", "\\n")
     if new_code[:4] == 'f"""':
         new_code = set_quote_type(new_code, QuoteTypes.double)
 

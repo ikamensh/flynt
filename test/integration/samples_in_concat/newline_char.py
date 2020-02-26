@@ -1,0 +1,1 @@
+print( dumps(data) + "\n" )

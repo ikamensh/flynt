@@ -71,10 +71,11 @@ all_files_concat = pytest.fixture(
         "index.py",
         "mixed_format.py",
         "longer_line.py",
+        "newline_char.py",
     ]
 )
 
-# @pytest.fixture(params=["mixed_format.py"])
+# @pytest.fixture(params=["newline_char.py"])
 @all_files_concat
 def filename_concat(request):
     yield request.param
