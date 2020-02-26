@@ -1,5 +1,5 @@
-import sys
 import os
+import sys
 
 home = os.path.dirname(__file__)
 

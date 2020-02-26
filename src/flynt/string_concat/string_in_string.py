@@ -17,6 +17,9 @@ class SinSDetector(ast.NodeVisitor):
         self.generic_visit(node)
         self.sns_depth -= 1
 
+    def visit_FormattedValue(self, node):
+        self.visit(node.value)
+
 
 def check_sns_depth(node, limit=1):
     d = SinSDetector(limit)

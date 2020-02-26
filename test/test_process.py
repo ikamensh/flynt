@@ -4,6 +4,14 @@ import pytest
 from flynt import process
 
 
+def test_part_of_concat():
+    s_in = """print('blah{}'.format(thing) + 'blah' + otherThing + "is %d" % x)"""
+    s_expected = """print(f'blah{thing}' + 'blah' + otherThing + f"is {x:d}")"""
+
+    s_out, count = process.fstringify_code_by_line(s_in)
+    assert s_out == s_expected
+
+
 def test_one_string():
     s_in = """a = 'my string {}, but also {} and {}'.format(var, f, cada_bra)"""
     s_expected = """a = f'my string {var}, but also {f} and {cada_bra}'"""

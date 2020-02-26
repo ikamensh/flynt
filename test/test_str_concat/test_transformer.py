@@ -90,6 +90,18 @@ def test_string_in_string():
 
 
 @pytest.mark.skipif(sys.version_info < (3, 8), reason="requires python3.8 or higher")
+def test_concats_fstring():
+
+    txt = """print(f'blah{thing}' + 'blah' + otherThing + f"is {x:d}")"""
+    expected = """print(f'blah{thing}blah{otherThing}is {x:d}')"""
+
+    new, changed = transform_concat(txt)
+
+    assert changed
+    assert new == expected
+
+
+@pytest.mark.skipif(sys.version_info < (3, 8), reason="requires python3.8 or higher")
 def test_string_in_string_x3():
 
     txt = """'blah' + blah.blah('more' + vars.foo('other' + b))"""

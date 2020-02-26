@@ -53,7 +53,7 @@ def unpack_binop(node: ast.BinOp) -> List[ast.AST]:
     return result
 
 
-class FstringifyTransformer(ast.NodeTransformer):
+class ConcatTransformer(ast.NodeTransformer):
     def __init__(self):
         super().__init__()
         self.counter = 0
@@ -98,7 +98,7 @@ from flynt.format import QuoteTypes, set_quote_type
 def transform_concat(code: str, *args, **kwargs) -> Tuple[str, bool]:
     tree = ast.parse(code)
 
-    ft = FstringifyTransformer()
+    ft = ConcatTransformer()
     ft.visit(tree)
 
     new_code = astor.to_source(tree)

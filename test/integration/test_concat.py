@@ -2,7 +2,7 @@
 import os
 import sys
 import config
-from flynt.process import fstringify_concats
+from flynt.api import fstringify_file
 
 import pytest
 
@@ -36,6 +36,15 @@ def write_output_file(name, txt):
     filepath = os.path.join(out_dir, name)
     with open(filepath, "w") as f:
         f.write(txt)
+    return filepath
+
+
+def read_output_file(name):
+    filepath = os.path.join(out_dir, name)
+    with open(filepath) as f:
+        txt = f.read()
+
+    return txt
 
 
 def try_on_file_string_concat(filename: str, multiline):
@@ -44,9 +53,11 @@ def try_on_file_string_concat(filename: str, multiline):
     to test/integration/actual_out/something.py,
     and compare the result with test/integration/expected_out/something.py"""
     txt_in = read_in(filename)
-    out, edits = fstringify_concats(txt_in, multiline=multiline, len_limit=None)
+    path = write_output_file(filename, txt_in)
 
-    write_output_file(filename, out)
+    fstringify_file(path, multiline=multiline, len_limit=None, transform_concat=True)
+    out = read_output_file(filename)
+
     return out, read_expected(filename)
 
 
