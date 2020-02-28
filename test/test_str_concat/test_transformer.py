@@ -110,3 +110,27 @@ def test_string_in_string_x3():
 
     assert changed
     assert "'blah' +" in new
+
+
+@pytest.mark.skipif(sys.version_info < (3, 8), reason="requires python3.8 or higher")
+def test_existing_fstr():
+
+    txt = """f'blah{thing}' + otherThing + 'blah'"""
+    expected = '''f"blah{thing}{otherThing}blah"'''
+
+    new, changed = transform_concat(txt)
+
+    assert changed
+    assert new == expected
+
+
+@pytest.mark.skipif(sys.version_info < (3, 8), reason="requires python3.8 or higher")
+def test_existing_fstr_expr():
+
+    txt = """f'blah{thing}' + otherThing + f'blah{thing + 1}'"""
+    expected = '''f"blah{thing}{otherThing}blah{thing + 1}"'''
+
+    new, changed = transform_concat(txt)
+
+    assert changed
+    assert new == expected

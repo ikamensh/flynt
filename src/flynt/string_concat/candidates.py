@@ -11,6 +11,8 @@ def is_str_literal(node):
     """ Returns True if a node is a string literal """
     if isinstance(node, ast.Constant):
         return isinstance(node.value, str)
+    elif isinstance(node, ast.JoinedStr):
+        return True
     else:
         return False
 
