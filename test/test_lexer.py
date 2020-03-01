@@ -163,3 +163,9 @@ def test_indexed_percent():
         code[chunk.start_idx : chunk.end_idx]
         == '"Hello %s!" % flask.request.args[name]'
     )
+
+
+def test_tuple_percent():
+    code = """print("%s %s " % (var+var, abc))"""
+    generator = split.get_fstringify_chunks(tuple_in_list)
+    assert len(list(generator)) == 1

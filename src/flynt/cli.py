@@ -5,11 +5,11 @@ import sys
 
 from flynt.api import fstringify
 from flynt import state
-from config import __version__
+from flynt import __version__
 
 
 def main():
-    print(f"Running flynt v.{__version__} __init__")
+    print(f"Running flynt v.{__version__}")
     parser = argparse.ArgumentParser(
         description=f"flynt v.{__version__}", add_help=True, epilog=__doc__
     )
@@ -48,7 +48,7 @@ def main():
     )
 
     parser.add_argument(
-        "--process-concats",
+        "--transform-concats",
         action="store_true",
         default=False,
         help="Replace string concatenations (defined as + operations involving string literals) "

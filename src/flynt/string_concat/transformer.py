@@ -7,12 +7,12 @@ from flynt.exceptions import FlyntException
 from flynt.format import QuoteTypes, set_quote_type
 from flynt.string_concat.candidates import is_string_concat
 from flynt.string_concat.string_in_string import check_sns_depth
+from flynt.linting.fstr_lint import FstrInliner
 
 
 def ast_formatted_value(
     val, fmt_str: str = None, conversion=None
 ) -> ast.FormattedValue:
-
     if isinstance(val, ast.FormattedValue):
         return val
 
@@ -98,6 +98,8 @@ def transform_concat(code: str, *args, **kwargs) -> Tuple[str, bool]:
 
     ft = ConcatTransformer()
     ft.visit(tree)
+    il = FstrInliner()
+    il.visit(tree)
 
     new_code = astor.to_source(tree)
     if new_code[-1] == "\n":

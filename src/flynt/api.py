@@ -61,6 +61,7 @@ def _fstringify_file(
     except SyntaxError:
         print(f"Faulty result during conversion on {filename} - skipping.")
         if state.verbose:
+            print(new_code)
             traceback.print_exc()
         return default_result()
 
@@ -197,7 +198,7 @@ def _resolve_files(files_or_paths) -> List[str]:
             for abspath, filename in astor.code_to_ast.find_py_files(abs_path):
                 files.append(abspath)
         else:
-            files.append(os.path.dirname(abs_path))
+            files.append(abs_path)
 
         files = [f for f in files if all(b not in file_or_path for b in blacklist)]
     return files

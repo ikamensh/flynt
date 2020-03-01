@@ -4,6 +4,7 @@ from typing import Tuple
 from flynt import state
 from flynt.transform.format_call_transforms import joined_string, matching_call
 from flynt.transform.percent_transformer import transform_binop
+from flynt.linting.fstr_lint import FstrInliner
 
 
 class FstringifyTransformer(ast.NodeTransformer):
@@ -64,11 +65,8 @@ class FstringifyTransformer(ast.NodeTransformer):
                 if ng in node.left.s:
                     return node
             for ch in ast.walk(node.right):
-                # no nested binops!
-                if isinstance(ch, ast.BinOp):
-                    return node
                 # f-string expression part cannot include a backslash
-                elif isinstance(ch, ast.Str) and (
+                if isinstance(ch, ast.Str) and (
                     any(
                         map(
                             lambda x: x in ch.s,
@@ -91,5 +89,7 @@ class FstringifyTransformer(ast.NodeTransformer):
 def fstringify_node(node) -> Tuple[ast.AST, bool, bool]:
     ft = FstringifyTransformer()
     result = ft.visit(node)
+    il = FstrInliner()
+    il.visit(result)
 
     return result, ft.counter > 0, ft.string_in_string

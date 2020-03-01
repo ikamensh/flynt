@@ -5,6 +5,14 @@ import pytest
 from flynt import process
 
 
+def test_percent_tuple():
+    s_in = """print("%s %s " % (var+var, abc))"""
+    s_expected = """print(f"{var + var} {abc} ")"""
+
+    s_out, count = process.fstringify_code_by_line(s_in)
+    assert s_out == s_expected
+
+
 def test_part_of_concat():
     s_in = """print('blah{}'.format(thing) + 'blah' + otherThing + "is %d" % x)"""
     s_expected = """print(f'blah{thing}' + 'blah' + otherThing + f"is {x:d}")"""

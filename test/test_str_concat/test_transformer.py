@@ -134,3 +134,15 @@ def test_existing_fstr_expr():
 
     assert changed
     assert new == expected
+
+
+@pytest.mark.skipif(sys.version_info < (3, 8), reason="requires python3.8 or higher")
+def test_embedded_fstr():
+
+    txt = """print(f"{f'blah{var}' + abc}blah")"""
+    expected = """print(f'blah{var}{abc}blah')"""
+
+    new, changed = transform_concat(txt)
+
+    assert changed
+    assert new == expected
