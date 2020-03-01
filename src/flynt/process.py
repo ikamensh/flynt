@@ -8,8 +8,8 @@ from flynt.exceptions import FlyntException
 from flynt.format import QuoteTypes as qt
 from flynt.format import get_quote_type
 from flynt.lexer import split
-from flynt.string_concat import concat_candidates, transform_concat
 from flynt.transform.transform import transform_chunk
+from flynt.string_concat import concat_candidates, transform_concat
 
 noqa_regex = re.compile("#[ ]*noqa.*flynt")
 
@@ -23,15 +23,15 @@ class JoinTransformer:
         self,
         code: str,
         len_limit: int,
-        candidates_constructor: Callable = split.get_fstringify_chunks,
-        transform_func: Callable = transform_chunk,
+        candidates_iter_factory: Callable,
+        transform_func: Callable,
     ):
 
         if len_limit is None:
             len_limit = math.inf
 
         self.len_limit = len_limit
-        self.candidates_generator = candidates_constructor(code)
+        self.candidates_iter = candidates_iter_factory(code)
         self.transform_func = transform_func
         self.src_lines = code.split("\n")
 
@@ -44,7 +44,7 @@ class JoinTransformer:
 
     def fstringify_code_by_line(self):
         assert not self.used_up, "Tried to use JT twice."
-        for chunk in self.candidates_generator:
+        for chunk in self.candidates_iter:
             self.fill_up_to(chunk)
             self.try_chunk(chunk)
 
@@ -145,30 +145,32 @@ class JoinTransformer:
 
 def fstringify_code_by_line(code: str, multiline=True, len_limit=88) -> Tuple[str, int]:
     """ returns fstringified version of the code and amount of lines edited."""
-    if not multiline:
-        len_limit = 0
-        lexer.set_single_line()
-    else:
-        lexer.set_multiline()
-
-    jt = JoinTransformer(code, len_limit)
-
-    return jt.fstringify_code_by_line()
+    return _transform_code(
+        code, split.get_fstringify_chunks, transform_chunk, multiline, len_limit
+    )
 
 
 def fstringify_concats(code: str, multiline=True, len_limit=88) -> Tuple[str, int]:
+    """ replace string literal concatenations with f-string expressions. """
+    return _transform_code(
+        code, concat_candidates, transform_concat, multiline, len_limit
+    )
+
+
+def _transform_code(
+    code: str, candidates_iter_factory, transform_func, multiline, len_limit
+) -> Tuple[str, int]:
     """ returns fstringified version of the code and amount of lines edited."""
+
+    len_limit = _multiline_settings(len_limit, multiline)
+    jt = JoinTransformer(code, len_limit, candidates_iter_factory, transform_func)
+    return jt.fstringify_code_by_line()
+
+
+def _multiline_settings(len_limit, multiline):
     if not multiline:
         len_limit = 0
         lexer.set_single_line()
     else:
         lexer.set_multiline()
-
-    jt = JoinTransformer(
-        code,
-        len_limit,
-        candidates_constructor=concat_candidates,
-        transform_func=transform_concat,
-    )
-
-    return jt.fstringify_code_by_line()
+    return len_limit
