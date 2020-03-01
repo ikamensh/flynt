@@ -1,3 +1,4 @@
+"""This module keeps global state of flynt application instance."""
 verbose = False
 quiet = False
 

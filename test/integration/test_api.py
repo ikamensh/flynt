@@ -4,7 +4,7 @@ import shutil
 import pytest
 
 from flynt import api
-from flynt.api import fstringify_file
+from flynt.api import _fstringify_file
 
 
 @pytest.fixture()
@@ -32,7 +32,7 @@ def test_py2(py2_file):
     with open(py2_file) as f:
         content_before = f.read()
 
-    modified, _, _, _ = fstringify_file(py2_file, True, 1000)
+    modified, _, _, _ = _fstringify_file(py2_file, True, 1000)
 
     with open(py2_file) as f:
         content_after = f.read()
@@ -46,7 +46,7 @@ def test_works(formattable_file):
     with open(formattable_file) as f:
         content_before = f.read()
 
-    modified, _, _, _ = fstringify_file(formattable_file, True, 1000)
+    modified, _, _, _ = _fstringify_file(formattable_file, True, 1000)
 
     with open(formattable_file) as f:
         content_after = f.read()
@@ -65,7 +65,7 @@ def test_break_safe(formattable_file, monkeypatch):
 
     monkeypatch.setattr(api, "fstringify_code_by_line", broken_fstringify_by_line)
 
-    modified, _, _, _ = fstringify_file(formattable_file, True, 1000)
+    modified, _, _, _ = _fstringify_file(formattable_file, True, 1000)
 
     with open(formattable_file) as f:
         content_after = f.read()
@@ -84,7 +84,7 @@ def test_catches_subtle(formattable_file, monkeypatch):
 
     monkeypatch.setattr(api, "fstringify_code_by_line", broken_fstringify_by_line)
 
-    modified, _, _, _ = fstringify_file(formattable_file, True, 1000)
+    modified, _, _, _ = _fstringify_file(formattable_file, True, 1000)
 
     with open(formattable_file) as f:
         content_after = f.read()

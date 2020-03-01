@@ -1,3 +1,7 @@
+"""This module deals with quote types for strings.
+
+It includes checking the quote type and changing it."""
+
 import io
 import re
 import tokenize

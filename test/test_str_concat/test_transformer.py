@@ -68,8 +68,8 @@ def test_transform_attribute():
 @pytest.mark.skipif(sys.version_info < (3, 8), reason="requires python3.8 or higher")
 def test_transform_complex():
 
-    txt = """'blah' + lst[123].transform(x, y, z) + 'Yeah'"""
-    expected = '''f"blah{lst[123].transform(x, y, z)}Yeah"'''
+    txt = """'blah' + lst[123].process(x, y, z) + 'Yeah'"""
+    expected = '''f"blah{lst[123].process(x, y, z)}Yeah"'''
 
     new, changed = transform_concat(txt)
 

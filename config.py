@@ -1,9 +1,9 @@
 import os
 import sys
 
-home = os.path.dirname(__file__)
+__version__ = "0.45.5"
 
-print(sys.path)
+home = os.path.dirname(__file__)
 
 
 def add_src_to_path():

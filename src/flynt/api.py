@@ -3,7 +3,7 @@ import os
 import sys
 import time
 import traceback
-from typing import Tuple
+from typing import Tuple, List
 
 import astor
 
@@ -14,7 +14,7 @@ from flynt.process import fstringify_code_by_line, fstringify_concats
 blacklist = {".tox", "venv", "site-packages", ".eggs"}
 
 
-def fstringify_file(
+def _fstringify_file(
     filename, multiline, len_limit, transform_concat=False
 ) -> Tuple[bool, int, int, int]:
     """
@@ -45,35 +45,36 @@ def fstringify_file(
             )
             changes += concat_changes
             state.concat_changes += concat_changes
+
     except Exception as e:
         if not state.quiet:
             print(f"Skipping fstrings transform of file {filename} due to {e}")
             if state.verbose:
                 traceback.print_exc()
-        result = default_result()
-    else:
-        if new_code == contents:
-            result = default_result()
-        else:
+        return default_result()
 
-            try:
-                ast_after = ast.parse(new_code)
-            except SyntaxError:
-                print(f"Faulty result during conversion on {filename} - skipping.")
-                if state.verbose:
-                    traceback.print_exc()
-                return default_result()
+    if new_code == contents:
+        return default_result()
 
-            if not len(ast_before.body) == len(ast_after.body):
-                print(f"Faulty result during conversion on {filename} - skipping.")
-                return default_result()
+    try:
+        ast_after = ast.parse(new_code)
+    except SyntaxError:
+        print(f"Faulty result during conversion on {filename} - skipping.")
+        if state.verbose:
+            traceback.print_exc()
+        return default_result()
 
-            with open(filename, "w", encoding="utf-8") as f:
-                f.write(new_code)
+    if not len(ast_before.body) == len(ast_after.body):
+        print(
+            f"Faulty result during conversion on {filename}: "
+            f"statement count has changed, which is not intended - skipping."
+        )
+        return default_result()
 
-            result = True, changes, len(contents), len(new_code)
+    with open(filename, "w", encoding="utf-8") as f:
+        f.write(new_code)
 
-    return result
+    return True, changes, len(contents), len(new_code)
 
 
 def fstringify_files(files, multiline, len_limit, transform_concat):
@@ -82,12 +83,9 @@ def fstringify_files(files, multiline, len_limit, transform_concat):
     total_charcount_new = 0
     total_expressions = 0
     start_time = time.time()
-    for f in files:
-        if any(b in f[0] for b in blacklist):
-            continue
-        file_path = os.path.join(f[0], f[1])
-        changed, count_expressions, charcount_original, charcount_new = fstringify_file(
-            file_path, multiline, len_limit, transform_concat
+    for path in files:
+        changed, count_expressions, charcount_original, charcount_new = _fstringify_file(
+            path, multiline, len_limit, transform_concat
         )
         if changed:
             changed_files += 1
@@ -96,12 +94,12 @@ def fstringify_files(files, multiline, len_limit, transform_concat):
         total_charcount_new += charcount_new
 
         if state.verbose:
-            status = "yes" if count_expressions else "no"
-            print(f"fstringifying {file_path}...{status}")
-    total_time = round(time.time() - start_time, 3)
+            status = "modified" if count_expressions else "no change"
+            print(f"fstringifying {path}...{status}")
+    total_time = time.time() - start_time
 
     if not state.quiet:
-        print_report(
+        _print_report(
             changed_files,
             total_charcount_new,
             total_charcount_original,
@@ -112,11 +110,11 @@ def fstringify_files(files, multiline, len_limit, transform_concat):
     return changed_files
 
 
-def print_report(
+def _print_report(
     changed_files, total_cc_new, total_cc_original, total_expr, total_time
 ):
     print("\nFlynt run has finished. Stats:")
-    print(f"\nExecution time:                            {total_time}s")
+    print(f"\nExecution time:                            {total_time:.3f}s")
     print(f"Files modified:                            {changed_files}")
     if changed_files:
         cc_reduction = total_cc_original - total_cc_new
@@ -164,32 +162,11 @@ def print_report(
 
 
 def fstringify(
-    files_or_paths,
-    verbose,
-    quiet,
-    multiline,
-    len_limit,
-    fail_on_changes=False,
-    transform_concat=False,
+    files_or_paths, multiline, len_limit, fail_on_changes=False, transform_concat=False
 ):
     """ determine if a directory or a single file was passed, and f-stringify it."""
 
-    state.verbose = verbose
-    state.quiet = quiet
-
-    files = []
-
-    for file_or_path in files_or_paths:
-        abs_path = os.path.abspath(file_or_path)
-
-        if not os.path.exists(abs_path):
-            print(f"`{file_or_path}` not found")
-            sys.exit(1)
-
-        if os.path.isdir(abs_path):
-            files.extend(astor.code_to_ast.find_py_files(abs_path))
-        else:
-            files.append((os.path.dirname(abs_path), os.path.basename(abs_path)))
+    files = _resolve_files(files_or_paths)
 
     status = fstringify_files(
         files,
@@ -202,3 +179,25 @@ def fstringify(
         return status
     else:
         return 0
+
+
+def _resolve_files(files_or_paths) -> List[str]:
+    """Resolve relative paths and directory names into a list of absolute paths to python files."""
+
+    files = []
+    for file_or_path in files_or_paths:
+
+        abs_path = os.path.abspath(file_or_path)
+
+        if not os.path.exists(abs_path):
+            print(f"`{file_or_path}` not found")
+            sys.exit(1)
+
+        if os.path.isdir(abs_path):
+            for abspath, filename in astor.code_to_ast.find_py_files(abs_path):
+                files.append(abspath)
+        else:
+            files.append(os.path.dirname(abs_path))
+
+        files = [f for f in files if all(b not in file_or_path for b in blacklist)]
+    return files
