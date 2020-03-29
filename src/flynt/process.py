@@ -39,7 +39,7 @@ class JoinTransformer:
         self.count_expressions = 0
 
         self.last_line = 0
-        self.last_idx = None
+        self.last_idx = 0
         self.used_up = False
 
     def fstringify_code_by_line(self):
@@ -56,21 +56,15 @@ class JoinTransformer:
         start_line, start_idx, _ = (chunk.start_line, chunk.start_idx, chunk.end_idx)
         line = self.src_lines[start_line]
 
-        if self.last_idx is None:
+        if start_line == self.last_line:
+            self.results.append(
+                self.src_lines[self.last_line][self.last_idx : start_idx]
+            )
+        else:
+            self.results.append(self.src_lines[self.last_line][self.last_idx :] + "\n")
+            self.last_line += 1
             self.fill_up_to_line(start_line)
             self.results.append(line[:start_idx])
-        else:
-            if start_line == self.last_line:
-                self.results.append(
-                    self.src_lines[self.last_line][self.last_idx : start_idx]
-                )
-            else:
-                self.results.append(
-                    self.src_lines[self.last_line][self.last_idx :] + "\n"
-                )
-                self.last_line += 1
-                self.fill_up_to_line(start_line)
-                self.results.append(line[:start_idx])
 
         self.last_idx = start_idx
 
@@ -134,9 +128,8 @@ class JoinTransformer:
             self.last_idx = chunk.end_idx
 
     def add_rest(self):
-        if self.last_idx is not None:
-            self.results.append(self.src_lines[self.last_line][self.last_idx :] + "\n")
-            self.last_line += 1
+        self.results.append(self.src_lines[self.last_line][self.last_idx :] + "\n")
+        self.last_line += 1
 
         while len(self.src_lines) > self.last_line:
             self.results.append(self.src_lines[self.last_line] + "\n")
