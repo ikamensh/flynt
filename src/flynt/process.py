@@ -80,10 +80,9 @@ class JoinTransformer:
                 # user does not wish for this line to be converted.
                 return
 
-        line = self.src_lines[chunk.start_line]
-
         contract_lines = chunk.n_lines - 1
         if contract_lines == 0:
+            line = self.src_lines[chunk.start_line]
             rest = line[chunk.end_idx :]
         else:
             next_line = self.src_lines[chunk.start_line + contract_lines]

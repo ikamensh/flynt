@@ -93,6 +93,8 @@ class Chunk:
         else:
             if self.percent_ongoing:
                 self.tokens.append(t)
+                if t.is_string() and not '{' in str(self):
+                    self.string_in_string = True
                 if self.is_parseable:
                     self.percent_ongoing = False
                     self.successful = True
