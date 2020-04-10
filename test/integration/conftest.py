@@ -52,6 +52,7 @@ all_files = pytest.fixture(
         "str_literal.py",
         "tuple_in_list.py",
         "two_liner.py",
+        "unicode.py",
     ]
 )
 

@@ -5,6 +5,14 @@ import pytest
 from flynt import process
 
 
+def test_unicode():
+    s_in = r"""x = 'a\xA0%s' % a"""
+    s_expected = r"""x = f'a\xa0{a}'"""
+
+    s_out, count = process.fstringify_code_by_line(s_in)
+    assert s_out == s_expected
+
+
 def test_percent_tuple():
     s_in = """print("%s %s " % (var+var, abc))"""
     s_expected = """print(f"{var + var} {abc} ")"""

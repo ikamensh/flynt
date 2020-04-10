@@ -53,8 +53,7 @@ class JoinTransformer:
         return "".join(self.results)[:-1], self.count_expressions
 
     def fill_up_to(self, chunk):
-        start_line, start_idx, _ = (chunk.start_line, chunk.start_idx, chunk.end_idx)
-        line = self.src_lines[start_line]
+        start_line, start_idx = chunk.start_line, chunk.start_idx
 
         if start_line == self.last_line:
             self.results.append(
@@ -64,9 +63,26 @@ class JoinTransformer:
             self.results.append(self.src_lines[self.last_line][self.last_idx :] + "\n")
             self.last_line += 1
             self.fill_up_to_line(start_line)
+            line = self.src_lines[start_line]
             self.results.append(line[:start_idx])
 
         self.last_idx = start_idx
+
+    def code_in(self, chunk):
+        start_line, start_idx = chunk.start_line, chunk.start_idx
+        end_line, end_idx = chunk.end_line, chunk.end_idx
+
+
+        if start_line == end_line:
+            return self.src_lines[start_line][start_idx: end_idx]
+        else:
+            result = []
+            result.append(self.src_lines[start_line][start_idx:])
+            for line in range(start_line + 1, end_line):
+                result.append(self.src_lines[line])
+            result.append(self.src_lines[end_line][:end_idx])
+            return '\n'.join(result)
+
 
     def fill_up_to_line(self, start_line):
         while self.last_line < start_line:
