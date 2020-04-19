@@ -123,7 +123,7 @@ print('%s' % foo) # prints '1'
 print(f'{foo}')   # prints '(1,)'
 ```
 
-Furthermore, some arguments cause formatting of strings to throw exceptions, e.g. print('%d' % 'bla'). While most cases are covered by taking the formatting specifiers to the f-strings format, the precise exception behaviour might differ as well.
+Furthermore, some arguments cause formatting of strings to throw exceptions. One example where f-strings are inconsistent with previous formatting is %d vs {:d} - new format no longer accepts floats. While most cases are covered by taking the formatting specifiers to the f-strings format, the precise exception behaviour might differ as well. Make sure you have sufficient test coverage.
 
 ### Other Credits / Dependencies / Links
 
