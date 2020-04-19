@@ -6,7 +6,7 @@ from typing import Tuple
 import astor
 
 from flynt import state
-from flynt.exceptions import FlyntException
+from flynt.exceptions import FlyntException, ConversionRefused
 from flynt.format import QuoteTypes, set_quote_type
 from flynt.transform.FstringifyTransformer import fstringify_node
 
@@ -29,8 +29,12 @@ def transform_chunk(
         converted, changed, str_in_str = fstringify_node(copy.deepcopy(tree))
     except (SyntaxError, FlyntException, Exception) as e:
         if state.verbose:
-            print(f"Exception {e} during conversion of code '{code}'")
-            traceback.print_exc()
+            if isinstance(e, ConversionRefused):
+                print(f"Not converting code '{code}': {e}")
+                print(e)
+            else:
+                print(f"Exception {e} during conversion of code '{code}'")
+                traceback.print_exc()
         state.invalid_conversions += 1
         return code, False
     else:

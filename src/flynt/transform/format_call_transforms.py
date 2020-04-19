@@ -4,7 +4,7 @@ from collections import deque
 
 import astor
 
-from flynt.exceptions import FlyntException
+from flynt.exceptions import FlyntException, ConversionRefused
 
 
 def ast_formatted_value(
@@ -93,8 +93,8 @@ def joined_string(fmt_call: ast.Call) -> ast.JoinedStr:
             if suffix:
                 ast_name = ast.Attribute(value=ast_name, attr=suffix)
             new_segments.append(ast_formatted_value(ast_name, fmt_str, conversion))
-        except IndexError as e:
-            raise FlyntException(
+        except KeyError as e:
+            raise ConversionRefused(
                 "A variable is used multiple times - better not to replace it."
             ) from e
 
