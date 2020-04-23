@@ -1,0 +1,8 @@
+- id: flynt
+  name: flynt
+  description: "flynt: command line tool to automatically convertd .format(...) strings into Python 3.6+'s "f-strings"."
+  entry: flynt
+  language: python
+  language_version: python3.6
+  require_serial: true
+  types: [python]
