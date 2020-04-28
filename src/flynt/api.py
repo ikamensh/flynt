@@ -195,8 +195,8 @@ def _resolve_files(files_or_paths) -> List[str]:
             sys.exit(1)
 
         if os.path.isdir(abs_path):
-            for abspath, filename in astor.code_to_ast.find_py_files(abs_path):
-                files.append(abspath)
+            for folder, filename in astor.code_to_ast.find_py_files(abs_path):
+                files.append(os.path.join(folder, filename))
         else:
             files.append(abs_path)
 
