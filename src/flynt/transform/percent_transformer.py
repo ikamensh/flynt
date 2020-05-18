@@ -4,6 +4,7 @@ from collections import deque
 
 from flynt.exceptions import FlyntException
 from flynt.transform.format_call_transforms import ast_formatted_value, ast_string_node
+from flynt import state
 
 FORMATS = "diouxXeEfFgGcrsa"
 
@@ -26,7 +27,7 @@ conversion_methods = {"r": "!r", "a": "!a", "s": None}
 def formatted_value(fmt_prefix, fmt_spec, val):
 
     if fmt_spec in conversion_methods:
-        if fmt_prefix:
+        if not state.aggressive and fmt_prefix:
             raise FlyntException(
                 "Default text alignment has changed between percent fmt and fstrings. "
                 "Proceeding would result in changed code behaviour."

@@ -2,7 +2,16 @@ import sys
 
 import pytest
 
-from flynt import process
+from flynt import process, state
+
+
+def test_string_specific_len(monkeypatch):
+    s_in = """'%5s' % CLASS_NAMES[labels[j]]"""
+    s_expected = """f'{CLASS_NAMES[labels[j]]:5}'"""
+
+    monkeypatch.setattr(state, "aggressive", True)
+    s_out, count = process.fstringify_code_by_line(s_in)
+    assert s_out == s_expected
 
 
 def test_string_in_string_single():

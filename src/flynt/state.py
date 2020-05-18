@@ -1,6 +1,8 @@
-"""This module keeps global state of flynt application instance."""
+"""This module contains global state of flynt application instance."""
+
 verbose = False
 quiet = False
+aggressive = False
 
 percent_candidates = 0
 percent_transforms = 0

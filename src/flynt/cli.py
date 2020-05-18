@@ -16,10 +16,10 @@ def main():
 
     verbosity_group = parser.add_mutually_exclusive_group()
     verbosity_group.add_argument(
-        "--verbose", action="store_true", help="run with verbose output", default=False
+        "-v", "--verbose", action="store_true", help="run with verbose output", default=False
     )
     verbosity_group.add_argument(
-        "--quiet", action="store_true", help="run without output", default=False
+        "-q", "--quiet", action="store_true", help="run without output", default=False
     )
 
     multiline_group = parser.add_mutually_exclusive_group()
@@ -39,6 +39,7 @@ def main():
     )
 
     multiline_group.add_argument(
+        "-ll",
         "--line-length",
         action="store",
         help="for expressions spanning multiple lines, convert only if "
@@ -48,6 +49,7 @@ def main():
     )
 
     parser.add_argument(
+        "-tc",
         "--transform-concats",
         action="store_true",
         default=False,
@@ -56,11 +58,21 @@ def main():
     )
 
     parser.add_argument(
+        "-f",
         "--fail-on-change",
         action="store_true",
         default=False,
         help="Fail when changing files (for linting purposes)",
     )
+
+    parser.add_argument(
+        "-a",
+        "--aggressive",
+        action="store_true",
+        default=False,
+        help="Include conversions with potentially changed behavior.",
+    )
+
     parser.add_argument(
         "src", action="store", nargs="+", help="source file(s) or directory"
     )
@@ -74,6 +86,7 @@ def main():
                 installed to a python3.8+ interpreter. Currently using {sys.version_info}."""
             )
 
+    state.aggressive = args.aggressive
     state.verbose = args.verbose
     state.quiet = args.quiet
 
