@@ -148,7 +148,7 @@ def _print_report(
                 f"{state.concat_candidates} ({state.concat_changes / state.concat_candidates:.1%})"
             )
         else:
-            print("No `.format(...)` calls attempted.")
+            print("No concatenations attempted.")
 
         print(f"F-string expressions created:              {total_expr}")
 

@@ -35,18 +35,19 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
-  --verbose             run with verbose output
-  --quiet               run without output
+  -a, --aggressive      allow 'unsafe' conversions with potentially different behavior
+  -v, --verbose         run with verbose output
+  -q, --quiet           run without output
   --no-multiline        convert only single line expressions
-  --line-length LINE_LENGTH
+  -ll, --line-length LINE_LENGTH
                         for expressions spanning multiple lines, convert only
                         if the resulting single line will fit into the line
                         length limit. Default value is 88 characters.
-  --transform-concats   Replace string concatenations (defined as + operations 
+  -tc, --transform-concats   Replace string concatenations (defined as + operations 
                         involving string literals) with f-strings. 
                         Available only if flynt is installed with
                         3.8+ interpreter.
-  --fail-on-change      Fail when changing files (for linting purposes)
+  -f, --fail-on-change      Fail when changing files (for linting purposes)
 ```
 
 ### Sample output of a successful run:
