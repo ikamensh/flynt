@@ -37,6 +37,14 @@ def formatted_value(fmt_prefix, fmt_spec, val):
         )
     else:
         fmt_spec = translate_conversion_types.get(fmt_spec, fmt_spec)
+        if fmt_spec == 'd':
+            if state.aggressive:
+                val = ast.Call(func=ast.Name(id='int', ctx=ast.Load()), args=[val], keywords={})
+                fmt_spec = ''
+            else:
+                raise FlyntException(
+                    "Skipping %d formatting - fstrings behave differently from % formatting."
+                )
         fv = ast_formatted_value(val, fmt_str=fmt_prefix + fmt_spec)
     return fv
 
