@@ -80,14 +80,6 @@ class JoinTransformer:
                 # user does not wish for this line to be converted.
                 return
 
-        contract_lines = chunk.n_lines - 1
-        if contract_lines == 0:
-            line = self.src_lines[chunk.start_line]
-            rest = line[chunk.end_idx :]
-        else:
-            next_line = self.src_lines[chunk.start_line + contract_lines]
-            rest = next_line[chunk.end_idx :]
-
         try:
             if chunk.string_in_string:
                 quote_type = qt.double
@@ -102,6 +94,13 @@ class JoinTransformer:
         else:
             converted, changed = self.transform_func(str(chunk), quote_type=quote_type)
             if changed:
+                contract_lines = chunk.n_lines - 1
+                if contract_lines == 0:
+                    line = self.src_lines[chunk.start_line]
+                    rest = line[chunk.end_idx:]
+                else:
+                    next_line = self.src_lines[chunk.start_line + contract_lines]
+                    rest = next_line[chunk.end_idx:]
                 self.maybe_replace(chunk, contract_lines, converted, rest)
 
     def maybe_replace(self, chunk, contract_lines, converted, rest):
