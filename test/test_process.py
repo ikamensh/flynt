@@ -4,12 +4,15 @@ import pytest
 
 from flynt import process, state
 
+@pytest.fixture()
+def aggressive(monkeypatch):
+    monkeypatch.setattr(state, "aggressive", True)
+    yield
 
-def test_string_specific_len(monkeypatch):
+def test_string_specific_len(aggressive):
     s_in = """'%5s' % CLASS_NAMES[labels[j]]"""
     s_expected = """f'{CLASS_NAMES[labels[j]]:5}'"""
 
-    monkeypatch.setattr(state, "aggressive", True)
     s_out, count = process.fstringify_code_by_line(s_in)
     assert s_out == s_expected
 
@@ -31,8 +34,8 @@ def test_percent_tuple():
 
 
 def test_part_of_concat():
-    s_in = """print('blah{}'.format(thing) + 'blah' + otherThing + "is %d" % x)"""
-    s_expected = """print(f'blah{thing}' + 'blah' + otherThing + f"is {x:d}")"""
+    s_in = """print('blah{}'.format(thing) + 'blah' + otherThing + "is %f" % x)"""
+    s_expected = """print(f'blah{thing}' + 'blah' + otherThing + f"is {x:f}")"""
 
     s_out, count = process.fstringify_code_by_line(s_in)
     assert s_out == s_expected
@@ -201,8 +204,8 @@ def test_empty_line():
 
 
 def test_dict_perc():
-    s_in = "{'r': '%d' % row_idx}"
-    s_expected = """{'r': f'{row_idx:d}'}"""
+    s_in = "{'r': '%s' % row_idx}"
+    s_expected = """{'r': f'{row_idx}'}"""
 
     assert process.fstringify_code_by_line(s_in)[0] == s_expected
 
@@ -228,9 +231,9 @@ def test_percent_dict():
     assert process.fstringify_code_by_line(s_in)[0] == s_expected
 
 
-def test_percent_dict_fmt():
+def test_percent_dict_fmt(aggressive):
     s_in = """a = '%(?)ld world' % {'?': var}"""
-    s_expected = """a = f'{var:d} world'"""
+    s_expected = """a = f'{int(var)} world'"""
 
     assert process.fstringify_code_by_line(s_in)[0] == s_expected
 
@@ -264,9 +267,9 @@ def test_percent_attr():
     assert out == s_expected
 
 
-def test_legacy_fmtspec():
+def test_legacy_fmtspec(aggressive):
     s_in = """d = '%i' % var"""
-    s_expected = """d = f'{var:d}'"""
+    s_expected = """d = f'{int(var)}'"""
 
     out, count = process.fstringify_code_by_line(s_in)
     assert out == s_expected
@@ -298,9 +301,9 @@ def test_decimal_precision():
     assert out == s_expected
 
 
-def test_width_spec():
-    s_in = "{'r': '%03d' % row_idx}"
-    s_expected = """{'r': f'{row_idx:03d}'}"""
+def test_width_spec(aggressive):
+    s_in = "{'r': '%03f' % row_idx}"
+    s_expected = """{'r': f'{row_idx:03f}'}"""
 
     assert process.fstringify_code_by_line(s_in)[0] == s_expected
 

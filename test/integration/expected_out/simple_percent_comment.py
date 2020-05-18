@@ -1,2 +1,2 @@
 var = 5
-a = f"Test: {var:d}" # cool formatting!
+a = f"Test: {var}" # cool formatting!

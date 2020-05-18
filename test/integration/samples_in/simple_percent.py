@@ -1,2 +1,2 @@
 var = 5
-a = "Test: %d" % var
+a = "Test: %s" % var

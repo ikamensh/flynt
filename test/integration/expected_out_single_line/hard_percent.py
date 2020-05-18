@@ -12,7 +12,7 @@ coord = (1, 2)
 c = f'{coord[1]:f} {coord[0]:f}'
 print(c)
 
-d = f'{i:d}'
+d = '%i' % i
 e = f'{i:.03f}'
 
 print(d,e)

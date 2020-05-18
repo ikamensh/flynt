@@ -1,9 +1,10 @@
-v.0.47
+
+#### v.0.47
 
 * added the changelog.
 * added `-a / --aggressive` flag to enable risky 
 (with behaviour potentially different from original) transformations. 
-This currently includes only "%5" % var -> f"{var:5}" transformation. 
+This currently includes "%5" % var -> f"{var:5}" transformation. 
 Demo of unsafe behavior: 
 
 ```
@@ -21,6 +22,9 @@ print( f"|{111:5}|{999_999:5}|{77:5}|" )
 """
 ```
 
+* %d format specifier is transformed only in `--aggressive` mode, 
+and will result in `"%d" % var` -> `f"{int(var)}"`. See https://github.com/ikamensh/flynt/issues/59.
+
 * added short versions to other flags:
 ```
 --line-length, -l
@@ -29,3 +33,4 @@ print( f"|{111:5}|{999_999:5}|{77:5}|" )
 --quiet, -q
 --fail-on-change, -f
 ```
+

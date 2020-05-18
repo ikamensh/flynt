@@ -1,3 +1,3 @@
 a = 2
 b = "wuga"
-print(f'{a:d} {b}')
+print(f'{a:f} {b}')
