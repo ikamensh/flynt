@@ -187,7 +187,7 @@ def fstringify(
         return 0
 
 
-def _resolve_files(files_or_paths, excluded_files_or_paths=None) -> List[str]:
+def _resolve_files(files_or_paths, excluded_files_or_paths) -> List[str]:
     """Resolve relative paths and directory names into a list of absolute paths to python files."""
 
     files = []
