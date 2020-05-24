@@ -9,6 +9,14 @@ def aggressive(monkeypatch):
     monkeypatch.setattr(state, "aggressive", True)
     yield
 
+
+def test_call():
+    s_in = """'%s' % fn(var)"""
+    s_expected = """f'{fn(var)}'"""
+
+    s_out, count = process.fstringify_code_by_line(s_in)
+    assert s_out == s_expected
+
 def test_string_specific_len(aggressive):
     s_in = """'%5s' % CLASS_NAMES[labels[j]]"""
     s_expected = """f'{CLASS_NAMES[labels[j]]:5}'"""

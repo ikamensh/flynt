@@ -169,7 +169,7 @@ def transform_generic(node):
 
 def transform_binop(node):
     if isinstance(
-        node.right, (ast.Name, ast.Attribute, ast.Str, ast.BinOp, ast.Subscript)
+        node.right, (ast.Name, ast.Attribute, ast.Str, ast.BinOp, ast.Subscript, ast.Call)
     ):
         return transform_generic(node)
 

@@ -52,7 +52,7 @@ class FstringifyTransformer(ast.NodeTransformer):
             and isinstance(node.op, ast.Mod)
             and isinstance(
                 node.right,
-                (ast.Tuple, ast.Name, ast.Attribute, ast.Str, ast.Subscript, ast.Dict),
+                (ast.Tuple, ast.Name, ast.Attribute, ast.Str, ast.Subscript, ast.Dict, ast.Call),
             )
         )
 
