@@ -78,13 +78,14 @@ def main():
     )
 
     parser.add_argument(
-        "src", action="store", nargs="+", help="source file(s) or directory"
-    )
-    parser.add_argument(
         "--exclude",
         action="store",
         nargs="+",
-        help="source file(s) or directory to ignore",
+        help="ignore files with given strings in it's absolute path.",
+    )
+
+    parser.add_argument(
+        "src", action="store", nargs="+", help="source file(s) or directory"
     )
 
     args = parser.parse_args()
