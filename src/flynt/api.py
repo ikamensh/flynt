@@ -163,11 +163,16 @@ def _print_report(
 
 
 def fstringify(
-    files_or_paths, multiline, len_limit, fail_on_changes=False, transform_concat=False
+    files_or_paths,
+    multiline,
+    len_limit,
+    fail_on_changes=False,
+    transform_concat=False,
+    excluded_files_or_paths=None,
 ):
     """ determine if a directory or a single file was passed, and f-stringify it."""
 
-    files = _resolve_files(files_or_paths)
+    files = _resolve_files(files_or_paths, excluded_files_or_paths)
 
     status = fstringify_files(
         files,
@@ -182,10 +187,14 @@ def fstringify(
         return 0
 
 
-def _resolve_files(files_or_paths) -> List[str]:
+def _resolve_files(files_or_paths, excluded_files_or_paths) -> List[str]:
     """Resolve relative paths and directory names into a list of absolute paths to python files."""
 
     files = []
+    _blacklist = blacklist.copy()
+    if excluded_files_or_paths is not None:
+        _blacklist.update(set(excluded_files_or_paths))
+
     for file_or_path in files_or_paths:
 
         abs_path = os.path.abspath(file_or_path)
@@ -200,5 +209,5 @@ def _resolve_files(files_or_paths) -> List[str]:
         else:
             files.append(abs_path)
 
-        files = [f for f in files if all(b not in file_or_path for b in blacklist)]
+    files = [f for f in files if all(b not in f for b in _blacklist)]
     return files

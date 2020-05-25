@@ -16,7 +16,11 @@ def main():
 
     verbosity_group = parser.add_mutually_exclusive_group()
     verbosity_group.add_argument(
-        "-v", "--verbose", action="store_true", help="run with verbose output", default=False
+        "-v",
+        "--verbose",
+        action="store_true",
+        help="run with verbose output",
+        default=False,
     )
     verbosity_group.add_argument(
         "-q", "--quiet", action="store_true", help="run without output", default=False
@@ -76,6 +80,12 @@ def main():
     parser.add_argument(
         "src", action="store", nargs="+", help="source file(s) or directory"
     )
+    parser.add_argument(
+        "--exclude",
+        action="store",
+        nargs="+",
+        help="source file(s) or directory to ignore",
+    )
 
     args = parser.parse_args()
 
@@ -92,6 +102,7 @@ def main():
 
     return fstringify(
         args.src,
+        excluded_files_or_paths=args.exclude,
         multiline=not args.no_multiline,
         len_limit=int(args.line_length),
         fail_on_changes=args.fail_on_change,
