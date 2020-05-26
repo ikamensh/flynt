@@ -25,30 +25,31 @@ It turns the code it runs on into Python 3.6+, since 3.6 is when "f-strings" wer
 
 ### Command line options
 ```
-usage: flynt [-h] [--verbose | --quiet]
-             [--no-multiline | --line-length LINE_LENGTH]
-             [--transform-concats] [--fail-on-change]
-             src [src ...]
+flynt v.0.48
+
+usage:  flynt [-h] [-v | -q] 
+        [--no-multiline | -ll LINE_LENGTH] 
+        [-tc] [-f] [-a] [-e EXCLUDE [EXCLUDE ...]] 
+        src [src ...]
 
 positional arguments:
   src                   source file(s) or directory
 
 optional arguments:
   -h, --help            show this help message and exit
-  -a, --aggressive      allow 'unsafe' conversions with potentially different behavior
   -v, --verbose         run with verbose output
   -q, --quiet           run without output
   --no-multiline        convert only single line expressions
-  -ll, --line-length LINE_LENGTH
-                        for expressions spanning multiple lines, convert only
-                        if the resulting single line will fit into the line
-                        length limit. Default value is 88 characters.
-  -tc, --transform-concats   Replace string concatenations (defined as + operations 
-                        involving string literals) with f-strings. 
-                        Available only if flynt is installed with
-                        3.8+ interpreter.
-  -f, --fail-on-change      Fail when changing files (for linting purposes)  --exclude EXCLUDE [EXCLUDE ...]
-                        source file(s) or directory to ignore
+  -ll LINE_LENGTH, --line-length LINE_LENGTH
+                        for expressions spanning multiple lines, convert only if the resulting single line will fit into the line length limit. Default value is 88 characters.
+  -tc, --transform-concats
+                        Replace string concatenations (defined as + operations involving string literals) with f-strings. Available only if flynt is installed with 3.8+
+                        interpreter.
+  -f, --fail-on-change  Fail when changing files (for linting purposes)
+  -a, --aggressive      Include conversions with potentially changed behavior.
+  -e EXCLUDE [EXCLUDE ...], --exclude EXCLUDE [EXCLUDE ...]
+                        ignore files with given strings in it's absolute path.
+
 ```
 
 ### Sample output of a successful run:

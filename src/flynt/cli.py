@@ -78,6 +78,7 @@ def main():
     )
 
     parser.add_argument(
+        "-e",
         "--exclude",
         action="store",
         nargs="+",
