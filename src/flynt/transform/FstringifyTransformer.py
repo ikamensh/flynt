@@ -3,7 +3,7 @@ from typing import Tuple
 
 from flynt import state
 from flynt.transform.format_call_transforms import joined_string, matching_call
-from flynt.transform.percent_transformer import transform_binop
+from flynt.transform.percent_transformer import transform_binop, supported_operands
 from flynt.linting.fstr_lint import FstrInliner
 
 
@@ -52,7 +52,7 @@ class FstringifyTransformer(ast.NodeTransformer):
             and isinstance(node.op, ast.Mod)
             and isinstance(
                 node.right,
-                (ast.Tuple, ast.Name, ast.Attribute, ast.Str, ast.Subscript, ast.Dict, ast.Call),
+                tuple( [ast.Tuple, ast.Dict] + supported_operands),
             )
         )
 

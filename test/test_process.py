@@ -4,10 +4,27 @@ import pytest
 
 from flynt import process, state
 
+
 @pytest.fixture()
 def aggressive(monkeypatch):
     monkeypatch.setattr(state, "aggressive", True)
     yield
+
+
+def test_ifexpr():
+    s_in = """'%s' % (a if c else b)"""
+    s_expected = """f'{a if c else b}'"""
+
+    s_out, count = process.fstringify_code_by_line(s_in)
+    assert s_out == s_expected
+
+
+def test_binop():
+    s_in = """'%s' % (a+b+c)"""
+    s_expected = """f'{a + b + c}'"""
+
+    s_out, count = process.fstringify_code_by_line(s_in)
+    assert s_out == s_expected
 
 
 def test_call():
@@ -16,6 +33,7 @@ def test_call():
 
     s_out, count = process.fstringify_code_by_line(s_in)
     assert s_out == s_expected
+
 
 def test_string_specific_len(aggressive):
     s_in = """'%5s' % CLASS_NAMES[labels[j]]"""
