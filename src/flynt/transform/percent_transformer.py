@@ -37,10 +37,12 @@ def formatted_value(fmt_prefix, fmt_spec, val):
         )
     else:
         fmt_spec = translate_conversion_types.get(fmt_spec, fmt_spec)
-        if fmt_spec == 'd':
+        if fmt_spec == "d":
             if state.aggressive:
-                val = ast.Call(func=ast.Name(id='int', ctx=ast.Load()), args=[val], keywords={})
-                fmt_spec = ''
+                val = ast.Call(
+                    func=ast.Name(id="int", ctx=ast.Load()), args=[val], keywords={}
+                )
+                fmt_spec = ""
             else:
                 raise FlyntException(
                     "Skipping %d formatting - fstrings behave differently from % formatting."
@@ -167,9 +169,21 @@ def transform_generic(node):
     return transform_tuple(node), False
 
 
+supported_operands = [
+    ast.Name,
+    ast.Attribute,
+    ast.Str,
+    ast.Subscript,
+    ast.Call,
+    ast.BinOp,
+    ast.IfExp
+]
+
+
 def transform_binop(node):
     if isinstance(
-        node.right, (ast.Name, ast.Attribute, ast.Str, ast.BinOp, ast.Subscript, ast.Call)
+        node.right,
+        tuple(supported_operands),
     ):
         return transform_generic(node)
 
