@@ -31,7 +31,6 @@ def transform_chunk(
         if state.verbose:
             if isinstance(e, ConversionRefused):
                 print(f"Not converting code '{code}': {e}")
-                print(e)
             else:
                 print(f"Exception {e} during conversion of code '{code}'")
                 traceback.print_exc()

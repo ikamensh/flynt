@@ -90,15 +90,18 @@ def joined_string(fmt_call: ast.Call) -> ast.JoinedStr:
 
         try:
             ast_name = var_map.pop(identifier)
-            if suffix:
-                ast_name = ast.Attribute(value=ast_name, attr=suffix)
-            new_segments.append(ast_formatted_value(ast_name, fmt_str, conversion))
         except KeyError as e:
             raise ConversionRefused(
-                "A variable is used multiple times - better not to replace it."
+                f"A variable {identifier} is used multiple times - better not to replace it."
             ) from e
 
+        if suffix:
+            ast_name = ast.Attribute(value=ast_name, attr=suffix)
+        new_segments.append(ast_formatted_value(ast_name, fmt_str, conversion))
+
     if var_map:
-        raise FlyntException("A variable was never used - a risk of bug.")
+        raise FlyntException(
+            f"Some variables were never used: {var_map} - skipping conversion, it's a risk of bug."
+        )
 
     return ast.JoinedStr(new_segments)

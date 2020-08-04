@@ -55,7 +55,7 @@ def _fstringify_file(
             print(f"Skipping fstrings transform of file {filename} due to {msg}.")
             if state.verbose:
                 traceback.print_exc()
-                
+
         return default_result()
 
     if new_code == contents:
