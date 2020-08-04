@@ -2,6 +2,7 @@ import math
 import re
 import traceback
 from typing import Callable, Tuple
+import string
 
 from flynt import lexer, state
 from flynt.exceptions import FlyntException
@@ -97,10 +98,10 @@ class JoinTransformer:
                 contract_lines = chunk.n_lines - 1
                 if contract_lines == 0:
                     line = self.src_lines[chunk.start_line]
-                    rest = line[chunk.end_idx:]
+                    rest = line[chunk.end_idx :]
                 else:
                     next_line = self.src_lines[chunk.start_line + contract_lines]
-                    rest = next_line[chunk.end_idx:]
+                    rest = next_line[chunk.end_idx :]
                 self.maybe_replace(chunk, contract_lines, converted, rest)
 
     def maybe_replace(self, chunk, contract_lines, converted, rest):
@@ -120,10 +121,32 @@ class JoinTransformer:
         else:
             lines_fit = True
         if not contract_lines or lines_fit:
+
             self.results.append(converted)
             self.count_expressions += 1
             self.last_line += contract_lines
             self.last_idx = chunk.end_idx
+
+            # remove redundant parenthesis
+            if len(self.results) < 2 or not self.results[-2]:
+                return
+            elif len(self.src_lines[self.last_line]) == self.last_idx:
+                return
+
+            if (
+                self.results[-2][-1] == "("
+                and self.src_lines[self.last_line][self.last_idx] == ")"
+            ):
+                for char in reversed(self.results[-2][:-1]):
+                    if char in string.whitespace:
+                        continue
+                    elif char in "(=[+*":
+                        break
+                    else:
+                        return
+
+                self.results[-2] = self.results[-2][:-1]
+                self.last_idx += 1
 
     def add_rest(self):
         self.results.append(self.src_lines[self.last_line][self.last_idx :] + "\n")

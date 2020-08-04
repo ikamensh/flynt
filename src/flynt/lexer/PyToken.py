@@ -43,7 +43,9 @@ class PyToken:
         return self.toknum == token.STRING
 
     def get_quote_type(self):
-        assert self.toknum is token.STRING
+        if self.toknum is not token.STRING:
+            return None
+
         for qt in QuoteTypes.all:
             if self.tokval[: len(qt)] == qt and self.tokval[-len(qt) :] == qt:
                 return qt
