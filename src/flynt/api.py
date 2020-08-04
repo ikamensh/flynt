@@ -48,9 +48,14 @@ def _fstringify_file(
 
     except Exception as e:
         if not state.quiet:
-            print(f"Skipping fstrings transform of file {filename} due to {e}")
+            if str(e):
+                msg = str(e)
+            else:
+                msg = e.__class__.__name__
+            print(f"Skipping fstrings transform of file {filename} due to {msg}.")
             if state.verbose:
                 traceback.print_exc()
+                
         return default_result()
 
     if new_code == contents:
