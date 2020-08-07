@@ -42,6 +42,8 @@ optional arguments:
   --no-multiline        convert only single line expressions
   -ll LINE_LENGTH, --line-length LINE_LENGTH
                         for expressions spanning multiple lines, convert only if the resulting single line will fit into the line length limit. Default value is 88 characters.
+  -n, --dry-run         Do not change the file in-place. Useful when running
+                        as a linting process.
   -tc, --transform-concats
                         Replace string concatenations (defined as + operations involving string literals) with f-strings. Available only if flynt is installed with 3.8+
                         interpreter.
