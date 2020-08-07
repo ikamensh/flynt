@@ -4,6 +4,7 @@ import shutil
 import pytest
 
 from flynt import api
+from flynt import state
 from flynt.api import _fstringify_file
 
 
@@ -90,4 +91,18 @@ def test_catches_subtle(formattable_file, monkeypatch):
         content_after = f.read()
 
     assert not modified
+    assert content_after == content_before
+
+
+def test_dry_run(formattable_file, monkeypatch):
+    monkeypatch.setattr(state, "dry_run", True)
+    with open(formattable_file) as f:
+        content_before = f.read()
+
+    modified, _, _, _ = _fstringify_file(formattable_file, True, 1000)
+
+    with open(formattable_file) as f:
+        content_after = f.read()
+
+    assert modified
     assert content_after == content_before
