@@ -53,6 +53,14 @@ def main():
     )
 
     parser.add_argument(
+        "-n",
+        "--dry-run",
+        action="store_true",
+        default=False,
+        help="Do not change the file in-place. Useful when running as a linting process."
+    )
+
+    parser.add_argument(
         "-tc",
         "--transform-concats",
         action="store_true",
@@ -101,6 +109,7 @@ def main():
     state.aggressive = args.aggressive
     state.verbose = args.verbose
     state.quiet = args.quiet
+    state.dry_run = args.dry_run
 
     return fstringify(
         args.src,

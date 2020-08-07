@@ -77,8 +77,9 @@ def _fstringify_file(
         )
         return default_result()
 
-    with open(filename, "w", encoding="utf-8") as f:
-        f.write(new_code)
+    if not state.dry_run:
+        with open(filename, "w", encoding="utf-8") as f:
+            f.write(new_code)
 
     return True, changes, len(contents), len(new_code)
 
