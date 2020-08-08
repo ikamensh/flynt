@@ -99,6 +99,9 @@ def main():
 
     args = parser.parse_args()
 
+    if args.dry_run:
+        print('Running flynt in dry-run mode. No files will be changed.')
+
     if args.transform_concats:
         if sys.version_info < (3, 8):
             raise Exception(
