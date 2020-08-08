@@ -58,7 +58,7 @@ def main():
         action="store_true",
         default=False,
         help="Do not change the file in-place. Note that this must be used in "
-            "conjunction with '--fail-on-change' when used for linting purposes."
+             "conjunction with '--fail-on-change' when used for linting purposes."
     )
 
     parser.add_argument(
@@ -101,7 +101,7 @@ def main():
     args = parser.parse_args()
 
     if args.dry_run:
-        print('Running flynt in dry-run mode. No files will be changed.')
+        print("Running flynt in dry-run mode. No files will be changed.")
 
     if args.transform_concats:
         if sys.version_info < (3, 8):
