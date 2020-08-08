@@ -53,11 +53,12 @@ def main():
     )
 
     parser.add_argument(
-        "-n",
+        "-d",
         "--dry-run",
         action="store_true",
         default=False,
-        help="Do not change the file in-place. Useful when running as a linting process."
+        help="Do not change the file in-place. Note that this must be used in "
+            "conjunction with '--fail-on-change' when used for linting purposes."
     )
 
     parser.add_argument(
