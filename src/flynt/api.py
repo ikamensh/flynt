@@ -4,6 +4,7 @@ import sys
 import time
 import traceback
 from typing import Tuple, List
+from difflib import unified_diff
 
 import astor
 
@@ -77,8 +78,12 @@ def _fstringify_file(
         )
         return default_result()
 
-    with open(filename, "w", encoding="utf-8") as f:
-        f.write(new_code)
+    if state.dry_run:
+        for l in unified_diff(contents.split('\n'), new_code.split('\n'), fromfile=filename):
+            print(l)
+    else:
+        with open(filename, "w", encoding="utf-8") as f:
+            f.write(new_code)
 
     return True, changes, len(contents), len(new_code)
 

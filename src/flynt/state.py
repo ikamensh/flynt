@@ -3,6 +3,7 @@
 verbose = False
 quiet = False
 aggressive = False
+dry_run = False
 
 percent_candidates = 0
 percent_transforms = 0

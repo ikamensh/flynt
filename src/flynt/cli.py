@@ -53,6 +53,16 @@ def main():
     )
 
     parser.add_argument(
+        "-d",
+        "--dry-run",
+        action="store_true",
+        default=False,
+        help="Do not change the files in-place and print the diff instead. "
+             "Note that this must be used in conjunction with '--fail-on-change' when "
+             "used for linting purposes."
+    )
+
+    parser.add_argument(
         "-tc",
         "--transform-concats",
         action="store_true",
@@ -91,6 +101,9 @@ def main():
 
     args = parser.parse_args()
 
+    if args.dry_run:
+        print("Running flynt in dry-run mode. No files will be changed.")
+
     if args.transform_concats:
         if sys.version_info < (3, 8):
             raise Exception(
@@ -101,6 +114,7 @@ def main():
     state.aggressive = args.aggressive
     state.verbose = args.verbose
     state.quiet = args.quiet
+    state.dry_run = args.dry_run
 
     return fstringify(
         args.src,
