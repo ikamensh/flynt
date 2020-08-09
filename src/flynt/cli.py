@@ -57,8 +57,9 @@ def main():
         "--dry-run",
         action="store_true",
         default=False,
-        help="Do not change the file in-place. Note that this must be used in "
-             "conjunction with '--fail-on-change' when used for linting purposes."
+        help="Do not change the files in-place and print the diff instead. "
+             "Note that this must be used in conjunction with '--fail-on-change' when "
+             "used for linting purposes."
     )
 
     parser.add_argument(
