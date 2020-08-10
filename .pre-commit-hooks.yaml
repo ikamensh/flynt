@@ -1,0 +1,8 @@
+- id: flynt
+  name: flynt
+  description: "flynt: string formatting converter"
+  entry: flynt
+  language: python
+  language_version: python3
+  require_serial: true
+  types: [python]
