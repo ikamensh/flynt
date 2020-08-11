@@ -94,16 +94,10 @@ add flynt to your [pre-commit](https://www.pre-commit.com) hooks.
 
 Add a new section to `.pre-commit-config.yaml`:
 ```
-   - repo: local
-     hooks:
-         - id: flynt
-           name: flynt
-           entry: flynt
-           args: [--fail-on-change]
-           types: [python]
-           language: python
-           additional_dependencies:
-               - flynt
+-   repo: https://github.com/ikamensh/flynt/
+    rev: ''
+    hooks:
+    -   id: flynt
 ```
 
 This will run flynt on all modified files before commiting.
