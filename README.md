@@ -53,7 +53,7 @@ optional arguments:
   -a, --aggressive      Include conversions with potentially changed behavior.
   -e EXCLUDE [EXCLUDE ...], --exclude EXCLUDE [EXCLUDE ...]
                         ignore files with given strings in it's absolute path.
-
+  --version             Print the current version number and exit.
 ```
 
 ### Sample output of a successful run:

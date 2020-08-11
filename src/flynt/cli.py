@@ -9,7 +9,7 @@ from flynt import __version__
 
 
 def main():
-    print(f"Running flynt v.{__version__}")
+
     parser = argparse.ArgumentParser(
         description=f"flynt v.{__version__}", add_help=True, epilog=__doc__
     )
@@ -96,11 +96,25 @@ def main():
     )
 
     parser.add_argument(
-        "src", action="store", nargs="+", help="source file(s) or directory"
+        "src", action="store", nargs="*", help="source file(s) or directory"
     )
 
+    parser.add_argument(
+        "--version",
+        action="store_true",
+        default=False,
+        help="Print the current version number and exit."
+    )
     args = parser.parse_args()
 
+    if args.version:
+        print(__version__)
+        sys.exit(0)
+    elif not args.src:
+        print("flynt: error: the following arguments are required: src")
+        sys.exit(1)
+
+    print(f"Running flynt v.{__version__}")
     if args.dry_run:
         print("Running flynt in dry-run mode. No files will be changed.")
 
