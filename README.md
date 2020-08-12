@@ -43,9 +43,7 @@ optional arguments:
   -ll LINE_LENGTH, --line-length LINE_LENGTH
                         for expressions spanning multiple lines, convert only if the resulting single line will fit into the line length limit. Default value is 88 characters.
   -d, --dry-run         Do not change the files in-place and print the diff
-                        instead. Note that this must be used in conjunction
-                        with '--fail-on-change' when used for linting
-                        purposes.
+                        instead. 
   -tc, --transform-concats
                         Replace string concatenations (defined as + operations involving string literals) with f-strings. Available only if flynt is installed with 3.8+
                         interpreter.
