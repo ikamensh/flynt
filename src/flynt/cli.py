@@ -111,6 +111,7 @@ def main():
         print(__version__)
         sys.exit(0)
     elif not args.src:
+        print("flynt: error: the following arguments are required: src")
         parser.print_usage()
         sys.exit(1)
 
