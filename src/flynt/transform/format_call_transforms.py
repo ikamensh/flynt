@@ -104,4 +104,19 @@ def joined_string(fmt_call: ast.Call) -> ast.JoinedStr:
             f"Some variables were never used: {var_map} - skipping conversion, it's a risk of bug."
         )
 
+    def fix_literals(segment):
+        if (isinstance(segment, ast.FormattedValue) and
+                segment.format_spec is None and
+                isinstance(segment.value, ast.Constant) and
+                isinstance(segment.value.value, str)):
+            return segment.value
+        return segment
+    new_segments = [fix_literals(e) for e in new_segments]
+
+    if all(
+            (isinstance(segment, ast.Constant) and
+             isinstance(segment.value, str))
+            for segment in new_segments):
+        return ast.Str(''.join(segment.value for segment in new_segments))
+
     return ast.JoinedStr(new_segments)

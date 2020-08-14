@@ -17,6 +17,7 @@ all_files = pytest.fixture(
         "implicit_concat_named2.py",
         "indexed_fmt_name.py",
         "indexed_percent.py",
+        "literal_string.py",
         "long.py",
         "multiline.py",
         "multiline_1.py",
