@@ -17,7 +17,7 @@ def ast_formatted_value(
         )
 
     if fmt_str:
-        format_spec = ast.JoinedStr([ast_string_node(fmt_str.replace(":", ""))])
+        format_spec = ast.JoinedStr([ast_string_node(fmt_str)])
     else:
         format_spec = None
 
@@ -34,7 +34,7 @@ def ast_string_node(string: str) -> ast.Str:
 
 def matching_call(node) -> bool:
     """
-    Check if a an ast Node represents a "...".format() call.
+    Check if an ast Node represents a "...".format() call.
     """
     return (
         isinstance(node, ast.Call)
@@ -49,6 +49,7 @@ stdlib_parse = string.Formatter().parse
 
 def joined_string(fmt_call: ast.Call) -> ast.JoinedStr:
     """ Transform a "...".format() call node into a f-string node. """
+
     string = fmt_call.func.value.s
     var_map = {kw.arg: kw.value for kw in fmt_call.keywords}
 

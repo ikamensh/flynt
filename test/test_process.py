@@ -11,6 +11,14 @@ def aggressive(monkeypatch):
     yield
 
 
+def test_timestamp():
+    s_in = """'Timestamp: {:%Y-%m-%d %H:%M:%S}'.format(datetime.datetime.now())"""
+    s_expected = """f'Timestamp: {datetime.datetime.now():%Y-%m-%d %H:%M:%S}'"""
+
+    s_out, count = process.fstringify_code_by_line(s_in)
+    assert s_out == s_expected
+
+
 def test_ifexpr():
     s_in = """'%s' % (a if c else b)"""
     s_expected = """f'{a if c else b}'"""
