@@ -24,6 +24,7 @@ all_files = pytest.fixture(
         "multiline_3.py",
         "multiline_twice.py",
         "multiple.py",
+        "multiline_dict.py",
         "multiline_keep.py",
         "named_inverse.py",
         "no_fstring_1.py",
@@ -56,7 +57,7 @@ all_files = pytest.fixture(
 )
 
 # @pytest.fixture(params=[
-# "escaped_dq.py",
+#         "multiline_dict.py",
 # ])
 @all_files
 def filename(request):

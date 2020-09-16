@@ -40,9 +40,9 @@ def transform_chunk(
         if changed:
             new_code = astor.to_source(converted)
             new_code = new_code.strip()
-            new_code = set_quote_type(
-                new_code, quote_type if not str_in_str else QuoteTypes.double
-            )
+            if str_in_str and quote_type == QuoteTypes.single:
+                quote_type = QuoteTypes.double
+            new_code = set_quote_type(new_code, quote_type)
             new_code = new_code.replace("\n", "\\n")
             new_code = new_code.replace("\t", "\\t")
             try:
