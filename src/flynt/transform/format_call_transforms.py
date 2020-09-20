@@ -1,4 +1,5 @@
 import ast
+import sys
 import string
 from collections import deque
 
@@ -104,19 +105,29 @@ def joined_string(fmt_call: ast.Call) -> ast.JoinedStr:
             f"Some variables were never used: {var_map} - skipping conversion, it's a risk of bug."
         )
 
+    def is_literal_string(node):
+        if sys.version_info < (3, 8):
+            return isinstance(node, ast.Str)
+        else:
+            return (isinstance(node, ast.Constant) and
+                    isinstance(node.value, str))
+
+    def literal_string_value(node):
+        if sys.version_info < (3, 8):
+            return node.s
+        else:
+            return node.value
+
     def fix_literals(segment):
         if (isinstance(segment, ast.FormattedValue) and
                 segment.format_spec is None and
-                isinstance(segment.value, ast.Constant) and
-                isinstance(segment.value.value, str)):
+                is_literal_string(segment.value)):
             return segment.value
         return segment
     new_segments = [fix_literals(e) for e in new_segments]
 
-    if all(
-            (isinstance(segment, ast.Constant) and
-             isinstance(segment.value, str))
-            for segment in new_segments):
-        return ast.Str(''.join(segment.value for segment in new_segments))
+    if all(is_literal_string(segment)
+           for segment in new_segments):
+        return ast.Str(''.join(literal_string_value(segment) for segment in new_segments))
 
     return ast.JoinedStr(new_segments)
