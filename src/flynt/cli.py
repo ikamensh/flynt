@@ -119,12 +119,11 @@ def main():
     if args.dry_run:
         print("Running flynt in dry-run mode. No files will be changed.")
 
-    if args.transform_concats:
-        if sys.version_info < (3, 8):
-            raise Exception(
-                f"""Transforming string concatenations is only possible with flynt 
+    if args.transform_concats and sys.version_info < (3, 8):
+        raise Exception(
+            f"""Transforming string concatenations is only possible with flynt 
                 installed to a python3.8+ interpreter. Currently using {sys.version_info}."""
-            )
+        )
 
     state.aggressive = args.aggressive
     state.verbose = args.verbose

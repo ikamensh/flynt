@@ -17,15 +17,8 @@ def ast_formatted_value(
             "values starting with '{' are better left not transformed."
         )
 
-    if fmt_str:
-        format_spec = ast.JoinedStr([ast_string_node(fmt_str)])
-    else:
-        format_spec = None
-
-    if conversion is None:
-        conversion = -1
-    else:
-        conversion = ord(conversion.replace("!", ""))
+    format_spec = ast.JoinedStr([ast_string_node(fmt_str)]) if fmt_str else None
+    conversion = -1 if conversion is None else ord(conversion.replace("!", ""))
     return ast.FormattedValue(value=val, conversion=conversion, format_spec=format_spec)
 
 

@@ -34,11 +34,7 @@ def ast_to_dict(node):
             continue
         v = getattr(node, k)
         if isinstance(v, ast.AST):
-            if v._fields:
-                fields[k] = ast_to_dict(v)
-            else:
-                fields[k] = _get_classname(v)
-
+            fields[k] = ast_to_dict(v) if v._fields else _get_classname(v)
         elif isinstance(v, list):
             fields[k] = []
             for e in v:

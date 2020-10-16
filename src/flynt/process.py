@@ -55,8 +55,6 @@ class JoinTransformer:
 
     def fill_up_to(self, chunk):
         start_line, start_idx, _ = (chunk.start_line, chunk.start_idx, chunk.end_idx)
-        line = self.src_lines[start_line]
-
         if start_line == self.last_line:
             self.results.append(
                 self.src_lines[self.last_line][self.last_idx : start_idx]
@@ -64,6 +62,8 @@ class JoinTransformer:
         else:
             self.results.append(self.src_lines[self.last_line][self.last_idx :] + "\n")
             self.last_line += 1
+            line = self.src_lines[start_line]
+
             self.fill_up_to_line(start_line)
             self.results.append(line[:start_idx])
 
@@ -82,11 +82,7 @@ class JoinTransformer:
                 return
 
         try:
-            if chunk.string_in_string:
-                quote_type = qt.double
-            else:
-                quote_type = chunk.quote_type
-
+            quote_type = qt.double if chunk.string_in_string else chunk.quote_type
         except FlyntException as e:
             if state.verbose:
                 print(f"Exception {e} during conversion of code '{str(chunk)}'")

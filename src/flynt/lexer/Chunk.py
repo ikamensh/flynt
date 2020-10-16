@@ -14,14 +14,14 @@ if is_36:
     multiline_skip = (token.NEWLINE, 58)
     multiline_break = (57,)
 
-    single_skip = ()
     single_break = (token.NEWLINE, 57, 58)
 else:
     multiline_skip = (token.NEWLINE, token.NL)
     multiline_break = (token.COMMENT,)
 
-    single_skip = ()
     single_break = (token.COMMENT, token.NEWLINE, token.NL)
+
+single_skip = ()
 
 
 class Chunk:
@@ -55,9 +55,7 @@ class Chunk:
         self.string_in_string = False
 
     def empty_append(self, t: PyToken):
-        if t.is_string() and not t.is_raw_string():
-            pass
-        else:
+        if not t.is_string() or t.is_raw_string():
             self.complete = True
 
         self.tokens.append(t)
@@ -93,7 +91,7 @@ class Chunk:
         else:
             if self.percent_ongoing:
                 self.tokens.append(t)
-                if t.is_string() and not '{' in str(self):
+                if t.is_string() and '{' not in str(self):
                     self.string_in_string = True
                 if self.is_parseable:
                     self.percent_ongoing = False
@@ -139,7 +137,7 @@ class Chunk:
             self.second_append(t)
         elif self.is_call_chunk:
             self.call_append(t)
-        elif self.is_percent_chunk:
+        else:
             return self.percent_append(t)
 
     @property
