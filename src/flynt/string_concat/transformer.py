@@ -26,10 +26,7 @@ def ast_formatted_value(
     else:
         format_spec = None
 
-    if conversion is None:
-        conversion = -1
-    else:
-        conversion = ord(conversion.replace("!", ""))
+    conversion = -1 if conversion is None else ord(conversion.replace("!", ""))
     return ast.FormattedValue(value=val, conversion=conversion, format_spec=format_spec)
 
 
@@ -63,34 +60,33 @@ class ConcatTransformer(ast.NodeTransformer):
         """
         Transforms a string concat to an f-string
         """
-        if is_string_concat(node):
-            self.counter += 1
-            left, right = node.left, node.right
-            left = self.visit(left)
-            right = self.visit(right)
-
-            if not check_sns_depth(left) or not check_sns_depth(right):
-                node.left = left
-                node.right = right
-                return node
-
-            parts = []
-            for p in [left, right]:
-                if isinstance(p, ast.JoinedStr):
-                    parts += p.values
-                else:
-                    parts.append(p)
-
-            segments = []
-            for p in parts:
-                if isinstance(p, ast.Constant):
-                    segments.append(ast_string_node(p.value))
-                else:
-                    segments.append(ast_formatted_value(p))
-
-            return ast.JoinedStr(segments)
-        else:
+        if not is_string_concat(node):
             return self.generic_visit(node)
+        self.counter += 1
+        left, right = node.left, node.right
+        left = self.visit(left)
+        right = self.visit(right)
+
+        if not check_sns_depth(left) or not check_sns_depth(right):
+            node.left = left
+            node.right = right
+            return node
+
+        parts = []
+        for p in [left, right]:
+            if isinstance(p, ast.JoinedStr):
+                parts += p.values
+            else:
+                parts.append(p)
+
+        segments = []
+        for p in parts:
+            if isinstance(p, ast.Constant):
+                segments.append(ast_string_node(p.value))
+            else:
+                segments.append(ast_formatted_value(p))
+
+        return ast.JoinedStr(segments)
 
 
 def transform_concat(code: str, *args, **kwargs) -> Tuple[str, bool]:
