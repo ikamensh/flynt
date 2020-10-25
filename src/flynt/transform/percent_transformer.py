@@ -2,7 +2,7 @@ import ast
 import re
 from collections import deque
 
-from flynt.exceptions import FlyntException
+from flynt.exceptions import FlyntException, ConversionRefused
 from flynt.transform.format_call_transforms import ast_formatted_value, ast_string_node
 from flynt import state
 
@@ -11,7 +11,7 @@ FORMATS = "diouxXeEfFgGcrsa"
 FORMAT_GROUP = f"[hlL]?[{FORMATS}]"
 FORMAT_GROUP_MATCH = f"[hlL]?([{FORMATS}])"
 
-PREFIX_GROUP = "[.]?[0-9]*"
+PREFIX_GROUP = "[0-9]*[.]?[0-9]*"
 
 DICT_PATTERN = re.compile(rf"(%{PREFIX_GROUP}\([^)]+\){FORMAT_GROUP})")
 SPLIT_DICT_PATTERN = re.compile(rf"%({PREFIX_GROUP})\(([^)]+)\){FORMAT_GROUP_MATCH}")
@@ -103,7 +103,9 @@ def transform_dict(node):
             segments.append(ast.Str(s=block.replace("%%", "%")))
 
     if mapping:
-        raise FlyntException("Not all keys were matched - probably an error.")
+        raise FlyntException(
+            "Not all keys were matched - either a flynt error or original code error."
+        )
 
     return ast.JoinedStr(segments)
 
@@ -124,7 +126,7 @@ def transform_tuple(node):
     matches = VAR_KEY_PATTERN.findall(format_str)
 
     if len(node.right.elts) != len(matches):
-        raise FlyntException("string formatting length mismatch")
+        raise ConversionRefused("This expression involves tuple unpacking.")
 
     str_vars = deque(node.right.elts)
 
@@ -194,4 +196,4 @@ def transform_binop(node):
         # todo adapt transform dict to Dict literal
         return transform_dict(node), False
 
-    raise FlyntException("unexpected `node.right` class")
+    raise ConversionRefused(f"Unsupported `node.right` class: {type(node.right)}")

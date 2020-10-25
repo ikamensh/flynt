@@ -140,6 +140,14 @@ def test_invalid_conversion_names():
     assert s_out == s_expected
 
 
+def test_dangerous_tuple():
+    s_in = """print("%5.0f   %12.6g %12.6g %s" % (fmin_data + (step,)))"""
+    s_expected = s_in
+
+    s_out, count = process.fstringify_code_by_line(s_in)
+    assert s_out == s_expected
+
+
 def test_percent_newline():
     s_in = """a = '%s\\n' % var"""
     s_expected = """a = f'{var}\\n'"""
