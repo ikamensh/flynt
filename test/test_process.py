@@ -359,6 +359,15 @@ def test_equiv_expressions_repr():
     assert eval(out) == eval(s_in)
 
 
+def test_equiv_expressions_hex():
+    a = 17  # noqa: F841
+
+    s_in = """'%.3x' % a"""
+
+    out, count = process.fstringify_code_by_line(s_in)
+    assert eval(out) == eval(s_in)
+
+
 def test_equiv_expressions_s():
     name = "bla"  # noqa: F841
 
