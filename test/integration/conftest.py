@@ -9,6 +9,7 @@ all_files = pytest.fixture(
         "dict_func.py",
         "double_conv.py",
         "escaped_dq.py",
+        "escaped_newline.py",
         "first_string.py",
         "hard_percent.py",
         "implicit_concat.py",
