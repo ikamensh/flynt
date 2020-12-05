@@ -16,7 +16,7 @@ noqa_regex = re.compile("#[ ]*noqa.*flynt")
 
 
 class JoinTransformer:
-    """ JoinTransformer fills up the resulting code by tracking
+    """JoinTransformer fills up the resulting code by tracking
     the last line number and char index. Failed transformations do not need to do anything -
     not adding results is safe, as original code will be filled in."""
 
@@ -82,7 +82,11 @@ class JoinTransformer:
                 return
 
         try:
-            quote_type = qt.double if chunk.string_in_string else chunk.quote_type
+            quote_type = (
+                qt.double
+                if chunk.string_in_string and chunk.n_lines == 1
+                else chunk.quote_type
+            )
         except FlyntException as e:
             if state.verbose:
                 print(f"Exception {e} during conversion of code '{str(chunk)}'")

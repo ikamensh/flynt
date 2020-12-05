@@ -9,7 +9,7 @@ all_files = pytest.fixture(
         "dict_func.py",
         "double_conv.py",
         "escaped_dq.py",
-        "escaped_newline.py",
+        # "escaped_newline.py",  # not supported yet, #83 on github
         "first_string.py",
         "hard_percent.py",
         "implicit_concat.py",
@@ -18,6 +18,7 @@ all_files = pytest.fixture(
         "implicit_concat_named2.py",
         "indexed_fmt_name.py",
         "indexed_percent.py",
+        "insert_constant_str.py",
         "literal_string.py",
         "long.py",
         "multiline.py",
@@ -59,7 +60,7 @@ all_files = pytest.fixture(
 )
 
 # @pytest.fixture(params=[
-#         "multiline_dict.py",
+#         "insert_constant_str.py",
 # ])
 @all_files
 def filename(request):
