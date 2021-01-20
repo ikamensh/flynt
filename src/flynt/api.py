@@ -23,8 +23,8 @@ def _fstringify_file(
     length of original code, length of new code)
     """
 
-    with open(filename, encoding="utf-8") as f:
-        contents = f.read()
+    with open(filename, "rb") as f:
+        contents = f.read().decode("utf-8")
 
     def default_result():
         return False, 0, len(contents), len(contents)
@@ -82,7 +82,7 @@ def _fstringify_file(
         for l in unified_diff(contents.split('\n'), new_code.split('\n'), fromfile=filename):
             print(l)
     else:
-        ln = _auto_detect_line_ending(filename)
+        ln = _auto_detect_line_ending(contents)
         with open(filename, "w", encoding="utf-8", newline=ln) as f:
             f.write(new_code)
 
@@ -224,7 +224,7 @@ def _resolve_files(files_or_paths, excluded_files_or_paths) -> List[str]:
     return files
 
 
-def _auto_detect_line_ending(filename: str):
+def _auto_detect_line_ending(content: str):
     """
     This function attempts to detect the original
     line-ending character in order to avoid situations
@@ -235,12 +235,6 @@ def _auto_detect_line_ending(filename: str):
 
     LF = "\n"  # Unix
     CRLF = "\r\n"  # Windows
-
-    # The file is opened in "rb" mode
-    # otherwise the newline characters
-    # cannot be detected
-    with open(filename, "rb") as f:
-        content = f.read().decode()
 
     if CRLF in content:
         return CRLF

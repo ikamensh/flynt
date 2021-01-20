@@ -113,13 +113,7 @@ def test_dry_run(formattable_file, monkeypatch):
 def test_autodetect_newline_character():
     """ Ensure newlines are detected """
     for nl in ["\n", "\r\n"]:
-        temp = tempfile.NamedTemporaryFile(mode="wb", delete=False)
-        temp.write(bytes("sometext"+nl, encoding="utf-8"))
-        temp.close()
 
-        result = _auto_detect_line_ending(temp.name)
-
-        # cleanup
-        os.unlink(temp.name)
+        result = _auto_detect_line_ending(f"sometext{nl}")
 
         assert result == nl
