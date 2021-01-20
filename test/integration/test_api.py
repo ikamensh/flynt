@@ -6,7 +6,6 @@ import pytest
 from flynt import api
 from flynt import state
 from flynt.api import _fstringify_file
-from flynt.api import _auto_detect_line_ending
 
 
 @pytest.fixture()
@@ -29,16 +28,6 @@ def py2_file(tmpdir):
     yield tmp_path
 
 
-@pytest.fixture()
-def windows_file(tmpdir):
-    folder = os.path.dirname(__file__)
-    windows_file_path = os.path.join(folder, "samples_in", "windows_line_endings.py")
-    tmp_path = os.path.join(tmpdir, "windows_line_endings.py")
-
-    shutil.copy2(windows_file_path, tmp_path)
-    yield tmp_path
-
-
 def test_py2(py2_file):
 
     with open(py2_file) as f:
@@ -51,8 +40,6 @@ def test_py2(py2_file):
 
     assert not modified
     assert content_after == content_before
-    assert _auto_detect_line_ending(content_before) == "\n"
-    assert _auto_detect_line_ending(content_after) == "\n"
 
 
 def test_works(formattable_file):

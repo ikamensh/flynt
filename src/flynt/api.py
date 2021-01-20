@@ -23,8 +23,8 @@ def _fstringify_file(
     length of original code, length of new code)
     """
 
-    with open(filename, "rb") as f:
-        contents = f.read().decode("utf-8")
+    with open(filename, encoding="utf-8") as f:
+        contents = f.read()
 
     def default_result():
         return False, 0, len(contents), len(contents)
