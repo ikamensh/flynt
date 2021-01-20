@@ -82,8 +82,7 @@ def _fstringify_file(
         for l in unified_diff(contents.split('\n'), new_code.split('\n'), fromfile=filename):
             print(l)
     else:
-        ln = _auto_detect_line_ending(contents)
-        with open(filename, "w", encoding="utf-8", newline=ln) as f:
+        with open(filename, "w", encoding="utf-8", newline="") as f:
             f.write(new_code)
 
     return True, changes, len(contents), len(new_code)
@@ -222,21 +221,3 @@ def _resolve_files(files_or_paths, excluded_files_or_paths) -> List[str]:
 
     files = [f for f in files if all(b not in f for b in _blacklist)]
     return files
-
-
-def _auto_detect_line_ending(content: str):
-    """
-    This function attempts to detect the original
-    line-ending character in order to avoid situations
-    where files originally saved with unix line endings
-    and source control such as git show a whole file
-    as rewritten
-    """
-
-    LF = "\n"  # Unix
-    CRLF = "\r\n"  # Windows
-
-    if CRLF in content:
-        return CRLF
-
-    return LF
