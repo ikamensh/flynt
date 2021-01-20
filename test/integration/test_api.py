@@ -1,11 +1,13 @@
 import os
 import shutil
+import tempfile
 
 import pytest
 
 from flynt import api
 from flynt import state
 from flynt.api import _fstringify_file
+from flynt.api import _auto_detect_line_ending
 
 
 @pytest.fixture()
@@ -106,3 +108,18 @@ def test_dry_run(formattable_file, monkeypatch):
 
     assert modified
     assert content_after == content_before
+
+
+def test_autodetect_newline_character():
+    """ Ensure newlines are detected """
+    for nl in ["\n", "\r\n"]:
+        temp = tempfile.NamedTemporaryFile(mode="wb", delete=False)
+        temp.write(bytes("sometext"+nl, encoding="utf-8"))
+        temp.close()
+
+        result = _auto_detect_line_ending(temp.name)
+
+        # cleanup
+        os.unlink(temp.name)
+
+        assert result == nl
