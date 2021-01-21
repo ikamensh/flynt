@@ -82,7 +82,7 @@ def _fstringify_file(
         for l in unified_diff(contents.split('\n'), new_code.split('\n'), fromfile=filename):
             print(l)
     else:
-        with open(filename, "w", encoding="utf-8") as f:
+        with open(filename, "w", encoding="utf-8", newline="") as f:
             f.write(new_code)
 
     return True, changes, len(contents), len(new_code)
