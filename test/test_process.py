@@ -309,6 +309,13 @@ def test_percent_attr():
     assert out == s_expected
 
 
+def test_percent_dict_prefix():
+    s_in = """a = '%(?)s %(world).2f' % var"""
+    s_expected = """a = f"{var['?']} {var['world']:.2f}\""""
+
+    assert process.fstringify_code_by_line(s_in)[0] == s_expected
+
+
 def test_legacy_fmtspec(aggressive):
     s_in = """d = '%i' % var"""
     s_expected = """d = f'{int(var)}'"""
