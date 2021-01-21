@@ -35,7 +35,7 @@ def formatted_value(fmt_prefix, fmt_spec, val):
                 "Default text alignment has changed between percent fmt and fstrings. "
                 "Proceeding would result in changed code behaviour."
             )
-        fv = ast_formatted_value(
+        return ast_formatted_value(
             val, fmt_str=fmt_prefix, conversion=conversion_methods[fmt_spec]
         )
     else:
@@ -50,8 +50,7 @@ def formatted_value(fmt_prefix, fmt_spec, val):
                 raise FlyntException(
                     "Skipping %d formatting - fstrings behave differently from % formatting."
                 )
-        fv = ast_formatted_value(val, fmt_str=fmt_prefix + fmt_spec)
-    return fv
+        return ast_formatted_value(val, fmt_str=fmt_prefix + fmt_spec)
 
 
 def transform_dict(node):
