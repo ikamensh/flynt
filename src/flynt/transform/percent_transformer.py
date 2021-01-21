@@ -13,8 +13,8 @@ FORMAT_GROUP_MATCH = f"[hlL]?([{FORMATS}])"
 
 PREFIX_GROUP = "[0-9]*[.]?[0-9]*"
 
-DICT_PATTERN = re.compile(rf"(%{PREFIX_GROUP}\([^)]+\){FORMAT_GROUP})")
-SPLIT_DICT_PATTERN = re.compile(rf"%({PREFIX_GROUP})\(([^)]+)\){FORMAT_GROUP_MATCH}")
+DICT_PATTERN = re.compile(rf"(%\([^)]+\){PREFIX_GROUP}{FORMAT_GROUP})")
+SPLIT_DICT_PATTERN = re.compile(rf"%\(([^)]+)\)({PREFIX_GROUP}){FORMAT_GROUP_MATCH}")
 VAR_KEY_PATTERN = re.compile(
     f"%({PREFIX_GROUP}){FORMAT_GROUP_MATCH}"
 )  # specs at https://docs.python.org/3/library/stdtypes.html#string-formatting
@@ -70,7 +70,7 @@ def transform_dict(node):
     matches = DICT_PATTERN.findall(format_str)
     spec = []
     for idx, m in enumerate(matches):
-        _, prefix, var_key, fmt_str, _ = SPLIT_DICT_PATTERN.split(m)
+        _, var_key, prefix, fmt_str, _ = SPLIT_DICT_PATTERN.split(m)
         if not var_key:
             raise FlyntException("could not find dict key")
         spec.append((prefix, var_key, fmt_str))
