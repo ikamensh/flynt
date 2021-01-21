@@ -52,7 +52,7 @@ class FstringifyTransformer(ast.NodeTransformer):
             and isinstance(node.op, ast.Mod)
             and isinstance(
                 node.right,
-                tuple( [ast.Tuple, ast.Dict] + supported_operands),
+                tuple([ast.Tuple, ast.Dict] + supported_operands),
             )
         )
 

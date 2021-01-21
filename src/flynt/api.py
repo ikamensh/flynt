@@ -79,7 +79,9 @@ def _fstringify_file(
         return default_result()
 
     if state.dry_run:
-        for l in unified_diff(contents.split('\n'), new_code.split('\n'), fromfile=filename):
+        for l in unified_diff(
+            contents.split("\n"), new_code.split("\n"), fromfile=filename
+        ):
             print(l)
     else:
         with open(filename, "w", encoding="utf-8", newline="") as f:
@@ -95,9 +97,12 @@ def fstringify_files(files, multiline, len_limit, transform_concat):
     total_expressions = 0
     start_time = time.time()
     for path in files:
-        changed, count_expressions, charcount_original, charcount_new = _fstringify_file(
-            path, multiline, len_limit, transform_concat
-        )
+        (
+            changed,
+            count_expressions,
+            charcount_original,
+            charcount_new,
+        ) = _fstringify_file(path, multiline, len_limit, transform_concat)
         if changed:
             changed_files += 1
             total_expressions += count_expressions

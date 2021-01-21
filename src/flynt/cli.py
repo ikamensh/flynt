@@ -58,8 +58,8 @@ def main():
         action="store_true",
         default=False,
         help="Do not change the files in-place and print the diff instead. "
-             "Note that this must be used in conjunction with '--fail-on-change' when "
-             "used for linting purposes."
+        "Note that this must be used in conjunction with '--fail-on-change' when "
+        "used for linting purposes.",
     )
 
     parser.add_argument(
@@ -103,7 +103,7 @@ def main():
         "--version",
         action="store_true",
         default=False,
-        help="Print the current version number and exit."
+        help="Print the current version number and exit.",
     )
     args = parser.parse_args()
 

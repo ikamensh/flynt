@@ -22,12 +22,12 @@ obsolete_specifiers = "hlL"
 
 translate_conversion_types = {"i": "d", "u": "d"}
 conversion_methods = {"r": "!r", "a": "!a", "s": None}
-integer_specificers = 'dxXob'
+integer_specificers = "dxXob"
 
 
 def formatted_value(fmt_prefix, fmt_spec, val):
     if fmt_spec in integer_specificers:
-        fmt_prefix = fmt_prefix.replace('.', '0')
+        fmt_prefix = fmt_prefix.replace(".", "0")
 
     if fmt_spec in conversion_methods:
         if not state.aggressive and fmt_prefix:
@@ -181,7 +181,7 @@ supported_operands = [
     ast.Subscript,
     ast.Call,
     ast.BinOp,
-    ast.IfExp
+    ast.IfExp,
 ]
 
 

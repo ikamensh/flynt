@@ -147,6 +147,7 @@ def test_embedded_fstr():
     assert changed
     assert new == expected
 
+
 @pytest.mark.skipif(sys.version_info < (3, 8), reason="requires python3.8 or higher")
 def test_backslash():
     txt = """blah1 \
@@ -157,6 +158,7 @@ def test_backslash():
 
     assert changed
     assert new == expected
+
 
 @pytest.mark.skipif(sys.version_info < (3, 8), reason="requires python3.8 or higher")
 def test_parens():
