@@ -197,6 +197,15 @@ def test_openpyxl():
     assert s_out == s_expected
 
 
+def test_double_percent_2():
+    s_in = """print("p = %.3f%%" % (100 * p))"""
+    s_expected = """print(f"p = {100 * p:.3f}%")"""
+    s_out, count = process.fstringify_code_by_line(s_in)
+
+    assert count == 1
+    assert s_out == s_expected
+
+
 def test_str_in_str():
     s_in = """a = "beautiful numbers to follow: {}".format(" ".join(lst))"""
     s_expected = """a = f"beautiful numbers to follow: {' '.join(lst)}\""""
