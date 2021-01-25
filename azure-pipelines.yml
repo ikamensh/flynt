@@ -16,6 +16,12 @@ schedules:
 
 strategy:
   matrix:
+    LPython39:
+      python.version: '3.9'
+      vmImage: 'ubuntu-latest'
+    WPython39:
+      python.version: '3.9'
+      vmImage: 'vs2017-win2016'
     LPython38:
       python.version: '3.8'
       vmImage: 'ubuntu-latest'
