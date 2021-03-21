@@ -7,7 +7,10 @@ from flynt import api
 from flynt import state
 from flynt.api import _fstringify_file
 
+# These "files" are byte-string constants instead of actual files to prevent e.g. Git or text editors from accidentally changing the encoding
 invalid_unicode = b"# This is not valid unicode: " + bytes([0xff, 0xff])
+mixed_line_endings_before = b"'{}'.format(1)\n'{}'.format(2)# Linux line ending\n'{}'.format(3)# Windows line ending\r\n"
+mixed_line_endings_after = b"f'{1}'\nf'{2}'# Linux line ending\nf'{3}'# Windows line ending\r\n"
 
 @pytest.fixture()
 def formattable_file(tmpdir):
@@ -36,6 +39,16 @@ def invalid_unicode_file(tmpdir):
 
     with open(tmp_path, "wb") as f:
         f.write(invalid_unicode)
+
+    yield tmp_path
+
+
+@pytest.fixture()
+def mixed_line_endings_file(tmpdir):
+    folder = os.path.dirname(__file__)
+    tmp_path = os.path.join(tmpdir, "mixed_line_endings.py")
+    with open(tmp_path, "wb") as file:
+        file.write(mixed_line_endings_before)
 
     yield tmp_path
 
@@ -127,3 +140,13 @@ def test_dry_run(formattable_file, monkeypatch):
 
     assert modified
     assert content_after == content_before
+
+
+def test_mixed_line_endings(mixed_line_endings_file):
+    modified, _, _, _ = _fstringify_file(mixed_line_endings_file, True, 1000)
+
+    with open(mixed_line_endings_file, "rb") as f:
+        content_after = f.read()
+
+    assert modified
+    assert content_after == mixed_line_endings_after

@@ -25,7 +25,7 @@ def _fstringify_file(
     def default_result():
         return False, 0, len(contents), len(contents)
 
-    with open(filename, encoding="utf-8") as f:
+    with open(filename, encoding="utf-8", newline="") as f:
         try:
             contents = f.read()
         except UnicodeDecodeError as e:
