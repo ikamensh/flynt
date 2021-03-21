@@ -7,6 +7,7 @@ from flynt import api
 from flynt import state
 from flynt.api import _fstringify_file
 
+invalid_unicode = b"# This is not valid unicode: " + bytes([0xff, 0xff])
 
 @pytest.fixture()
 def formattable_file(tmpdir):
@@ -28,6 +29,17 @@ def py2_file(tmpdir):
     yield tmp_path
 
 
+@pytest.fixture()
+def invalid_unicode_file(tmpdir):
+    folder = os.path.dirname(__file__)
+    tmp_path = os.path.join(tmpdir, "invalid_unicode.py")
+
+    with open(tmp_path, "wb") as f:
+        f.write(invalid_unicode)
+
+    yield tmp_path
+
+
 def test_py2(py2_file):
 
     with open(py2_file) as f:
@@ -41,6 +53,15 @@ def test_py2(py2_file):
     assert not modified
     assert content_after == content_before
 
+
+def test_invalid_unicode(invalid_unicode_file):
+    modified, _, _, _ = _fstringify_file(invalid_unicode_file, True, 1000)
+
+    with open(invalid_unicode_file, "rb") as f:
+        content_after = f.read()
+
+    assert not modified
+    assert content_after == invalid_unicode
 
 def test_works(formattable_file):
 
