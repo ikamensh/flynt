@@ -22,12 +22,16 @@ def _fstringify_file(
     :return: tuple: (changes_made, n_changes,
     length of original code, length of new code)
     """
-
-    with open(filename, encoding="utf-8") as f:
-        contents = f.read()
-
     def default_result():
         return False, 0, len(contents), len(contents)
+
+    with open(filename, encoding="utf-8") as f:
+        try:
+            contents = f.read()
+        except UnicodeDecodeError as e:
+            contents = ''
+            print(f'Exception while reading {filename}: {e}')
+            return default_result()
 
     try:
         ast_before = ast.parse(contents)
