@@ -12,3 +12,15 @@ except ImportError:
     sys.path.append(os.path.join(home, "src"))
 else:
     config.add_src_to_path()
+
+import pytest
+
+from flynt.state import _reset
+
+
+@pytest.fixture(autouse=True)
+def reset_state():
+    """
+    Fixture to reset the global state between each test
+    """
+    _reset()
