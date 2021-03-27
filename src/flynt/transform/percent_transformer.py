@@ -170,8 +170,10 @@ def transform_generic(node):
         return transform_dict(node), True
 
     # if it's just a name then pretend it's tuple to use that code
+    str_in_str = any(isinstance(n, (ast.Str, ast.JoinedStr)) for n in ast.walk(node.right))
+
     node.right = ast.Tuple(elts=[node.right])
-    return transform_tuple(node), False
+    return transform_tuple(node), str_in_str
 
 
 supported_operands = [

@@ -436,3 +436,16 @@ def test_floats_precision_equiv(number, fmt_spec):
     out, count = process.fstringify_code_by_line(percent_fmt_string)
 
     assert eval(out) == eval(percent_fmt_string)
+
+
+
+
+def test_multiline_tuple():
+    s_in = """s = '%s' % (
+                    v['key'])"""
+
+    expected = """s = f"{v['key']}\""""
+
+    out, count = process.fstringify_code_by_line(s_in)
+    assert out == expected
+
