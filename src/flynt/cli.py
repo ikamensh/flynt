@@ -9,7 +9,9 @@ from flynt import __version__
 
 
 def main():
+    return sys.exit(run_flynt_cli())
 
+def run_flynt_cli():
     parser = argparse.ArgumentParser(
         description=f"flynt v.{__version__}", add_help=True, epilog=__doc__
     )
@@ -109,11 +111,11 @@ def main():
 
     if args.version:
         print(__version__)
-        sys.exit(0)
+        return 0
     elif not args.src:
         print("flynt: error: the following arguments are required: src")
         parser.print_usage()
-        sys.exit(1)
+        return 1
 
     print(f"Running flynt v.{__version__}")
     if args.dry_run:
@@ -121,7 +123,7 @@ def main():
 
     if args.transform_concats and sys.version_info < (3, 8):
         raise Exception(
-            f"""Transforming string concatenations is only possible with flynt 
+            f"""Transforming string concatenations is only possible with flynt
                 installed to a python3.8+ interpreter. Currently using {sys.version_info}."""
         )
 
