@@ -109,6 +109,11 @@ class Chunk:
         if t.is_string():
             self.string_in_string = True
 
+        if len(self) == 2 and t.tokval != 'format':
+            self.complete = True
+            self.successful = False
+            return
+
         self.tokens.append(t)
         if len(self) > 3 and self.is_parseable:
             self.complete = True

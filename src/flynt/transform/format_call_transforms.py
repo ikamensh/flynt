@@ -30,10 +30,14 @@ def matching_call(node) -> bool:
     """
     Check if an ast Node represents a "...".format() call.
     """
+    call_from_string = isinstance(node.func.value, ast.Str) or (
+        isinstance(node.func.value, ast.Constant)
+        and isinstance(node.func.value.value, str)
+    )
     return (
         isinstance(node, ast.Call)
         and hasattr(node.func, "value")
-        and isinstance(node.func.value, ast.Str)
+        and call_from_string
         and node.func.attr == "format"
     )
 
