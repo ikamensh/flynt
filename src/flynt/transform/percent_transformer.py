@@ -13,6 +13,7 @@ FORMAT_GROUP_MATCH = f"[hlL]?([{FORMATS}])"
 
 PREFIX_GROUP = "[0-9]*[.]?[0-9]*"
 
+ANY_DICT = re.compile(r"(?<!%)%\([^)]+?\)")
 DICT_PATTERN = re.compile(rf"(%\([^)]+\){PREFIX_GROUP}{FORMAT_GROUP})")
 SPLIT_DICT_PATTERN = re.compile(rf"%\(([^)]+)\)({PREFIX_GROUP}){FORMAT_GROUP_MATCH}")
 VAR_KEY_PATTERN = re.compile(
@@ -68,6 +69,11 @@ def transform_dict(node):
 
     format_str = node.left.s
     matches = DICT_PATTERN.findall(format_str)
+    if len(matches) != len(ANY_DICT.findall(format_str)):
+        raise FlyntException(
+            "Some locations have unknown format modifiers."
+        )
+
     spec = []
     for idx, m in enumerate(matches):
         _, var_key, prefix, fmt_str, _ = SPLIT_DICT_PATTERN.split(m)

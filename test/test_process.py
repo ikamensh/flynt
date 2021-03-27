@@ -454,3 +454,12 @@ def test_kv_loop():
 
     out, count = process.fstringify_code_by_line(s_in)
     assert out == expected
+
+
+def test_unknown_mod_percend_dictionary():
+    """Unknown modifier must not result in partial conversion!"""
+
+    s_in = """\"%(a)-6d %(a)s" % d"""
+
+    out, count = process.fstringify_code_by_line(s_in)
+    assert out == s_in
