@@ -143,15 +143,7 @@ def run_flynt_cli():
     state.quiet = args.quiet
     state.dry_run = args.dry_run
 
-    if args.string:
-        converted, _ = fstringify_code_by_line(
-            " ".join(args.src),
-            multiline=not args.no_multiline,
-            len_limit=int(args.line_length),
-        )
-        print(converted)
-        return 0
-    else:
+    if not args.string:
         return fstringify(
             args.src,
             excluded_files_or_paths=args.exclude,
@@ -160,3 +152,11 @@ def run_flynt_cli():
             fail_on_changes=args.fail_on_change,
             transform_concat=args.transform_concats,
         )
+
+    converted, _ = fstringify_code_by_line(
+        " ".join(args.src),
+        multiline=not args.no_multiline,
+        len_limit=int(args.line_length),
+    )
+    print(converted)
+    return 0
