@@ -463,3 +463,29 @@ def test_unknown_mod_percend_dictionary():
 
     out, count = process.fstringify_code_by_line(s_in)
     assert out == s_in
+
+
+s_in_mixed_quotes = """'one is {} '
+"and two is {}".format(one, two) 
+""".strip()
+
+def test_mixed_quote_types():
+    """Test that a multiline, mixed-quotes expression is transformed."""
+
+    expected = '''f"one is {one} and two is {two}"'''
+
+    out, count = process.fstringify_code_by_line(s_in_mixed_quotes)
+    assert out == expected
+
+
+s_in_mixed_quotes_unsafe = """'one is "{}" '
+"and two is {}".format('"'.join(one), two) 
+""".strip()
+
+def test_mixed_quote_types_unsafe():
+    """Test that a multiline, mixed-quotes expression is transformed."""
+
+    # expected = '''f"one is {one} and two is {two}"'''
+
+    out, count = process.fstringify_code_by_line(s_in_mixed_quotes_unsafe)
+    assert out == s_in_mixed_quotes_unsafe
