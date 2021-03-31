@@ -8,7 +8,7 @@ from flynt.cli import run_flynt_cli
 from flynt.cli_messages import farewell_message
 
 
-class ArgumentParser(object):
+class ArgumentParser():
     """
     Mock class for argparse.ArgumentParser
 
@@ -90,6 +90,61 @@ def test_cli_version(monkeypatch, capsys):
 
     out, err = capsys.readouterr()
     assert out == f"{flynt.__version__}\n"
+    assert err == ""
+
+
+# Code snippets for testing the -s/--string argument
+cli_string_snippets = pytest.mark.parametrize(
+    "code_in, code_out",
+    [
+        ("'{}'.format(x) + '{}'.format(y)", "f'{x}' + f'{y}'"),
+        (
+            "['{}={}'.format(key, value) for key, value in x.items()]",
+            "[f'{key}={value}' for key, value in x.items()]",
+        ),
+        (
+            '["{}={}".format(key, value) for key, value in x.items()]',
+            '[f"{key}={value}" for key, value in x.items()]',
+        ),
+        (
+            "This ! isn't <> valid .. Python $ code",
+            "This ! isn't <> valid .. Python $ code",
+        ),
+    ],
+)
+
+
+@cli_string_snippets
+def test_cli_string_quoted(monkeypatch, capsys, code_in, code_out):
+    """
+    Tests an invocation with quotes, like:
+
+        flynt -s "some code snippet"
+
+    Then the src argument will be ["some code snippet"].
+    """
+    return_code = run_cli_test(monkeypatch, string=True, src=[code_in])
+    assert return_code == 0
+
+    out, err = capsys.readouterr()
+    assert out.strip() == code_out
+    assert err == ""
+
+
+@cli_string_snippets
+def test_cli_string_unquoted(monkeypatch, capsys, code_in, code_out):
+    """
+    Tests an invocation with no quotes, like:
+
+        flynt -s some code snippet
+
+    Then the src argument will be ["some", "code", "snippet"].
+    """
+    return_code = run_cli_test(monkeypatch, string=True, src=code_in.split())
+    assert return_code == 0
+
+    out, err = capsys.readouterr()
+    assert out.strip() == code_out
     assert err == ""
 
 

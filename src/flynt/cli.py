@@ -3,7 +3,7 @@
 import argparse
 import sys
 
-from flynt.api import fstringify
+from flynt.api import fstringify, fstringify_code_by_line
 from flynt import state
 from flynt import __version__
 
@@ -65,6 +65,15 @@ def run_flynt_cli():
     )
 
     parser.add_argument(
+        "-s",
+        "--string",
+        action="store_true",
+        default=False,
+        help="Interpret the input as a Python code snippet and print the converted version. "
+        "The snippet must use single quotes or escaped double quotes. "
+    )
+
+    parser.add_argument(
         "-tc",
         "--transform-concats",
         action="store_true",
@@ -117,7 +126,9 @@ def run_flynt_cli():
         parser.print_usage()
         return 1
 
-    print(f"Running flynt v.{__version__}")
+    if not args.string:
+        print(f"Running flynt v.{__version__}")
+
     if args.dry_run:
         print("Running flynt in dry-run mode. No files will be changed.")
 
@@ -132,11 +143,20 @@ def run_flynt_cli():
     state.quiet = args.quiet
     state.dry_run = args.dry_run
 
-    return fstringify(
-        args.src,
-        excluded_files_or_paths=args.exclude,
-        multiline=not args.no_multiline,
-        len_limit=int(args.line_length),
-        fail_on_changes=args.fail_on_change,
-        transform_concat=args.transform_concats,
-    )
+    if args.string:
+        converted, _ = fstringify_code_by_line(
+            " ".join(args.src),
+            multiline=not args.no_multiline,
+            len_limit=int(args.line_length),
+        )
+        print(converted)
+        return 0
+    else:
+        return fstringify(
+            args.src,
+            excluded_files_or_paths=args.exclude,
+            multiline=not args.no_multiline,
+            len_limit=int(args.line_length),
+            fail_on_changes=args.fail_on_change,
+            transform_concat=args.transform_concats,
+        )

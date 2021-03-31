@@ -10,8 +10,8 @@ F-Strings:
 
 ### Installation
 
-`pip install flynt`. It requires Python version 3.6+.  
- 
+`pip install flynt`. It requires Python version 3.6+.
+
 ### Usage
 
 *Flynt will modify the files it runs on. Add your project to version control system before using flynt.*
@@ -24,14 +24,10 @@ To run: `flynt {source_file_or_directory}`
 It turns the code it runs on into Python 3.6+, since 3.6 is when "f-strings" were introduced.
 
 ### Command line options
+
+From the output of `flynt -h`:
+
 ```
-flynt v.0.48
-
-usage:  flynt [-h] [-v | -q] 
-        [--no-multiline | -ll LINE_LENGTH] 
-        [-tc] [-f] [-a] [-e EXCLUDE [EXCLUDE ...]] 
-        src [src ...]
-
 positional arguments:
   src                   source file(s) or directory
 
@@ -42,11 +38,10 @@ optional arguments:
   --no-multiline        convert only single line expressions
   -ll LINE_LENGTH, --line-length LINE_LENGTH
                         for expressions spanning multiple lines, convert only if the resulting single line will fit into the line length limit. Default value is 88 characters.
-  -d, --dry-run         Do not change the files in-place and print the diff
-                        instead. 
+  -d, --dry-run         Do not change the files in-place and print the diff instead. Note that this must be used in conjunction with '--fail-on-change' when used for linting purposes.
+  -s, --string          Interpret the input as a Python code snippet and print the converted version. The snippet must use single quotes or escaped double quotes.
   -tc, --transform-concats
-                        Replace string concatenations (defined as + operations involving string literals) with f-strings. Available only if flynt is installed with 3.8+
-                        interpreter.
+                        Replace string concatenations (defined as + operations involving string literals) with f-strings. Available only if flynt is installed with 3.8+ interpreter.
   -f, --fail-on-change  Fail when changing files (for linting purposes)
   -a, --aggressive      Include conversions with potentially changed behavior.
   -e EXCLUDE [EXCLUDE ...], --exclude EXCLUDE [EXCLUDE ...]
@@ -105,11 +100,11 @@ You can skip conversion of certain lines by adding `# noqa [: anything else] fly
 
 ### About
 
-Read up on f-strings here: 
+Read up on f-strings here:
 - https://realpython.com/python-f-strings/
 - https://www.python.org/dev/peps/pep-0498/
 
-After obsessively refactoring a project at work, and not even covering 50% of f-string candidates, I realized there was some place for automation. Also it was very interesting to work with ast module. 
+After obsessively refactoring a project at work, and not even covering 50% of f-string candidates, I realized there was some place for automation. Also it was very interesting to work with ast module.
 
 ### Dangers of conversion
 It is not guaranteed that formatted strings will be exactly the same as before conversion.
