@@ -489,3 +489,14 @@ def test_mixed_quote_types_unsafe():
 
     out, count = process.fstringify_code_by_line(s_in_mixed_quotes_unsafe)
     assert out == s_in_mixed_quotes_unsafe
+
+
+def test_super_call():
+    """Regression for https://github.com/ikamensh/flynt/issues/103 - """
+
+    s_in = '"{}/{}".format(super(SuggestEndpoint, self).path, self.facet.suggest)'
+    expected = 'f"{super(SuggestEndpoint, self).path}/{self.facet.suggest}"'
+
+    out, count = process.fstringify_code_by_line(s_in)
+    assert count == 1
+    assert out == expected
