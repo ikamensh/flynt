@@ -8,9 +8,12 @@ from flynt import state
 from flynt.api import _fstringify_file
 
 # These "files" are byte-string constants instead of actual files to prevent e.g. Git or text editors from accidentally changing the encoding
-invalid_unicode = b"# This is not valid unicode: " + bytes([0xff, 0xff])
+invalid_unicode = b"# This is not valid unicode: " + bytes([0xFF, 0xFF])
 mixed_line_endings_before = b"'{}'.format(1)\n'{}'.format(2)# Linux line ending\n'{}'.format(3)# Windows line ending\r\n"
-mixed_line_endings_after = b"f'{1}'\nf'{2}'# Linux line ending\nf'{3}'# Windows line ending\r\n"
+mixed_line_endings_after = (
+    b"f'{1}'\nf'{2}'# Linux line ending\nf'{3}'# Windows line ending\r\n"
+)
+
 
 @pytest.fixture()
 def formattable_file(tmpdir):
@@ -75,6 +78,7 @@ def test_invalid_unicode(invalid_unicode_file):
 
     assert not modified
     assert content_after == invalid_unicode
+
 
 def test_works(formattable_file):
 
@@ -150,3 +154,22 @@ def test_mixed_line_endings(mixed_line_endings_file):
 
     assert modified
     assert content_after == mixed_line_endings_after
+
+
+@pytest.fixture()
+def bom_file(tmpdir):
+    folder = os.path.dirname(__file__)
+    source_path = os.path.join(folder, "samples_in", "bom.py")
+    tmp_path = os.path.join(tmpdir, "input.py")
+
+    shutil.copy2(source_path, tmp_path)
+    yield tmp_path
+
+
+def test_bom(bom_file):
+    """Test on a file with Byte order mark https://en.wikipedia.org/wiki/Byte_order_mark
+
+    It's possible to verify that a file has bom using `file` unix utility. """
+
+    modified, _, _, _ = _fstringify_file(bom_file, True, 1000)
+    assert modified

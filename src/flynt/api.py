@@ -1,9 +1,10 @@
 import ast
+import codecs
 import os
 import sys
 import time
 import traceback
-from typing import Tuple, List
+from typing import Tuple, List, Optional
 from difflib import unified_diff
 
 import astor
@@ -22,20 +23,25 @@ def _fstringify_file(
     :return: tuple: (changes_made, n_changes,
     length of original code, length of new code)
     """
+
     def default_result():
         return False, 0, len(contents), len(contents)
 
-    with open(filename, encoding="utf-8", newline="") as f:
+    encoding, bom = encoding_by_bom(filename)
+
+    with open(filename, encoding=encoding, newline="") as f:
         try:
             contents = f.read()
         except UnicodeDecodeError as e:
-            contents = ''
-            print(f'Exception while reading {filename}: {e}')
+            contents = ""
+            print(f"Exception while reading {filename}: {e}")
             return default_result()
 
     try:
         ast_before = ast.parse(contents)
     except SyntaxError:
+        if state.verbose:
+            traceback.print_exc()
         if not state.quiet:
             print(f"Can't parse {filename} as a python file.")
         return default_result()
@@ -88,7 +94,12 @@ def _fstringify_file(
         ):
             print(l)
     else:
-        with open(filename, "w", encoding="utf-8", newline="") as f:
+        mode = "w"
+        if bom is not None:
+            with open(filename, "wb") as f:
+                f.write(bom)
+            mode = "a"
+        with open(filename, mode, encoding=encoding, newline="") as f:
             f.write(new_code)
 
     return True, changes, len(contents), len(new_code)
@@ -230,3 +241,20 @@ def _resolve_files(files_or_paths, excluded_files_or_paths) -> List[str]:
 
     files = [f for f in files if all(b not in f for b in _blacklist)]
     return files
+
+
+def encoding_by_bom(path, default="utf-8") -> Tuple[str, Optional[bytes]]:
+    """Adapted from https://stackoverflow.com/questions/13590749/reading-unicode-file-data-with-bom-chars-in-python/24370596#24370596 """
+
+    with open(path, "rb") as f:
+        raw = f.read(4)  # will read less if the file is smaller
+    # BOM_UTF32_LE's start is equal to BOM_UTF16_LE so need to try the former first
+    for enc, boms in (
+        ("utf-8-sig", (codecs.BOM_UTF8,)),
+        ("utf-32", (codecs.BOM_UTF32_LE, codecs.BOM_UTF32_BE)),
+        ("utf-16", (codecs.BOM_UTF16_LE, codecs.BOM_UTF16_BE)),
+    ):
+        for bom in boms:
+            if raw.startswith(bom):
+                return enc, bom
+    return default, None
