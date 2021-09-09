@@ -51,6 +51,14 @@ def test_string_specific_len(aggressive):
     assert s_out == s_expected
 
 
+def test_dont_wrap_len(aggressive):
+    s_in = """print('List length %d' % len(sys.argv))"""
+    s_expected = """print(f'List length {len(sys.argv)}')"""
+
+    s_out, count = process.fstringify_code_by_line(s_in)
+    assert s_out == s_expected
+
+
 def test_string_in_string_single():
     s_in = """print('getlivejpg: %s: %s' % (camera['name'], errmsg))"""
     s_expected = """print(f"getlivejpg: {camera['name']}: {errmsg}")"""
@@ -469,6 +477,7 @@ s_in_mixed_quotes = """'one is {} '
 "and two is {}".format(one, two) 
 """.strip()
 
+
 def test_mixed_quote_types():
     """Test that a multiline, mixed-quotes expression is transformed."""
 
@@ -481,6 +490,7 @@ def test_mixed_quote_types():
 s_in_mixed_quotes_unsafe = """'one is "{}" '
 "and two is {}".format('"'.join(one), two) 
 """.strip()
+
 
 def test_mixed_quote_types_unsafe():
     """Test that a multiline, mixed-quotes expression is transformed."""
