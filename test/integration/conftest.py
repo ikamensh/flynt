@@ -4,6 +4,7 @@ all_files = pytest.fixture(
     params=[
         "CantAffordActiveException.py",
         "quotes_issue107.py",
+        "multiline_issue102.py",
         "all_named.py",
         "def_empty_line.py",
         "digit_ordering.py",
