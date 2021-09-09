@@ -87,7 +87,7 @@ class JoinTransformer:
                 if chunk.string_in_string and chunk.n_lines == 1
                 else chunk.quote_type
             )
-        except FlyntException as e:
+        except FlyntException:
             quote_type = qt.double
 
         converted, changed = self.transform_func(str(chunk), quote_type=quote_type)
@@ -151,7 +151,6 @@ class JoinTransformer:
 
             self.results[-2] = self.results[-2][:-1]
             self.last_idx += 1
-
 
     def add_rest(self):
         self.results.append(self.src_lines[self.last_line][self.last_idx :] + "\n")
