@@ -3,6 +3,7 @@ import pytest
 all_files = pytest.fixture(
     params=[
         "CantAffordActiveException.py",
+        "quotes_issue107.py",
         "all_named.py",
         "def_empty_line.py",
         "digit_ordering.py",
@@ -60,7 +61,7 @@ all_files = pytest.fixture(
 )
 
 # @pytest.fixture(params=[
-#         "insert_constant_str.py",
+#         "quotes_issue107.py",
 # ])
 @all_files
 def filename(request):

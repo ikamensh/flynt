@@ -47,7 +47,7 @@ def transform_chunk(
             new_code = new_code.replace("\t", "\\t")
             try:
                 ast.parse(new_code)
-            except Exception as e:
+            except SyntaxError as e:
                 if state.verbose:
                     print(
                         f"Failed to parse transformed code '{new_code}' given original '{code}'"

@@ -70,9 +70,7 @@ def transform_dict(node):
     format_str = node.left.s
     matches = DICT_PATTERN.findall(format_str)
     if len(matches) != len(ANY_DICT.findall(format_str)):
-        raise FlyntException(
-            "Some locations have unknown format modifiers."
-        )
+        raise FlyntException("Some locations have unknown format modifiers.")
 
     spec = []
     for idx, m in enumerate(matches):
@@ -176,7 +174,9 @@ def transform_generic(node):
         return transform_dict(node), True
 
     # if it's just a name then pretend it's tuple to use that code
-    str_in_str = any(isinstance(n, (ast.Str, ast.JoinedStr)) for n in ast.walk(node.right))
+    str_in_str = any(
+        isinstance(n, (ast.Str, ast.JoinedStr)) for n in ast.walk(node.right)
+    )
 
     node.right = ast.Tuple(elts=[node.right])
     return transform_tuple(node), str_in_str
@@ -194,14 +194,14 @@ supported_operands = [
 
 
 def transform_binop(node):
-    if isinstance(
-        node.right,
-        tuple(supported_operands),
-    ):
+    if isinstance(node.right, tuple(supported_operands)):
         return transform_generic(node)
 
     elif isinstance(node.right, ast.Tuple):
-        return transform_tuple(node), False
+        return (
+            transform_tuple(node),
+            any(isinstance(n, (ast.Str, ast.JoinedStr)) for n in ast.walk(node.right)),
+        )
 
     elif isinstance(node.right, ast.Dict):
         # todo adapt transform dict to Dict literal
