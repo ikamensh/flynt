@@ -94,7 +94,7 @@ def transform_dict(node):
             mapping[str(ast.literal_eval(k))] = v
 
         def make_fv(key: str):
-            return mapping.pop(key)
+            return mapping[key]
 
     else:
 
@@ -112,11 +112,6 @@ def transform_dict(node):
         else:
             # no match means it's just a literal string
             segments.append(ast.Str(s=block.replace("%%", "%")))
-
-    if mapping:
-        raise FlyntException(
-            "Not all keys were matched - either a flynt error or original code error."
-        )
 
     return ast.JoinedStr(segments)
 
