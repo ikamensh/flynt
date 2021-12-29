@@ -36,27 +36,22 @@ def formatted_value(fmt_prefix, fmt_spec, val):
                 "Default text alignment has changed between percent fmt and fstrings. "
                 "Proceeding would result in changed code behaviour."
             )
-        fv = ast_formatted_value(
+        return ast_formatted_value(
             val, fmt_str=fmt_prefix, conversion=conversion_methods[fmt_spec]
         )
     else:
         fmt_spec = translate_conversion_types.get(fmt_spec, fmt_spec)
         if fmt_spec == "d":
-            if state.aggressive:
-                if isinstance(val, ast.Call) and val.func.id == "len":
-                    # don't wrap len() into int() - assume it returns int already. see issue #108 on github
-                    pass
-                else:
-                    val = ast.Call(
-                        func=ast.Name(id="int", ctx=ast.Load()), args=[val], keywords={}
-                    )
-                fmt_spec = ""
-            else:
+            if not state.aggressive:
                 raise FlyntException(
                     "Skipping %d formatting - fstrings behave differently from % formatting."
                 )
-        fv = ast_formatted_value(val, fmt_str=fmt_prefix + fmt_spec)
-    return fv
+            if not isinstance(val, ast.Call) or val.func.id != "len":
+                val = ast.Call(
+                    func=ast.Name(id="int", ctx=ast.Load()), args=[val], keywords={}
+                )
+            fmt_spec = ""
+        return ast_formatted_value(val, fmt_str=fmt_prefix + fmt_spec)
 
 
 def transform_dict(node):
