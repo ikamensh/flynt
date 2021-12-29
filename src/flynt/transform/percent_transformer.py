@@ -94,7 +94,8 @@ def transform_dict(node):
             mapping[str(ast.literal_eval(k))] = v
 
         def make_fv(key: str):
-            return mapping[key]
+            # only allow reused keys when aggressive is on
+            return mapping[key] if state.aggressive else mapping.pop(key)
 
     else:
 

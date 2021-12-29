@@ -304,11 +304,18 @@ def test_double_percent_dict():
     assert process.fstringify_code_by_line(s_in)[0] == s_expected
 
 
-def test_percent_dict_reused_key():
-    s_in = """a = '%(?)s %(?)s' % {'?': var}"""
+percent_dict_reused_key = """a = '%(?)s %(?)s' % {'?': var}"""
+
+
+def test_percent_dict_reused_key_noop():
+    assert (process.fstringify_code_by_line(percent_dict_reused_key)[0] ==
+            percent_dict_reused_key)
+
+
+def test_percent_dict_reused_key_aggressive(aggressive):
     s_expected = """a = f'{var} {var}'"""
 
-    assert process.fstringify_code_by_line(s_in)[0] == s_expected
+    assert process.fstringify_code_by_line(percent_dict_reused_key)[0] == s_expected
 
 
 def test_percent_dict_name():
