@@ -78,7 +78,11 @@ def parse_pyproject_toml(path_config: str) -> Dict[str, Any]:
     """
     with open(path_config, encoding="utf8") as f:
         pyproject_toml = tomli.load(f)
+
     config = pyproject_toml.get("tool", {}).get("flynt", {})
+    if path_config.endswith("flynt.toml"):
+        config.update(pyproject_toml)
+
     return {k.replace("--", "").replace("-", "_"): v for k, v in config.items()}
 
 
@@ -91,8 +95,8 @@ def find_user_pyproject_toml() -> Path:
     """
     if sys.platform == "win32":
         # Windows
-        user_config_path = Path.home() / ".flynt"
+        user_config_path = Path.home() / ".flynt.toml"
     else:
         config_root = os.environ.get("XDG_CONFIG_HOME", "~/.config")
-        user_config_path = Path(config_root).expanduser() / "flynt"
+        user_config_path = Path(config_root).expanduser() / "flynt.toml"
     return user_config_path.resolve()

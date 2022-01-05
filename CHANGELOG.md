@@ -1,3 +1,9 @@
+#### v.0.71
+
+Added support to configuration via file.
+For per-project configuration, use `pyproject.toml` file, [tool.flynt] section.
+for global config, use `~/.config/flynt.toml` file.
+
 
 #### v.0.47
 

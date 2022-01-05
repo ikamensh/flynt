@@ -102,7 +102,7 @@ You can skip conversion of certain lines by adding `# noqa [: anything else] fly
 
 Since v0.71 flynt can be configured using `pyproject.toml` file on a per-project basis. 
 Use same arguments as in CLI, and add them to `[tool.flynt]` section. CLI arguments takes precedence over the config file.
-It can also be configured globally with a toml file located in `~/.config/flynt` on Unix / `~/.flynt` on Windows.
+It can also be configured globally with a toml file located in `~/.config/flynt.toml` on Unix / `~/.flynt.toml` on Windows.
 
 ### About
 
