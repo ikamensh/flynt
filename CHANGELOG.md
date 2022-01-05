@@ -4,6 +4,10 @@ Added support to configuration via file.
 For per-project configuration, use `pyproject.toml` file, [tool.flynt] section.
 for global config, use `~/.config/flynt.toml` file.
 
+#### v0.70
+
+*[Contributed by Ryan Barrett]* Aggressive mode enables transforming expressions where same variable is used twice, 
+e.g. `"""a = '%(?)s %(?)s' % {'?': var}"""` to `"""a = f'{var} {var}'"""` 
 
 #### v.0.47
 
