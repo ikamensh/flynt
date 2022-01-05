@@ -3,13 +3,13 @@ https://github.com/psf/black/
 """
 
 import sys
+import warnings
 from functools import lru_cache
 from pathlib import Path
 import os
 from typing import Tuple, Optional, Dict, Any, Sequence
 
 import tomli
-from black import err
 
 
 @lru_cache()
@@ -67,7 +67,7 @@ def find_pyproject_toml(path_search_start: Tuple[str, ...]) -> Optional[str]:
         )
     except PermissionError as e:
         # We do not have access to the user-level config directory, so ignore it.
-        err(f"Ignoring user configuration directory due to {e!r}")
+        warnings.warn(f"Ignoring user configuration directory due to {e!r}")
         return None
 
 
