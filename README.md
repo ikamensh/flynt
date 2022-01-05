@@ -98,6 +98,12 @@ This will run flynt on all modified files before commiting.
 You can skip conversion of certain lines by adding `# noqa [: anything else] flynt [anything else]`
 
 
+### Configuration files
+
+Since v0.71 flynt can be configured using `pyproject.toml` file on a per-project basis. 
+Use same arguments as in CLI, and add them to `[tool.flynt]` section. CLI arguments takes precedence over the config file.
+It can also be configured globally with a toml file located in `~/.config/flynt` on Unix / `~/.flynt` on Windows.
+
 ### About
 
 Read up on f-strings here:
@@ -123,3 +129,4 @@ Furthermore, some arguments cause formatting of strings to throw exceptions. One
 
 - [astor](https://github.com/berkerpeksag/astor) is used to turn the transformed AST back into code.
 - Thanks to folks from [pyddf](https://www.pyddf.de/) for their support, advice and participation during spring hackathon 2019, in particular Holger Hass, Farid Muradov, Charlie Clark.
+- Logic finding the pyproject.toml and parsing it was partially copied from [black](https://github.com/psf/black) 

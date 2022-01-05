@@ -2,18 +2,22 @@
 
 import argparse
 import sys
+import warnings
 
 from flynt.api import fstringify, fstringify_code_by_line
 from flynt import state
 from flynt import __version__
+from flynt.pyproject_finder import find_pyproject_toml, parse_pyproject_toml
 
 
 def main():
     return sys.exit(run_flynt_cli())
 
+
 def run_flynt_cli():
+    """"""
     parser = argparse.ArgumentParser(
-        description=f"flynt v.{__version__}", add_help=True, epilog=__doc__
+        description=f"flynt v.{__version__}", add_help=True
     )
 
     verbosity_group = parser.add_mutually_exclusive_group()
@@ -30,20 +34,11 @@ def run_flynt_cli():
 
     multiline_group = parser.add_mutually_exclusive_group()
     multiline_group.add_argument(
-        "--no_multiline", action="store_true", help=argparse.SUPPRESS, default=False
-    )
-
-    multiline_group.add_argument(
         "--no-multiline",
         action="store_true",
         help="convert only single line expressions",
         default=False,
     )
-
-    multiline_group.add_argument(
-        "--line_length", action="store", help=argparse.SUPPRESS, default=88
-    )
-
     multiline_group.add_argument(
         "-ll",
         "--line-length",
@@ -70,7 +65,7 @@ def run_flynt_cli():
         action="store_true",
         default=False,
         help="Interpret the input as a Python code snippet and print the converted version. "
-        "The snippet must use single quotes or escaped double quotes. "
+        "The snippet must use single quotes or escaped double quotes. ",
     )
 
     parser.add_argument(
@@ -126,8 +121,25 @@ def run_flynt_cli():
         parser.print_usage()
         return 1
 
+    salutation = f"Running flynt v.{__version__}"
+    toml_file = find_pyproject_toml(tuple(args.src))
+    if toml_file:
+        salutation += f"\nUsing config file at {toml_file}"
+        cfg = parse_pyproject_toml(toml_file)
+        supported_args = list(args.__dict__.keys())
+        redundant = set(cfg.keys()) - set(supported_args)
+        if redundant:
+            supported_args.sort()
+            warnings.warn(
+                f"Unknown config options: {redundant}. "
+                f"This might be a spelling problem. "
+                f"Supported options are: {supported_args}"
+            )
+        parser.set_defaults(**cfg)
+        args = parser.parse_args()
+
     if not args.string:
-        print(f"Running flynt v.{__version__}")
+        print(salutation)
 
     if args.dry_run:
         print("Running flynt in dry-run mode. No files will be changed.")
@@ -137,6 +149,9 @@ def run_flynt_cli():
             f"""Transforming string concatenations is only possible with flynt
                 installed to a python3.8+ interpreter. Currently using {sys.version_info}."""
         )
+
+    if args.verbose and not args.string:
+        print(f"Using following options: {args}")
 
     state.aggressive = args.aggressive
     state.verbose = args.verbose

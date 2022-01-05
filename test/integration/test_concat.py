@@ -43,7 +43,9 @@ def try_on_file_string_concat(filename: str, multiline):
     out_path = os.path.join(out_dir, filename)
     shutil.copyfile(in_path, out_path)
 
-    _fstringify_file(out_path, multiline=multiline, len_limit=120, transform_concat=True)
+    _fstringify_file(
+        out_path, multiline=multiline, len_limit=120, transform_concat=True
+    )
     out = read_output_file(filename)
 
     return out, read_expected(filename)

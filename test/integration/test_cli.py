@@ -8,7 +8,7 @@ from flynt.cli import run_flynt_cli
 from flynt.cli_messages import farewell_message
 
 
-class ArgumentParser():
+class ArgumentParser:
     """
     Mock class for argparse.ArgumentParser
 
@@ -42,8 +42,11 @@ class ArgumentParser():
     def parse_args(self):
         return self.parse_args_return_value
 
+    def set_defaults(self):
+        pass
 
-class MutuallyExclusiveGroup(object):
+
+class MutuallyExclusiveGroup:
     """
     Mock class for argparse.MutuallyExclusiveGroup
     """

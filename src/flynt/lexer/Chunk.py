@@ -109,7 +109,7 @@ class Chunk:
         if t.is_string():
             self.string_in_string = True
 
-        if len(self) == 2 and t.tokval != 'format':
+        if len(self) == 2 and t.tokval != "format":
             self.complete = True
             self.successful = False
             return

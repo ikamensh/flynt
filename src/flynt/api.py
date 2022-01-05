@@ -4,7 +4,7 @@ import os
 import sys
 import time
 import traceback
-from typing import Tuple, List, Optional
+from typing import Tuple, List, Optional, Collection
 from difflib import unified_diff
 
 import astor
@@ -131,6 +131,7 @@ def fstringify_files(files, multiline, len_limit, transform_concat):
 
     if not state.quiet:
         _print_report(
+            len(files),
             changed_files,
             total_charcount_new,
             total_charcount_original,
@@ -142,10 +143,11 @@ def fstringify_files(files, multiline, len_limit, transform_concat):
 
 
 def _print_report(
-    changed_files, total_cc_new, total_cc_original, total_expr, total_time
+    found_files, changed_files, total_cc_new, total_cc_original, total_expr, total_time
 ):
     print("\nFlynt run has finished. Stats:")
     print(f"\nExecution time:                            {total_time:.3f}s")
+    print(f"Files checked:                             {found_files}")
     print(f"Files modified:                            {changed_files}")
     if changed_files:
         cc_reduction = total_cc_original - total_cc_new
@@ -193,13 +195,13 @@ def _print_report(
 
 
 def fstringify(
-    files_or_paths,
-    multiline,
-    len_limit,
-    fail_on_changes=False,
-    transform_concat=False,
-    excluded_files_or_paths=None,
-):
+    files_or_paths: List[str],
+    multiline: bool,
+    len_limit: int,
+    fail_on_changes: bool = False,
+    transform_concat: bool = False,
+    excluded_files_or_paths: Optional[Collection[str]] = None,
+) -> int:
     """ determine if a directory or a single file was passed, and f-stringify it."""
 
     files = _resolve_files(files_or_paths, excluded_files_or_paths)
@@ -217,7 +219,9 @@ def fstringify(
         return 0
 
 
-def _resolve_files(files_or_paths, excluded_files_or_paths) -> List[str]:
+def _resolve_files(
+    files_or_paths: List[str], excluded_files_or_paths: Optional[Collection[str]]
+) -> List[str]:
     """Resolve relative paths and directory names into a list of absolute paths to python files."""
 
     files = []

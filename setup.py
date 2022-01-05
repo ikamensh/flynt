@@ -17,7 +17,13 @@ def get_requirements():
 
 setup(
     name="flynt",
-    packages=["flynt", "flynt.transform", "flynt.lexer", "flynt.string_concat", "flynt.linting"],
+    packages=[
+        "flynt",
+        "flynt.transform",
+        "flynt.lexer",
+        "flynt.string_concat",
+        "flynt.linting",
+    ],
     package_dir={"": "src"},
     version=version,
     description="CLI tool to convert a python project's %-formatted strings "
