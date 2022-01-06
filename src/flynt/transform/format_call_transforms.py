@@ -6,6 +6,7 @@ from typing import Tuple, Union
 
 import astor
 
+from flynt import state
 from flynt.exceptions import FlyntException, ConversionRefused
 
 
@@ -100,18 +101,22 @@ def joined_string(fmt_call: ast.Call) -> Tuple[Union[ast.JoinedStr, ast.Str], bo
         else:
             identifier = var_name
 
-        try:
-            ast_name = var_map.pop(identifier)
-        except KeyError as e:
-            raise ConversionRefused(
-                f"A variable {identifier} is used multiple times - better not to replace it."
-            ) from e
+        if state.aggressive:
+            ast_name = var_map[identifier]
+        else:
+            try:
+
+                ast_name = var_map.pop(identifier)
+            except KeyError as e:
+                raise ConversionRefused(
+                    f"A variable {identifier} is used multiple times - better not to replace it."
+                ) from e
 
         if suffix:
             ast_name = ast.Attribute(value=ast_name, attr=suffix)
         new_segments.append(ast_formatted_value(ast_name, fmt_str, conversion))
 
-    if var_map:
+    if var_map and not state.aggressive:
         raise FlyntException(
             f"Some variables were never used: {var_map} - skipping conversion, it's a risk of bug."
         )

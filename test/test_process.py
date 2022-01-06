@@ -622,6 +622,23 @@ f'some {text} here as {placeholder}'
 
 
 def test_112():
+    """Test for issue #112 on github"""
     out, count = process.fstringify_code_by_line(issue_112)
     assert count == 1
     assert out == expected_112
+
+
+def test_110(aggressive):
+    """Test for issue #110 on github"""
+    s_in = "'{conn.login}:{conn.password}@'.format(conn=x)"
+    expected_out = "f'{x.login}:{x.password}@'"
+    out, count = process.fstringify_code_by_line(s_in)
+    assert count == 1
+    assert out == expected_out
+
+
+def test_110_nonaggr():
+    """Test for issue #110 on github"""
+    s_in = "'{conn.login}:{conn.password}@'.format(conn=x)"
+    out, count = process.fstringify_code_by_line(s_in)
+    assert count == 0
