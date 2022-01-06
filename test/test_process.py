@@ -638,7 +638,7 @@ def test_110(aggressive):
 
 
 def test_110_nonaggr():
-    """Test for issue #110 on github"""
+    """Test for issue #110 on github - no change in code expected outside of -aggr flag"""
     s_in = "'{conn.login}:{conn.password}@'.format(conn=x)"
     out, count = process.fstringify_code_by_line(s_in)
     assert count == 0

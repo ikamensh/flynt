@@ -42,11 +42,12 @@ def formatted_value(fmt_prefix, fmt_spec, val):
     else:
         fmt_spec = translate_conversion_types.get(fmt_spec, fmt_spec)
         if fmt_spec == "d":
-            if not state.aggressive:
-                raise FlyntException(
-                    "Skipping %d formatting - fstrings behave differently from % formatting."
-                )
+            # assume built-in len always returns int
             if not isinstance(val, ast.Call) or val.func.id != "len":
+                if not state.aggressive:
+                    raise FlyntException(
+                        "Skipping %d formatting - fstrings behave differently from % formatting."
+                    )
                 val = ast.Call(
                     func=ast.Name(id="int", ctx=ast.Load()), args=[val], keywords={}
                 )
