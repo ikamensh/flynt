@@ -609,3 +609,19 @@ def test_escaped_mix_double():
     out, count = process.fstringify_code_by_line(escaped_2)
     assert count == 1
     assert out == expected_escaped_2
+
+
+issue_112 = """
+'some {} here as {}'.format(
+text, placeholder)
+"""
+
+expected_112 = """
+f'some {text} here as {placeholder}'
+"""
+
+
+def test_112():
+    out, count = process.fstringify_code_by_line(issue_112)
+    assert count == 1
+    assert out == expected_112
