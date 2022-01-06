@@ -215,6 +215,15 @@ def test_line_split():
     assert s_out == split_expected
 
 
+def test_line_split_single_line():
+    s_in = """a = 'foo {}'.format(var.get('bar'))"""
+    expected = """a = f"foo {var.get('bar')}\""""
+    s_out, count = process.fstringify_code_by_line(s_in)
+
+    assert count == 1
+    assert s_out == expected
+
+
 split_kw = """
 var = {}
 a = 'foo {key}'.format(
@@ -564,3 +573,39 @@ def test_super_call():
     out, count = process.fstringify_code_by_line(s_in)
     assert count == 1
     assert out == expected
+
+
+escaped = """
+var = 'baz'
+'foo " %s \\' bar' % var
+"""
+
+expected_escaped = """
+var = f'bazfoo " {var} \\' bar'
+"""
+
+
+def test_escaped_mix():
+    """Regression for https://github.com/ikamensh/flynt/issues/114"""
+
+    out, count = process.fstringify_code_by_line(escaped)
+    assert count == 1
+    assert out == expected_escaped
+
+
+escaped_2 = """
+var = 'baz'
+"foo ' %s \\" bar" % var
+"""
+
+expected_escaped_2 = """
+var = f"bazfoo ' {var} \\" bar"
+"""
+
+
+def test_escaped_mix_double():
+    """Regression for https://github.com/ikamensh/flynt/issues/114"""
+
+    out, count = process.fstringify_code_by_line(escaped_2)
+    assert count == 1
+    assert out == expected_escaped_2
