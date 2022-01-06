@@ -27,7 +27,8 @@ class FstringifyTransformer(ast.NodeTransformer):
             if any(isinstance(arg, ast.Starred) for arg in node.args):
                 return node
 
-            result_node = joined_string(node)
+            result_node, str_in_str = joined_string(node)
+            self.string_in_string = str_in_str
             self.visit(result_node)
             self.counter += 1
             state.call_transforms += 1

@@ -2,6 +2,7 @@ import ast
 import sys
 import string
 from collections import deque
+from typing import Tuple, Union
 
 import astor
 
@@ -49,11 +50,19 @@ def matching_call(node) -> bool:
 stdlib_parse = string.Formatter().parse
 
 
-def joined_string(fmt_call: ast.Call) -> ast.JoinedStr:
+def joined_string(fmt_call: ast.Call) -> Tuple[Union[ast.JoinedStr, ast.Str], bool]:
     """ Transform a "...".format() call node into a f-string node. """
 
     string = fmt_call.func.value.s
     var_map = {kw.arg: kw.value for kw in fmt_call.keywords}
+    inserted_value_nodes = []
+    for a in fmt_call.args:
+        inserted_value_nodes += list(ast.walk(a))
+    for kw in fmt_call.keywords:
+        inserted_value_nodes += list(ast.walk(kw.value))
+    str_in_str = any(
+        isinstance(n, (ast.Str, ast.JoinedStr)) for n in inserted_value_nodes
+    )
 
     for i, val in enumerate(fmt_call.args):
         var_map[i] = val
@@ -131,8 +140,9 @@ def joined_string(fmt_call: ast.Call) -> ast.JoinedStr:
     new_segments = [fix_literals(e) for e in new_segments]
 
     if all(is_literal_string(segment) for segment in new_segments):
-        return ast.Str(
-            "".join(literal_string_value(segment) for segment in new_segments)
+        return (
+            ast.Str("".join(literal_string_value(segment) for segment in new_segments)),
+            False,
         )
 
-    return ast.JoinedStr(new_segments)
+    return ast.JoinedStr(new_segments), str_in_str

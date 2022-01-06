@@ -196,6 +196,44 @@ def test_indented():
     assert s_out.split("\n")[2] == s_expected
 
 
+split = """
+var = {}
+a = 'foo {}'.format(
+    var.get('bar'))
+"""
+
+split_expected = """
+var = {}
+a = f"foo {var.get('bar')}"
+"""
+
+
+def test_line_split():
+    s_out, count = process.fstringify_code_by_line(split)
+
+    assert count == 1
+    assert s_out == split_expected
+
+
+split_kw = """
+var = {}
+a = 'foo {key}'.format(
+    key=var.get('bar'))
+"""
+
+split_expected_kw = """
+var = {}
+a = f"foo {var.get('bar')}"
+"""
+
+
+def test_line_split_kw():
+    s_out, count = process.fstringify_code_by_line(split_kw)
+
+    assert count == 1
+    assert s_out == split_expected_kw
+
+
 def test_openpyxl():
     s_in = """sheet['B{}'.format(i) : 'E{}'.format(i)]"""
     s_expected = """sheet[f'B{i}' : f'E{i}']"""
