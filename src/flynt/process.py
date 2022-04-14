@@ -161,14 +161,14 @@ class JoinTransformer:
 
 
 def fstringify_code_by_line(code: str, multiline=True, len_limit=88) -> Tuple[str, int]:
-    """ returns fstringified version of the code and amount of lines edited."""
+    """returns fstringified version of the code and amount of lines edited."""
     return _transform_code(
         code, split.get_fstringify_chunks, transform_chunk, multiline, len_limit
     )
 
 
 def fstringify_concats(code: str, multiline=True, len_limit=88) -> Tuple[str, int]:
-    """ replace string literal concatenations with f-string expressions. """
+    """replace string literal concatenations with f-string expressions."""
     return _transform_code(
         code, concat_candidates, transform_concat, multiline, len_limit
     )
@@ -177,7 +177,7 @@ def fstringify_concats(code: str, multiline=True, len_limit=88) -> Tuple[str, in
 def _transform_code(
     code: str, candidates_iter_factory, transform_func, multiline, len_limit
 ) -> Tuple[str, int]:
-    """ returns fstringified version of the code and amount of lines edited."""
+    """returns fstringified version of the code and amount of lines edited."""
 
     len_limit = _multiline_settings(len_limit, multiline)
     jt = JoinTransformer(code, len_limit, candidates_iter_factory, transform_func)

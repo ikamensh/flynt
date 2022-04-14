@@ -169,7 +169,7 @@ def bom_file(tmpdir):
 def test_bom(bom_file):
     """Test on a file with Byte order mark https://en.wikipedia.org/wiki/Byte_order_mark
 
-    It's possible to verify that a file has bom using `file` unix utility. """
+    It's possible to verify that a file has bom using `file` unix utility."""
 
     modified, _, _, _ = _fstringify_file(bom_file, True, 1000)
     assert modified
