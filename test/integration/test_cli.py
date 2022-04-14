@@ -174,13 +174,14 @@ def test_cli_dry_run(monkeypatch, capsys, sample_file):
 
     # Check that the output includes all changed lines, and the farewell message
     out, err = capsys.readouterr()
-
     for line in source_lines:
         if line not in converted_lines:
-            assert f"-{line}" in out, "Original source line missing from output"
+            assert f"-{line.strip()}" in out, "Original source line missing from output"
     for line in converted_lines:
         if line not in source_lines:
-            assert f"+{line}" in out, "Converted source line missing from output"
+            assert (
+                f"+{line.strip()}" in out
+            ), "Converted source line missing from output"
 
     assert out.strip().endswith(farewell_message.strip())
     assert err == ""
