@@ -29,7 +29,11 @@ def run_flynt_cli():
         default=False,
     )
     verbosity_group.add_argument(
-        "-q", "--quiet", action="store_true", help="run without output", default=False
+        "-q",
+        "--quiet",
+        action="store_true",
+        help="run without stdout output",
+        default=False,
     )
 
     multiline_group = parser.add_mutually_exclusive_group()
@@ -121,6 +125,22 @@ def run_flynt_cli():
         parser.print_usage()
         return 1
 
+    if args.transform_concats and sys.version_info < (3, 8):
+        raise Exception(
+            f"""Transforming string concatenations is only possible with flynt
+                installed to a python3.8+ interpreter. Currently using {sys.version_info}."""
+        )
+
+    if args.string:
+        set_global_state(args)
+        converted, _ = fstringify_code_by_line(
+            " ".join(args.src),
+            multiline=not args.no_multiline,
+            len_limit=int(args.line_length),
+        )
+        print(converted)
+        return 0
+
     salutation = f"Running flynt v.{__version__}"
     toml_file = find_pyproject_toml(tuple(args.src))
     if toml_file:
@@ -137,41 +157,25 @@ def run_flynt_cli():
             )
         parser.set_defaults(**cfg)
         args = parser.parse_args()
-
-    if not args.string:
+    set_global_state(args)
+    if not args.quiet:
         print(salutation)
-
+    if args.verbose:
+        print(f"Using following options: {args}")
     if args.dry_run:
         print("Running flynt in dry-run mode. No files will be changed.")
+    return fstringify(
+        args.src,
+        excluded_files_or_paths=args.exclude,
+        multiline=not args.no_multiline,
+        len_limit=int(args.line_length),
+        fail_on_changes=args.fail_on_change,
+        transform_concat=args.transform_concats,
+    )
 
-    if args.transform_concats and sys.version_info < (3, 8):
-        raise Exception(
-            f"""Transforming string concatenations is only possible with flynt
-                installed to a python3.8+ interpreter. Currently using {sys.version_info}."""
-        )
 
-    if args.verbose and not args.string:
-        print(f"Using following options: {args}")
-
+def set_global_state(args):
     state.aggressive = args.aggressive
     state.verbose = args.verbose
     state.quiet = args.quiet
     state.dry_run = args.dry_run
-
-    if args.string:
-        converted, _ = fstringify_code_by_line(
-            " ".join(args.src),
-            multiline=not args.no_multiline,
-            len_limit=int(args.line_length),
-        )
-        print(converted)
-        return 0
-    else:
-        return fstringify(
-            args.src,
-            excluded_files_or_paths=args.exclude,
-            multiline=not args.no_multiline,
-            len_limit=int(args.line_length),
-            fail_on_changes=args.fail_on_change,
-            transform_concat=args.transform_concats,
-        )
