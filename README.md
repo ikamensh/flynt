@@ -1,6 +1,12 @@
 # flynt - string formatting converter
-[![Build Status](https://dev.azure.com/ikamenshchikov/flynt/_apis/build/status/ikamensh.flynt?branchName=master)](https://dev.azure.com/ikamenshchikov/flynt/_build/latest?definitionId=1&branchName=master) ![Coverage](https://img.shields.io/azure-devops/coverage/ikamenshchikov/flynt/1) [![PyPI version](https://badge.fury.io/py/flynt.svg)](https://badge.fury.io/py/flynt)  [![Downloads](https://pepy.tech/badge/flynt)](https://pepy.tech/project/flynt)  [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
+<p align="center">
+<a href="https://github.com/ikamensh/flynt/actions"><img alt="Actions Status" src="https://github.com/ikamensh/flynt/workflows/Test/badge.svg"></a>
+<a href="https://github.com/ikamensh/flynt/blob/main/LICENSE"><img alt="License: MIT" src="https://black.readthedocs.io/en/stable/_static/license.svg"></a>
+<a href="https://pypi.org/project/flynt/"><img alt="PyPI" src="https://img.shields.io/pypi/v/flynt"></a>
+<a href="https://pepy.tech/project/flynt"><img alt="Downloads" src="https://pepy.tech/badge/flynt"></a>
+<a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
+</p>
 
 `flynt` is a command line tool to automatically convert a project's Python code from old "%-formatted" and .format(...) strings into Python 3.6+'s "f-strings".
 
