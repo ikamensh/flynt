@@ -38,7 +38,7 @@ def test_finds_config(tmpdir):
 
 
 def test_ignores_irrelevant_config(tmpdir):
-    """Keys in the config that are in other tools sections should not be parsed. """
+    """Keys in the config that are in other tools sections should not be parsed."""
     path = tmpdir / "pyproject.toml"
     with open(path, "w") as f:
         f.write(other_tool_config)

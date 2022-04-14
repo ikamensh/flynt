@@ -52,7 +52,7 @@ stdlib_parse = string.Formatter().parse
 
 
 def joined_string(fmt_call: ast.Call) -> Tuple[Union[ast.JoinedStr, ast.Str], bool]:
-    """ Transform a "...".format() call node into a f-string node. """
+    """Transform a "...".format() call node into a f-string node."""
 
     string = fmt_call.func.value.s
     var_map = {kw.arg: kw.value for kw in fmt_call.keywords}

@@ -34,7 +34,7 @@ def read_output_file(name):
 
 
 def try_on_file_string_concat(filename: str, multiline):
-    """ Given a file name (something.py) find this file in test/integration/samples_in,
+    """Given a file name (something.py) find this file in test/integration/samples_in,
     run flint_str on its content, write result
     to test/integration/actual_out/something.py,
     and compare the result with test/integration/expected_out/something.py"""

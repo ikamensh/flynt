@@ -565,7 +565,7 @@ def test_mixed_quote_types_unsafe():
 
 
 def test_super_call():
-    """Regression for https://github.com/ikamensh/flynt/issues/103 - """
+    """Regression for https://github.com/ikamensh/flynt/issues/103 -"""
 
     s_in = '"{}/{}".format(super(SuggestEndpoint, self).path, self.facet.suggest)'
     expected = 'f"{super(SuggestEndpoint, self).path}/{self.facet.suggest}"'

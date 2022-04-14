@@ -202,7 +202,7 @@ def fstringify(
     transform_concat: bool = False,
     excluded_files_or_paths: Optional[Collection[str]] = None,
 ) -> int:
-    """ determine if a directory or a single file was passed, and f-stringify it."""
+    """determine if a directory or a single file was passed, and f-stringify it."""
 
     files = _resolve_files(files_or_paths, excluded_files_or_paths)
 
@@ -248,7 +248,7 @@ def _resolve_files(
 
 
 def encoding_by_bom(path, default="utf-8") -> Tuple[str, Optional[bytes]]:
-    """Adapted from https://stackoverflow.com/questions/13590749/reading-unicode-file-data-with-bom-chars-in-python/24370596#24370596 """
+    """Adapted from https://stackoverflow.com/questions/13590749/reading-unicode-file-data-with-bom-chars-in-python/24370596#24370596"""
 
     with open(path, "rb") as f:
         raw = f.read(4)  # will read less if the file is smaller
