@@ -174,7 +174,7 @@ def test_cli_dry_run(monkeypatch, capsys, sample_file):
 
     # Check that the output includes all changed lines, and the farewell message
     out, err = capsys.readouterr()
-
+    print(out)
     for line in source_lines:
         if line not in converted_lines:
             assert f"-{line}" in out, "Original source line missing from output"
