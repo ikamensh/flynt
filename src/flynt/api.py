@@ -213,10 +213,7 @@ def fstringify(
         transform_concat=transform_concat,
     )
 
-    if fail_on_changes:
-        return status
-    else:
-        return 0
+    return status if fail_on_changes else 0
 
 
 def _resolve_files(
@@ -238,8 +235,13 @@ def _resolve_files(
             sys.exit(1)
 
         if os.path.isdir(abs_path):
-            for folder, filename in astor.code_to_ast.find_py_files(abs_path):
-                files.append(os.path.join(folder, filename))
+            files.extend(
+                os.path.join(folder, filename)
+                for folder, filename in astor.code_to_ast.find_py_files(
+                    abs_path
+                )
+            )
+
         else:
             files.append(abs_path)
 
