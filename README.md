@@ -79,7 +79,7 @@ Out of all attempted transforms, 7 resulted in errors.
 To find out specific error messages, use --verbose flag.
 
 _-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_.
-Please run your tests before commiting. Did flynt get a perfect conversion? give it a star at:
+Please run your tests before committing. Did flynt get a perfect conversion? give it a star at:
 ~ https://github.com/ikamensh/flynt ~
 Thank you for using flynt. Upgrade more projects and recommend it to your colleagues!
 
@@ -99,7 +99,7 @@ Add a new section to `.pre-commit-config.yaml`:
     -   id: flynt
 ```
 
-This will run flynt on all modified files before commiting.
+This will run flynt on all modified files before committing.
 
 You can skip conversion of certain lines by adding `# noqa [: anything else] flynt [anything else]`
 
