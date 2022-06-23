@@ -628,6 +628,24 @@ def test_112():
     assert out == expected_112
 
 
+issue_112_simple = """
+'my string {}'.format(
+    my_var,
+)
+"""
+
+expected_112_simple = """
+f'my string {my_var}'
+"""
+
+
+def test_112_simple():
+    """Test for issue #112 on github with a different input."""
+    out, count = process.fstringify_code_by_line(issue_112_simple)
+    assert count == 1
+    assert out == expected_112_simple
+
+
 def test_110(aggressive):
     """Test for issue #110 on github"""
     s_in = "'{conn.login}:{conn.password}@'.format(conn=x)"
