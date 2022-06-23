@@ -1,4 +1,8 @@
 repos:
+-   repo: https://github.com/PyCQA/bandit
+    rev: 1.7.4
+    hooks:
+      - id: bandit  # See setup.cfg for args
 -   repo: https://github.com/ambv/black
     rev: 22.3.0
     hooks:
@@ -8,10 +12,8 @@ repos:
 -   repo: https://github.com/codespell-project/codespell
     rev: v2.1.0
     hooks:
-      - id: codespell
-        args:
-          - --ignore-words-list=hass,thats
+      - id: codespell  # See setup.cfg for args
 -   repo: https://github.com/PyCQA/flake8
     rev: 4.0.1
     hooks:
-    - id: flake8
+    - id: flake8  # See setup.cfg for args
