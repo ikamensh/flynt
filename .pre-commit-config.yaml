@@ -5,7 +5,13 @@ repos:
     - id: black
       language_version: python3
       exclude: test/integration/actual_out|test/integration/actual_out_single_line|test/integration/expected_out|test/integration/expected_out_single_line|test/integration/samples_in
+-   repo: https://github.com/codespell-project/codespell
+    rev: v2.1.0
+    hooks:
+      - id: codespell
+        args:
+          - --ignore-words-list=hass,thats
 -   repo: https://github.com/PyCQA/flake8
-    rev: 3.7.8
+    rev: 4.0.1
     hooks:
     - id: flake8

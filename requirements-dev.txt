@@ -1,9 +1,10 @@
-astor
-pytest
-pytest-cov
+-r requirements.txt
 black
-pre-commit
+codespell
 flake8
 flake8-black
-wheel
+pre-commit
+pytest
+pytest-cov
 twine
+wheel
