@@ -6,13 +6,8 @@ from flynt.ast_chunk import AstChunk
 
 
 def is_str_literal(node):
-    """Returns True if a node is a string literal"""
-    if isinstance(node, ast.Constant):
-        return isinstance(node.value, str)
-    elif isinstance(node, ast.JoinedStr):
-        return True
-    else:
-        return False
+    """Returns True if a node is a string literal. f-string is also a string literal."""
+    return isinstance(node, (ast.Str, ast.JoinedStr))
 
 
 def is_string_concat(node):
