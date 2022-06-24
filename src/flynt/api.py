@@ -89,13 +89,10 @@ def _fstringify_file(
         return default_result()
 
     if state.dry_run:
-        print(
-            "\n".join(
-                unified_diff(
-                    contents.split("\n"), new_code.split("\n"), fromfile=filename
-                )
-            )
+        diff = unified_diff(
+            contents.split("\n"), new_code.split("\n"), fromfile=filename
         )
+        print("\n".join(diff))
     else:
         mode = "w"
         if bom is not None:
