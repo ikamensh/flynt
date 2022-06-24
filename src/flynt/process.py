@@ -106,7 +106,7 @@ class JoinTransformer:
                 lines = converted.split("\\n")
                 lines[-1] += rest
                 lines_fit = all(
-                    len(l) <= self.len_limit - chunk.start_idx for l in lines
+                    len(line) <= self.len_limit - chunk.start_idx for line in lines
                 )
                 converted = converted.replace("\\n", "\n")
             else:
