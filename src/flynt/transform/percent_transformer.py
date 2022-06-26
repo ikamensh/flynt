@@ -2,9 +2,10 @@ import ast
 import re
 from collections import deque
 
-from flynt.exceptions import FlyntException, ConversionRefused
-from flynt.transform.format_call_transforms import ast_formatted_value, ast_string_node
 from flynt import state
+from flynt.exceptions import ConversionRefused, FlyntException
+from flynt.transform.format_call_transforms import (ast_formatted_value,
+                                                    ast_string_node)
 
 FORMATS = "diouxXeEfFgGcrsa"
 

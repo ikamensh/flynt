@@ -1,15 +1,15 @@
 import math
 import re
-from typing import Callable, Tuple
 import string
+from typing import Callable, Tuple
 
 from flynt import lexer, state
 from flynt.exceptions import FlyntException
 from flynt.format import QuoteTypes as qt
 from flynt.format import get_quote_type
 from flynt.lexer import split
-from flynt.transform.transform import transform_chunk
 from flynt.string_concat import concat_candidates, transform_concat
+from flynt.transform.transform import transform_chunk
 
 noqa_regex = re.compile("#[ ]*noqa.*flynt")
 

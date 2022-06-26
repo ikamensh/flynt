@@ -5,9 +5,9 @@ import astor
 
 from flynt.exceptions import FlyntException
 from flynt.format import QuoteTypes, set_quote_type
+from flynt.linting.fstr_lint import FstrInliner
 from flynt.string_concat.candidates import is_string_concat
 from flynt.string_concat.string_in_string import check_sns_depth
-from flynt.linting.fstr_lint import FstrInliner
 
 
 def ast_formatted_value(

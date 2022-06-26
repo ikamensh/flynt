@@ -2,8 +2,8 @@ try:
     import config
 except ImportError:
     # assume remote server enters the application in test_str_concat/, home would be test_str_concat/..
-    import sys
     import os
+    import sys
 
     test_dir = os.path.dirname(__file__)
     home = os.path.join(test_dir, os.path.pardir)

@@ -1,13 +1,13 @@
 import ast
-import sys
 import string
+import sys
 from collections import deque
 from typing import Tuple, Union
 
 import astor
 
 from flynt import state
-from flynt.exceptions import FlyntException, ConversionRefused
+from flynt.exceptions import ConversionRefused, FlyntException
 
 
 def ast_formatted_value(

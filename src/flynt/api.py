@@ -4,8 +4,8 @@ import os
 import sys
 import time
 import traceback
-from typing import Tuple, List, Optional, Collection
 from difflib import unified_diff
+from typing import Collection, List, Optional, Tuple
 
 import astor
 

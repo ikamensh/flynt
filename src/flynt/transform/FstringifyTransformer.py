@@ -2,9 +2,10 @@ import ast
 from typing import Tuple
 
 from flynt import state
-from flynt.transform.format_call_transforms import joined_string, matching_call
-from flynt.transform.percent_transformer import transform_binop, supported_operands
 from flynt.linting.fstr_lint import FstrInliner
+from flynt.transform.format_call_transforms import joined_string, matching_call
+from flynt.transform.percent_transformer import (supported_operands,
+                                                 transform_binop)
 
 
 class FstringifyTransformer(ast.NodeTransformer):
