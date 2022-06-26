@@ -27,7 +27,7 @@ def transform_chunk(
     try:
         tree = ast.parse(code)
         converted, changed, str_in_str = fstringify_node(copy.deepcopy(tree))
-    except (SyntaxError, FlyntException, Exception) as e:
+    except (FlyntException, Exception) as e:
         if state.verbose:
             if isinstance(e, ConversionRefused):
                 print(f"Not converting code '{code}': {e}")

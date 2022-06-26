@@ -9,4 +9,4 @@ class CantAffordActiveError(PydolonsError):
         self.missing = missing
 
     def __repr__(self):
-        return "Need more {} to activate {}".format(self.missing, self.active)
+        return f"Need more {self.missing} to activate {self.active}"

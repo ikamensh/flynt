@@ -128,10 +128,7 @@ def joined_string(fmt_call: ast.Call) -> Tuple[Union[ast.JoinedStr, ast.Str], bo
             return isinstance(node, ast.Constant) and isinstance(node.value, str)
 
     def literal_string_value(node):
-        if sys.version_info < (3, 8):
-            return node.s
-        else:
-            return node.value
+        return node.s if sys.version_info < (3, 8) else node.value
 
     def fix_literals(segment):
         if (

@@ -134,10 +134,8 @@ def transform_tuple(node):
 
     str_vars = deque(node.right.elts)
 
-    segments = []
     blocks = deque(VAR_KEY_PATTERN.split(format_str))
-    segments.append(ast_string_node(blocks.popleft().replace("%%", "%")))
-
+    segments = [ast_string_node(blocks.popleft().replace("%%", "%"))]
     while len(blocks) > 0:
 
         fmt_prefix = blocks.popleft()
@@ -146,9 +144,7 @@ def transform_tuple(node):
 
         fv = formatted_value(fmt_prefix, fmt_spec, val)
 
-        segments.append(fv)
-        segments.append(ast_string_node(blocks.popleft().replace("%%", "%")))
-
+        segments.extend((fv, ast_string_node(blocks.popleft().replace("%%", "%"))))
     return ast.JoinedStr(segments)
 
 
@@ -166,8 +162,7 @@ def transform_generic(node):
     Returns ast.JoinedStr (f-string), bool: str-in-str
     """
 
-    has_dict_str_format = DICT_PATTERN.findall(node.left.s)
-    if has_dict_str_format:
+    if has_dict_str_format := DICT_PATTERN.findall(node.left.s):
         return transform_dict(node), True
 
     # if it's just a name then pretend it's tuple to use that code

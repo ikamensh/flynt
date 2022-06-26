@@ -19,23 +19,20 @@ class FstringifyTransformer(ast.NodeTransformer):
         Convert `ast.Call` to `ast.JoinedStr` f-string
         """
 
-        match = matching_call(node)
+        if not (match := matching_call(node)):
+            return node
+        state.call_candidates += 1
 
-        if match:
-            state.call_candidates += 1
+        # bail in these edge cases...
+        if any(isinstance(arg, ast.Starred) for arg in node.args):
+            return node
 
-            # bail in these edge cases...
-            if any(isinstance(arg, ast.Starred) for arg in node.args):
-                return node
-
-            result_node, str_in_str = joined_string(node)
-            self.string_in_string = str_in_str
-            self.visit(result_node)
-            self.counter += 1
-            state.call_transforms += 1
-            return result_node
-
-        return node
+        result_node, str_in_str = joined_string(node)
+        self.string_in_string = str_in_str
+        self.visit(result_node)
+        self.counter += 1
+        state.call_transforms += 1
+        return result_node
 
     def visit_BinOp(self, node):
         """Convert `ast.BinOp` to `ast.JoinedStr` f-string

@@ -141,13 +141,11 @@ def run_flynt_cli():
         return 0
 
     salutation = f"Running flynt v.{__version__}"
-    toml_file = find_pyproject_toml(tuple(args.src))
-    if toml_file:
+    if toml_file := find_pyproject_toml(tuple(args.src)):
         salutation += f"\nUsing config file at {toml_file}"
         cfg = parse_pyproject_toml(toml_file)
         supported_args = list(args.__dict__.keys())
-        redundant = set(cfg.keys()) - set(supported_args)
-        if redundant:
+        if redundant := set(cfg.keys()) - set(supported_args):
             supported_args.sort()
             warnings.warn(
                 f"Unknown config options: {redundant}. "

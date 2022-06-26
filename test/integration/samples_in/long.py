@@ -50,7 +50,7 @@ singlehtml_sidebars = {"index": ["project.html", "versions.html", "localtoc.html
 html_static_path = ["_static"]
 html_favicon = "_static/flask-icon.png"
 html_logo = "_static/flask-logo-sidebar.png"
-html_title = "Flask Documentation ({})".format(version)
+html_title = f"Flask Documentation ({version})"
 html_show_sourcelink = False
 html_domain_indices = False
 
