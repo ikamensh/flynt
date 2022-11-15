@@ -1,5 +1,6 @@
 import math
 import re
+from functools import partial
 from typing import Callable, Tuple
 import string
 
@@ -161,10 +162,21 @@ class JoinTransformer:
             self.last_line += 1
 
 
-def fstringify_code_by_line(code: str, multiline=True, len_limit=88) -> Tuple[str, int]:
+def fstringify_code_by_line(
+    code: str,
+    multiline=True,
+    len_limit=88,
+    transform_percent: bool = True,
+    transform_format: bool = True,
+) -> Tuple[str, int]:
     """returns fstringified version of the code and amount of lines edited."""
+    phunk = partial(
+        transform_chunk,
+        transform_format=transform_format,
+        transform_percent=transform_percent,
+    )
     return _transform_code(
-        code, split.get_fstringify_chunks, transform_chunk, multiline, len_limit
+        code, split.get_fstringify_chunks, phunk, multiline, len_limit
     )
 
 

@@ -1,7 +1,5 @@
 # Files generated during test
-test/integration/actual_out
-test/integration/actual_out_concat
-test/integration/actual_out_single_line
+test/integration/actual_out*
 
 # Python cache
 __pycache__/

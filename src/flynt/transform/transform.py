@@ -12,13 +12,18 @@ from flynt.transform.FstringifyTransformer import fstringify_node
 
 
 def transform_chunk(
-    code: str, quote_type: str = QuoteTypes.triple_double
+    code: str,
+    quote_type: str = QuoteTypes.triple_double,
+    transform_percent: bool = True,
+    transform_format: bool = True,
 ) -> Tuple[str, bool]:
     """Convert a block of code to an f-string
 
     Args:
         code: The code to convert.
         quote_type: the quote type to use for the transformed result
+        transform_percent: whether to transform percent format strings
+        transform_format: whether to transform format calls
 
     Returns:
        Tuple: resulting code, boolean: was it changed?
@@ -26,7 +31,11 @@ def transform_chunk(
 
     try:
         tree = ast.parse(code)
-        converted, changed, str_in_str = fstringify_node(copy.deepcopy(tree))
+        converted, changed, str_in_str = fstringify_node(
+            copy.deepcopy(tree),
+            transform_percent=transform_percent,
+            transform_format=transform_format,
+        )
     except (SyntaxError, FlyntException, Exception) as e:
         if state.verbose:
             if isinstance(e, ConversionRefused):

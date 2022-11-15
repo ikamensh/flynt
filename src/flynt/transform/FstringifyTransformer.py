@@ -3,24 +3,28 @@ from typing import Tuple
 
 from flynt import state
 from flynt.transform.format_call_transforms import joined_string, matching_call
-from flynt.transform.percent_transformer import transform_binop, supported_operands
+from flynt.transform.percent_transformer import transform_binop, is_percent_stringify
 from flynt.linting.fstr_lint import FstrInliner
 
 
 class FstringifyTransformer(ast.NodeTransformer):
-    def __init__(self):
+    def __init__(
+        self,
+        transform_percent: bool = True,
+        transform_format: bool = True,
+    ):
         super().__init__()
         self.counter = 0
         self.string_in_string = False
+        self.transform_percent = transform_percent
+        self.transform_format = transform_format
 
     def visit_Call(self, node: ast.Call):
         """
         Convert `ast.Call` to `ast.JoinedStr` f-string
         """
 
-        match = matching_call(node)
-
-        if match:
+        if self.transform_format and matching_call(node):
             state.call_candidates += 1
 
             # bail in these edge cases...
@@ -48,15 +52,7 @@ class FstringifyTransformer(ast.NodeTransformer):
         Returns ast.JoinedStr (f-string)
         """
 
-        percent_stringify = (
-            isinstance(node.left, ast.Str)
-            and isinstance(node.op, ast.Mod)
-            and isinstance(
-                node.right, tuple([ast.Tuple, ast.Dict] + supported_operands)
-            )
-        )
-
-        if percent_stringify:
+        if self.transform_percent and is_percent_stringify(node):
             state.percent_candidates += 1
 
             # bail in these edge cases...
@@ -86,8 +82,15 @@ class FstringifyTransformer(ast.NodeTransformer):
         return node
 
 
-def fstringify_node(node) -> Tuple[ast.AST, bool, bool]:
-    ft = FstringifyTransformer()
+def fstringify_node(
+    node,
+    transform_percent: bool = True,
+    transform_format: bool = True,
+) -> Tuple[ast.AST, bool, bool]:
+    ft = FstringifyTransformer(
+        transform_percent=transform_percent,
+        transform_format=transform_format,
+    )
     result = ft.visit(node)
     il = FstrInliner()
     il.visit(result)

@@ -26,6 +26,14 @@ conversion_methods = {"r": "!r", "a": "!a", "s": None}
 integer_specificers = "dxXob"
 
 
+def is_percent_stringify(node: ast.BinOp) -> bool:
+    return (
+        isinstance(node.left, ast.Str)
+        and isinstance(node.op, ast.Mod)
+        and isinstance(node.right, tuple([ast.Tuple, ast.Dict, *supported_operands]))
+    )
+
+
 def formatted_value(fmt_prefix, fmt_spec, val):
     if fmt_spec in integer_specificers:
         fmt_prefix = fmt_prefix.replace(".", "0")
