@@ -46,6 +46,6 @@ def fixup_transformed(tree: ast.AST) -> str:
     if new_code[-1] == "\n":
         new_code = new_code[:-1]
     new_code = new_code.replace("\n", "\\n")
-    if new_code[:4] == 'f"""':
+    if new_code[:4] == 'f"""' or new_code[:3] == "'''" or new_code[:3] == '"""':
         new_code = set_quote_type(new_code, QuoteTypes.double)
     return new_code
