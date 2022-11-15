@@ -24,11 +24,11 @@ def unpack_binop(node: ast.BinOp) -> List[ast.AST]:
 
 
 class ConcatTransformer(ast.NodeTransformer):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.counter = 0
 
-    def visit_BinOp(self, node: ast.BinOp):
+    def visit_BinOp(self, node: ast.BinOp) -> ast.AST:
         """
         Transforms a string concat to an f-string
         """
@@ -51,7 +51,7 @@ class ConcatTransformer(ast.NodeTransformer):
             else:
                 parts.append(p)
 
-        segments = []
+        segments: List[ast.AST] = []
         for p in parts:
             if isinstance(p, ast.Constant):
                 segments.append(ast_string_node(p.value))

@@ -3,6 +3,7 @@
 import argparse
 import sys
 import warnings
+from typing import List, Optional
 
 from flynt import __version__, state
 from flynt.api import fstringify, fstringify_code_by_line
@@ -13,7 +14,7 @@ def main():
     return sys.exit(run_flynt_cli())
 
 
-def run_flynt_cli(arglist=None):
+def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
     """"""
     parser = argparse.ArgumentParser(
         prog="flynt",
@@ -211,7 +212,7 @@ def run_flynt_cli(arglist=None):
     )
 
 
-def set_global_state(args):
+def set_global_state(args: argparse.Namespace) -> None:
     state.aggressive = args.aggressive
     state.verbose = args.verbose
     state.quiet = args.quiet

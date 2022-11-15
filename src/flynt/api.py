@@ -130,15 +130,15 @@ def _fstringify_file(
 
 
 def fstringify_files(
-    files,
-    multiline,
-    len_limit,
-    transform_concat: bool = False,
+    files: List[str],
+    multiline: bool,
+    len_limit: int,
+    transform_concat: bool,
     transform_join: bool = False,
     *,
     transform_format: bool = True,
     transform_percent: bool = True,
-):
+) -> int:
     changed_files = 0
     total_charcount_original = 0
     total_charcount_new = 0
@@ -184,8 +184,13 @@ def fstringify_files(
 
 
 def _print_report(
-    found_files, changed_files, total_cc_new, total_cc_original, total_expr, total_time
-):
+    found_files: int,
+    changed_files: int,
+    total_cc_new: int,
+    total_cc_original: int,
+    total_expr: int,
+    total_time: float,
+) -> None:
     print("\nFlynt run has finished. Stats:")
     print(f"\nExecution time:                            {total_time:.3f}s")
     print(f"Files checked:                             {found_files}")
@@ -302,7 +307,7 @@ def _resolve_files(
     return files
 
 
-def encoding_by_bom(path, default="utf-8") -> Tuple[str, Optional[bytes]]:
+def encoding_by_bom(path: str, default: str = "utf-8") -> Tuple[str, Optional[bytes]]:
     """Adapted from https://stackoverflow.com/questions/13590749/reading-unicode-file-data-with-bom-chars-in-python/24370596#24370596"""
 
     with open(path, "rb") as f:

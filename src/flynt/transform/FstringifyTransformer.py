@@ -12,14 +12,14 @@ class FstringifyTransformer(ast.NodeTransformer):
         self,
         transform_percent: bool = True,
         transform_format: bool = True,
-    ):
+    ) -> None:
         super().__init__()
         self.counter = 0
         self.string_in_string = False
         self.transform_percent = transform_percent
         self.transform_format = transform_format
 
-    def visit_Call(self, node: ast.Call):
+    def visit_Call(self, node: ast.Call) -> ast.AST:
         """
         Convert `ast.Call` to `ast.JoinedStr` f-string
         """
@@ -40,7 +40,7 @@ class FstringifyTransformer(ast.NodeTransformer):
 
         return node
 
-    def visit_BinOp(self, node):
+    def visit_BinOp(self, node: ast.BinOp) -> ast.AST:
         """Convert `ast.BinOp` to `ast.JoinedStr` f-string
 
         Currently only if a string literal `ast.Str` is on the left side of the `%`
@@ -83,7 +83,7 @@ class FstringifyTransformer(ast.NodeTransformer):
 
 
 def fstringify_node(
-    node,
+    node: ast.AST,
     transform_percent: bool = True,
     transform_format: bool = True,
 ) -> Tuple[ast.AST, bool, bool]:

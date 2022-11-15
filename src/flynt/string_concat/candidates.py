@@ -6,7 +6,7 @@ from flynt.ast_chunk import AstChunk
 from flynt.utils import is_str_literal
 
 
-def is_string_concat(node):
+def is_string_concat(node: ast.AST) -> bool:
     """Returns True for nodes representing a string concatenation"""
     if is_str_literal(node):
         return True
@@ -16,11 +16,11 @@ def is_string_concat(node):
 
 
 class ConcatHound(ast.NodeVisitor):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.victims: List[AstChunk] = []
 
-    def visit_BinOp(self, node: ast.BinOp):
+    def visit_BinOp(self, node: ast.BinOp) -> None:
         """
         Finds all nodes that are string concatenations with a literal
         """
@@ -30,7 +30,7 @@ class ConcatHound(ast.NodeVisitor):
             self.generic_visit(node)
 
 
-def concat_candidates(code: str):
+def concat_candidates(code: str) -> None:
     tree = ast.parse(code)
 
     ch = ConcatHound()

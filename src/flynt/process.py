@@ -2,13 +2,15 @@ import math
 import re
 import string
 from functools import partial
-from typing import Callable, Tuple
+from typing import Callable, Optional, Tuple, Union
 
 from flynt import lexer, state
+from flynt.ast_chunk import AstChunk
 from flynt.exceptions import FlyntException
 from flynt.format import QuoteTypes as qt
 from flynt.format import get_quote_type
 from flynt.lexer import split
+from flynt.lexer.Chunk import Chunk
 from flynt.static_join.candidates import join_candidates
 from flynt.static_join.transformer import transform_join
 from flynt.string_concat.candidates import concat_candidates
@@ -29,7 +31,7 @@ class JoinTransformer:
         len_limit: int,
         candidates_iter_factory: Callable,
         transform_func: Callable,
-    ):
+    ) -> None:
 
         if len_limit is None:
             len_limit = math.inf
@@ -46,7 +48,7 @@ class JoinTransformer:
         self.last_idx = 0
         self.used_up = False
 
-    def fstringify_code_by_line(self):
+    def fstringify_code_by_line(self) -> Tuple[str, int]:
         assert not self.used_up, "Tried to use JT twice."
         for chunk in self.candidates_iter:
             self.fill_up_to(chunk)
@@ -56,7 +58,7 @@ class JoinTransformer:
         self.used_up = True
         return "".join(self.results)[:-1], self.count_expressions
 
-    def fill_up_to(self, chunk):
+    def fill_up_to(self, chunk: Union[Chunk, AstChunk]) -> None:
         start_line, start_idx, _ = (chunk.start_line, chunk.start_idx, chunk.end_idx)
         if start_line == self.last_line:
             self.results.append(
@@ -72,12 +74,12 @@ class JoinTransformer:
 
         self.last_idx = start_idx
 
-    def fill_up_to_line(self, start_line):
+    def fill_up_to_line(self, start_line: int) -> None:
         while self.last_line < start_line:
             self.results.append(self.src_lines[self.last_line] + "\n")
             self.last_line += 1
 
-    def try_chunk(self, chunk):
+    def try_chunk(self, chunk: Union[Chunk, AstChunk]) -> None:
 
         for line in self.src_lines[chunk.start_line : chunk.start_line + chunk.n_lines]:
             if noqa_regex.findall(line):
@@ -104,7 +106,13 @@ class JoinTransformer:
                 rest = next_line[chunk.end_idx :]
             self.maybe_replace(chunk, contract_lines, converted, rest)
 
-    def maybe_replace(self, chunk, contract_lines, converted, rest):
+    def maybe_replace(
+        self,
+        chunk: Union[Chunk, AstChunk],
+        contract_lines: int,
+        converted: str,
+        rest: str,
+    ) -> None:
         if contract_lines:
             if get_quote_type(str(chunk)) in (qt.triple_double, qt.triple_single):
                 lines = converted.split("\\n")
@@ -155,7 +163,7 @@ class JoinTransformer:
             self.results[-2] = self.results[-2][:-1]
             self.last_idx += 1
 
-    def add_rest(self):
+    def add_rest(self) -> None:
         self.results.append(self.src_lines[self.last_line][self.last_idx :] + "\n")
         self.last_line += 1
 
@@ -166,8 +174,8 @@ class JoinTransformer:
 
 def fstringify_code_by_line(
     code: str,
-    multiline=True,
-    len_limit=88,
+    multiline: bool = True,
+    len_limit: Optional[int] = 88,
     transform_percent: bool = True,
     transform_format: bool = True,
 ) -> Tuple[str, int]:
@@ -182,7 +190,11 @@ def fstringify_code_by_line(
     )
 
 
-def fstringify_concats(code: str, multiline=True, len_limit=88) -> Tuple[str, int]:
+def fstringify_concats(
+    code: str,
+    multiline: bool = True,
+    len_limit: int = 88,
+) -> Tuple[str, int]:
     """replace string literal concatenations with f-string expressions."""
     return _transform_code(
         code, concat_candidates, transform_concat, multiline, len_limit
@@ -195,7 +207,11 @@ def fstringify_static_joins(code: str, multiline=True, len_limit=88) -> Tuple[st
 
 
 def _transform_code(
-    code: str, candidates_iter_factory, transform_func, multiline, len_limit
+    code: str,
+    candidates_iter_factory: Callable,
+    transform_func: Callable,
+    multiline: bool,
+    len_limit: Optional[int],
 ) -> Tuple[str, int]:
     """returns fstringified version of the code and amount of lines edited."""
 
@@ -204,7 +220,7 @@ def _transform_code(
     return jt.fstringify_code_by_line()
 
 
-def _multiline_settings(len_limit, multiline):
+def _multiline_settings(len_limit: Optional[int], multiline: bool) -> Optional[int]:
     if not multiline:
         len_limit = 0
         lexer.set_single_line()

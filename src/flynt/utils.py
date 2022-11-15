@@ -30,7 +30,7 @@ def ast_to_string(node: ast.AST) -> str:
     return astor.to_source(node, pretty_string=nicer_pretty_string).rstrip()
 
 
-def is_str_literal(node):
+def is_str_literal(node: ast.AST) -> bool:
     """Returns True if a node is a string literal. f-string is also a string literal."""
     return isinstance(node, (ast.Str, ast.JoinedStr))
 

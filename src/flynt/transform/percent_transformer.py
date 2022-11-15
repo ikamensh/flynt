@@ -1,6 +1,7 @@
 import ast
 import re
 from collections import deque
+from typing import Tuple
 
 from flynt import state
 from flynt.exceptions import ConversionRefused, FlyntException
@@ -34,7 +35,11 @@ def is_percent_stringify(node: ast.BinOp) -> bool:
     )
 
 
-def formatted_value(fmt_prefix, fmt_spec, val):
+def formatted_value(
+    fmt_prefix: str,
+    fmt_spec: str,
+    val: ast.AST,
+) -> ast.FormattedValue:
     if fmt_spec in integer_specificers:
         fmt_prefix = fmt_prefix.replace(".", "0")
 
@@ -63,7 +68,7 @@ def formatted_value(fmt_prefix, fmt_spec, val):
         return ast_formatted_value(val, fmt_str=fmt_prefix + fmt_spec)
 
 
-def transform_dict(node):
+def transform_dict(node: ast.BinOp) -> ast.JoinedStr:
     """Convert a `BinOp` `%` formatted str with a name representing a Dict on the right to an f-string.
 
     Takes an ast.BinOp representing `"1. %(key1)s 2. %(key2)s" % mydict`
@@ -121,7 +126,7 @@ def transform_dict(node):
     return ast.JoinedStr(segments)
 
 
-def transform_tuple(node):
+def transform_tuple(node: ast.BinOp) -> ast.JoinedStr:
     """Convert a `BinOp` `%` formatted str with a tuple on the right to an f-string.
 
     Takes an ast.BinOp representing `"1. %s 2. %s" % (a, b)`
@@ -159,7 +164,7 @@ def transform_tuple(node):
     return ast.JoinedStr(segments)
 
 
-def transform_generic(node):
+def transform_generic(node: ast.BinOp) -> Tuple[ast.JoinedStr, bool]:
     """Convert a `BinOp` `%` formatted str with a unknown name on the `node.right` to an f-string.
 
     When `node.right` is a Name since we don't know if it's a single var or a dict so we sniff the string.
@@ -197,7 +202,7 @@ supported_operands = [
 ]
 
 
-def transform_binop(node):
+def transform_binop(node: ast.BinOp) -> Tuple[ast.JoinedStr, bool]:
     if isinstance(node.right, tuple(supported_operands)):
         return transform_generic(node)
 

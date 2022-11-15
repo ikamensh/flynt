@@ -26,7 +26,7 @@ def fstr_candidates(code: str):
 
 
 class FstrInliner(ast.NodeTransformer):
-    def visit_JoinedStr(self, node):
+    def visit_JoinedStr(self, node: ast.JoinedStr) -> ast.JoinedStr:
         new_vals = []
         for v in node.values:
             if (

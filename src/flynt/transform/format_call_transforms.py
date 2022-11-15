@@ -9,7 +9,7 @@ from flynt.exceptions import ConversionRefused, FlyntException
 from flynt.utils import ast_formatted_value, ast_string_node
 
 
-def matching_call(node) -> bool:
+def matching_call(node: ast.Call) -> bool:
     """
     Check if an ast Node represents a "...".format() call.
     """

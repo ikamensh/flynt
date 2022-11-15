@@ -24,7 +24,7 @@ join_changes = 0
 _initial_state = dict(globals())
 
 
-def _reset():
+def _reset() -> None:
     """
     Resets the state variables to the initial values seen above.
     """

@@ -5,6 +5,7 @@ It includes checking the quote type and changing it."""
 import io
 import re
 import tokenize
+from typing import Optional
 
 lonely_quote = re.compile(r"(?<!\\)\"")
 lonely_single_quote = re.compile(r"(?<!\\)\'")
@@ -18,7 +19,7 @@ class QuoteTypes:
     all = [triple_double, triple_single, single, double]
 
 
-def get_quote_type(code: str):
+def get_quote_type(code: str) -> Optional[str]:
     from flynt.lexer.PyToken import PyToken
 
     g = tokenize.tokenize(io.BytesIO(code.encode("utf-8")).readline)
@@ -28,14 +29,14 @@ def get_quote_type(code: str):
     return token.get_quote_type()
 
 
-def remove_quotes(code: str):
+def remove_quotes(code: str) -> str:
     quote_type = get_quote_type(code)
     if quote_type:
         return code[len(quote_type) : -len(quote_type)]
     return code
 
 
-def set_quote_type(code: str, quote_type: str):
+def set_quote_type(code: str, quote_type: str) -> str:
     if code[0] == "f":
         prefix, body = "f", remove_quotes(code[1:])
     else:
