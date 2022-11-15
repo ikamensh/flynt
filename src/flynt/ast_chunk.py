@@ -43,4 +43,4 @@ class AstChunk:
         return astor.to_source(self.node)[1:-2]
 
     def __repr__(self):
-        return "AstChunk: " + str(self)
+        return f"AstChunk: {self}"
