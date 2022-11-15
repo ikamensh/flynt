@@ -40,7 +40,10 @@ class AstChunk:
         return QuoteTypes.double
 
     def __str__(self):
-        return astor.to_source(self.node)[1:-2]
+        src = astor.to_source(self.node).rstrip()
+        if src.startswith("(") and src.endswith(")"):
+            src = src[1:-1]
+        return src
 
     def __repr__(self):
         return f"AstChunk: {self}"
