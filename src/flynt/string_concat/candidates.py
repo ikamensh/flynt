@@ -3,11 +3,7 @@ from typing import List
 
 from flynt import state
 from flynt.ast_chunk import AstChunk
-
-
-def is_str_literal(node):
-    """Returns True if a node is a string literal. f-string is also a string literal."""
-    return isinstance(node, (ast.Str, ast.JoinedStr))
+from flynt.utils import is_str_literal
 
 
 def is_string_concat(node):

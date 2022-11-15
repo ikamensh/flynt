@@ -4,28 +4,9 @@ import string
 from collections import deque
 from typing import Tuple, Union
 
-import astor
-
 from flynt import state
 from flynt.exceptions import FlyntException, ConversionRefused
-
-
-def ast_formatted_value(
-    val, fmt_str: str = None, conversion=None
-) -> ast.FormattedValue:
-
-    if astor.to_source(val)[0] == "{":
-        raise FlyntException(
-            "values starting with '{' are better left not transformed."
-        )
-
-    format_spec = ast.JoinedStr([ast_string_node(fmt_str)]) if fmt_str else None
-    conversion = -1 if conversion is None else ord(conversion.replace("!", ""))
-    return ast.FormattedValue(value=val, conversion=conversion, format_spec=format_spec)
-
-
-def ast_string_node(string: str) -> ast.Str:
-    return ast.Str(s=string)
+from flynt.utils import ast_formatted_value, ast_string_node
 
 
 def matching_call(node) -> bool:
