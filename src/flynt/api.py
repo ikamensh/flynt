@@ -11,13 +11,17 @@ import astor
 
 from flynt import state
 from flynt.cli_messages import farewell_message
-from flynt.process import fstringify_code_by_line, fstringify_concats
+from flynt.process import (
+    fstringify_code_by_line,
+    fstringify_concats,
+    fstringify_static_joins,
+)
 
 blacklist = {".tox", "venv", "site-packages", ".eggs"}
 
 
 def _fstringify_file(
-    filename, multiline, len_limit, transform_concat=False
+    filename, multiline, len_limit, transform_concat=False, transform_join=False
 ) -> Tuple[bool, int, int, int]:
     """
     :return: tuple: (changes_made, n_changes,
@@ -56,6 +60,12 @@ def _fstringify_file(
             )
             changes += concat_changes
             state.concat_changes += concat_changes
+        if transform_join:
+            new_code, join_changes = fstringify_static_joins(
+                new_code, multiline=multiline, len_limit=len_limit
+            )
+            changes += join_changes
+            state.join_changes += join_changes
 
     except Exception as e:
         if not state.quiet:
@@ -105,7 +115,13 @@ def _fstringify_file(
     return True, changes, len(contents), len(new_code)
 
 
-def fstringify_files(files, multiline, len_limit, transform_concat):
+def fstringify_files(
+    files,
+    multiline,
+    len_limit,
+    transform_concat,
+    transform_join,
+):
     changed_files = 0
     total_charcount_original = 0
     total_charcount_new = 0
@@ -117,7 +133,13 @@ def fstringify_files(files, multiline, len_limit, transform_concat):
             count_expressions,
             charcount_original,
             charcount_new,
-        ) = _fstringify_file(path, multiline, len_limit, transform_concat)
+        ) = _fstringify_file(
+            path,
+            multiline,
+            len_limit,
+            transform_concat=transform_concat,
+            transform_join=transform_join,
+        )
         if changed:
             changed_files += 1
             total_expressions += count_expressions
@@ -182,6 +204,14 @@ def _print_report(
         else:
             print("No concatenations attempted.")
 
+        if state.join_candidates:
+            print(
+                f"Static string joins attempted:             {state.join_changes}/"
+                f"{state.join_candidates} ({state.join_changes / state.join_candidates:.1%})"
+            )
+        else:
+            print("No static string joins attempted.")
+
         print(f"F-string expressions created:              {total_expr}")
 
         if state.invalid_conversions:
@@ -200,6 +230,7 @@ def fstringify(
     len_limit: int,
     fail_on_changes: bool = False,
     transform_concat: bool = False,
+    transform_join: bool = False,
     excluded_files_or_paths: Optional[Collection[str]] = None,
 ) -> int:
     """determine if a directory or a single file was passed, and f-stringify it."""
@@ -211,6 +242,7 @@ def fstringify(
         multiline=multiline,
         len_limit=len_limit,
         transform_concat=transform_concat,
+        transform_join=transform_join,
     )
 
     if fail_on_changes:

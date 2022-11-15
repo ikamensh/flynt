@@ -10,6 +10,7 @@ from flynt.format import get_quote_type
 from flynt.lexer import split
 from flynt.transform.transform import transform_chunk
 from flynt.string_concat import concat_candidates, transform_concat
+from flynt.static_join import join_candidates, transform_join
 
 noqa_regex = re.compile("#[ ]*noqa.*flynt")
 
@@ -172,6 +173,11 @@ def fstringify_concats(code: str, multiline=True, len_limit=88) -> Tuple[str, in
     return _transform_code(
         code, concat_candidates, transform_concat, multiline, len_limit
     )
+
+
+def fstringify_static_joins(code: str, multiline=True, len_limit=88) -> Tuple[str, int]:
+    """replace joins on static content with f-string expressions."""
+    return _transform_code(code, join_candidates, transform_join, multiline, len_limit)
 
 
 def _transform_code(
