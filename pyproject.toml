@@ -33,11 +33,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "black",
     "build",
-    "codespell",
-    "flake8",
-    "flake8-black",
     "pre-commit",
     "pytest",
     "pytest-cov",
