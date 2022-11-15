@@ -112,7 +112,7 @@ class JoinTransformer:
                 converted = converted.replace("\\n", "\n")
             else:
                 lines_fit = (
-                    len("".join([converted, rest])) <= self.len_limit - chunk.start_idx
+                    len(f"{converted}{rest}") <= self.len_limit - chunk.start_idx
                 )
 
         else:
