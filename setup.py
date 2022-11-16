@@ -33,7 +33,6 @@ setup(
     classifiers=[
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
@@ -45,7 +44,7 @@ setup(
     long_description=(_DIR / "README.md").read_text().strip(),
     long_description_content_type="text/markdown",
     install_requires=get_requirements(),
-    python_requires=">=3.6",
+    python_requires=">=3.7",
     entry_points={"console_scripts": ["flynt=flynt:main"]},
     url="https://github.com/ikamensh/flynt",
     include_package_data=True,
