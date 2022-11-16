@@ -5,10 +5,9 @@ import shutil
 
 import pytest
 
-import config
 from flynt.api import _fstringify_file
 
-int_test_dir = os.path.join(config.home, "test/integration/")
+int_test_dir = os.path.dirname(__file__)
 
 in_dir = os.path.join(int_test_dir, "samples_in_concat")
 out_dir = os.path.join(int_test_dir, "actual_out_concat")

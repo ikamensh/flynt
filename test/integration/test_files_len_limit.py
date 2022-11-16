@@ -3,10 +3,9 @@ import os
 
 import pytest
 
-import config
 from flynt.process import fstringify_code_by_line
 
-int_test_dir = os.path.join(config.home, "test/integration/")
+int_test_dir = os.path.dirname(__file__)
 
 in_dir = os.path.join(int_test_dir, "samples_in")
 out_dir = os.path.join(int_test_dir, "actual_out")
