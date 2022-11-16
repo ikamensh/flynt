@@ -7,11 +7,7 @@ from flynt.process import fstringify_concats
 from test.integration.utils import try_on_file
 
 
-@pytest.fixture(params=["multiline_limit.py"])
-def filename(request):
-    yield request.param
-
-
+@pytest.mark.parametrize("filename", ["multiline_limit.py"])
 def test_fstringify(filename):
     out, expected = try_on_file(
         filename,

@@ -4,7 +4,7 @@ import sys
 import pytest
 
 from flynt.process import fstringify_concats, fstringify_code_by_line
-from test.integration.utils import try_on_file
+from test.integration.utils import try_on_file, concat_samples
 
 
 def fstringify_and_concats(code: str):
@@ -14,6 +14,7 @@ def fstringify_and_concats(code: str):
 
 
 @pytest.mark.skipif(sys.version_info < (3, 8), reason="requires python3.8 or higher")
+@pytest.mark.parametrize("filename_concat", concat_samples)
 def test_fstringify_concat(filename_concat):
     out, expected = try_on_file(
         filename_concat,

@@ -3,6 +3,15 @@ from typing import Callable, Tuple
 
 int_test_path = pathlib.Path(__file__).parent
 
+EXCLUDED = {
+    "bom.py",
+    "class.py",
+    "escaped_newline.py",  # not supported yet, #83 on github
+    "multiline_limit.py",
+}
+samples = {p.name for p in (int_test_path / "samples_in").glob("*.py")} - EXCLUDED
+concat_samples = {p.name for p in (int_test_path / "samples_in_concat").glob("*.py")}
+
 
 def try_on_file(
     filename: str,
