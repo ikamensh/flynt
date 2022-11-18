@@ -16,6 +16,9 @@ invalid_conversions = 0
 concat_candidates = 0
 concat_changes = 0
 
+join_candidates = 0
+join_changes = 0
+
 # Backup of the initial state to support the tests, which should start with a clean state each time.
 # Note: this assumes that all state variables are immutable.
 _initial_state = dict(globals())

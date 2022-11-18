@@ -1,3 +1,8 @@
+#### unreleased
+
+*[Contributed by Aarni Koskela]* `--transform-joins` (`-tj`) will transform string join operations on static operands
+to an f-string.
+
 #### v.0.71
 
 Added support to configuration via file.

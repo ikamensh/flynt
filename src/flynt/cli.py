@@ -82,6 +82,15 @@ def run_flynt_cli():
     )
 
     parser.add_argument(
+        "-tj",
+        "--transform-joins",
+        action="store_true",
+        default=False,
+        help="Replace static joins (where the joiner is a string literal and the joinee is a static-length list) "
+        "with f-strings. Available only if flynt is installed with 3.8+ interpreter.",
+    )
+
+    parser.add_argument(
         "-f",
         "--fail-on-change",
         action="store_true",
@@ -131,6 +140,12 @@ def run_flynt_cli():
                 installed to a python3.8+ interpreter. Currently using {sys.version_info}."""
         )
 
+    if args.transform_joins and sys.version_info < (3, 8):
+        raise Exception(
+            f"""Transforming joins is only possible with flynt
+                installed to a python3.8+ interpreter. Currently using {sys.version_info}."""
+        )
+
     if args.string:
         set_global_state(args)
         converted, _ = fstringify_code_by_line(
@@ -171,6 +186,7 @@ def run_flynt_cli():
         len_limit=int(args.line_length),
         fail_on_changes=args.fail_on_change,
         transform_concat=args.transform_concats,
+        transform_join=args.transform_joins,
     )
 
 
