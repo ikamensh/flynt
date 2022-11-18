@@ -190,7 +190,7 @@ def _print_report(
             )
             print("To find out specific error messages, use --verbose flag.")
 
-    print("\n" + ("_-_." * 25))
+    print(f"\n{'_-_.' * 25}")
     print(farewell_message)
 
 

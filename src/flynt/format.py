@@ -40,7 +40,7 @@ def set_quote_type(code: str, quote_type: str):
         prefix, body = "", remove_quotes(code)
     if quote_type in (QuoteTypes.single, QuoteTypes.triple_double):
         if body[-2:] == '\\"':
-            body = body[:-2] + '"'
+            body = f'{body[:-2]}"'
     elif quote_type is QuoteTypes.double:
         body = lonely_quote.sub('\\"', body)
 
