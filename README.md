@@ -33,26 +33,55 @@ It turns the code it runs on into Python 3.6+, since 3.6 is when "f-strings" wer
 
 From the output of `flynt -h`:
 
+<!-- begin-options -->
 ```
+usage: flynt [-h] [-v | -q] [--no-multiline | -ll LINE_LENGTH] [-d]
+             [-s] [-tc] [-tj] [-f] [-a] [-e EXCLUDE [EXCLUDE ...]]
+             [--version]
+             [src ...]
+
+flynt v.0.76
+
 positional arguments:
   src                   source file(s) or directory
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   -v, --verbose         run with verbose output
-  -q, --quiet           run without output
+  -q, --quiet           run without stdout output
   --no-multiline        convert only single line expressions
   -ll LINE_LENGTH, --line-length LINE_LENGTH
-                        for expressions spanning multiple lines, convert only if the resulting single line will fit into the line length limit. Default value is 88 characters.
-  -d, --dry-run         Do not change the files in-place and print the diff instead. Note that this must be used in conjunction with '--fail-on-change' when used for linting purposes.
-  -s, --string          Interpret the input as a Python code snippet and print the converted version. The snippet must use single quotes or escaped double quotes.
+                        for expressions spanning multiple lines,
+                        convert only if the resulting single line
+                        will fit into the line length limit. Default
+                        value is 88 characters.
+  -d, --dry-run         Do not change the files in-place and print
+                        the diff instead. Note that this must be
+                        used in conjunction with '--fail-on-change'
+                        when used for linting purposes.
+  -s, --string          Interpret the input as a Python code snippet
+                        and print the converted version. The snippet
+                        must use single quotes or escaped double
+                        quotes.
   -tc, --transform-concats
-                        Replace string concatenations (defined as + operations involving string literals) with f-strings. Available only if flynt is installed with 3.8+ interpreter.
-  -f, --fail-on-change  Fail when changing files (for linting purposes)
-  -a, --aggressive      Include conversions with potentially changed behavior.
+                        Replace string concatenations (defined as +
+                        operations involving string literals) with
+                        f-strings. Available only if flynt is
+                        installed with 3.8+ interpreter.
+  -tj, --transform-joins
+                        Replace static joins (where the joiner is a
+                        string literal and the joinee is a static-
+                        length list) with f-strings. Available only
+                        if flynt is installed with 3.8+ interpreter.
+  -f, --fail-on-change  Fail when changing files (for linting
+                        purposes)
+  -a, --aggressive      Include conversions with potentially changed
+                        behavior.
   -e EXCLUDE [EXCLUDE ...], --exclude EXCLUDE [EXCLUDE ...]
-                        ignore files with given strings in it's absolute path.
+                        ignore files with given strings in it's
+                        absolute path.
   --version             Print the current version number and exit.
+
 ```
 
 ### Sample output of a successful run:
