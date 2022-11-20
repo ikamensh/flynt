@@ -1,0 +1,55 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "flynt"
+dynamic = ["version"]
+description = "CLI tool to convert a python project's %-formatted strings to f-strings."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.7"
+authors = [
+    { name = "Ilya Kamenshchikov" },
+]
+keywords = [
+    "strings",
+    "utility",
+]
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "astor",
+    "tomli>=1.1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "build",
+    "pre-commit",
+    "pytest",
+    "pytest-cov",
+    "twine",
+]
+
+[project.scripts]
+flynt = "flynt:main"
+
+[project.urls]
+Homepage = "https://github.com/ikamensh/flynt"
+
+[tool.hatch.version]
+path = "src/flynt/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src",
+]

@@ -4,8 +4,8 @@ with `pip install -r requirements-dev.txt`
 
 # Code style
 [pre-commit](https://github.com/pre-commit/pre-commit) is used, to run code checks before committing changes.
-If you have pre-commit installed from the requirements-dev.txt simple run ``pre-commit install`` to install the hooks for this repo
 
+If you have pre-commit installed (e.g. from the dev requirements), simply run ``pre-commit install`` to install the hooks for this repo.
 
 # Integration tests
 
