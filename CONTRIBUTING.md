@@ -1,6 +1,5 @@
 # Running tests
-In order for imports to work, install package in editable mode in your environment with `pip install -e .` and install dev dependencies
-with `pip install -r requirements-dev.txt`
+In order for imports to work, install package in editable mode in your environment with `pip install -e .[dev]`.
 
 # Code style
 [pre-commit](https://github.com/pre-commit/pre-commit) is used, to run code checks before committing changes.
