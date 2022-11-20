@@ -73,6 +73,24 @@ def run_flynt_cli():
     )
 
     parser.add_argument(
+        "--no-tp",
+        "--no-transform-percent",
+        dest="transform_percent",
+        action="store_false",
+        default=True,
+        help="Don't transform % formatting to f-strings (default: do so)",
+    )
+
+    parser.add_argument(
+        "--no-tf",
+        "--no-transform-format",
+        dest="transform_format",
+        action="store_false",
+        default=True,
+        help="Don't transform .format formatting to f-strings (default: do so)",
+    )
+
+    parser.add_argument(
         "-tc",
         "--transform-concats",
         action="store_true",
@@ -185,6 +203,8 @@ def run_flynt_cli():
         multiline=not args.no_multiline,
         len_limit=int(args.line_length),
         fail_on_changes=args.fail_on_change,
+        transform_percent=args.transform_percent,
+        transform_format=args.transform_format,
         transform_concat=args.transform_concats,
         transform_join=args.transform_joins,
     )

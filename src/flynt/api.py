@@ -21,7 +21,14 @@ blacklist = {".tox", "venv", "site-packages", ".eggs"}
 
 
 def _fstringify_file(
-    filename, multiline, len_limit, transform_concat=False, transform_join=False
+    filename: str,
+    multiline: bool,
+    len_limit: int,
+    *,
+    transform_concat: bool = False,
+    transform_format: bool = True,
+    transform_join: bool = False,
+    transform_percent: bool = True,
 ) -> Tuple[bool, int, int, int]:
     """
     :return: tuple: (changes_made, n_changes,
@@ -51,9 +58,16 @@ def _fstringify_file(
         return default_result()
 
     try:
-        new_code, changes = fstringify_code_by_line(
-            contents, multiline=multiline, len_limit=len_limit
-        )
+        new_code = contents
+        changes = 0
+        if transform_percent or transform_format:
+            new_code, changes = fstringify_code_by_line(
+                contents,
+                multiline=multiline,
+                len_limit=len_limit,
+                transform_percent=transform_percent,
+                transform_format=transform_format,
+            )
         if transform_concat:
             new_code, concat_changes = fstringify_concats(
                 new_code, multiline=multiline, len_limit=len_limit
@@ -119,8 +133,11 @@ def fstringify_files(
     files,
     multiline,
     len_limit,
-    transform_concat,
-    transform_join,
+    transform_concat: bool = False,
+    transform_join: bool = False,
+    *,
+    transform_format: bool = True,
+    transform_percent: bool = True,
 ):
     changed_files = 0
     total_charcount_original = 0
@@ -138,7 +155,9 @@ def fstringify_files(
             multiline,
             len_limit,
             transform_concat=transform_concat,
+            transform_format=transform_format,
             transform_join=transform_join,
+            transform_percent=transform_percent,
         )
         if changed:
             changed_files += 1
@@ -229,6 +248,8 @@ def fstringify(
     multiline: bool,
     len_limit: int,
     fail_on_changes: bool = False,
+    transform_percent: bool = True,
+    transform_format: bool = True,
     transform_concat: bool = False,
     transform_join: bool = False,
     excluded_files_or_paths: Optional[Collection[str]] = None,
@@ -241,6 +262,8 @@ def fstringify(
         files,
         multiline=multiline,
         len_limit=len_limit,
+        transform_percent=transform_percent,
+        transform_format=transform_format,
         transform_concat=transform_concat,
         transform_join=transform_join,
     )

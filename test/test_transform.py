@@ -187,3 +187,15 @@ def test_fix_fstrings(s, expected):
     new, changed = transform_chunk(s)
     assert changed
     assert new == expected
+
+
+def test_disabled_transforms():
+    # Test that disabling transforms does disable them
+    assert not transform_chunk(
+        '"my string {:.2f}".format(var)',
+        transform_format=False,
+    )[1]
+    assert not transform_chunk(
+        '"my string {:.2f}" % var',
+        transform_percent=False,
+    )[1]
