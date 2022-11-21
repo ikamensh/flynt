@@ -30,7 +30,9 @@ def get_quote_type(code: str):
 
 def remove_quotes(code: str):
     quote_type = get_quote_type(code)
-    return code[len(quote_type) : -len(quote_type)]
+    if quote_type:
+        return code[len(quote_type) : -len(quote_type)]
+    return code
 
 
 def set_quote_type(code: str, quote_type: str):
