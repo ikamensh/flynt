@@ -36,11 +36,11 @@ From the output of `flynt -h`:
 <!-- begin-options -->
 ```
 usage: flynt [-h] [-v | -q] [--no-multiline | -ll LINE_LENGTH] [-d]
-             [-s] [-tc] [-tj] [-f] [-a] [-e EXCLUDE [EXCLUDE ...]]
-             [--version]
+             [-s] [--no-tp] [--no-tf] [-tc] [-tj] [-f] [-a]
+             [-e EXCLUDE [EXCLUDE ...]] [--version]
              [src ...]
 
-flynt v.0.76
+flynt v.0.77-beta
 
 positional arguments:
   src                   source file(s) or directory
@@ -63,6 +63,12 @@ options:
                         and print the converted version. The snippet
                         must use single quotes or escaped double
                         quotes.
+  --no-tp, --no-transform-percent
+                        Don't transform % formatting to f-strings
+                        (default: do so)
+  --no-tf, --no-transform-format
+                        Don't transform .format formatting to
+                        f-strings (default: do so)
   -tc, --transform-concats
                         Replace string concatenations (defined as +
                         operations involving string literals) with
