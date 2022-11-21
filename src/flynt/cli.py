@@ -78,7 +78,7 @@ def run_flynt_cli():
         dest="transform_percent",
         action="store_false",
         default=True,
-        help="Don't transform % formatting to f-strings (default: do so)",
+        help="Don't transform %% formatting to f-strings (default: do so)",
     )
 
     parser.add_argument(
