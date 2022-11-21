@@ -53,3 +53,7 @@ path = "src/flynt/__init__.py"
 include = [
     "/src",
 ]
+
+[tool.bandit]
+exclude_dirs = ["test"]
+skips = ["B101"]

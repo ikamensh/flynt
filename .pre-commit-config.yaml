@@ -2,7 +2,13 @@ repos:
   - repo: https://github.com/PyCQA/bandit
     rev: 1.7.4
     hooks:
-      - id: bandit  # See setup.cfg for args
+      - id: bandit
+        additional_dependencies:
+          - "bandit[toml]"
+        args:
+          - -c
+          - pyproject.toml
+        exclude: test/integration/(actual|expected|samples).*
   - repo: https://github.com/PyCQA/autoflake
     rev: v1.7.7
     hooks:
