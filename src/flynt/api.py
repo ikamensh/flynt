@@ -35,7 +35,7 @@ def _fstringify_file(
     length of original code, length of new code)
     """
 
-    def default_result():
+    def default_result() -> Tuple[bool, int, int, int]:
         return False, 0, len(contents), len(contents)
 
     encoding, bom = encoding_by_bom(filename)
@@ -118,13 +118,10 @@ def _fstringify_file(
         )
         print("\n".join(diff))
     else:
-        mode = "w"
-        if bom is not None:
-            with open(filename, "wb") as f:
-                f.write(bom)
-            mode = "a"
-        with open(filename, mode, encoding=encoding, newline="") as f:
-            f.write(new_code)
+        with open(filename, "wb") as outf:
+            if bom is not None:
+                outf.write(bom)
+            outf.write(new_code.encode(encoding))
 
     return True, changes, len(contents), len(new_code)
 

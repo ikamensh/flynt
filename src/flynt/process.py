@@ -2,7 +2,7 @@ import math
 import re
 import string
 from functools import partial
-from typing import Callable, Optional, Tuple, Union
+from typing import Callable, List, Optional, Tuple, Union
 
 from flynt import lexer, state
 from flynt.ast_chunk import AstChunk
@@ -28,20 +28,16 @@ class JoinTransformer:
     def __init__(
         self,
         code: str,
-        len_limit: int,
+        len_limit: Optional[int],
         candidates_iter_factory: Callable,
         transform_func: Callable,
     ) -> None:
-
-        if len_limit is None:
-            len_limit = math.inf
-
-        self.len_limit = len_limit
+        self.len_limit = len_limit if len_limit is not None else math.inf
         self.candidates_iter = candidates_iter_factory(code)
         self.transform_func = transform_func
         self.src_lines = code.split("\n")
 
-        self.results = []
+        self.results: List[str] = []
         self.count_expressions = 0
 
         self.last_line = 0
@@ -193,7 +189,7 @@ def fstringify_code_by_line(
 def fstringify_concats(
     code: str,
     multiline: bool = True,
-    len_limit: int = 88,
+    len_limit: Optional[int] = 88,
 ) -> Tuple[str, int]:
     """replace string literal concatenations with f-string expressions."""
     return _transform_code(

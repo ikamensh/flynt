@@ -7,11 +7,11 @@ from flynt.static_join.utils import get_static_join_bits
 
 
 class JoinHound(ast.NodeVisitor):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.victims: List[AstChunk] = []
 
-    def visit_Call(self, node: ast.Call):
+    def visit_Call(self, node: ast.Call) -> None:
         """
         Finds all nodes that are joins with a static string literal
         as the joiner and a static iterable as the joinee.

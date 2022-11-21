@@ -37,7 +37,7 @@ def is_str_literal(node: ast.AST) -> bool:
 
 def ast_formatted_value(
     val: ast.AST,
-    fmt_str: str = None,
+    fmt_str: Optional[str] = None,
     conversion: Optional[str] = None,
 ) -> ast.FormattedValue:
     if isinstance(val, ast.FormattedValue):
@@ -53,8 +53,12 @@ def ast_formatted_value(
     else:
         format_spec = None
 
-    conversion = -1 if conversion is None else ord(conversion.replace("!", ""))
-    return ast.FormattedValue(value=val, conversion=conversion, format_spec=format_spec)
+    conversion_val = -1 if conversion is None else ord(conversion.replace("!", ""))
+    return ast.FormattedValue(
+        value=val,
+        conversion=conversion_val,
+        format_spec=format_spec,
+    )
 
 
 def ast_string_node(string: str) -> ast.Str:

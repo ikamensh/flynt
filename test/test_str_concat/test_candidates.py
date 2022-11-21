@@ -44,7 +44,7 @@ def test_find_victims_api(pycode_with_2_concats: str):
 
 
 @pytest.mark.skipif(sys.version_info < (3, 8), reason="requires python3.8 or higher")
-def test_find_victims_api():
+def test_find_victims_parens():
     txt_in = """print('blah' + (thing - 1))"""
     gen = concat_candidates(txt_in)
     lst = list(gen)

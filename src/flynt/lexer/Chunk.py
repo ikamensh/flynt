@@ -2,12 +2,11 @@ import ast
 import sys
 import token
 from collections import deque
-from typing import Deque, Iterable, Optional
+from typing import Deque, Iterable, Iterator, Optional, Tuple
 
 from flynt.lexer.PyToken import PyToken
 
 REUSE = "Token was not used"
-
 
 is_36 = sys.version_info.major == 3 and sys.version_info.minor == 6
 if is_36:
@@ -25,9 +24,8 @@ single_skip = ()
 
 
 class Chunk:
-
-    skip_tokens = ()
-    break_tokens = ()
+    skip_tokens: Tuple[int, ...] = ()
+    break_tokens: Tuple[int, ...] = ()
     multiline = None
 
     @staticmethod
@@ -79,7 +77,7 @@ class Chunk:
         # todo handle all cases?
         if not self[0].is_string():
             self.complete = True
-            return
+            return None
 
         if len(self) == 2:
             self.tokens.append(t)
@@ -103,6 +101,7 @@ class Chunk:
                 self.complete = True
                 self.successful = self.is_parseable
                 return REUSE
+        return None
 
     def call_append(self, t: PyToken) -> None:
 
@@ -126,15 +125,15 @@ class Chunk:
             self.successful = self.is_parseable and (
                 self.is_percent_chunk or self.is_call_chunk
             )
-            return
+            return None
 
         if len(self) > 50:
             self.complete = True
             self.successful = False
-            return
+            return None
 
         if t.toknum in self.skip_tokens:
-            return
+            return None
 
         if len(self) == 0:
             self.empty_append(t)
@@ -144,6 +143,7 @@ class Chunk:
             self.call_append(t)
         else:
             return self.percent_append(t)
+        return None
 
     @property
     def is_parseable(self) -> bool:
@@ -188,13 +188,13 @@ class Chunk:
         return sum(t.toknum == token.STRING for t in self.tokens) > 1
 
     @property
-    def quote_type(self) -> str:
+    def quote_type(self) -> Optional[str]:
         return self.tokens[0].get_quote_type()
 
     def __getitem__(self, item: int) -> PyToken:
         return self.tokens[item]
 
-    def __iter__(self) -> Iterable[PyToken]:
+    def __iter__(self) -> Iterator[PyToken]:
         return iter(self.tokens)
 
     def __len__(self) -> int:

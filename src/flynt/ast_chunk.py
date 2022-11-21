@@ -19,11 +19,15 @@ class AstChunk:
 
     @property
     def end_idx(self) -> int:
-        return self.node.end_col_offset
+        idx = self.node.end_col_offset
+        assert idx is not None
+        return idx
 
     @property
     def end_line(self) -> int:
-        return self.node.end_lineno - 1
+        lineno = self.node.end_lineno
+        assert lineno is not None
+        return lineno - 1
 
     @property
     def n_lines(self) -> int:

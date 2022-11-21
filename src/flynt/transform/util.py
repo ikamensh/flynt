@@ -1,18 +1,19 @@
 import ast
 import json
+from typing import Any, Dict, Optional
 
 
-def pp_code_ast(code):
+def pp_code_ast(code: str) -> None:
     """Pretty print code's AST to stdout."""
     tree = ast.parse(code)
     pp_ast(tree)
 
 
-def _get_classname(cls):
-    return cls.__class__.__name__
+def _get_classname(cls: Any) -> str:
+    return str(cls.__class__.__name__)
 
 
-def ast_to_dict(node):
+def ast_to_dict(node: ast.AST) -> Optional[Dict[str, Any]]:
     """Convert an AST node to a dictionary for debugging.
 
     This is mainly for powering `pp_ast` (pretty printing).
@@ -28,7 +29,7 @@ def ast_to_dict(node):
     """
     if not node:
         return None
-    fields = {}
+    fields: Dict[str, Any] = {}
     for k in node._fields:
         if not hasattr(node, k):
             continue
@@ -52,6 +53,6 @@ def ast_to_dict(node):
     return {_get_classname(node): fields}
 
 
-def pp_ast(node):
+def pp_ast(node: ast.AST) -> None:
     """Pretty print an AST to stdout"""
     print(json.dumps(ast_to_dict(node), indent=2))

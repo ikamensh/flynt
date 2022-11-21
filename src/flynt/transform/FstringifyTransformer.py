@@ -53,6 +53,9 @@ class FstringifyTransformer(ast.NodeTransformer):
         """
 
         if self.transform_percent and is_percent_stringify(node):
+            # Mypy doesn't understand the is_percent_stringify acts
+            # as a type guard, so we need the assert here.
+            assert isinstance(node.left, ast.Str)
             state.percent_candidates += 1
 
             # bail in these edge cases...
@@ -63,12 +66,7 @@ class FstringifyTransformer(ast.NodeTransformer):
             for ch in ast.walk(node.right):
                 # f-string expression part cannot include a backslash
                 if isinstance(ch, ast.Str) and (
-                    any(
-                        map(
-                            lambda x: x in ch.s,
-                            ("\n", "\t", "\r", "'", '"', "%s", "%%"),
-                        )
-                    )
+                    any(x in ch.s for x in ("\n", "\t", "\r", "'", '"', "%s", "%%"))
                     or "\\" in ch.s
                 ):
                     return node

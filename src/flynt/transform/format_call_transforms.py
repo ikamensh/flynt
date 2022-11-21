@@ -2,7 +2,7 @@ import ast
 import string
 import sys
 from collections import deque
-from typing import Tuple, Union
+from typing import Any, Dict, List, Tuple, Union
 
 from flynt import state
 from flynt.exceptions import ConversionRefused, FlyntException
@@ -13,20 +13,14 @@ def matching_call(node: ast.Call) -> bool:
     """
     Check if an ast Node represents a "...".format() call.
     """
-    call_from_string = (
-        isinstance(node.func, ast.Attribute)
-        and hasattr(node.func, "value")
-        and (
-            isinstance(node.func.value, ast.Str)
-            or (
-                isinstance(node.func.value, ast.Constant)
-                and isinstance(node.func.value.value, str)
-            )
-        )
+    func = node.func
+    if not isinstance(func, ast.Attribute):
+        return False
+    call_from_string = hasattr(func, "value") and (
+        isinstance(func.value, ast.Str)
+        or (isinstance(func.value, ast.Constant) and isinstance(func.value.value, str))
     )
-    return (
-        isinstance(node, ast.Call) and call_from_string and node.func.attr == "format"
-    )
+    return isinstance(node, ast.Call) and call_from_string and func.attr == "format"
 
 
 stdlib_parse = string.Formatter().parse
@@ -34,9 +28,11 @@ stdlib_parse = string.Formatter().parse
 
 def joined_string(fmt_call: ast.Call) -> Tuple[Union[ast.JoinedStr, ast.Str], bool]:
     """Transform a "...".format() call node into a f-string node."""
-
+    assert isinstance(fmt_call.func, ast.Attribute) and isinstance(
+        fmt_call.func.value, ast.Str
+    )
     string = fmt_call.func.value.s
-    var_map = {kw.arg: kw.value for kw in fmt_call.keywords}
+    var_map: Dict[Any, Any] = {kw.arg: kw.value for kw in fmt_call.keywords}
     inserted_value_nodes = []
     for a in fmt_call.args:
         inserted_value_nodes += list(ast.walk(a))
@@ -52,7 +48,7 @@ def joined_string(fmt_call: ast.Call) -> Tuple[Union[ast.JoinedStr, ast.Str], bo
     splits = deque(stdlib_parse(string))
 
     seq_ctr = 0
-    new_segments = []
+    new_segments: List[ast.AST] = []
     manual_field_ordering = False
 
     for raw, var_name, fmt_str, conversion in splits:
@@ -72,6 +68,7 @@ def joined_string(fmt_call: ast.Call) -> Tuple[Union[ast.JoinedStr, ast.Str], bo
             idx = var_name.find(".")
             var_name, suffix = var_name[:idx], var_name[idx + 1 :]
 
+        identifier: Union[str, int]
         if var_name.isdigit():
             manual_field_ordering = True
             identifier = int(var_name)

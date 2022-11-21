@@ -1,5 +1,5 @@
 import ast
-from typing import List, Optional, Tuple
+from typing import List, Optional, Sequence, Tuple
 
 from flynt.utils import is_str_literal
 
@@ -14,9 +14,9 @@ def get_joiner_from_static_join(func: ast.AST) -> Optional[str]:
     return None
 
 
-def get_arguments_from_static_join(args: List[ast.AST]) -> Optional[List[ast.AST]]:
+def get_arguments_from_static_join(args: Sequence[ast.AST]) -> Optional[List[ast.AST]]:
     if len(args) == 1 and isinstance(args[0], (ast.List, ast.Tuple, ast.Set)):
-        elts = args[0].elts
+        elts: List[ast.AST] = list(args[0].elts)
         if any(isinstance(elt, ast.Starred) for elt in elts):
             # If there's a `*starred` element in the list, it's not valid.
             return None
