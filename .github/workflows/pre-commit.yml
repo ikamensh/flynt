@@ -12,9 +12,4 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
-        with:
-          python-version: 3.x
-      - run: pip install pre-commit
-      - run: pre-commit --version
-      - run: pre-commit install
-      - run: pre-commit run
+      - uses: pre-commit/action@v3.0.0
