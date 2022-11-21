@@ -9,6 +9,7 @@ from flynt import state
 from flynt.exceptions import FlyntException, ConversionRefused
 from flynt.format import QuoteTypes, set_quote_type
 from flynt.transform.FstringifyTransformer import fstringify_node
+from flynt.utils import fixup_transformed
 
 
 def transform_chunk(
@@ -47,13 +48,9 @@ def transform_chunk(
         return code, False
     else:
         if changed:
-            new_code = astor.to_source(converted)
-            new_code = new_code.strip()
             if str_in_str and quote_type == QuoteTypes.single:
                 quote_type = QuoteTypes.double
-            new_code = set_quote_type(new_code, quote_type)
-            new_code = new_code.replace("\n", "\\n")
-            new_code = new_code.replace("\t", "\\t")
+            new_code = fixup_transformed(converted, quote_type=quote_type)
             try:
                 ast.parse(new_code)
             except SyntaxError as e:

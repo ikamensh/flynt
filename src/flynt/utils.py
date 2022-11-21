@@ -39,13 +39,16 @@ def ast_string_node(string: str) -> ast.Str:
     return ast.Str(s=string)
 
 
-def fixup_transformed(tree: ast.AST) -> str:
+def fixup_transformed(tree: ast.AST, quote_type: Optional[str] = None) -> str:
     il = FstrInliner()
     il.visit(tree)
     new_code = astor.to_source(tree)
-    if new_code[-1] == "\n":
-        new_code = new_code[:-1]
+    new_code = new_code.rstrip()
+    if quote_type is None:
+        if new_code[:4] == 'f"""' or new_code[:3] == "'''" or new_code[:3] == '"""':
+            quote_type = QuoteTypes.double
+    if quote_type is not None:
+        new_code = set_quote_type(new_code, quote_type)
     new_code = new_code.replace("\n", "\\n")
-    if new_code[:4] == 'f"""' or new_code[:3] == "'''" or new_code[:3] == '"""':
-        new_code = set_quote_type(new_code, QuoteTypes.double)
+    new_code = new_code.replace("\t", "\\t")
     return new_code
