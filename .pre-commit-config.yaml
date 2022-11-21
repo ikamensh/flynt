@@ -3,6 +3,15 @@ repos:
     rev: 1.7.4
     hooks:
       - id: bandit  # See setup.cfg for args
+  - repo: https://github.com/PyCQA/autoflake
+    rev: v1.7.7
+    hooks:
+      - id: autoflake
+        args:
+          - --in-place
+          - --remove-duplicate-keys
+          - --remove-all-unused-imports
+        exclude: test/integration/(actual|expected|samples).*
   - repo: https://github.com/PyCQA/isort
     rev: 5.10.1
     hooks:

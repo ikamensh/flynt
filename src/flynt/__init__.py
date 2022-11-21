@@ -5,3 +5,5 @@ Learn more about f-strings at https://www.python.org/dev/peps/pep-0498/"""
 __version__ = "0.77-beta"
 
 from flynt.cli import main
+
+__all__ = ["main", "__version__"]
