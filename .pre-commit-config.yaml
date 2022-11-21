@@ -3,18 +3,18 @@ repos:
     rev: 1.7.4
     hooks:
       - id: bandit  # See setup.cfg for args
-  - repo: https://github.com/ambv/black
-    rev: 22.3.0
+  - repo: https://github.com/psf/black
+    rev: 22.10.0
     hooks:
       - id: black
         language_version: python3
         exclude: test/integration/actual_out|test/integration/actual_out_single_line|test/integration/expected_out|test/integration/expected_out_single_line|test/integration/samples_in
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.1.0
+    rev: v2.2.2
     hooks:
       - id: codespell  # See setup.cfg for args
   - repo: https://github.com/PyCQA/flake8
-    rev: 4.0.1
+    rev: 5.0.4
     hooks:
       - id: flake8  # See setup.cfg for args
         additional_dependencies:

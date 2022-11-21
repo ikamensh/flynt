@@ -12,5 +12,6 @@ CASES = [
     ('a.join(["1", "2", "3"])', None),  # Not a static joiner
     ('"a".join(a)', None),  # Not a static joinee
     ('"a".join([a, a, *a])', None),  # Not a static length
-    ('"a".join([c for c in a])', None),  # comprehension should not be transformed (not a static length)
+    # comprehension should not be transformed (not a static length)
+    ('"a".join([c for c in a])', None),
 ]

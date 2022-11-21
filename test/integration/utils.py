@@ -32,7 +32,7 @@ def try_on_file(
     txt_in = (int_test_path / f"samples_in{suffix}" / filename).read_text()
     ex = (int_test_path / f"expected_out{out_suffix}" / filename).read_text()
     out, edits = func(txt_in)
-    out_path = (int_test_path / f"actual_out{out_suffix}" / filename)
+    out_path = int_test_path / f"actual_out{out_suffix}" / filename
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(out)
     return out, ex
