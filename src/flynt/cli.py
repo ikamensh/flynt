@@ -14,10 +14,12 @@ def main():
     return sys.exit(run_flynt_cli())
 
 
-def run_flynt_cli():
+def run_flynt_cli(arglist=None):
     """"""
     parser = argparse.ArgumentParser(
-        description=f"flynt v.{__version__}", add_help=True
+        prog="flynt",
+        description=f"flynt v.{__version__}",
+        add_help=True,
     )
 
     verbosity_group = parser.add_mutually_exclusive_group()
@@ -142,7 +144,7 @@ def run_flynt_cli():
         default=False,
         help="Print the current version number and exit.",
     )
-    args = parser.parse_args()
+    args = parser.parse_args(arglist)
 
     if args.version:
         print(__version__)
@@ -189,7 +191,7 @@ def run_flynt_cli():
                 f"Supported options are: {supported_args}"
             )
         parser.set_defaults(**cfg)
-        args = parser.parse_args()
+        args = parser.parse_args(arglist)
     set_global_state(args)
     if not args.quiet:
         print(salutation)
