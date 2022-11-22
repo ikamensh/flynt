@@ -1,8 +1,8 @@
 import ast
 from typing import List
 
-from flynt import state
 from flynt.ast_chunk import AstChunk
+from flynt.state import State
 from flynt.static_join.utils import get_static_join_bits
 
 
@@ -22,7 +22,7 @@ class JoinHound(ast.NodeVisitor):
             self.generic_visit(node)
 
 
-def join_candidates(code: str):
+def join_candidates(code: str, state: State):
     tree = ast.parse(code)
 
     ch = JoinHound()

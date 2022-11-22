@@ -9,13 +9,13 @@ from typing import Collection, List, Optional, Tuple
 
 import astor
 
-from flynt import state
 from flynt.cli_messages import farewell_message
 from flynt.process import (
     fstringify_code_by_line,
     fstringify_concats,
     fstringify_static_joins,
 )
+from flynt.state import State
 
 log = logging.getLogger(__name__)
 
@@ -24,13 +24,7 @@ blacklist = {".tox", "venv", "site-packages", ".eggs"}
 
 def _fstringify_file(
     filename: str,
-    multiline: bool,
-    len_limit: int,
-    *,
-    transform_concat: bool = False,
-    transform_format: bool = True,
-    transform_join: bool = False,
-    transform_percent: bool = True,
+    state: State,
 ) -> Tuple[bool, int, int, int]:
     """
     :return: tuple: (changes_made, n_changes,
@@ -59,23 +53,22 @@ def _fstringify_file(
     try:
         new_code = contents
         changes = 0
-        if transform_percent or transform_format:
+        if state.transform_percent or state.transform_format:
             new_code, changes = fstringify_code_by_line(
                 contents,
-                multiline=multiline,
-                len_limit=len_limit,
-                transform_percent=transform_percent,
-                transform_format=transform_format,
+                state=state,
             )
-        if transform_concat:
+        if state.transform_concat:
             new_code, concat_changes = fstringify_concats(
-                new_code, multiline=multiline, len_limit=len_limit
+                new_code,
+                state=state,
             )
             changes += concat_changes
             state.concat_changes += concat_changes
-        if transform_join:
+        if state.transform_join:
             new_code, join_changes = fstringify_static_joins(
-                new_code, multiline=multiline, len_limit=len_limit
+                new_code,
+                state=state,
             )
             changes += join_changes
             state.join_changes += join_changes
@@ -123,13 +116,7 @@ def _fstringify_file(
 
 def fstringify_files(
     files: List[str],
-    multiline: bool,
-    len_limit: int,
-    transform_concat: bool,
-    transform_join: bool = False,
-    *,
-    transform_format: bool = True,
-    transform_percent: bool = True,
+    state: State,
 ) -> int:
     changed_files = 0
     total_charcount_original = 0
@@ -144,12 +131,7 @@ def fstringify_files(
             charcount_new,
         ) = _fstringify_file(
             path,
-            multiline,
-            len_limit,
-            transform_concat=transform_concat,
-            transform_format=transform_format,
-            transform_join=transform_join,
-            transform_percent=transform_percent,
+            state,
         )
         if changed:
             changed_files += 1
@@ -163,6 +145,7 @@ def fstringify_files(
 
     if not state.quiet:
         _print_report(
+            state,
             len(files),
             changed_files,
             total_charcount_new,
@@ -175,6 +158,7 @@ def fstringify_files(
 
 
 def _print_report(
+    state: State,
     found_files: int,
     changed_files: int,
     total_cc_new: int,
@@ -241,13 +225,8 @@ def _print_report(
 
 def fstringify(
     files_or_paths: List[str],
-    multiline: bool,
-    len_limit: int,
+    state: State,
     fail_on_changes: bool = False,
-    transform_percent: bool = True,
-    transform_format: bool = True,
-    transform_concat: bool = False,
-    transform_join: bool = False,
     excluded_files_or_paths: Optional[Collection[str]] = None,
 ) -> int:
     """determine if a directory or a single file was passed, and f-stringify it."""
@@ -256,12 +235,7 @@ def fstringify(
 
     status = fstringify_files(
         files,
-        multiline=multiline,
-        len_limit=len_limit,
-        transform_percent=transform_percent,
-        transform_format=transform_format,
-        transform_concat=transform_concat,
-        transform_join=transform_join,
+        state=state,
     )
 
     if fail_on_changes:

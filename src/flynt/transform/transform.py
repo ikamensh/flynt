@@ -3,9 +3,9 @@ import copy
 import logging
 from typing import Tuple
 
-from flynt import state
 from flynt.exceptions import ConversionRefused
 from flynt.format import QuoteTypes
+from flynt.state import State
 from flynt.transform.FstringifyTransformer import fstringify_node
 from flynt.utils import fixup_transformed
 
@@ -14,17 +14,15 @@ log = logging.getLogger(__name__)
 
 def transform_chunk(
     code: str,
+    state: State,
     quote_type: str = QuoteTypes.triple_double,
-    transform_percent: bool = True,
-    transform_format: bool = True,
 ) -> Tuple[str, bool]:
     """Convert a block of code to an f-string
 
     Args:
+        state: State object, for settings and statistics
         code: The code to convert.
         quote_type: the quote type to use for the transformed result
-        transform_percent: whether to transform percent format strings
-        transform_format: whether to transform format calls
 
     Returns:
        Tuple: resulting code, boolean: was it changed?
@@ -34,8 +32,7 @@ def transform_chunk(
         tree = ast.parse(code)
         converted, changed, str_in_str = fstringify_node(
             copy.deepcopy(tree),
-            transform_percent=transform_percent,
-            transform_format=transform_format,
+            state=state,
         )
     except ConversionRefused as cr:
         log.warning("Not converting code '%s': %s", code, cr)

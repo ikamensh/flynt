@@ -12,6 +12,7 @@ from flynt.format import QuoteTypes as qt
 from flynt.format import get_quote_type
 from flynt.lexer import split
 from flynt.lexer.Chunk import Chunk
+from flynt.state import State
 from flynt.static_join.candidates import join_candidates
 from flynt.static_join.transformer import transform_join
 from flynt.string_concat.candidates import concat_candidates
@@ -171,58 +172,51 @@ class JoinTransformer:
             self.last_line += 1
 
 
-def fstringify_code_by_line(
-    code: str,
-    multiline: bool = True,
-    len_limit: Optional[int] = 88,
-    transform_percent: bool = True,
-    transform_format: bool = True,
-) -> Tuple[str, int]:
+def fstringify_code_by_line(code: str, state: State) -> Tuple[str, int]:
     """returns fstringified version of the code and amount of lines edited."""
-    phunk = partial(
-        transform_chunk,
-        transform_format=transform_format,
-        transform_percent=transform_percent,
-    )
     return _transform_code(
-        code, split.get_fstringify_chunks, phunk, multiline, len_limit
+        code, split.get_fstringify_chunks, partial(transform_chunk, state=state), state
     )
 
 
-def fstringify_concats(
-    code: str,
-    multiline: bool = True,
-    len_limit: Optional[int] = 88,
-) -> Tuple[str, int]:
+def fstringify_concats(code: str, state: State) -> Tuple[str, int]:
     """replace string literal concatenations with f-string expressions."""
     return _transform_code(
-        code, concat_candidates, transform_concat, multiline, len_limit
+        code,
+        partial(concat_candidates, state=state),
+        partial(transform_concat, state=state),
+        state,
     )
 
 
-def fstringify_static_joins(code: str, multiline=True, len_limit=88) -> Tuple[str, int]:
+def fstringify_static_joins(code: str, state: State) -> Tuple[str, int]:
     """replace joins on static content with f-string expressions."""
-    return _transform_code(code, join_candidates, transform_join, multiline, len_limit)
+    return _transform_code(
+        code,
+        partial(join_candidates, state=state),
+        partial(transform_join, state=state),
+        state,
+    )
 
 
 def _transform_code(
     code: str,
     candidates_iter_factory: Callable,
     transform_func: Callable,
-    multiline: bool,
-    len_limit: Optional[int],
+    state: State,
 ) -> Tuple[str, int]:
     """returns fstringified version of the code and amount of lines edited."""
 
-    len_limit = _multiline_settings(len_limit, multiline)
+    len_limit = _multiline_settings(state)
     jt = JoinTransformer(code, len_limit, candidates_iter_factory, transform_func)
     return jt.fstringify_code_by_line()
 
 
-def _multiline_settings(len_limit: Optional[int], multiline: bool) -> Optional[int]:
-    if not multiline:
-        len_limit = 0
+def _multiline_settings(state: State) -> Optional[int]:
+    # TODO: eradicate this function and system
+    if not state.multiline:
+        state.len_limit = 0
         lexer.set_single_line()
     else:
         lexer.set_multiline()
-    return len_limit
+    return state.len_limit

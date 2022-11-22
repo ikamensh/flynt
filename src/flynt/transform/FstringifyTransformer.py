@@ -1,8 +1,8 @@
 import ast
 from typing import Tuple
 
-from flynt import state
 from flynt.linting.fstr_lint import FstrInliner
+from flynt.state import State
 from flynt.transform.format_call_transforms import joined_string, matching_call
 from flynt.transform.percent_transformer import is_percent_stringify, transform_binop
 
@@ -10,32 +10,32 @@ from flynt.transform.percent_transformer import is_percent_stringify, transform_
 class FstringifyTransformer(ast.NodeTransformer):
     def __init__(
         self,
-        transform_percent: bool = True,
-        transform_format: bool = True,
+        state: State,
     ) -> None:
         super().__init__()
+        self.state = state
         self.counter = 0
         self.string_in_string = False
-        self.transform_percent = transform_percent
-        self.transform_format = transform_format
 
     def visit_Call(self, node: ast.Call) -> ast.AST:
         """
         Convert `ast.Call` to `ast.JoinedStr` f-string
         """
 
-        if self.transform_format and matching_call(node):
-            state.call_candidates += 1
+        if self.state.transform_format and matching_call(node):
+            self.state.call_candidates += 1
 
             # bail in these edge cases...
             if any(isinstance(arg, ast.Starred) for arg in node.args):
                 return node
 
-            result_node, str_in_str = joined_string(node)
+            result_node, str_in_str = joined_string(
+                node, aggressive=self.state.aggressive
+            )
             self.string_in_string = str_in_str
             self.visit(result_node)
             self.counter += 1
-            state.call_transforms += 1
+            self.state.call_transforms += 1
             return result_node
 
         return node
@@ -52,11 +52,11 @@ class FstringifyTransformer(ast.NodeTransformer):
         Returns ast.JoinedStr (f-string)
         """
 
-        if self.transform_percent and is_percent_stringify(node):
+        if self.state.transform_percent and is_percent_stringify(node):
             # Mypy doesn't understand the is_percent_stringify acts
             # as a type guard, so we need the assert here.
             assert isinstance(node.left, ast.Str)
-            state.percent_candidates += 1
+            self.state.percent_candidates += 1
 
             # bail in these edge cases...
             no_good = ["}", "{"]
@@ -71,10 +71,12 @@ class FstringifyTransformer(ast.NodeTransformer):
                 ):
                     return node
 
-            result_node, str_in_str = transform_binop(node)
+            result_node, str_in_str = transform_binop(
+                node, aggressive=self.state.aggressive
+            )
             self.string_in_string = str_in_str
             self.counter += 1
-            state.percent_transforms += 1
+            self.state.percent_transforms += 1
             return result_node
 
         return node
@@ -82,13 +84,9 @@ class FstringifyTransformer(ast.NodeTransformer):
 
 def fstringify_node(
     node: ast.AST,
-    transform_percent: bool = True,
-    transform_format: bool = True,
+    state: State,
 ) -> Tuple[ast.AST, bool, bool]:
-    ft = FstringifyTransformer(
-        transform_percent=transform_percent,
-        transform_format=transform_format,
-    )
+    ft = FstringifyTransformer(state)
     result = ft.visit(node)
     il = FstrInliner()
     il.visit(result)

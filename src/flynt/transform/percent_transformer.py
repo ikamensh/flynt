@@ -3,7 +3,6 @@ import re
 from collections import deque
 from typing import List, Tuple
 
-from flynt import state
 from flynt.exceptions import ConversionRefused, FlyntException
 from flynt.transform.format_call_transforms import ast_formatted_value, ast_string_node
 
@@ -47,12 +46,14 @@ def formatted_value(
     fmt_prefix: str,
     fmt_spec: str,
     val: ast.AST,
+    *,
+    aggressive: bool = False,
 ) -> ast.FormattedValue:
     if fmt_spec in integer_specificers:
         fmt_prefix = fmt_prefix.replace(".", "0")
 
     if fmt_spec in conversion_methods:
-        if not state.aggressive and fmt_prefix:
+        if not aggressive and fmt_prefix:
             raise ConversionRefused(
                 "Default text alignment has changed between percent fmt and fstrings. "
                 "Proceeding would result in changed code behaviour."
@@ -65,7 +66,7 @@ def formatted_value(
         if fmt_spec == "d":
             # assume built-in len always returns int
             if not _is_len_call(val):
-                if not state.aggressive:
+                if not aggressive:
                     raise ConversionRefused(
                         "Skipping %d formatting - fstrings behave differently from % formatting."
                     )
@@ -76,7 +77,7 @@ def formatted_value(
         return ast_formatted_value(val, fmt_str=fmt_prefix + fmt_spec)
 
 
-def transform_dict(node: ast.BinOp) -> ast.JoinedStr:
+def transform_dict(node: ast.BinOp, aggressive: bool = False) -> ast.JoinedStr:
     """Convert a `BinOp` `%` formatted str with a name representing a Dict on the right to an f-string.
 
     Takes an ast.BinOp representing `"1. %(key1)s 2. %(key2)s" % mydict`
@@ -114,7 +115,7 @@ def transform_dict(node: ast.BinOp) -> ast.JoinedStr:
 
         def make_fv(key: str):
             # only allow reused keys when aggressive is on
-            return mapping[key] if state.aggressive else mapping.pop(key)
+            return mapping[key] if aggressive else mapping.pop(key)
 
     else:
 
@@ -127,7 +128,9 @@ def transform_dict(node: ast.BinOp) -> ast.JoinedStr:
         # if this block matches a %(arg)s pattern then inject f-string instead
         if DICT_PATTERN.match(block):
             prefix, var_key, fmt_str = spec.pop()
-            fv = formatted_value(prefix, fmt_str, make_fv(var_key))
+            fv = formatted_value(
+                prefix, fmt_str, make_fv(var_key), aggressive=aggressive
+            )
             segments.append(fv)
         else:
             # no match means it's just a literal string
@@ -136,7 +139,7 @@ def transform_dict(node: ast.BinOp) -> ast.JoinedStr:
     return ast.JoinedStr(segments)
 
 
-def transform_tuple(node: ast.BinOp) -> ast.JoinedStr:
+def transform_tuple(node: ast.BinOp, *, aggressive: bool = False) -> ast.JoinedStr:
     """Convert a `BinOp` `%` formatted str with a tuple on the right to an f-string.
 
     Takes an ast.BinOp representing `"1. %s 2. %s" % (a, b)`
@@ -167,7 +170,7 @@ def transform_tuple(node: ast.BinOp) -> ast.JoinedStr:
         fmt_spec = blocks.popleft()
         val = str_vars.popleft()
 
-        fv = formatted_value(fmt_prefix, fmt_spec, val)
+        fv = formatted_value(fmt_prefix, fmt_spec, val, aggressive=aggressive)
 
         segments.append(fv)
         segments.append(ast_string_node(blocks.popleft().replace("%%", "%")))
@@ -175,7 +178,9 @@ def transform_tuple(node: ast.BinOp) -> ast.JoinedStr:
     return ast.JoinedStr(segments)
 
 
-def transform_generic(node: ast.BinOp) -> Tuple[ast.JoinedStr, bool]:
+def transform_generic(
+    node: ast.BinOp, aggressive: bool = False
+) -> Tuple[ast.JoinedStr, bool]:
     """Convert a `BinOp` `%` formatted str with a unknown name on the `node.right` to an f-string.
 
     When `node.right` is a Name since we don't know if it's a single var or a dict so we sniff the string.
@@ -192,7 +197,7 @@ def transform_generic(node: ast.BinOp) -> Tuple[ast.JoinedStr, bool]:
     assert isinstance(node.left, ast.Str)
     has_dict_str_format = DICT_PATTERN.findall(node.left.s)
     if has_dict_str_format:
-        return transform_dict(node), True
+        return transform_dict(node, aggressive=aggressive), True
 
     # if it's just a name then pretend it's tuple to use that code
     str_in_str = any(
@@ -200,7 +205,7 @@ def transform_generic(node: ast.BinOp) -> Tuple[ast.JoinedStr, bool]:
     )
 
     node.right = ast.Tuple(elts=[node.right])
-    return transform_tuple(node), str_in_str
+    return transform_tuple(node, aggressive=aggressive), str_in_str
 
 
 supported_operands = [
@@ -214,18 +219,20 @@ supported_operands = [
 ]
 
 
-def transform_binop(node: ast.BinOp) -> Tuple[ast.JoinedStr, bool]:
+def transform_binop(
+    node: ast.BinOp, *, aggressive: bool = False
+) -> Tuple[ast.JoinedStr, bool]:
     if isinstance(node.right, tuple(supported_operands)):
-        return transform_generic(node)
+        return transform_generic(node, aggressive=aggressive)
 
     elif isinstance(node.right, ast.Tuple):
         return (
-            transform_tuple(node),
+            transform_tuple(node, aggressive=aggressive),
             any(isinstance(n, (ast.Str, ast.JoinedStr)) for n in ast.walk(node.right)),
         )
 
     elif isinstance(node.right, ast.Dict):
         # todo adapt transform dict to Dict literal
-        return transform_dict(node), False
+        return transform_dict(node, aggressive=aggressive), False
 
     raise ConversionRefused(f"Unsupported `node.right` class: {type(node.right)}")
