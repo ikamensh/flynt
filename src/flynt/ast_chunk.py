@@ -2,8 +2,6 @@
 
 import ast
 
-import astor
-
 from flynt.format import QuoteTypes
 
 
@@ -40,7 +38,9 @@ class AstChunk:
         return QuoteTypes.double
 
     def __str__(self):
-        src = astor.to_source(self.node).rstrip()
+        from flynt.utils import ast_to_string
+
+        src = ast_to_string(self.node)
         if src.startswith("(") and src.endswith(")"):
             src = src[1:-1]
         return src
