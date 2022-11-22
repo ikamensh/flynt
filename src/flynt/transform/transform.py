@@ -3,11 +3,9 @@ import copy
 import traceback
 from typing import Tuple
 
-import astor
-
 from flynt import state
-from flynt.exceptions import FlyntException, ConversionRefused
-from flynt.format import QuoteTypes, set_quote_type
+from flynt.exceptions import ConversionRefused, FlyntException
+from flynt.format import QuoteTypes
 from flynt.transform.FstringifyTransformer import fstringify_node
 from flynt.utils import fixup_transformed
 

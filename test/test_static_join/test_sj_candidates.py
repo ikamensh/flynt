@@ -1,11 +1,11 @@
 import ast
 import sys
+from test.test_static_join.utils import CASES
 from typing import Tuple
 
 import pytest
 
 from flynt.static_join.candidates import JoinHound, join_candidates
-from test.test_static_join.utils import CASES
 
 pytestmark = pytest.mark.skipif(
     sys.version_info < (3, 8), reason="requires python3.8 or higher"

@@ -3,9 +3,7 @@ from typing import List
 
 from flynt import state
 from flynt.ast_chunk import AstChunk
-from flynt.static_join.utils import (
-    get_static_join_bits,
-)
+from flynt.static_join.utils import get_static_join_bits
 
 
 class JoinHound(ast.NodeVisitor):

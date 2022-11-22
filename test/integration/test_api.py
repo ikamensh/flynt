@@ -3,8 +3,7 @@ import shutil
 
 import pytest
 
-from flynt import api
-from flynt import state
+from flynt import api, state
 from flynt.api import _fstringify_file
 
 # These "files" are byte-string constants instead of actual files to prevent e.g. Git or text editors from accidentally changing the encoding

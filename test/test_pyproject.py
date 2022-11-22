@@ -1,5 +1,6 @@
-from flynt.pyproject_finder import find_pyproject_toml, parse_pyproject_toml
 import os
+
+from flynt.pyproject_finder import find_pyproject_toml, parse_pyproject_toml
 
 pyproject_content = """
 [tool.flynt]

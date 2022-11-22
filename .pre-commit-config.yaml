@@ -3,6 +3,13 @@ repos:
     rev: 1.7.4
     hooks:
       - id: bandit  # See setup.cfg for args
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.10.1
+    hooks:
+      - id: isort
+        args:
+          - --profile=black
+        exclude: test/integration/(actual|expected|samples).*
   - repo: https://github.com/psf/black
     rev: 22.10.0
     hooks:
