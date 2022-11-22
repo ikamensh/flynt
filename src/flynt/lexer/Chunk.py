@@ -1,5 +1,4 @@
 import ast
-import sys
 import token
 from collections import deque
 from typing import Deque, Iterable, Iterator, Optional, Tuple
@@ -8,18 +7,9 @@ from flynt.lexer.PyToken import PyToken
 
 REUSE = "Token was not used"
 
-is_36 = sys.version_info.major == 3 and sys.version_info.minor == 6
-if is_36:
-    multiline_skip = (token.NEWLINE, 58)
-    multiline_break = (57,)
-
-    single_break = (token.NEWLINE, 57, 58)
-else:
-    multiline_skip = (token.NEWLINE, token.NL)
-    multiline_break = (token.COMMENT,)
-
-    single_break = (token.COMMENT, token.NEWLINE, token.NL)
-
+multiline_break = (token.COMMENT,)
+multiline_skip = (token.NEWLINE, token.NL)
+single_break = (token.COMMENT, token.NEWLINE, token.NL)
 single_skip = ()
 
 
