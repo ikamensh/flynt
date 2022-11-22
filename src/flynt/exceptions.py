@@ -2,7 +2,7 @@ class FlyntException(Exception):
     pass
 
 
-class ConversionRefused(Exception):
+class ConversionRefused(FlyntException):
     pass
 
 
