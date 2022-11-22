@@ -1,7 +1,7 @@
 import logging
-import math
 import re
 import string
+import sys
 from functools import partial
 from typing import Callable, List, Optional, Tuple, Union
 
@@ -36,7 +36,10 @@ class JoinTransformer:
         candidates_iter_factory: Callable,
         transform_func: Callable,
     ) -> None:
-        self.len_limit = len_limit if len_limit is not None else math.inf
+        if len_limit is None:
+            len_limit = sys.maxsize
+
+        self.len_limit = len_limit
         self.candidates_iter = candidates_iter_factory(code)
         self.transform_func = transform_func
         self.src_lines = code.split("\n")
