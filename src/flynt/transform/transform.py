@@ -1,13 +1,15 @@
 import ast
 import copy
-import traceback
+import logging
 from typing import Tuple
 
 from flynt import state
-from flynt.exceptions import ConversionRefused, FlyntException
+from flynt.exceptions import ConversionRefused
 from flynt.format import QuoteTypes
 from flynt.transform.FstringifyTransformer import fstringify_node
 from flynt.utils import fixup_transformed
+
+log = logging.getLogger(__name__)
 
 
 def transform_chunk(
@@ -35,13 +37,12 @@ def transform_chunk(
             transform_percent=transform_percent,
             transform_format=transform_format,
         )
-    except (SyntaxError, FlyntException, Exception) as e:
-        if state.verbose:
-            if isinstance(e, ConversionRefused):
-                print(f"Not converting code '{code}': {e}")
-            else:
-                print(f"Exception {e} during conversion of code '{code}'")
-                traceback.print_exc()
+    except ConversionRefused as cr:
+        log.warning("Not converting code '%s': %s", code, cr)
+        state.invalid_conversions += 1
+        return code, False
+    except Exception:
+        log.exception("Exception during conversion of code '%s'", code)
         state.invalid_conversions += 1
         return code, False
     else:
@@ -51,13 +52,13 @@ def transform_chunk(
             new_code = fixup_transformed(converted, quote_type=quote_type)
             try:
                 ast.parse(new_code)
-            except SyntaxError as e:
-                if state.verbose:
-                    print(
-                        f"Failed to parse transformed code '{new_code}' given original '{code}'"
-                    )
-                    print(e)
-                    traceback.print_exc()
+            except SyntaxError:
+                log.error(
+                    "Failed to parse transformed code '%s'' given original '%s'",
+                    new_code,
+                    code,
+                    exc_info=True,
+                )
                 state.invalid_conversions += 1
                 return code, False
             else:

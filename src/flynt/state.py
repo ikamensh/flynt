@@ -1,6 +1,5 @@
 """This module contains global state of flynt application instance."""
 
-verbose = False
 quiet = False
 aggressive = False
 dry_run = False

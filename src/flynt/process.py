@@ -1,10 +1,11 @@
+import logging
 import math
 import re
 import string
 from functools import partial
 from typing import Callable, List, Optional, Tuple, Union
 
-from flynt import lexer, state
+from flynt import lexer
 from flynt.ast_chunk import AstChunk
 from flynt.exceptions import FlyntException
 from flynt.format import QuoteTypes as qt
@@ -18,6 +19,8 @@ from flynt.string_concat.transformer import transform_concat
 from flynt.transform.transform import transform_chunk
 
 noqa_regex = re.compile("#[ ]*noqa.*flynt")
+
+log = logging.getLogger(__name__)
 
 
 class JoinTransformer:
@@ -125,12 +128,12 @@ class JoinTransformer:
         else:
             lines_fit = True
         if contract_lines and not lines_fit:
-            if state.verbose:
-                print(
-                    "Skipping conversion due to line length limit. "
-                    "Pass -ll 999 to increase it. "
-                    "(999 is an example, as number of characters.)"
-                )
+            log.warning(
+                "Skipping conversion of %s due to line length limit. "
+                "Pass -ll 999 to increase it. "
+                "(999 is an example, as number of characters.)",
+                str(chunk),
+            )
             return
 
         self.results.append(converted)

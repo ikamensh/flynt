@@ -1,11 +1,12 @@
 import io
+import logging
 import tokenize
-import traceback
 from typing import Generator
 
-from flynt import state
 from flynt.lexer.Chunk import Chunk
 from flynt.lexer.PyToken import PyToken
+
+log = logging.getLogger(__name__)
 
 
 def get_chunks(code: str) -> Generator[Chunk, None, None]:
@@ -30,9 +31,10 @@ def get_chunks(code: str) -> Generator[Chunk, None, None]:
 
         yield chunk
     except tokenize.TokenError as e:
-        if state.verbose:
-            traceback.print_exc()
-            print(e)
+        log.error(
+            f"TokenError: {e}",
+            exc_info=True,
+        )
 
 
 def get_fstringify_chunks(code: str) -> Generator[Chunk, None, None]:
