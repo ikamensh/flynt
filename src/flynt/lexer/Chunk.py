@@ -1,36 +1,23 @@
 import ast
 import token
 from collections import deque
-from typing import Deque, Iterable, Iterator, Optional, Tuple
+from typing import Deque, Iterable, Iterator, Optional
 
+from flynt.lexer.context import LexerContext
 from flynt.lexer.PyToken import PyToken
 
 REUSE = "Token was not used"
 
-multiline_break = (token.COMMENT,)
-multiline_skip = (token.NEWLINE, token.NL)
-single_break = (token.COMMENT, token.NEWLINE, token.NL)
-single_skip = ()
-
 
 class Chunk:
-    skip_tokens: Tuple[int, ...] = ()
-    break_tokens: Tuple[int, ...] = ()
-    multiline = None
+    def __init__(
+        self,
+        tokens: Iterable[PyToken] = (),
+        *,
+        lexer_context: LexerContext,
+    ) -> None:
+        self.lexer_context = lexer_context
 
-    @staticmethod
-    def set_multiline() -> None:
-        Chunk.skip_tokens = multiline_skip
-        Chunk.break_tokens = multiline_break
-        Chunk.multiline = True
-
-    @staticmethod
-    def set_single_line() -> None:
-        Chunk.skip_tokens = single_skip
-        Chunk.break_tokens = single_break
-        Chunk.multiline = False
-
-    def __init__(self, tokens: Iterable[PyToken] = ()) -> None:
         self.tokens: Deque[PyToken] = deque(tokens)
         self.complete = False
 
@@ -63,7 +50,6 @@ class Chunk:
             self.complete = True
 
     def percent_append(self, t: PyToken) -> Optional[str]:
-
         # todo handle all cases?
         if not self[0].is_string():
             self.complete = True
@@ -94,7 +80,6 @@ class Chunk:
         return None
 
     def call_append(self, t: PyToken) -> None:
-
         if t.is_string():
             self.string_in_string = True
 
@@ -110,7 +95,7 @@ class Chunk:
 
     def append(self, t: PyToken) -> Optional[str]:
         # stop on a comment or too long chunk
-        if t.toknum in self.break_tokens:
+        if t.toknum in self.lexer_context.break_tokens:
             self.complete = True
             self.successful = self.is_parseable and (
                 self.is_percent_chunk or self.is_call_chunk
@@ -122,7 +107,7 @@ class Chunk:
             self.successful = False
             return None
 
-        if t.toknum in self.skip_tokens:
+        if t.toknum in self.lexer_context.skip_tokens:
             return None
 
         if len(self) == 0:
