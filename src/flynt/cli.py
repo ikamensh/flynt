@@ -4,9 +4,8 @@ import argparse
 import sys
 import warnings
 
+from flynt import __version__, state
 from flynt.api import fstringify, fstringify_code_by_line
-from flynt import state
-from flynt import __version__
 from flynt.pyproject_finder import find_pyproject_toml, parse_pyproject_toml
 
 

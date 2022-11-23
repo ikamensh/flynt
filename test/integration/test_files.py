@@ -1,10 +1,10 @@
 """ Test str processors on actual file contents """
 from functools import partial
+from test.integration.utils import samples, try_on_file
 
 import pytest
 
 from flynt.process import fstringify_code_by_line
-from test.integration.utils import try_on_file, samples
 
 
 @pytest.mark.parametrize("filename", samples)

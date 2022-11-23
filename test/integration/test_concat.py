@@ -1,10 +1,10 @@
 """ Test str processors on actual file contents """
 import sys
+from test.integration.utils import concat_samples, try_on_file
 
 import pytest
 
-from flynt.process import fstringify_concats, fstringify_code_by_line
-from test.integration.utils import try_on_file, concat_samples
+from flynt.process import fstringify_code_by_line, fstringify_concats
 
 
 def fstringify_and_concats(code: str):

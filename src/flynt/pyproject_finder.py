@@ -2,12 +2,12 @@
 https://github.com/psf/black/
 """
 
+import os
 import sys
 import warnings
 from functools import lru_cache
 from pathlib import Path
-import os
-from typing import Tuple, Optional, Dict, Any, Sequence
+from typing import Any, Dict, Optional, Sequence, Tuple
 
 import tomli
 

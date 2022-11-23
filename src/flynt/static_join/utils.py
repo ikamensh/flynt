@@ -1,5 +1,5 @@
 import ast
-from typing import Optional, List, Tuple
+from typing import List, Optional, Tuple
 
 from flynt.utils import is_str_literal
 

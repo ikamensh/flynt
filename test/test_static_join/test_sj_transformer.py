@@ -1,10 +1,10 @@
 import sys
+from test.test_static_join.utils import CASES
 from typing import Optional
 
 import pytest
 
 from flynt.static_join.transformer import transform_join
-from test.test_static_join.utils import CASES
 
 pytestmark = pytest.mark.skipif(
     sys.version_info < (3, 8), reason="requires python3.8 or higher"

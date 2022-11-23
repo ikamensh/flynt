@@ -1,10 +1,10 @@
 """ Test str processors on actual file contents """
 from functools import partial
+from test.integration.utils import try_on_file
 
 import pytest
 
 from flynt.process import fstringify_concats
-from test.integration.utils import try_on_file
 
 
 @pytest.mark.parametrize("filename", ["multiline_limit.py"])
