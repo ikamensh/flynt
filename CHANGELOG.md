@@ -2,6 +2,7 @@
 
 *[Contributed by Aarni Koskela]* `--transform-joins` (`-tj`) will transform string join operations on static operands
 to an f-string.
+
 *[Contributed by Aarni Koskela]* Fix handling of escaped unicode characters (#55 and #104).
 
 *[Contributed by Aarni Koskela]* Add flags to disable percent statement / .format statement transformations: `--no-tp, --no-transform-percent` and 
