@@ -8,7 +8,7 @@ from flynt.lexer.Chunk import Chunk
 from flynt.lexer.PyToken import PyToken
 
 
-def get_chunks(code) -> Generator[Chunk, None, None]:
+def get_chunks(code: str) -> Generator[Chunk, None, None]:
     g = tokenize.tokenize(io.BytesIO(code.encode("utf-8")).readline)
     chunk = Chunk()
 

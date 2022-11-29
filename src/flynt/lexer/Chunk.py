@@ -2,12 +2,11 @@ import ast
 import sys
 import token
 from collections import deque
-from typing import Deque
+from typing import Deque, Iterable, Iterator, Optional, Tuple
 
 from flynt.lexer.PyToken import PyToken
 
 REUSE = "Token was not used"
-
 
 is_36 = sys.version_info.major == 3 and sys.version_info.minor == 6
 if is_36:
@@ -25,24 +24,23 @@ single_skip = ()
 
 
 class Chunk:
-
-    skip_tokens = ()
-    break_tokens = ()
+    skip_tokens: Tuple[int, ...] = ()
+    break_tokens: Tuple[int, ...] = ()
     multiline = None
 
     @staticmethod
-    def set_multiline():
+    def set_multiline() -> None:
         Chunk.skip_tokens = multiline_skip
         Chunk.break_tokens = multiline_break
         Chunk.multiline = True
 
     @staticmethod
-    def set_single_line():
+    def set_single_line() -> None:
         Chunk.skip_tokens = single_skip
         Chunk.break_tokens = single_break
         Chunk.multiline = False
 
-    def __init__(self, tokens=()):
+    def __init__(self, tokens: Iterable[PyToken] = ()) -> None:
         self.tokens: Deque[PyToken] = deque(tokens)
         self.complete = False
 
@@ -54,13 +52,13 @@ class Chunk:
 
         self.string_in_string = False
 
-    def empty_append(self, t: PyToken):
+    def empty_append(self, t: PyToken) -> None:
         if not t.is_string() or t.is_raw_string():
             self.complete = True
 
         self.tokens.append(t)
 
-    def second_append(self, t: PyToken):
+    def second_append(self, t: PyToken) -> None:
         if t.is_string():
             self.tokens[0].tokval += t.tokval
             self.tokens[0].end = t.end
@@ -74,12 +72,12 @@ class Chunk:
             self.tokens.append(t)
             self.complete = True
 
-    def percent_append(self, t: PyToken):
+    def percent_append(self, t: PyToken) -> Optional[str]:
 
         # todo handle all cases?
         if not self[0].is_string():
             self.complete = True
-            return
+            return None
 
         if len(self) == 2:
             self.tokens.append(t)
@@ -103,8 +101,9 @@ class Chunk:
                 self.complete = True
                 self.successful = self.is_parseable
                 return REUSE
+        return None
 
-    def call_append(self, t: PyToken):
+    def call_append(self, t: PyToken) -> None:
 
         if t.is_string():
             self.string_in_string = True
@@ -119,22 +118,22 @@ class Chunk:
             self.complete = True
             self.successful = True
 
-    def append(self, t: PyToken):
+    def append(self, t: PyToken) -> Optional[str]:
         # stop on a comment or too long chunk
         if t.toknum in self.break_tokens:
             self.complete = True
             self.successful = self.is_parseable and (
                 self.is_percent_chunk or self.is_call_chunk
             )
-            return
+            return None
 
         if len(self) > 50:
             self.complete = True
             self.successful = False
-            return
+            return None
 
         if t.toknum in self.skip_tokens:
-            return
+            return None
 
         if len(self) == 0:
             self.empty_append(t)
@@ -144,9 +143,10 @@ class Chunk:
             self.call_append(t)
         else:
             return self.percent_append(t)
+        return None
 
     @property
-    def is_parseable(self):
+    def is_parseable(self) -> bool:
         if len(self.tokens) < 1:
             return False
         try:
@@ -156,23 +156,23 @@ class Chunk:
             return False
 
     @property
-    def start_line(self):
+    def start_line(self) -> int:
         return self.tokens[0].start[0] - 1
 
     @property
-    def start_idx(self):
+    def start_idx(self) -> int:
         return self.tokens[0].start[1]
 
     @property
-    def end_idx(self):
+    def end_idx(self) -> int:
         return self.tokens[-1].end[1]
 
     @property
-    def end_line(self):
+    def end_line(self) -> int:
         return self.tokens[-1].end[0] - 1
 
     @property
-    def n_lines(self):
+    def n_lines(self) -> int:
         return 1 + self.end_line - self.start_line
 
     @property
@@ -188,19 +188,19 @@ class Chunk:
         return sum(t.toknum == token.STRING for t in self.tokens) > 1
 
     @property
-    def quote_type(self):
+    def quote_type(self) -> Optional[str]:
         return self.tokens[0].get_quote_type()
 
-    def __getitem__(self, item):
+    def __getitem__(self, item: int) -> PyToken:
         return self.tokens[item]
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[PyToken]:
         return iter(self.tokens)
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.tokens)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return " ".join(t.tokval for t in self)
 
     def __repr__(self):

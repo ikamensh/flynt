@@ -1,5 +1,6 @@
 import token
-from typing import Tuple
+from tokenize import TokenInfo
+from typing import Optional, Tuple
 
 from flynt.exceptions import FlyntException
 from flynt.format import QuoteTypes
@@ -9,17 +10,17 @@ char_idx = int
 
 
 class PyToken:
-    def __init__(self, t):
+    def __init__(self, t: TokenInfo) -> None:
         toknum, tokval, start, end, line = t
         self.toknum: int = toknum
         self.tokval: str = tokval
         self.start: Tuple[line_num, char_idx] = start
         self.end: Tuple[line_num, char_idx] = end
 
-    def is_percent_op(self):
+    def is_percent_op(self) -> bool:
         return self.toknum == token.OP and self.tokval == "%"
 
-    def is_expr_continuation_op(self):
+    def is_expr_continuation_op(self) -> bool:
         return (
             self.is_sq_brack_op()
             or self.is_paren_op()
@@ -27,22 +28,22 @@ class PyToken:
             or self.is_exponentiation_op()
         )
 
-    def is_sq_brack_op(self):
+    def is_sq_brack_op(self) -> bool:
         return self.toknum == token.OP and self.tokval == "["
 
-    def is_dot_op(self):
+    def is_dot_op(self) -> bool:
         return self.toknum == token.OP and self.tokval == "."
 
-    def is_paren_op(self):
+    def is_paren_op(self) -> bool:
         return self.toknum == token.OP and self.tokval == "("
 
-    def is_exponentiation_op(self):
+    def is_exponentiation_op(self) -> bool:
         return self.toknum == token.OP and self.tokval == "**"
 
-    def is_string(self):
+    def is_string(self) -> bool:
         return self.toknum == token.STRING
 
-    def get_quote_type(self):
+    def get_quote_type(self) -> Optional[str]:
         if self.toknum is not token.STRING:
             return None
 
@@ -57,10 +58,10 @@ class PyToken:
 
         raise FlyntException(f"Can't determine quote type of the string {self.tokval}.")
 
-    def is_legacy_unicode_string(self):
+    def is_legacy_unicode_string(self) -> bool:
         return self.toknum == token.STRING and self.tokval[0] == "u"
 
-    def is_raw_string(self):
+    def is_raw_string(self) -> bool:
         return self.toknum == token.STRING and self.tokval[0] == "r"
 
     def __repr__(self):

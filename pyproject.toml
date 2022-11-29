@@ -57,3 +57,10 @@ include = [
 [tool.bandit]
 exclude_dirs = ["test"]
 skips = ["B101"]
+
+[tool.mypy]
+exclude = "test/integration/(actual|expected|samples).*"
+
+[[tool.mypy.overrides]]
+module = "astor"
+ignore_missing_imports = true

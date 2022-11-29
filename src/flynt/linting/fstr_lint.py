@@ -5,11 +5,11 @@ from flynt.ast_chunk import AstChunk
 
 
 class FstringFinder(ast.NodeVisitor):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.victims: List[AstChunk] = []
 
-    def visit_JoinedStr(self, node: ast.BinOp):
+    def visit_JoinedStr(self, node: ast.JoinedStr) -> None:
         """
         Finds all nodes that are string concatenations with a literal
         """
@@ -26,7 +26,7 @@ def fstr_candidates(code: str):
 
 
 class FstrInliner(ast.NodeTransformer):
-    def visit_JoinedStr(self, node):
+    def visit_JoinedStr(self, node: ast.JoinedStr) -> ast.AST:
         new_vals = []
         for v in node.values:
             if (

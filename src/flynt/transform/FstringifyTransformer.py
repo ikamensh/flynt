@@ -12,14 +12,14 @@ class FstringifyTransformer(ast.NodeTransformer):
         self,
         transform_percent: bool = True,
         transform_format: bool = True,
-    ):
+    ) -> None:
         super().__init__()
         self.counter = 0
         self.string_in_string = False
         self.transform_percent = transform_percent
         self.transform_format = transform_format
 
-    def visit_Call(self, node: ast.Call):
+    def visit_Call(self, node: ast.Call) -> ast.AST:
         """
         Convert `ast.Call` to `ast.JoinedStr` f-string
         """
@@ -40,7 +40,7 @@ class FstringifyTransformer(ast.NodeTransformer):
 
         return node
 
-    def visit_BinOp(self, node):
+    def visit_BinOp(self, node: ast.BinOp) -> ast.AST:
         """Convert `ast.BinOp` to `ast.JoinedStr` f-string
 
         Currently only if a string literal `ast.Str` is on the left side of the `%`
@@ -53,6 +53,9 @@ class FstringifyTransformer(ast.NodeTransformer):
         """
 
         if self.transform_percent and is_percent_stringify(node):
+            # Mypy doesn't understand the is_percent_stringify acts
+            # as a type guard, so we need the assert here.
+            assert isinstance(node.left, ast.Str)
             state.percent_candidates += 1
 
             # bail in these edge cases...
@@ -63,12 +66,7 @@ class FstringifyTransformer(ast.NodeTransformer):
             for ch in ast.walk(node.right):
                 # f-string expression part cannot include a backslash
                 if isinstance(ch, ast.Str) and (
-                    any(
-                        map(
-                            lambda x: x in ch.s,
-                            ("\n", "\t", "\r", "'", '"', "%s", "%%"),
-                        )
-                    )
+                    any(x in ch.s for x in ("\n", "\t", "\r", "'", '"', "%s", "%%"))
                     or "\\" in ch.s
                 ):
                     return node
@@ -83,7 +81,7 @@ class FstringifyTransformer(ast.NodeTransformer):
 
 
 def fstringify_node(
-    node,
+    node: ast.AST,
     transform_percent: bool = True,
     transform_format: bool = True,
 ) -> Tuple[ast.AST, bool, bool]:
