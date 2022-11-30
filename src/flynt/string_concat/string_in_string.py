@@ -12,7 +12,9 @@ class SinSDetector(ast.NodeVisitor):
     def visit_JoinedStr(self, node: ast.JoinedStr) -> None:
         self.sns_depth += 1
         if self.sns_depth > self.maxdepth:
-            raise StringEmbeddingTooDeep
+            raise StringEmbeddingTooDeep(
+                f"String embedding too deep: {self.sns_depth} > {self.maxdepth}"
+            )
 
         self.generic_visit(node)
         self.sns_depth -= 1

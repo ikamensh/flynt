@@ -1,6 +1,7 @@
 """This module parses the command line arguments and passes them to flynt.api.fstringify."""
 
 import argparse
+import logging
 import sys
 import warnings
 from typing import List, Optional
@@ -166,6 +167,11 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
                 installed to a python3.8+ interpreter. Currently using {sys.version_info}."""
         )
 
+    logging.basicConfig(
+        format="%(message)s",
+        level=(logging.DEBUG if args.verbose else logging.CRITICAL),
+    )
+
     if args.string:
         set_global_state(args)
         converted, _ = fstringify_code_by_line(
@@ -214,6 +220,5 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
 
 def set_global_state(args: argparse.Namespace) -> None:
     state.aggressive = args.aggressive
-    state.verbose = args.verbose
     state.quiet = args.quiet
     state.dry_run = args.dry_run

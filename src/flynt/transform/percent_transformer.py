@@ -53,7 +53,7 @@ def formatted_value(
 
     if fmt_spec in conversion_methods:
         if not state.aggressive and fmt_prefix:
-            raise FlyntException(
+            raise ConversionRefused(
                 "Default text alignment has changed between percent fmt and fstrings. "
                 "Proceeding would result in changed code behaviour."
             )
@@ -66,7 +66,7 @@ def formatted_value(
             # assume built-in len always returns int
             if not _is_len_call(val):
                 if not state.aggressive:
-                    raise FlyntException(
+                    raise ConversionRefused(
                         "Skipping %d formatting - fstrings behave differently from % formatting."
                     )
                 val = ast.Call(
@@ -92,7 +92,7 @@ def transform_dict(node: ast.BinOp) -> ast.JoinedStr:
     format_str = node.left.s
     matches = DICT_PATTERN.findall(format_str)
     if len(matches) != len(ANY_DICT.findall(format_str)):
-        raise FlyntException("Some locations have unknown format modifiers.")
+        raise ConversionRefused("Some locations have unknown format modifiers.")
 
     spec = []
     for idx, m in enumerate(matches):

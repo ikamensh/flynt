@@ -1,9 +1,9 @@
 import ast
 import codecs
+import logging
 import os
 import sys
 import time
-import traceback
 from difflib import unified_diff
 from typing import Collection, List, Optional, Tuple
 
@@ -16,6 +16,8 @@ from flynt.process import (
     fstringify_concats,
     fstringify_static_joins,
 )
+
+log = logging.getLogger(__name__)
 
 blacklist = {".tox", "venv", "site-packages", ".eggs"}
 
@@ -43,18 +45,15 @@ def _fstringify_file(
     with open(filename, encoding=encoding, newline="") as f:
         try:
             contents = f.read()
-        except UnicodeDecodeError as e:
+        except UnicodeDecodeError:
             contents = ""
-            print(f"Exception while reading {filename}: {e}")
+            log.error(f"Exception while reading {filename}", exc_info=True)
             return default_result()
 
     try:
         ast_before = ast.parse(contents)
     except SyntaxError:
-        if state.verbose:
-            traceback.print_exc()
-        if not state.quiet:
-            print(f"Can't parse {filename} as a python file.")
+        log.exception(f"Can't parse {filename} as a python file.")
         return default_result()
 
     try:
@@ -82,15 +81,11 @@ def _fstringify_file(
             state.join_changes += join_changes
 
     except Exception as e:
-        if not state.quiet:
-            if str(e):
-                msg = str(e)
-            else:
-                msg = e.__class__.__name__
-            print(f"Skipping fstrings transform of file {filename} due to {msg}.")
-            if state.verbose:
-                traceback.print_exc()
-
+        msg = str(e) or e.__class__.__name__
+        log.warning(
+            f"Skipping fstrings transform of file {filename} due to {msg}.",
+            exc_info=True,
+        )
         return default_result()
 
     if new_code == contents:
@@ -99,14 +94,14 @@ def _fstringify_file(
     try:
         ast_after = ast.parse(new_code)
     except SyntaxError:
-        print(f"Faulty result during conversion on {filename} - skipping.")
-        if state.verbose:
-            print(new_code)
-            traceback.print_exc()
+        log.warning(
+            f"Faulty result during conversion on {filename} - skipping.",
+            exc_info=True,
+        )
         return default_result()
 
     if not len(ast_before.body) == len(ast_after.body):
-        print(
+        log.error(
             f"Faulty result during conversion on {filename}: "
             f"statement count has changed, which is not intended - skipping."
         )
@@ -162,9 +157,8 @@ def fstringify_files(
         total_charcount_original += charcount_original
         total_charcount_new += charcount_new
 
-        if state.verbose:
-            status = "modified" if count_expressions else "no change"
-            print(f"fstringifying {path}...{status}")
+        status = "modified" if count_expressions else "no change"
+        log.info(f"fstringifying {path}...{status}")
     total_time = time.time() - start_time
 
     if not state.quiet:

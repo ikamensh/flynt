@@ -4,7 +4,7 @@ from typing import Optional
 import astor
 from astor.string_repr import pretty_string
 
-from flynt.exceptions import FlyntException
+from flynt.exceptions import ConversionRefused
 from flynt.format import QuoteTypes, set_quote_type
 from flynt.linting.fstr_lint import FstrInliner
 
@@ -44,7 +44,7 @@ def ast_formatted_value(
         return val
 
     if ast_to_string(val).startswith("{"):
-        raise FlyntException(
+        raise ConversionRefused(
             "values starting with '{' are better left not transformed."
         )
 
