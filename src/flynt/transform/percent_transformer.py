@@ -5,7 +5,8 @@ from typing import List, Tuple
 
 from flynt import state
 from flynt.exceptions import ConversionRefused, FlyntException
-from flynt.transform.format_call_transforms import ast_formatted_value, ast_string_node
+from flynt.transform.format_call_transforms import (ast_formatted_value,
+                                                    ast_string_node)
 
 FORMATS = "diouxXeEfFgGcrsa"
 
@@ -60,20 +61,19 @@ def formatted_value(
         return ast_formatted_value(
             val, fmt_str=fmt_prefix, conversion=conversion_methods[fmt_spec]
         )
-    else:
-        fmt_spec = translate_conversion_types.get(fmt_spec, fmt_spec)
-        if fmt_spec == "d":
-            # assume built-in len always returns int
-            if not _is_len_call(val):
-                if not state.aggressive:
-                    raise ConversionRefused(
-                        "Skipping %d formatting - fstrings behave differently from % formatting."
-                    )
-                val = ast.Call(
-                    func=ast.Name(id="int", ctx=ast.Load()), args=[val], keywords={}
+    fmt_spec = translate_conversion_types.get(fmt_spec, fmt_spec)
+    if fmt_spec == "d":
+        # assume built-in len always returns int
+        if not _is_len_call(val):
+            if not state.aggressive:
+                raise ConversionRefused(
+                    "Skipping %d formatting - fstrings behave differently from % formatting."
                 )
-            fmt_spec = ""
-        return ast_formatted_value(val, fmt_str=fmt_prefix + fmt_spec)
+            val = ast.Call(
+                func=ast.Name(id="int", ctx=ast.Load()), args=[val], keywords={}
+            )
+        fmt_spec = ""
+    return ast_formatted_value(val, fmt_str=fmt_prefix + fmt_spec)
 
 
 def transform_dict(node: ast.BinOp) -> ast.JoinedStr:
@@ -218,13 +218,13 @@ def transform_binop(node: ast.BinOp) -> Tuple[ast.JoinedStr, bool]:
     if isinstance(node.right, tuple(supported_operands)):
         return transform_generic(node)
 
-    elif isinstance(node.right, ast.Tuple):
+    if isinstance(node.right, ast.Tuple):
         return (
             transform_tuple(node),
             any(isinstance(n, (ast.Str, ast.JoinedStr)) for n in ast.walk(node.right)),
         )
 
-    elif isinstance(node.right, ast.Dict):
+    if isinstance(node.right, ast.Dict):
         # todo adapt transform dict to Dict literal
         return transform_dict(node), False
 

@@ -1,5 +1,6 @@
 from textwrap import dedent
 
+
 def f():
     arg = "text"
     return dedent(
@@ -8,4 +9,3 @@ def f():
         lorem ipsum
         """.format(arg)
     )
-

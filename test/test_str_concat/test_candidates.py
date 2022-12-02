@@ -11,7 +11,7 @@ from flynt.string_concat.candidates import ConcatHound, concat_candidates
 def pycode_with_2_concats():
     folder = os.path.dirname(__file__)
     path = os.path.join(folder, "victim.py")
-    with open(path) as f:
+    with open(path, encoding="utf-8") as f:
         content = f.read()
 
     yield content

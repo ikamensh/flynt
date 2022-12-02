@@ -144,7 +144,7 @@ class JoinTransformer:
         # remove redundant parenthesis
         if len(self.results) < 2 or not self.results[-2]:
             return
-        elif len(self.src_lines[self.last_line]) == self.last_idx:
+        if len(self.src_lines[self.last_line]) == self.last_idx:
             return
 
         if (
@@ -154,10 +154,9 @@ class JoinTransformer:
             for char in reversed(self.results[-2][:-1]):
                 if char in string.whitespace:
                     continue
-                elif char in "(=[+*":
+                if char in "(=[+*":
                     break
-                else:
-                    return
+                return
 
             self.results[-2] = self.results[-2][:-1]
             self.last_idx += 1

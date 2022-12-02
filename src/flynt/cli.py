@@ -150,7 +150,7 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
     if args.version:
         print(__version__)
         return 0
-    elif not args.src:
+    if not args.src:
         print("flynt: error: the following arguments are required: src")
         parser.print_usage()
         return 1

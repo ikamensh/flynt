@@ -11,11 +11,8 @@ import astor
 
 from flynt import state
 from flynt.cli_messages import farewell_message
-from flynt.process import (
-    fstringify_code_by_line,
-    fstringify_concats,
-    fstringify_static_joins,
-)
+from flynt.process import (fstringify_code_by_line, fstringify_concats,
+                           fstringify_static_joins)
 
 log = logging.getLogger(__name__)
 
@@ -266,8 +263,7 @@ def fstringify(
 
     if fail_on_changes:
         return status
-    else:
-        return 0
+    return 0
 
 
 def _resolve_files(

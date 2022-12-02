@@ -97,9 +97,9 @@ def test_cli_dry_run(capsys, sample_file):
     folder = os.path.dirname(__file__)
     source_path = os.path.join(folder, "samples_in", sample_file)
     expected_path = os.path.join(folder, "expected_out", sample_file)
-    with open(source_path) as file:
+    with open(source_path, encoding="utf-8") as file:
         source_lines = file.readlines()
-    with open(expected_path) as file:
+    with open(expected_path, encoding="utf-8") as file:
         converted_lines = file.readlines()
 
     # Run the CLI

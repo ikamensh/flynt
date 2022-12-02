@@ -24,7 +24,7 @@ def test_finds_config(tmpdir):
     the pyproject config should be used for `flynt src/foo.py` command.
     """
     path = tmpdir / "pyproject.toml"
-    with open(path, "w") as f:
+    with open(path, "w", encoding="utf-8") as f:
         f.write(pyproject_content)
 
     src = tmpdir / "src"
@@ -41,7 +41,7 @@ def test_finds_config(tmpdir):
 def test_ignores_irrelevant_config(tmpdir):
     """Keys in the config that are in other tools sections should not be parsed."""
     path = tmpdir / "pyproject.toml"
-    with open(path, "w") as f:
+    with open(path, "w", encoding="utf-8") as f:
         f.write(other_tool_config)
 
     src = tmpdir / "src"
@@ -68,7 +68,7 @@ def test_ignores_subfolder_config(tmpdir):
     cfg_path = other_proj / "pyproject.toml"
     os.makedirs(other_proj)
 
-    with open(cfg_path, "w") as f:
+    with open(cfg_path, "w", encoding="utf-8") as f:
         f.write(pyproject_content)
 
     src = tmpdir / "src"

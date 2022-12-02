@@ -57,12 +57,12 @@ def mixed_line_endings_file(tmpdir):
 
 def test_py2(py2_file):
 
-    with open(py2_file) as f:
+    with open(py2_file, encoding="utf-8") as f:
         content_before = f.read()
 
     modified, _, _, _ = _fstringify_file(py2_file, True, 1000)
 
-    with open(py2_file) as f:
+    with open(py2_file, encoding="utf-8") as f:
         content_after = f.read()
 
     assert not modified
@@ -81,12 +81,12 @@ def test_invalid_unicode(invalid_unicode_file):
 
 def test_works(formattable_file):
 
-    with open(formattable_file) as f:
+    with open(formattable_file, encoding="utf-8") as f:
         content_before = f.read()
 
     modified, _, _, _ = _fstringify_file(formattable_file, True, 1000)
 
-    with open(formattable_file) as f:
+    with open(formattable_file, encoding="utf-8") as f:
         content_after = f.read()
 
     assert modified
@@ -95,7 +95,7 @@ def test_works(formattable_file):
 
 def test_break_safe(formattable_file, monkeypatch):
 
-    with open(formattable_file) as f:
+    with open(formattable_file, encoding="utf-8") as f:
         content_before = f.read()
 
     def broken_fstringify_by_line(*args, **kwargs):
@@ -105,7 +105,7 @@ def test_break_safe(formattable_file, monkeypatch):
 
     modified, _, _, _ = _fstringify_file(formattable_file, True, 1000)
 
-    with open(formattable_file) as f:
+    with open(formattable_file, encoding="utf-8") as f:
         content_after = f.read()
 
     assert not modified
@@ -114,7 +114,7 @@ def test_break_safe(formattable_file, monkeypatch):
 
 def test_catches_subtle(formattable_file, monkeypatch):
 
-    with open(formattable_file) as f:
+    with open(formattable_file, encoding="utf-8") as f:
         content_before = f.read()
 
     def broken_fstringify_by_line(*args, **kwargs):
@@ -124,7 +124,7 @@ def test_catches_subtle(formattable_file, monkeypatch):
 
     modified, _, _, _ = _fstringify_file(formattable_file, True, 1000)
 
-    with open(formattable_file) as f:
+    with open(formattable_file, encoding="utf-8") as f:
         content_after = f.read()
 
     assert not modified
@@ -133,12 +133,12 @@ def test_catches_subtle(formattable_file, monkeypatch):
 
 def test_dry_run(formattable_file, monkeypatch):
     monkeypatch.setattr(state, "dry_run", True)
-    with open(formattable_file) as f:
+    with open(formattable_file, encoding="utf-8") as f:
         content_before = f.read()
 
     modified, _, _, _ = _fstringify_file(formattable_file, True, 1000)
 
-    with open(formattable_file) as f:
+    with open(formattable_file, encoding="utf-8") as f:
         content_after = f.read()
 
     assert modified

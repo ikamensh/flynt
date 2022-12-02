@@ -6,7 +6,7 @@ def set_filename_version(filename, version_number, pattern):
         changed.append(True)
         return before + version_number + after
 
-    with open(filename) as f:
+    with open(filename, encoding="utf-8") as f:
         contents = re.sub(
             r"^(\s*%s\s*=\s*')(.+?)(')" % pattern,
             inject_version,

@@ -1,5 +1,6 @@
 from exceptions import PydolonsError
 
+
 class CantAffordActiveError(PydolonsError):
 
     def __init__(self, active, missing):
