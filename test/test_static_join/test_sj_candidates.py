@@ -5,6 +5,7 @@ from typing import Tuple
 
 import pytest
 
+from flynt.state import State
 from flynt.static_join.candidates import JoinHound, join_candidates
 
 pytestmark = pytest.mark.skipif(
@@ -23,7 +24,7 @@ def code_and_ok() -> Tuple[str, int]:
 
 
 @pytest.mark.parametrize("method", ["hound", "api"])
-def test_find_victims(code_and_ok: Tuple[str, int], method: str):
+def test_find_victims(code_and_ok: Tuple[str, int], method: str, state: State):
     code, expected_ok = code_and_ok
     if method == "hound":
         tree = ast.parse(code)
@@ -31,7 +32,7 @@ def test_find_victims(code_and_ok: Tuple[str, int], method: str):
         ch.visit(tree)
         victims = ch.victims
     elif method == "api":
-        victims = list(join_candidates(code))
+        victims = list(join_candidates(code, state))
     else:
         raise NotImplementedError("...")
     assert len(victims) == expected_ok

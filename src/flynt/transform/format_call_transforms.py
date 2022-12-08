@@ -4,7 +4,6 @@ import sys
 from collections import deque
 from typing import Any, Dict, List, Tuple, Union
 
-from flynt import state
 from flynt.exceptions import ConversionRefused, FlyntException
 from flynt.utils import ast_formatted_value, ast_string_node
 
@@ -26,7 +25,11 @@ def matching_call(node: ast.Call) -> bool:
 stdlib_parse = string.Formatter().parse
 
 
-def joined_string(fmt_call: ast.Call) -> Tuple[Union[ast.JoinedStr, ast.Str], bool]:
+def joined_string(
+    fmt_call: ast.Call,
+    *,
+    aggressive: bool = False,
+) -> Tuple[Union[ast.JoinedStr, ast.Str], bool]:
     """Transform a "...".format() call node into a f-string node."""
     assert isinstance(fmt_call.func, ast.Attribute) and isinstance(
         fmt_call.func.value, ast.Str
@@ -79,7 +82,7 @@ def joined_string(fmt_call: ast.Call) -> Tuple[Union[ast.JoinedStr, ast.Str], bo
         else:
             identifier = var_name
 
-        if state.aggressive:
+        if aggressive:
             ast_name = var_map[identifier]
         else:
             try:
@@ -94,7 +97,7 @@ def joined_string(fmt_call: ast.Call) -> Tuple[Union[ast.JoinedStr, ast.Str], bo
             ast_name = ast.Attribute(value=ast_name, attr=suffix)
         new_segments.append(ast_formatted_value(ast_name, fmt_str, conversion))
 
-    if var_map and not state.aggressive:
+    if var_map and not aggressive:
         raise FlyntException(
             f"Some variables were never used: {var_map} - skipping conversion, it's a risk of bug."
         )

@@ -1,11 +1,11 @@
 import pytest
 
-from flynt.state import _reset
+from flynt.state import State
 
 
-@pytest.fixture(autouse=True)
-def reset_state():
+@pytest.fixture
+def state() -> State:
     """
-    Fixture to reset the global state between each test
+    Fixture for a default state object
     """
-    _reset()
+    return State()

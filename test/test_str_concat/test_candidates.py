@@ -4,6 +4,7 @@ import sys
 
 import pytest
 
+from flynt.state import State
 from flynt.string_concat.candidates import ConcatHound, concat_candidates
 
 
@@ -32,8 +33,8 @@ def test_find_victims_primitives(pycode_with_2_concats: str):
 
 
 @pytest.mark.skipif(sys.version_info < (3, 8), reason="requires python3.8 or higher")
-def test_find_victims_api(pycode_with_2_concats: str):
-    gen = concat_candidates(pycode_with_2_concats)
+def test_find_victims_api(pycode_with_2_concats: str, state: State):
+    gen = concat_candidates(pycode_with_2_concats, state)
     lst = list(gen)
 
     assert len(lst) == 2
@@ -44,9 +45,9 @@ def test_find_victims_api(pycode_with_2_concats: str):
 
 
 @pytest.mark.skipif(sys.version_info < (3, 8), reason="requires python3.8 or higher")
-def test_find_victims_parens():
+def test_find_victims_parens(state: State):
     txt_in = """print('blah' + (thing - 1))"""
-    gen = concat_candidates(txt_in)
+    gen = concat_candidates(txt_in, state)
     lst = list(gen)
 
     assert len(lst) == 1

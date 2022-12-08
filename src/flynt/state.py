@@ -1,30 +1,33 @@
 """This module contains global state of flynt application instance."""
 
-quiet = False
-aggressive = False
-dry_run = False
-
-percent_candidates = 0
-percent_transforms = 0
-
-call_candidates = 0
-call_transforms = 0
-
-invalid_conversions = 0
-
-concat_candidates = 0
-concat_changes = 0
-
-join_candidates = 0
-join_changes = 0
-
-# Backup of the initial state to support the tests, which should start with a clean state each time.
-# Note: this assumes that all state variables are immutable.
-_initial_state = dict(globals())
+import dataclasses
+from typing import Optional
 
 
-def _reset() -> None:
-    """
-    Resets the state variables to the initial values seen above.
-    """
-    globals().update(**_initial_state)
+@dataclasses.dataclass
+class State:
+    # -- Options
+    quiet: bool = False
+    aggressive: bool = False
+    dry_run: bool = False
+    multiline: bool = True
+    len_limit: Optional[int] = None
+    transform_percent: bool = True
+    transform_format: bool = True
+    transform_concat: bool = False
+    transform_join: bool = False
+
+    # -- Statistics
+    percent_candidates: int = 0
+    percent_transforms: int = 0
+
+    call_candidates: int = 0
+    call_transforms: int = 0
+
+    invalid_conversions: int = 0
+
+    concat_candidates: int = 0
+    concat_changes: int = 0
+
+    join_candidates: int = 0
+    join_changes: int = 0

@@ -5,11 +5,13 @@ from test.integration.utils import concat_samples, try_on_file
 import pytest
 
 from flynt.process import fstringify_code_by_line, fstringify_concats
+from flynt.state import State
 
 
 def fstringify_and_concats(code: str):
-    code, count_a = fstringify_code_by_line(code, multiline=True, len_limit=None)
-    code, count_b = fstringify_concats(code, multiline=True, len_limit=None)
+    state = State()
+    code, count_a = fstringify_code_by_line(code, state=state)
+    code, count_b = fstringify_concats(code, state=state)
     return code, count_a + count_b
 
 

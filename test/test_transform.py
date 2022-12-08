@@ -1,59 +1,60 @@
 import pytest
 
+from flynt.state import State
 from flynt.transform.transform import transform_chunk
 
 
-def test_fmt_spec():
+def test_fmt_spec(state: State):
     code = """"my string {:.2f}".format(var)"""
     expected = '''f"""my string {var:.2f}"""'''
 
-    new, changed = transform_chunk(code)
+    new, changed = transform_chunk(code, state)
 
     assert changed
     assert new == expected
 
 
-def test_expr_no_paren():
+def test_expr_no_paren(state: State):
     code = """"my string {:.2f}".format(var+1)"""
     expected = '''f"""my string {var + 1:.2f}"""'''
 
-    new, changed = transform_chunk(code)
+    new, changed = transform_chunk(code, state)
 
     assert changed
     assert new == expected
 
 
-def test_newline():
+def test_newline(state: State):
     code = r""""echo '{}'\n".format(self.FLUSH_CMD)"""
     expected = '''f"""echo '{self.FLUSH_CMD}'\\n"""'''
 
-    new, changed = transform_chunk(code)
+    new, changed = transform_chunk(code, state)
 
     assert changed
     assert new == expected
 
 
-def test_parenthesis():
+def test_parenthesis(state: State):
     code = """"Flask Documentation ({})".format(version)"""
     expected = '''f"""Flask Documentation ({version})"""'''
 
-    new, changed = transform_chunk(code)
+    new, changed = transform_chunk(code, state)
 
     assert changed
     assert new == expected
 
 
-def test_implicit_string_concat():
+def test_implicit_string_concat(state: State):
     code = """"Helloo {}" "!!!".format(world)"""
     expected = '''f"""Helloo {world}!!!"""'''
 
-    new, changed = transform_chunk(code)
+    new, changed = transform_chunk(code, state)
 
     assert changed
     assert new == expected
 
 
-def test_multiline():
+def test_multiline(state: State):
     code = """
     "Flask Documentation ({})".format(
     version
@@ -61,59 +62,59 @@ def test_multiline():
     """.strip()
     expected = '''f"""Flask Documentation ({version})"""'''
 
-    new, changed = transform_chunk(code)
+    new, changed = transform_chunk(code, state)
 
     assert changed
     assert new == expected
 
 
-def test_numbered():
+def test_numbered(state: State):
     code = '''"""Flask Documentation ({0})""".format(version)'''
     expected = '''f"""Flask Documentation ({version})"""'''
 
-    new, changed = transform_chunk(code)
+    new, changed = transform_chunk(code, state)
 
     assert changed
     assert new == expected
 
 
-def test_mixed_numbered():
+def test_mixed_numbered(state: State):
     code = (
         """"Flask Documentation ({1} {0:.2f} {name})".format(version,sprt,name=NAME)"""
     )
     expected = '''f"""Flask Documentation ({sprt} {version:.2f} {NAME})"""'''
 
-    new, changed = transform_chunk(code)
+    new, changed = transform_chunk(code, state)
 
     assert changed
     assert new == expected
 
 
-def test_unpacking_no_change():
+def test_unpacking_no_change(state: State):
     code = """e.description = "KeyError: '{}'".format(*e.args)"""
-    new, changed = transform_chunk(code)
+    new, changed = transform_chunk(code, state)
     assert not changed
     assert new == code
 
 
-def test_kw_unpacking_no_change():
+def test_kw_unpacking_no_change(state: State):
     code = """e.description = "KeyError: '{some_name}'".format(**kwargs)"""
-    new, changed = transform_chunk(code)
+    new, changed = transform_chunk(code, state)
     assert not changed
     assert new == code
 
 
-def test_digit_grouping():
+def test_digit_grouping(state: State):
     code = """"Failed after {:,}".format(x)"""
     expected = '''f"""Failed after {x:,}"""'''
 
-    new, changed = transform_chunk(code)
+    new, changed = transform_chunk(code, state)
 
     assert changed
     assert new == expected
 
 
-def test_digit_grouping_2():
+def test_digit_grouping_2(state: State):
     code = """
     "Search: finished in {0:,} ms.".format(vm.search_time_elapsed_ms)
     """.strip()
@@ -121,7 +122,7 @@ def test_digit_grouping_2():
     f"""Search: finished in {vm.search_time_elapsed_ms:,} ms."""
     '''.strip()
 
-    new, changed = transform_chunk(code)
+    new, changed = transform_chunk(code, state)
 
     assert changed
     assert new == expected
@@ -155,8 +156,8 @@ def test_digit_grouping_2():
         '"{:{}}".format(x, y)',
     ),
 )
-def test_fix_fstrings_noop(s):
-    new, changed = transform_chunk(s)
+def test_fix_fstrings_noop(s, state: State):
+    new, changed = transform_chunk(s, state)
     assert new == s
     assert not changed
 
@@ -183,8 +184,8 @@ def test_fix_fstrings_noop(s):
         ('"{}".format(\n    a,\n)', 'f"""{a}"""'),
     ),
 )
-def test_fix_fstrings(s, expected):
-    new, changed = transform_chunk(s)
+def test_fix_fstrings(s, expected, state: State):
+    new, changed = transform_chunk(s, state)
     assert changed
     assert new == expected
 
@@ -193,9 +194,9 @@ def test_disabled_transforms():
     # Test that disabling transforms does disable them
     assert not transform_chunk(
         '"my string {:.2f}".format(var)',
-        transform_format=False,
+        state=State(transform_format=False),
     )[1]
     assert not transform_chunk(
         '"my string {:.2f}" % var',
-        transform_percent=False,
+        state=State(transform_percent=False),
     )[1]

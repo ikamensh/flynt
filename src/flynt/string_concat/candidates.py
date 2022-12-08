@@ -1,8 +1,8 @@
 import ast
 from typing import Generator, List
 
-from flynt import state
 from flynt.ast_chunk import AstChunk
+from flynt.state import State
 from flynt.utils import is_str_literal
 
 
@@ -30,7 +30,7 @@ class ConcatHound(ast.NodeVisitor):
             self.generic_visit(node)
 
 
-def concat_candidates(code: str) -> Generator[AstChunk, None, None]:
+def concat_candidates(code: str, state: State) -> Generator[AstChunk, None, None]:
     tree = ast.parse(code)
 
     ch = ConcatHound()
