@@ -45,7 +45,7 @@ def ast_formatted_value(
 
     if ast_to_string(val).startswith("{"):
         raise ConversionRefused(
-            "values starting with '{' are better left not transformed."
+            "values starting with '{' are better left not transformed.",
         )
 
     if fmt_str:

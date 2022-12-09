@@ -52,7 +52,7 @@ def find_project_root(srcs: Sequence[str]) -> Path:
 
 
 def find_pyproject_toml(path_search_start: Tuple[str, ...]) -> Optional[str]:
-    """Find the absolute filepath to a pyproject.toml if it exists"""
+    """Find the absolute filepath to a pyproject.toml if it exists."""
     path_project_root = find_project_root(path_search_start)
     path_pyproject_toml = path_project_root / "pyproject.toml"
     if path_pyproject_toml.is_file():
@@ -72,7 +72,7 @@ def find_pyproject_toml(path_search_start: Tuple[str, ...]) -> Optional[str]:
 
 
 def parse_pyproject_toml(path_config: str) -> Dict[str, Any]:
-    """Parse a pyproject toml file, pulling out relevant parts for flynt
+    """Parse a pyproject toml file, pulling out relevant parts for flynt.
 
     If parsing fails, will raise a tomli.TOMLDecodeError
     """

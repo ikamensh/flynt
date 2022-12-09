@@ -13,7 +13,7 @@ class SinSDetector(ast.NodeVisitor):
         self.sns_depth += 1
         if self.sns_depth > self.maxdepth:
             raise StringEmbeddingTooDeep(
-                f"String embedding too deep: {self.sns_depth} > {self.maxdepth}"
+                f"String embedding too deep: {self.sns_depth} > {self.maxdepth}",
             )
 
         self.generic_visit(node)

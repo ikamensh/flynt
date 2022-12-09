@@ -1,4 +1,4 @@
-""" This file gets run when we call `python3 -m flynt` """
+"""This file gets run when we call `python3 -m flynt`."""
 
 import sys
 

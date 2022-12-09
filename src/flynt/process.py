@@ -62,7 +62,7 @@ class JoinTransformer:
         start_line, start_idx, _ = (chunk.start_line, chunk.start_idx, chunk.end_idx)
         if start_line == self.last_line:
             self.results.append(
-                self.src_lines[self.last_line][self.last_idx : start_idx]
+                self.src_lines[self.last_line][self.last_idx : start_idx],
             )
         else:
             self.results.append(self.src_lines[self.last_line][self.last_idx :] + "\n")
@@ -145,7 +145,8 @@ class JoinTransformer:
         # remove redundant parenthesis
         if len(self.results) < 2 or not self.results[-2]:
             return
-        elif len(self.src_lines[self.last_line]) == self.last_idx:
+
+        if len(self.src_lines[self.last_line]) == self.last_idx:
             return
 
         if (
@@ -155,10 +156,9 @@ class JoinTransformer:
             for char in reversed(self.results[-2][:-1]):
                 if char in string.whitespace:
                     continue
-                elif char in "(=[+*":
+                if char in "(=[+*":
                     break
-                else:
-                    return
+                return
 
             self.results[-2] = self.results[-2][:-1]
             self.last_idx += 1
@@ -175,7 +175,10 @@ class JoinTransformer:
 def fstringify_code_by_line(code: str, state: State) -> Tuple[str, int]:
     """returns fstringified version of the code and amount of lines edited."""
     return _transform_code(
-        code, split.get_fstringify_chunks, partial(transform_chunk, state=state), state
+        code,
+        split.get_fstringify_chunks,
+        partial(transform_chunk, state=state),
+        state,
     )
 
 
@@ -206,7 +209,6 @@ def _transform_code(
     state: State,
 ) -> Tuple[str, int]:
     """returns fstringified version of the code and amount of lines edited."""
-
     len_limit = _multiline_settings(state)
     jt = JoinTransformer(code, len_limit, candidates_iter_factory, transform_func)
     return jt.fstringify_code_by_line()

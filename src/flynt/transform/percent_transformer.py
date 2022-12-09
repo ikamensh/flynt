@@ -17,7 +17,7 @@ ANY_DICT = re.compile(r"(?<!%)%\([^)]+?\)")
 DICT_PATTERN = re.compile(rf"(%\([^)]+\){PREFIX_GROUP}{FORMAT_GROUP})")
 SPLIT_DICT_PATTERN = re.compile(rf"%\(([^)]+)\)({PREFIX_GROUP}){FORMAT_GROUP_MATCH}")
 VAR_KEY_PATTERN = re.compile(
-    f"%({PREFIX_GROUP}){FORMAT_GROUP_MATCH}"
+    f"%({PREFIX_GROUP}){FORMAT_GROUP_MATCH}",
 )  # specs at https://docs.python.org/3/library/stdtypes.html#string-formatting
 obsolete_specifiers = "hlL"
 
@@ -56,25 +56,28 @@ def formatted_value(
         if not aggressive and fmt_prefix:
             raise ConversionRefused(
                 "Default text alignment has changed between percent fmt and fstrings. "
-                "Proceeding would result in changed code behaviour."
+                "Proceeding would result in changed code behaviour.",
             )
         return ast_formatted_value(
-            val, fmt_str=fmt_prefix, conversion=conversion_methods[fmt_spec]
+            val,
+            fmt_str=fmt_prefix,
+            conversion=conversion_methods[fmt_spec],
         )
-    else:
-        fmt_spec = translate_conversion_types.get(fmt_spec, fmt_spec)
-        if fmt_spec == "d":
-            # assume built-in len always returns int
-            if not _is_len_call(val):
-                if not aggressive:
-                    raise ConversionRefused(
-                        "Skipping %d formatting - fstrings behave differently from % formatting."
-                    )
-                val = ast.Call(
-                    func=ast.Name(id="int", ctx=ast.Load()), args=[val], keywords={}
+    fmt_spec = translate_conversion_types.get(fmt_spec, fmt_spec)
+    if fmt_spec == "d":
+        # assume built-in len always returns int
+        if not _is_len_call(val):
+            if not aggressive:
+                raise ConversionRefused(
+                    "Skipping %d formatting - fstrings behave differently from % formatting.",
                 )
-            fmt_spec = ""
-        return ast_formatted_value(val, fmt_str=fmt_prefix + fmt_spec)
+            val = ast.Call(
+                func=ast.Name(id="int", ctx=ast.Load()),
+                args=[val],
+                keywords={},
+            )
+        fmt_spec = ""
+    return ast_formatted_value(val, fmt_str=fmt_prefix + fmt_spec)
 
 
 def transform_dict(node: ast.BinOp, aggressive: bool = False) -> ast.JoinedStr:
@@ -88,7 +91,6 @@ def transform_dict(node: ast.BinOp, aggressive: bool = False) -> ast.JoinedStr:
 
     Returns ast.JoinedStr (f-string)
     """
-
     assert isinstance(node.left, ast.Str)
     format_str = node.left.s
     matches = DICT_PATTERN.findall(format_str)
@@ -121,7 +123,8 @@ def transform_dict(node: ast.BinOp, aggressive: bool = False) -> ast.JoinedStr:
 
         def make_fv(key: str):
             return ast.Subscript(
-                value=node.right, slice=ast.Index(value=ast.Str(s=key))
+                value=node.right,
+                slice=ast.Index(value=ast.Str(s=key)),
             )
 
     for block in blocks:
@@ -129,7 +132,10 @@ def transform_dict(node: ast.BinOp, aggressive: bool = False) -> ast.JoinedStr:
         if DICT_PATTERN.match(block):
             prefix, var_key, fmt_str = spec.pop()
             fv = formatted_value(
-                prefix, fmt_str, make_fv(var_key), aggressive=aggressive
+                prefix,
+                fmt_str,
+                make_fv(var_key),
+                aggressive=aggressive,
             )
             segments.append(fv)
         else:
@@ -150,7 +156,6 @@ def transform_tuple(node: ast.BinOp, *, aggressive: bool = False) -> ast.JoinedS
 
     Returns ast.JoinedStr (f-string)
     """
-
     assert isinstance(node.left, ast.Str)
     format_str = node.left.s
     matches = VAR_KEY_PATTERN.findall(format_str)
@@ -179,7 +184,8 @@ def transform_tuple(node: ast.BinOp, *, aggressive: bool = False) -> ast.JoinedS
 
 
 def transform_generic(
-    node: ast.BinOp, aggressive: bool = False
+    node: ast.BinOp,
+    aggressive: bool = False,
 ) -> Tuple[ast.JoinedStr, bool]:
     """Convert a `BinOp` `%` formatted str with a unknown name on the `node.right` to an f-string.
 
@@ -193,7 +199,6 @@ def transform_generic(
 
     Returns ast.JoinedStr (f-string), bool: str-in-str
     """
-
     assert isinstance(node.left, ast.Str)
     has_dict_str_format = DICT_PATTERN.findall(node.left.s)
     if has_dict_str_format:
@@ -220,18 +225,20 @@ supported_operands = [
 
 
 def transform_binop(
-    node: ast.BinOp, *, aggressive: bool = False
+    node: ast.BinOp,
+    *,
+    aggressive: bool = False,
 ) -> Tuple[ast.JoinedStr, bool]:
     if isinstance(node.right, tuple(supported_operands)):
         return transform_generic(node, aggressive=aggressive)
 
-    elif isinstance(node.right, ast.Tuple):
+    if isinstance(node.right, ast.Tuple):
         return (
             transform_tuple(node, aggressive=aggressive),
             any(isinstance(n, (ast.Str, ast.JoinedStr)) for n in ast.walk(node.right)),
         )
 
-    elif isinstance(node.right, ast.Dict):
+    if isinstance(node.right, ast.Dict):
         # todo adapt transform dict to Dict literal
         return transform_dict(node, aggressive=aggressive), False
 

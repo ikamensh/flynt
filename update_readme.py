@@ -32,7 +32,7 @@ def main():
     # disable argparse exiting the entire program when it prints help,
     # and patch the terminal size so we get the same output all the time
     with contextlib.redirect_stdout(sio), contextlib.suppress(
-        SystemExit
+        SystemExit,
     ), patch_terminal_size():
         sys.argv = ["flynt", "--help"]
         run_flynt_cli()
