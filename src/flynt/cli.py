@@ -137,7 +137,10 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
     )
 
     parser.add_argument(
-        "src", action="store", nargs="*", help="source file(s) or directory"
+        "src",
+        action="store",
+        nargs="*",
+        help="source file(s) or directory",
     )
 
     parser.add_argument(
@@ -151,7 +154,7 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
     if args.version:
         print(__version__)
         return 0
-    elif not args.src:
+    if not args.src:
         print("flynt: error: the following arguments are required: src")
         parser.print_usage()
         return 1
@@ -159,13 +162,13 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
     if args.transform_concats and sys.version_info < (3, 8):
         raise Exception(
             f"""Transforming string concatenations is only possible with flynt
-                installed to a python3.8+ interpreter. Currently using {sys.version_info}."""
+                installed to a python3.8+ interpreter. Currently using {sys.version_info}.""",
         )
 
     if args.transform_joins and sys.version_info < (3, 8):
         raise Exception(
             f"""Transforming joins is only possible with flynt
-                installed to a python3.8+ interpreter. Currently using {sys.version_info}."""
+                installed to a python3.8+ interpreter. Currently using {sys.version_info}.""",
         )
 
     logging.basicConfig(
@@ -201,7 +204,7 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
             warnings.warn(
                 f"Unknown config options: {redundant}. "
                 f"This might be a spelling problem. "
-                f"Supported options are: {supported_args}"
+                f"Supported options are: {supported_args}",
             )
         parser.set_defaults(**cfg)
         args = parser.parse_args(arglist)

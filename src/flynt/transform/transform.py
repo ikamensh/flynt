@@ -18,7 +18,6 @@ def transform_chunk(
     quote_type: str = QuoteTypes.triple_double,
 ) -> Tuple[str, bool]:
     """Convert a block of code to an f-string
-
     Args:
         state: State object, for settings and statistics
         code: The code to convert.
@@ -27,7 +26,6 @@ def transform_chunk(
     Returns:
        Tuple: resulting code, boolean: was it changed?
     """
-
     try:
         tree = ast.parse(code)
         converted, changed, str_in_str = fstringify_node(

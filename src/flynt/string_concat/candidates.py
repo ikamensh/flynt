@@ -7,7 +7,7 @@ from flynt.utils import is_str_literal
 
 
 def is_string_concat(node: ast.AST) -> bool:
-    """Returns True for nodes representing a string concatenation"""
+    """Returns True for nodes representing a string concatenation."""
     if is_str_literal(node):
         return True
     if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Add):
@@ -22,7 +22,7 @@ class ConcatHound(ast.NodeVisitor):
 
     def visit_BinOp(self, node: ast.BinOp) -> None:
         """
-        Finds all nodes that are string concatenations with a literal
+        Finds all nodes that are string concatenations with a literal.
         """
         if is_string_concat(node):
             self.victims.append(AstChunk(node))

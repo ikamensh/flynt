@@ -19,9 +19,8 @@ class FstringifyTransformer(ast.NodeTransformer):
 
     def visit_Call(self, node: ast.Call) -> ast.AST:
         """
-        Convert `ast.Call` to `ast.JoinedStr` f-string
+        Convert `ast.Call` to `ast.JoinedStr` f-string.
         """
-
         if self.state.transform_format and matching_call(node):
             self.state.call_candidates += 1
 
@@ -30,7 +29,8 @@ class FstringifyTransformer(ast.NodeTransformer):
                 return node
 
             result_node, str_in_str = joined_string(
-                node, aggressive=self.state.aggressive
+                node,
+                aggressive=self.state.aggressive,
             )
             self.string_in_string = str_in_str
             self.visit(result_node)
@@ -41,7 +41,7 @@ class FstringifyTransformer(ast.NodeTransformer):
         return node
 
     def visit_BinOp(self, node: ast.BinOp) -> ast.AST:
-        """Convert `ast.BinOp` to `ast.JoinedStr` f-string
+        """Convert `ast.BinOp` to `ast.JoinedStr` f-string.
 
         Currently only if a string literal `ast.Str` is on the left side of the `%`
         and one of `ast.Tuple`, `ast.Name`, `ast.Dict` is on the right
@@ -51,7 +51,6 @@ class FstringifyTransformer(ast.NodeTransformer):
 
         Returns ast.JoinedStr (f-string)
         """
-
         if self.state.transform_percent and is_percent_stringify(node):
             # Mypy doesn't understand the is_percent_stringify acts
             # as a type guard, so we need the assert here.
@@ -72,7 +71,8 @@ class FstringifyTransformer(ast.NodeTransformer):
                     return node
 
             result_node, str_in_str = transform_binop(
-                node, aggressive=self.state.aggressive
+                node,
+                aggressive=self.state.aggressive,
             )
             self.string_in_string = str_in_str
             self.counter += 1

@@ -32,7 +32,8 @@ def joined_string(
 ) -> Tuple[Union[ast.JoinedStr, ast.Str], bool]:
     """Transform a "...".format() call node into a f-string node."""
     assert isinstance(fmt_call.func, ast.Attribute) and isinstance(
-        fmt_call.func.value, ast.Str
+        fmt_call.func.value,
+        ast.Str,
     )
     string = fmt_call.func.value.s
     var_map: Dict[Any, Any] = {kw.arg: kw.value for kw in fmt_call.keywords}
@@ -63,7 +64,7 @@ def joined_string(
 
         if "[" in var_name:
             raise FlyntException(
-                f"Skipping f-stringify of a fmt call with indexed name {var_name}"
+                f"Skipping f-stringify of a fmt call with indexed name {var_name}",
             )
 
         suffix = ""
@@ -90,7 +91,7 @@ def joined_string(
                 ast_name = var_map.pop(identifier)
             except KeyError as e:
                 raise ConversionRefused(
-                    f"A variable {identifier} is used multiple times - better not to replace it."
+                    f"A variable {identifier} is used multiple times - better not to replace it.",
                 ) from e
 
         if suffix:
@@ -99,20 +100,18 @@ def joined_string(
 
     if var_map and not aggressive:
         raise FlyntException(
-            f"Some variables were never used: {var_map} - skipping conversion, it's a risk of bug."
+            f"Some variables were never used: {var_map} - skipping conversion, it's a risk of bug.",
         )
 
     def is_literal_string(node):
         if sys.version_info < (3, 8):
             return isinstance(node, ast.Str)
-        else:
-            return isinstance(node, ast.Constant) and isinstance(node.value, str)
+        return isinstance(node, ast.Constant) and isinstance(node.value, str)
 
     def literal_string_value(node):
         if sys.version_info < (3, 8):
             return node.s
-        else:
-            return node.value
+        return node.value
 
     def fix_literals(segment):
         if (

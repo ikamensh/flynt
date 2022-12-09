@@ -96,13 +96,15 @@ def _fstringify_file(
     if not len(ast_before.body) == len(ast_after.body):
         log.error(
             f"Faulty result during conversion on {filename}: "
-            f"statement count has changed, which is not intended - skipping."
+            f"statement count has changed, which is not intended - skipping.",
         )
         return default_result()
 
     if state.dry_run:
         diff = unified_diff(
-            contents.split("\n"), new_code.split("\n"), fromfile=filename
+            contents.split("\n"),
+            new_code.split("\n"),
+            fromfile=filename,
         )
         print("\n".join(diff))
     else:
@@ -174,7 +176,7 @@ def _print_report(
         cc_reduction = total_cc_original - total_cc_new
         cc_percent_reduction = cc_reduction / total_cc_original
         print(
-            f"Character count reduction:                 {cc_reduction} ({cc_percent_reduction:.2%})\n"
+            f"Character count reduction:                 {cc_reduction} ({cc_percent_reduction:.2%})\n",
         )
 
         print("Per expression type:")
@@ -182,7 +184,7 @@ def _print_report(
             percent_fraction = state.percent_transforms / state.percent_candidates
             print(
                 f"Old style (`%`) expressions attempted:     {state.percent_transforms}/"
-                f"{state.percent_candidates} ({percent_fraction:.1%})"
+                f"{state.percent_candidates} ({percent_fraction:.1%})",
             )
         else:
             print("No old style (`%`) expressions attempted.")
@@ -190,7 +192,7 @@ def _print_report(
         if state.call_candidates:
             print(
                 f"`.format(...)` calls attempted:            {state.call_transforms}/"
-                f"{state.call_candidates} ({state.call_transforms / state.call_candidates:.1%})"
+                f"{state.call_candidates} ({state.call_transforms / state.call_candidates:.1%})",
             )
         else:
             print("No `.format(...)` calls attempted.")
@@ -198,7 +200,7 @@ def _print_report(
         if state.concat_candidates:
             print(
                 f"String concatenations attempted:           {state.concat_changes}/"
-                f"{state.concat_candidates} ({state.concat_changes / state.concat_candidates:.1%})"
+                f"{state.concat_candidates} ({state.concat_changes / state.concat_candidates:.1%})",
             )
         else:
             print("No concatenations attempted.")
@@ -206,7 +208,7 @@ def _print_report(
         if state.join_candidates:
             print(
                 f"Static string joins attempted:             {state.join_changes}/"
-                f"{state.join_candidates} ({state.join_changes / state.join_candidates:.1%})"
+                f"{state.join_candidates} ({state.join_changes / state.join_candidates:.1%})",
             )
         else:
             print("No static string joins attempted.")
@@ -215,7 +217,7 @@ def _print_report(
 
         if state.invalid_conversions:
             print(
-                f"Out of all attempted transforms, {state.invalid_conversions} resulted in errors."
+                f"Out of all attempted transforms, {state.invalid_conversions} resulted in errors.",
             )
             print("To find out specific error messages, use --verbose flag.")
 
@@ -230,7 +232,6 @@ def fstringify(
     excluded_files_or_paths: Optional[Collection[str]] = None,
 ) -> int:
     """determine if a directory or a single file was passed, and f-stringify it."""
-
     files = _resolve_files(files_or_paths, excluded_files_or_paths)
 
     status = fstringify_files(
@@ -240,15 +241,14 @@ def fstringify(
 
     if fail_on_changes:
         return status
-    else:
-        return 0
+    return 0
 
 
 def _resolve_files(
-    files_or_paths: List[str], excluded_files_or_paths: Optional[Collection[str]]
+    files_or_paths: List[str],
+    excluded_files_or_paths: Optional[Collection[str]],
 ) -> List[str]:
     """Resolve relative paths and directory names into a list of absolute paths to python files."""
-
     files = []
     _blacklist = blacklist.copy()
     if excluded_files_or_paths is not None:
@@ -274,7 +274,6 @@ def _resolve_files(
 
 def encoding_by_bom(path: str, default: str = "utf-8") -> Tuple[str, Optional[bytes]]:
     """Adapted from https://stackoverflow.com/questions/13590749/reading-unicode-file-data-with-bom-chars-in-python/24370596#24370596"""
-
     with open(path, "rb") as f:
         raw = f.read(4)  # will read less if the file is smaller
     # BOM_UTF32_LE's start is equal to BOM_UTF16_LE so need to try the former first

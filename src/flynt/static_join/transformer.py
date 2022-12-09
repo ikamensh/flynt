@@ -34,7 +34,7 @@ class JoinTransformer(ast.NodeTransformer):
                     arg.s
                     for arg in args_with_interleaved_joiner
                     if isinstance(arg, ast.Str)
-                )
+                ),
             )
         return ast.JoinedStr(args_with_interleaved_joiner)
 
