@@ -4,6 +4,10 @@ on:
   push:
   schedule:
     - cron: '0 0 */7 * *'
+
+env:
+  FORCE_COLOR: 1
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
