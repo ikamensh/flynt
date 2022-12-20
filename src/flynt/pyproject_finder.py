@@ -9,7 +9,10 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, Optional, Sequence, Tuple
 
-import tomli
+if sys.version_info >= (3, 11):
+    import tomllib
+else:
+    import tomli as tomllib
 
 
 @lru_cache()
@@ -74,10 +77,10 @@ def find_pyproject_toml(path_search_start: Tuple[str, ...]) -> Optional[str]:
 def parse_pyproject_toml(path_config: str) -> Dict[str, Any]:
     """Parse a pyproject toml file, pulling out relevant parts for flynt.
 
-    If parsing fails, will raise a tomli.TOMLDecodeError
+    If parsing fails, will raise a tomllib.TOMLDecodeError
     """
     with open(path_config, "rb") as f:
-        pyproject_toml = tomli.load(f)
+        pyproject_toml = tomllib.load(f)
 
     config = pyproject_toml.get("tool", {}).get("flynt", {})
     if path_config.endswith("flynt.toml"):
