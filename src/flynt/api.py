@@ -1,5 +1,6 @@
 import ast
 import codecs
+import dataclasses
 import logging
 import os
 import sys
@@ -22,33 +23,63 @@ log = logging.getLogger(__name__)
 blacklist = {".tox", "venv", "site-packages", ".eggs"}
 
 
+@dataclasses.dataclass(frozen=True)
+class FstringifyResult:
+    n_changes: int
+    original_length: int
+    new_length: int
+    content: str
+
+
 def _fstringify_file(
     filename: str,
     state: State,
-) -> Tuple[bool, int, int, int]:
+) -> Optional[FstringifyResult]:
     """
-    :return: tuple: (changes_made, n_changes,
-    length of original code, length of new code)
+    F-stringify a file, write changes, and return a change result.
     """
-
-    def default_result() -> Tuple[bool, int, int, int]:
-        return False, 0, len(contents), len(contents)
-
     encoding, bom = encoding_by_bom(filename)
 
     with open(filename, encoding=encoding, newline="") as f:
         try:
             contents = f.read()
         except UnicodeDecodeError:
-            contents = ""
             log.error(f"Exception while reading {filename}", exc_info=True)
-            return default_result()
+            return None
 
+    result = fstringify_content(
+        contents=contents,
+        state=state,
+        filename=filename,
+    )
+
+    if result and result.n_changes:  # success?
+        new_code = result.content
+        if state.dry_run:
+            diff = unified_diff(
+                contents.split("\n"),
+                new_code.split("\n"),
+                fromfile=filename,
+            )
+            print("\n".join(diff))
+        else:
+            with open(filename, "wb") as outf:
+                if bom is not None:
+                    outf.write(bom)
+                outf.write(new_code.encode(encoding))
+    return result
+
+
+def fstringify_content(
+    contents: str,
+    state: State,
+    filename: str = "<code>",
+) -> Optional[FstringifyResult]:
     try:
         ast_before = ast.parse(contents)
     except SyntaxError:
         log.exception(f"Can't parse {filename} as a python file.")
-        return default_result()
+        return None
 
     try:
         new_code = contents
@@ -79,10 +110,17 @@ def _fstringify_file(
             f"Skipping fstrings transform of file {filename} due to {msg}.",
             exc_info=True,
         )
-        return default_result()
+        return None
 
-    if new_code == contents:
-        return default_result()
+    result = FstringifyResult(
+        n_changes=changes,
+        original_length=len(contents),
+        new_length=len(new_code),
+        content=new_code,
+    )
+
+    if result.content == contents:
+        return result
 
     try:
         ast_after = ast.parse(new_code)
@@ -91,29 +129,15 @@ def _fstringify_file(
             f"Faulty result during conversion on {filename} - skipping.",
             exc_info=True,
         )
-        return default_result()
+        return None
 
     if not len(ast_before.body) == len(ast_after.body):
         log.error(
             f"Faulty result during conversion on {filename}: "
             f"statement count has changed, which is not intended - skipping.",
         )
-        return default_result()
-
-    if state.dry_run:
-        diff = unified_diff(
-            contents.split("\n"),
-            new_code.split("\n"),
-            fromfile=filename,
-        )
-        print("\n".join(diff))
-    else:
-        with open(filename, "wb") as outf:
-            if bom is not None:
-                outf.write(bom)
-            outf.write(new_code.encode(encoding))
-
-    return True, changes, len(contents), len(new_code)
+        return None
+    return result
 
 
 def fstringify_files(
@@ -126,22 +150,19 @@ def fstringify_files(
     total_expressions = 0
     start_time = time.time()
     for path in files:
-        (
-            changed,
-            count_expressions,
-            charcount_original,
-            charcount_new,
-        ) = _fstringify_file(
+        result = _fstringify_file(
             path,
             state,
         )
-        if changed:
-            changed_files += 1
-            total_expressions += count_expressions
-        total_charcount_original += charcount_original
-        total_charcount_new += charcount_new
-
-        status = "modified" if count_expressions else "no change"
+        if result:
+            if result.n_changes:
+                changed_files += 1
+                total_expressions += result.n_changes
+            total_charcount_original += result.original_length
+            total_charcount_new += result.n_changes
+            status = "modified" if result.n_changes else "no change"
+        else:
+            status = "failed"
         log.info(f"fstringifying {path}...{status}")
     total_time = time.time() - start_time
 

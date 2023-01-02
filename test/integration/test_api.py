@@ -61,26 +61,24 @@ def test_py2(py2_file):
     with open(py2_file) as f:
         content_before = f.read()
 
-    modified, _, _, _ = _fstringify_file(
-        py2_file, state=State(multiline=True, len_limit=1000)
-    )
+    result = _fstringify_file(py2_file, state=State(multiline=True, len_limit=1000))
 
     with open(py2_file) as f:
         content_after = f.read()
 
-    assert not modified
+    assert not result
     assert content_after == content_before
 
 
 def test_invalid_unicode(invalid_unicode_file):
-    modified, _, _, _ = _fstringify_file(
+    result = _fstringify_file(
         invalid_unicode_file, state=State(multiline=True, len_limit=1000)
     )
 
     with open(invalid_unicode_file, "rb") as f:
         content_after = f.read()
 
-    assert not modified
+    assert not result
     assert content_after == invalid_unicode
 
 
@@ -89,14 +87,14 @@ def test_works(formattable_file):
     with open(formattable_file) as f:
         content_before = f.read()
 
-    modified, _, _, _ = _fstringify_file(
+    result = _fstringify_file(
         formattable_file, state=State(multiline=True, len_limit=1000)
     )
 
     with open(formattable_file) as f:
         content_after = f.read()
 
-    assert modified
+    assert result.n_changes
     assert content_after != content_before
 
 
@@ -110,14 +108,14 @@ def test_break_safe(formattable_file, monkeypatch):
 
     monkeypatch.setattr(api, "fstringify_code_by_line", broken_fstringify_by_line)
 
-    modified, _, _, _ = _fstringify_file(
+    result = _fstringify_file(
         formattable_file, state=State(multiline=True, len_limit=1000)
     )
 
     with open(formattable_file) as f:
         content_after = f.read()
 
-    assert not modified
+    assert not result
     assert content_after == content_before
 
 
@@ -131,14 +129,14 @@ def test_catches_subtle(formattable_file, monkeypatch):
 
     monkeypatch.setattr(api, "fstringify_code_by_line", broken_fstringify_by_line)
 
-    modified, _, _, _ = _fstringify_file(
+    result = _fstringify_file(
         formattable_file, state=State(multiline=True, len_limit=1000)
     )
 
     with open(formattable_file) as f:
         content_after = f.read()
 
-    assert not modified
+    assert not result
     assert content_after == content_before
 
 
@@ -146,26 +144,26 @@ def test_dry_run(formattable_file, monkeypatch):
     with open(formattable_file) as f:
         content_before = f.read()
 
-    modified, _, _, _ = _fstringify_file(
+    result = _fstringify_file(
         formattable_file, state=State(multiline=True, len_limit=1000, dry_run=True)
     )
 
     with open(formattable_file) as f:
         content_after = f.read()
 
-    assert modified
+    assert result.n_changes
     assert content_after == content_before
 
 
 def test_mixed_line_endings(mixed_line_endings_file):
-    modified, _, _, _ = _fstringify_file(
+    result = _fstringify_file(
         mixed_line_endings_file, state=State(multiline=True, len_limit=1000)
     )
 
     with open(mixed_line_endings_file, "rb") as f:
         content_after = f.read()
 
-    assert modified
+    assert result.n_changes
     assert content_after == mixed_line_endings_after
 
 
@@ -184,7 +182,5 @@ def test_bom(bom_file):
 
     It's possible to verify that a file has bom using `file` unix utility."""
 
-    modified, _, _, _ = _fstringify_file(
-        bom_file, state=State(multiline=True, len_limit=1000)
-    )
-    assert modified
+    result = _fstringify_file(bom_file, state=State(multiline=True, len_limit=1000))
+    assert result.n_changes
