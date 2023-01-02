@@ -1,3 +1,4 @@
+import io
 import os
 
 import pytest
@@ -30,28 +31,26 @@ def test_cli_version(capsys):
     assert err == ""
 
 
-# Code snippets for testing the -s/--string argument
-cli_string_snippets = pytest.mark.parametrize(
-    "code_in, code_out",
-    [
-        ("'{}'.format(x) + '{}'.format(y)", "f'{x}' + f'{y}'"),
-        (
-            "['{}={}'.format(key, value) for key, value in x.items()]",
-            "[f'{key}={value}' for key, value in x.items()]",
-        ),
-        (
-            '["{}={}".format(key, value) for key, value in x.items()]',
-            '[f"{key}={value}" for key, value in x.items()]',
-        ),
-        (
-            "This ! isn't <> valid .. Python $ code",
-            "This ! isn't <> valid .. Python $ code",
-        ),
-    ],
-)
+valid_snippets = [
+    ("'{}'.format(x) + '{}'.format(y)", "f'{x}' + f'{y}'"),
+    (
+        "['{}={}'.format(key, value) for key, value in x.items()]",
+        "[f'{key}={value}' for key, value in x.items()]",
+    ),
+    (
+        '["{}={}".format(key, value) for key, value in x.items()]',
+        '[f"{key}={value}" for key, value in x.items()]',
+    ),
+]
+invalid_snippets = [
+    (
+        "This ! isn't <> valid .. Python $ code",
+        "This ! isn't <> valid .. Python $ code",
+    ),
+]
 
 
-@cli_string_snippets
+@pytest.mark.parametrize("code_in, code_out", [*valid_snippets, *invalid_snippets])
 def test_cli_string_quoted(capsys, code_in, code_out):
     """
     Tests an invocation with quotes, like:
@@ -68,7 +67,7 @@ def test_cli_string_quoted(capsys, code_in, code_out):
     assert err == ""
 
 
-@cli_string_snippets
+@pytest.mark.parametrize("code_in, code_out", [*valid_snippets, *invalid_snippets])
 def test_cli_string_unquoted(capsys, code_in, code_out):
     """
     Tests an invocation with no quotes, like:
@@ -80,6 +79,20 @@ def test_cli_string_unquoted(capsys, code_in, code_out):
     return_code = run_flynt_cli(["-s", *code_in.split()])
     assert return_code == 0
 
+    out, err = capsys.readouterr()
+    assert out.strip() == code_out
+    assert err == ""
+
+
+@pytest.mark.parametrize("code_in, code_out", valid_snippets)
+def test_cli_stdin(monkeypatch, capsys, code_in, code_out):
+    """
+    Tests a stdin/stdout invocation, like:
+        echo snippet | flynt -
+    """
+    monkeypatch.setattr("sys.stdin", io.StringIO(code_in))
+    return_code = run_flynt_cli(["-"])
+    assert return_code == 0
     out, err = capsys.readouterr()
     assert out.strip() == code_out
     assert err == ""
