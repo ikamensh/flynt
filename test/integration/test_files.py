@@ -18,8 +18,8 @@ def test_fstringify(filename, state):
 
 
 @pytest.mark.parametrize("filename", samples)
-def test_fstringify_single_line(filename, state: State):
-    state.multiline = False
+def test_fstringify_single_line(filename):
+    state = State(multiline=False)
     out, expected = try_on_file(
         filename,
         partial(fstringify_code_by_line, state=state),

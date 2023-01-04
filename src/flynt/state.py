@@ -3,6 +3,8 @@
 import dataclasses
 from typing import Optional
 
+from flynt.lexer.context import LexerContext, multi_line_context, single_line_context
+
 
 @dataclasses.dataclass
 class State:
@@ -31,3 +33,13 @@ class State:
 
     join_candidates: int = 0
     join_changes: int = 0
+
+    def __post_init__(self):
+        if not self.multiline:
+            self.len_limit = 0
+
+    @property
+    def lexer_context(self) -> LexerContext:
+        if self.multiline:
+            return multi_line_context
+        return single_line_context

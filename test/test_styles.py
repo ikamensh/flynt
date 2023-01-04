@@ -3,6 +3,7 @@ import random
 import pytest
 
 from flynt.format import QuoteTypes, get_quote_type, set_quote_type
+from flynt.lexer.context import multi_line_context
 from flynt.lexer.split import get_chunks
 
 
@@ -17,7 +18,7 @@ from flynt.lexer.split import get_chunks
 )
 def test_get_quote_type_token(code, quote_type):
 
-    g = get_chunks(code)
+    g = get_chunks(code, lexer_context=multi_line_context)
     next(g)
     chunk = next(g)
     token = chunk.tokens[0]

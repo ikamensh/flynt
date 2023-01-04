@@ -1,11 +1,10 @@
 import logging
-import math
 import re
 import string
+import sys
 from functools import partial
 from typing import Callable, List, Optional, Tuple, Union
 
-from flynt import lexer
 from flynt.ast_chunk import AstChunk
 from flynt.exceptions import FlyntException
 from flynt.format import QuoteTypes as qt
@@ -36,7 +35,10 @@ class JoinTransformer:
         candidates_iter_factory: Callable,
         transform_func: Callable,
     ) -> None:
-        self.len_limit = len_limit if len_limit is not None else math.inf
+        if len_limit is None:
+            len_limit = sys.maxsize
+
+        self.len_limit = len_limit
         self.candidates_iter = candidates_iter_factory(code)
         self.transform_func = transform_func
         self.src_lines = code.split("\n")
@@ -176,7 +178,7 @@ def fstringify_code_by_line(code: str, state: State) -> Tuple[str, int]:
     """returns fstringified version of the code and amount of lines edited."""
     return _transform_code(
         code,
-        split.get_fstringify_chunks,
+        partial(split.get_fstringify_chunks, lexer_context=state.lexer_context),
         partial(transform_chunk, state=state),
         state,
     )
@@ -209,16 +211,9 @@ def _transform_code(
     state: State,
 ) -> Tuple[str, int]:
     """returns fstringified version of the code and amount of lines edited."""
-    len_limit = _multiline_settings(state)
-    jt = JoinTransformer(code, len_limit, candidates_iter_factory, transform_func)
-    return jt.fstringify_code_by_line()
-
-
-def _multiline_settings(state: State) -> Optional[int]:
-    # TODO: eradicate this function and system
-    if not state.multiline:
-        state.len_limit = 0
-        lexer.set_single_line()
-    else:
-        lexer.set_multiline()
-    return state.len_limit
+    return JoinTransformer(
+        code,
+        state.len_limit,
+        candidates_iter_factory,
+        transform_func,
+    ).fstringify_code_by_line()
