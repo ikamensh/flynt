@@ -179,11 +179,7 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
         level=(logging.DEBUG if args.verbose else logging.CRITICAL),
     )
 
-    state = State(
-        aggressive=args.aggressive,
-        quiet=args.quiet,
-        dry_run=args.dry_run,
-    )
+    state = state_from_args(args)
     if args.verbose:
         logging.getLogger("flynt").setLevel(logging.DEBUG)
 
@@ -222,6 +218,7 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
             )
         parser.set_defaults(**cfg)
         args = parser.parse_args(arglist)
+        state = state_from_args(args)
     if not args.quiet:
         print(salutation)
     if args.verbose:
@@ -233,4 +230,18 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
         excluded_files_or_paths=args.exclude,
         fail_on_changes=args.fail_on_change,
         state=state,
+    )
+
+
+def state_from_args(args) -> State:
+    return State(
+        aggressive=args.aggressive,
+        dry_run=args.dry_run,
+        len_limit=args.line_length,
+        multiline=(not args.no_multiline),
+        quiet=args.quiet,
+        transform_concat=args.transform_concats,
+        transform_format=args.transform_format,
+        transform_join=args.transform_joins,
+        transform_percent=args.transform_percent,
     )
