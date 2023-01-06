@@ -7,7 +7,7 @@ import warnings
 from typing import List, Optional
 
 from flynt import __version__
-from flynt.api import fstringify, fstringify_code_by_line
+from flynt.api import fstringify, fstringify_code_by_line, fstringify_content
 from flynt.pyproject_finder import find_pyproject_toml, parse_pyproject_toml
 from flynt.state import State
 
@@ -140,7 +140,10 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
         "src",
         action="store",
         nargs="*",
-        help="source file(s) or directory",
+        help=(
+            "source file(s) or directory "
+            "(or a single `-` to read stdin and output to stdout)"
+        ),
     )
 
     parser.add_argument(
@@ -191,7 +194,18 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
         )
         print(converted)
         return 0
-
+    if "-" in args.src:
+        if len(args.src) > 1:
+            parser.error("Cannot use '-' with a list of other paths")
+        result = fstringify_content(
+            sys.stdin.read(),
+            state,
+            filename="<stdin>",
+        )
+        if not result:
+            return 1
+        print(result.content)
+        return 0
     salutation = f"Running flynt v.{__version__}"
     toml_file = find_pyproject_toml(tuple(args.src))
     if toml_file:

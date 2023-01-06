@@ -43,7 +43,8 @@ usage: flynt [-h] [-v | -q] [--no-multiline | -ll LINE_LENGTH] [-d]
 flynt v.0.77-beta
 
 positional arguments:
-  src                   source file(s) or directory
+  src                   source file(s) or directory (or a single `-`
+                        to read stdin and output to stdout)
 
 options:
   -h, --help            show this help message and exit
