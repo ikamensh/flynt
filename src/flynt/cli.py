@@ -196,7 +196,7 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
         return 0
     if "-" in args.src:
         if len(args.src) > 1:
-            parser.error("Cannot use '-' with other arguments")
+            parser.error("Cannot use '-' with a list of other paths")
         result = fstringify_content(
             sys.stdin.read(),
             state,
