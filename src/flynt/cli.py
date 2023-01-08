@@ -7,7 +7,7 @@ import warnings
 from typing import List, Optional
 
 from flynt import __version__
-from flynt.api import fstringify, fstringify_code_by_line, fstringify_content
+from flynt.api import fstringify, fstringify_content
 from flynt.pyproject_finder import find_pyproject_toml, parse_pyproject_toml
 from flynt.state import State
 
@@ -179,20 +179,17 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
         level=(logging.DEBUG if args.verbose else logging.CRITICAL),
     )
 
-    state = State(
-        aggressive=args.aggressive,
-        quiet=args.quiet,
-        dry_run=args.dry_run,
-    )
+    state = state_from_args(args)
     if args.verbose:
         logging.getLogger("flynt").setLevel(logging.DEBUG)
 
     if args.string:
-        converted, _ = fstringify_code_by_line(
-            " ".join(args.src),
-            state=state,
+        content = " ".join(args.src)
+        result = fstringify_content(
+            content,
+            state,
         )
-        print(converted)
+        print(result.content if result else content)
         return 0
     if "-" in args.src:
         if len(args.src) > 1:
@@ -222,6 +219,7 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
             )
         parser.set_defaults(**cfg)
         args = parser.parse_args(arglist)
+        state = state_from_args(args)
     if not args.quiet:
         print(salutation)
     if args.verbose:
@@ -233,4 +231,18 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
         excluded_files_or_paths=args.exclude,
         fail_on_changes=args.fail_on_change,
         state=state,
+    )
+
+
+def state_from_args(args) -> State:
+    return State(
+        aggressive=args.aggressive,
+        dry_run=args.dry_run,
+        len_limit=args.line_length,
+        multiline=(not args.no_multiline),
+        quiet=args.quiet,
+        transform_concat=args.transform_concats,
+        transform_format=args.transform_format,
+        transform_join=args.transform_joins,
+        transform_percent=args.transform_percent,
     )

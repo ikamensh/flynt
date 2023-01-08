@@ -1,5 +1,6 @@
 import io
 import os
+import sys
 
 import pytest
 
@@ -81,6 +82,26 @@ def test_cli_string_unquoted(capsys, code_in, code_out):
 
     out, err = capsys.readouterr()
     assert out.strip() == code_out
+    assert err == ""
+
+
+@pytest.mark.skipif(sys.version_info < (3, 8), reason="requires python3.8 or higher")
+def test_cli_string_supports_flags(capsys):
+    """
+    Tests a --string invocation also does additional transformations.
+
+    See https://github.com/ikamensh/flynt/issues/162
+    """
+    return_code = run_flynt_cli(
+        [
+            "-tc",
+            "--string",
+            "test_string = 'This' + ' ' + 'may' + ' ' + 'not' + ' ' + 'work'",
+        ]
+    )
+    assert return_code == 0
+    out, err = capsys.readouterr()
+    assert out.strip() == 'test_string = f"This may not work"'
     assert err == ""
 
 
