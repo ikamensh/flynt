@@ -2,6 +2,7 @@
 
 import argparse
 import logging
+import os
 import sys
 import warnings
 from typing import List, Optional
@@ -207,7 +208,7 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
         if len(args.src) > 1:
             parser.error("Cannot use '-' with a list of other paths")
         result = fstringify_content(
-            sys.stdin.read(),
+            sys.stdin.read()[: -len(os.linesep)],
             state,
             filename="<stdin>",
         )
