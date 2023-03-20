@@ -53,20 +53,24 @@ def _fstringify_file(
         filename=filename,
     )
 
-    if result and result.n_changes:  # success?
-        new_code = result.content
-        if state.dry_run:
-            diff = unified_diff(
-                contents.split("\n"),
-                new_code.split("\n"),
-                fromfile=filename,
-            )
-            print("\n".join(diff))
-        else:
-            with open(filename, "wb") as outf:
-                if bom is not None:
-                    outf.write(bom)
-                outf.write(new_code.encode(encoding))
+    if result is None:
+        return None
+
+    new_code = result.content
+    if state.dry_run and result.n_changes:
+        diff = unified_diff(
+            contents.split("\n"),
+            new_code.split("\n"),
+            fromfile=filename,
+        )
+        print("\n".join(diff))
+    elif state.stdout:
+        print(new_code)
+    elif result.n_changes:
+        with open(filename, "wb") as outf:
+            if bom is not None:
+                outf.write(bom)
+            outf.write(new_code.encode(encoding))
     return result
 
 

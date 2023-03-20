@@ -12,6 +12,7 @@ class State:
     quiet: bool = False
     aggressive: bool = False
     dry_run: bool = False
+    stdout: bool = False
     multiline: bool = True
     len_limit: Optional[int] = None
     transform_percent: bool = True

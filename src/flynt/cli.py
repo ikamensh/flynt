@@ -36,7 +36,7 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
         "-q",
         "--quiet",
         action="store_true",
-        help="run without stdout output",
+        help="run without outputting statistics to stdout",
         default=False,
     )
 
@@ -57,7 +57,8 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
         default=88,
     )
 
-    parser.add_argument(
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument(
         "-d",
         "--dry-run",
         action="store_true",
@@ -65,6 +66,15 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
         help="Do not change the files in-place and print the diff instead. "
         "Note that this must be used in conjunction with '--fail-on-change' when "
         "used for linting purposes.",
+    )
+
+    group.add_argument(
+        "--stdout",
+        action="store_true",
+        default=False,
+        help="Do not change the files in-place and print the result instead. "
+        "This argument implies --quiet, i.e. no statistics are printed to stdout, "
+        "only the resulting code. It is incompatible with --dry-run and --verbose.",
     )
 
     parser.add_argument(
@@ -153,6 +163,8 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
         help="Print the current version number and exit.",
     )
     args = parser.parse_args(arglist)
+    if args.stdout and args.verbose:
+        parser.error("--stdout should not be used with -v/--verbose")
 
     if args.version:
         print(__version__)
@@ -220,7 +232,7 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
         parser.set_defaults(**cfg)
         args = parser.parse_args(arglist)
         state = state_from_args(args)
-    if not args.quiet:
+    if not state.quiet:
         print(salutation)
     if args.verbose:
         print(f"Using following options: {args}")
@@ -238,9 +250,10 @@ def state_from_args(args) -> State:
     return State(
         aggressive=args.aggressive,
         dry_run=args.dry_run,
+        stdout=args.stdout,
         len_limit=args.line_length,
         multiline=(not args.no_multiline),
-        quiet=args.quiet,
+        quiet=args.quiet or args.stdout,
         transform_concat=args.transform_concats,
         transform_format=args.transform_format,
         transform_join=args.transform_joins,

@@ -153,3 +153,35 @@ def test_cli_dry_run(capsys, sample_file):
 
     assert out.strip().endswith(farewell_message.strip())
     assert err == ""
+
+
+@pytest.mark.parametrize(
+    "sample_file",
+    ["all_named.py", "first_string.py", "percent_dict.py", "multiline_limit.py"],
+)
+def test_cli_stdout(capsys, sample_file):
+    """
+    Tests the --stdout option with a few files
+    """
+    # Get input/output paths and read them
+    folder = os.path.dirname(__file__)
+    source_path = os.path.join(folder, "samples_in", sample_file)
+    expected_path = os.path.join(folder, "expected_out", sample_file)
+    with open(expected_path) as file:
+        # file.readlines() returns lines with "\n" endings, which we must strip
+        # away for comparing with out.splitlines() which removes line endings.
+        expected_lines = [line.rstrip() for line in file.readlines()]
+
+    # Run the CLI
+    return_code = run_flynt_cli(["--stdout", source_path])
+    assert return_code == 0
+
+    # Check that the output includes the output code, and no farewell message
+    out, err = capsys.readouterr()
+    actual_lines = out.rstrip().splitlines()
+    for line in expected_lines:
+        assert line in actual_lines
+    for line in actual_lines:
+        assert line in expected_lines
+    assert not out.strip().endswith(farewell_message.strip())
+    assert err == ""
