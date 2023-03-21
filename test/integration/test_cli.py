@@ -111,7 +111,7 @@ def test_cli_stdin(monkeypatch, capsys, code_in, code_out):
     Tests a stdin/stdout invocation, like:
         echo snippet | flynt -
     """
-    monkeypatch.setattr("sys.stdin", io.StringIO(code_in))
+    monkeypatch.setattr("sys.stdin", io.StringIO(code_in + os.linesep))
     return_code = run_flynt_cli(["-"])
     assert return_code == 0
     out, err = capsys.readouterr()
