@@ -65,6 +65,7 @@ ignore_missing_imports = true
 [tool.ruff]
 extend-select = [
     "C9",
+    "I",
     "PLR091",
     "S",
 ]
