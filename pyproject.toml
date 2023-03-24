@@ -72,7 +72,7 @@ extend-ignore = [
     "S101",
 ]
 line-length = 141
-target-version = py37
+target-version = "py37"
 
 [tool.ruff.mccabe]
 max-complexity = 22
@@ -83,4 +83,7 @@ max-branches = 18
 max-statements = 67
 
 [tool.ruff.per-file-ignores]
-"test/integration/*" = F821  # Undefined names
+"test/integration/*" = [
+    "F821",  # Undefined names
+     "I",    # iSort
+ ]
