@@ -70,7 +70,7 @@ def joined_string(
         suffix = ""
         if "." in var_name:
             idx = var_name.find(".")
-            var_name, suffix = var_name[:idx], var_name[idx + 1 :]
+            var_name, suffix = var_name[:idx], var_name[idx + 1 :]  # noqa: PLW2901
 
         identifier: Union[str, int]
         if var_name.isdigit():

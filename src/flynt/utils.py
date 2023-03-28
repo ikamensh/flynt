@@ -48,10 +48,7 @@ def ast_formatted_value(
             "values starting with '{' are better left not transformed.",
         )
 
-    if fmt_str:
-        format_spec = ast.JoinedStr([ast_string_node(fmt_str)])
-    else:
-        format_spec = None
+    format_spec = ast.JoinedStr([ast_string_node(fmt_str)]) if fmt_str else None
 
     conversion_val = -1 if conversion is None else ord(conversion.replace("!", ""))
     return ast.FormattedValue(
@@ -69,9 +66,10 @@ def fixup_transformed(tree: ast.AST, quote_type: Optional[str] = None) -> str:
     il = FstrInliner()
     il.visit(tree)
     new_code = ast_to_string(tree)
-    if quote_type is None:
-        if new_code[:4] == 'f"""' or new_code[:3] == "'''" or new_code[:3] == '"""':
-            quote_type = QuoteTypes.double
+    if quote_type is None and (
+        new_code[:4] == 'f"""' or new_code[:3] in ("'''", '"""')
+    ):
+        quote_type = QuoteTypes.double
     if quote_type is not None:
         new_code = set_quote_type(new_code, quote_type)
     new_code = new_code.replace("\n", "\\n")

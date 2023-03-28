@@ -30,7 +30,7 @@ def is_percent_stringify(node: ast.BinOp) -> bool:
     return (
         isinstance(node.left, ast.Str)
         and isinstance(node.op, ast.Mod)
-        and isinstance(node.right, tuple([ast.Tuple, ast.Dict, *supported_operands]))
+        and isinstance(node.right, (ast.Tuple, ast.Dict, *supported_operands))
     )
 
 

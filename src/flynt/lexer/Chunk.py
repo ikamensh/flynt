@@ -62,21 +62,20 @@ class Chunk:
             else:
                 self.percent_ongoing = True
 
+        elif self.percent_ongoing:
+            self.tokens.append(t)
+            if t.is_string() and "{" not in str(self):
+                self.string_in_string = True
+            if self.is_parseable:
+                self.percent_ongoing = False
+                self.successful = True
+        elif t.is_expr_continuation_op():
+            self.tokens.append(t)
+            self.percent_ongoing = True
         else:
-            if self.percent_ongoing:
-                self.tokens.append(t)
-                if t.is_string() and "{" not in str(self):
-                    self.string_in_string = True
-                if self.is_parseable:
-                    self.percent_ongoing = False
-                    self.successful = True
-            elif t.is_expr_continuation_op():
-                self.tokens.append(t)
-                self.percent_ongoing = True
-            else:
-                self.complete = True
-                self.successful = self.is_parseable
-                return REUSE
+            self.complete = True
+            self.successful = self.is_parseable
+            return REUSE
         return None
 
     def call_append(self, t: PyToken) -> None:

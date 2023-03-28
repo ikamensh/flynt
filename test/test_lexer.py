@@ -97,7 +97,7 @@ def test_indented():
 def test_empty_line():
     code_empty_line = """
     def write_row(self, xf, row, row_idx):
-    
+
         attrs = {'r': '{}'.format(row_idx)}""".strip()
 
     generator = split.get_fstringify_chunks(code_empty_line)

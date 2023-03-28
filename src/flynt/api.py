@@ -135,7 +135,7 @@ def fstringify_content(
         )
         return None
 
-    if not len(ast_before.body) == len(ast_after.body):
+    if len(ast_before.body) != len(ast_after.body):
         log.error(
             f"Faulty result during conversion on {filename}: "
             f"statement count has changed, which is not intended - skipping.",
@@ -264,9 +264,7 @@ def fstringify(
         state=state,
     )
 
-    if fail_on_changes:
-        return status
-    return 0
+    return status if fail_on_changes else 0
 
 
 def _resolve_files(

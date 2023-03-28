@@ -539,7 +539,7 @@ def test_unknown_mod_percend_dictionary(state: State):
 
 
 s_in_mixed_quotes = """'one is {} '
-"and two is {}".format(one, two) 
+"and two is {}".format(one, two)
 """.strip()
 
 
@@ -553,7 +553,7 @@ def test_mixed_quote_types(state: State):
 
 
 s_in_mixed_quotes_unsafe = """'one is "{}" '
-"and two is {}".format('"'.join(one), two) 
+"and two is {}".format('"'.join(one), two)
 """.strip()
 
 

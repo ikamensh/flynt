@@ -63,14 +63,34 @@ module = "astor"
 ignore_missing_imports = true
 
 [tool.ruff]
-extend-select = [
-    "C9",
-    "I",
-    "PLR091",
-    "S",
+select = [
+    "C4",   # flake8-comprehensions
+    "C90",  # mccabe
+    "E",    # pycodestyle
+    "F",    # Pyflakes
+    "I",    # isort
+    "ICN",  # flake8-import-conventions
+    "PIE",  # flake8-pie
+    "PL",   # Pylint
+    "PYI",  # flake8-pyi
+    "RET",  # flake8-return
+    "RSE",  # flake8-raise
+    "RUF",  # Ruff-specific rules
+    "S",    # flake8-bandit
+    "SIM",  # flake8-simplify
+    "SLF",  # flake8-self
+    "T10",  # flake8-debugger
+    "TCH",  # flake8-type-checking
+    "TID",  # flake8-tidy-imports
+    "UP",   # pyupgrade
+    "W",    # pycodestyle
+    "YTT",  # flake8-2020
 ]
-extend-ignore = [
+ignore = [
+    "PLC1901",
+    "PLR2004",
     "S101",
+    "UP03",
 ]
 line-length = 141
 target-version = "py37"
@@ -90,6 +110,9 @@ max-statements = 67
     "F821",
     "F841",
     "I",
+    "RET503",
+    "UP",
+    "W292",
  ]
 "test/test_lexer.py" = ["F841"]
 "test/test_pyproject.py" = ["E712"]

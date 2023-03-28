@@ -57,6 +57,5 @@ def get_fstringify_chunks(
 
         if len(chunk) and chunk[-1].is_string():
             last_concat = True
-        else:
-            if lexer_context.multiline or len(chunk) > 0:
-                last_concat = False
+        elif lexer_context.multiline or len(chunk) > 0:
+            last_concat = False
