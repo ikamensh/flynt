@@ -55,13 +55,42 @@ include = [
     "/src",
 ]
 
-[tool.bandit]
-exclude_dirs = ["test"]
-skips = ["B101"]
-
 [tool.mypy]
 exclude = "test/integration/(actual|expected|samples).*"
 
 [[tool.mypy.overrides]]
 module = "astor"
 ignore_missing_imports = true
+
+[tool.ruff]
+extend-select = [
+    "C9",
+    "I",
+    "PLR091",
+    "S",
+]
+extend-ignore = [
+    "S101",
+]
+line-length = 141
+target-version = "py37"
+
+[tool.ruff.mccabe]
+max-complexity = 22
+
+[tool.ruff.pylint]
+max-args = 7
+max-branches = 18
+max-statements = 67
+
+[tool.ruff.per-file-ignores]
+"test/*" = ["I"]
+"test/integration/*" = [
+    "F523",
+    "F821",
+    "F841",
+    "I",
+ ]
+"test/test_lexer.py" = ["F841"]
+"test/test_pyproject.py" = ["E712"]
+"test/test_styles.py" = ["S311"]
