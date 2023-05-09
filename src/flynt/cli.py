@@ -56,6 +56,7 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
         "the resulting single line will fit into the line length limit. "
         "Default value is 88 characters.",
         default=88,
+        type=int,
     )
 
     group = parser.add_mutually_exclusive_group()
