@@ -3,9 +3,9 @@ import logging
 import tokenize
 from typing import Generator
 
-from flynt.lexer.Chunk import Chunk
-from flynt.lexer.context import LexerContext, multi_line_context
-from flynt.lexer.PyToken import PyToken
+from flynt.candidates.chunk import Chunk
+from flynt.candidates.context import LexerContext, multi_line_context
+from flynt.candidates.PyToken import PyToken
 
 log = logging.getLogger(__name__)
 

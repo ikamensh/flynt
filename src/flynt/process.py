@@ -5,12 +5,12 @@ import sys
 from functools import partial
 from typing import Callable, List, Optional, Tuple, Union
 
-from flynt.ast_chunk import AstChunk
+from flynt.candidates import split
+from flynt.candidates.ast_chunk import AstChunk
+from flynt.candidates.chunk import Chunk
 from flynt.exceptions import FlyntException
 from flynt.format import QuoteTypes as qt
 from flynt.format import get_quote_type
-from flynt.lexer import split
-from flynt.lexer.Chunk import Chunk
 from flynt.state import State
 from flynt.static_join.candidates import join_candidates
 from flynt.static_join.transformer import transform_join
@@ -24,9 +24,20 @@ log = logging.getLogger(__name__)
 
 
 class JoinTransformer:
-    """JoinTransformer fills up the resulting code by tracking
-    the last line number and char index. Failed transformations do not need to do anything -
-    not adding results is safe, as original code will be filled in."""
+    """JoinTransformer merges original and edited code by keeping track of last edit location.
+
+    As parsing and unparsing a file risks unintended changes ( escaped chars,
+    formatting quirks, etc.), we try to keep most characters of the original,
+    and only inject our edits on relevant locations.
+
+    This class uses variable functions to identify candidate edit locations,
+    tries to apply edits on candidates. The candidates factory must return candidates in
+    the same order as they occur in the code (first line to last line, left to right chars).
+    Given this property, whenever we decide to transform each candidate or not, we can
+    add all code to the left of candidate to the result as there will be no edits there;
+    and then append the optionally transformed candidate expression. After processing last
+    candidate, we can add the rest of the file.
+    """
 
     def __init__(
         self,

@@ -3,7 +3,11 @@
 import dataclasses
 from typing import Optional
 
-from flynt.lexer.context import LexerContext, multi_line_context, single_line_context
+from flynt.candidates.context import (
+    LexerContext,
+    multi_line_context,
+    single_line_context,
+)
 
 
 @dataclasses.dataclass

@@ -1,4 +1,4 @@
-from flynt.lexer import split
+from flynt.candidates import split
 
 
 def test_str_newline():

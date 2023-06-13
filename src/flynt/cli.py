@@ -8,7 +8,7 @@ import warnings
 from typing import List, Optional
 
 from flynt import __version__
-from flynt.api import fstringify, fstringify_content
+from flynt.api import fstringify, fstringify_code
 from flynt.pyproject_finder import find_pyproject_toml, parse_pyproject_toml
 from flynt.state import State
 
@@ -199,7 +199,7 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
 
     if args.string:
         content = " ".join(args.src)
-        result = fstringify_content(
+        result = fstringify_code(
             content,
             state,
         )
@@ -208,7 +208,7 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
     if "-" in args.src:
         if len(args.src) > 1:
             parser.error("Cannot use '-' with a list of other paths")
-        result = fstringify_content(
+        result = fstringify_code(
             sys.stdin.read()[: -len(os.linesep)],
             state,
             filename="<stdin>",

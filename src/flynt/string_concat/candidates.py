@@ -1,7 +1,7 @@
 import ast
 from typing import Generator, List
 
-from flynt.ast_chunk import AstChunk
+from flynt.candidates.ast_chunk import AstChunk
 from flynt.state import State
 from flynt.utils import is_str_literal
 

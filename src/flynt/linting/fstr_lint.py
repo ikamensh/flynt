@@ -1,7 +1,7 @@
 import ast
 from typing import List
 
-from flynt.ast_chunk import AstChunk
+from flynt.candidates.ast_chunk import AstChunk
 
 
 class FstringFinder(ast.NodeVisitor):

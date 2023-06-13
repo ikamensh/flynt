@@ -35,21 +35,21 @@ From the output of `flynt -h`:
 
 <!-- begin-options -->
 ```
-usage: flynt [-h] [-v | -q] [--no-multiline | -ll LINE_LENGTH] [-d]
-             [-s] [--no-tp] [--no-tf] [-tc] [-tj] [-f] [-a]
-             [-e EXCLUDE [EXCLUDE ...]] [--version]
+usage: flynt [-h] [-v | -q] [--no-multiline | -ll LINE_LENGTH]
+             [-d | --stdout] [-s] [--no-tp] [--no-tf] [-tc] [-tj]
+             [-f] [-a] [-e EXCLUDE [EXCLUDE ...]] [--version]
              [src ...]
 
-flynt v.0.77-beta
+flynt v.0.78
 
 positional arguments:
   src                   source file(s) or directory (or a single `-`
                         to read stdin and output to stdout)
 
-options:
+optional arguments:
   -h, --help            show this help message and exit
   -v, --verbose         run with verbose output
-  -q, --quiet           run without stdout output
+  -q, --quiet           run without outputting statistics to stdout
   --no-multiline        convert only single line expressions
   -ll LINE_LENGTH, --line-length LINE_LENGTH
                         for expressions spanning multiple lines,
@@ -60,6 +60,11 @@ options:
                         the diff instead. Note that this must be
                         used in conjunction with '--fail-on-change'
                         when used for linting purposes.
+  --stdout              Do not change the files in-place and print
+                        the result instead. This argument implies
+                        --quiet, i.e. no statistics are printed to
+                        stdout, only the resulting code. It is
+                        incompatible with --dry-run and --verbose.
   -s, --string          Interpret the input as a Python code snippet
                         and print the converted version. The snippet
                         must use single quotes or escaped double

@@ -1,10 +1,9 @@
 import ast
-import token
 from collections import deque
 from typing import Deque, Iterable, Iterator, Optional
 
-from flynt.lexer.context import LexerContext
-from flynt.lexer.PyToken import PyToken
+from flynt.candidates.context import LexerContext
+from flynt.candidates.PyToken import PyToken
 
 REUSE = "Token was not used"
 
@@ -149,18 +148,6 @@ class Chunk:
     @property
     def n_lines(self) -> int:
         return 1 + self.end_line - self.start_line
-
-    @property
-    def is_multiline(self):
-        return self.n_lines > 1
-
-    @property
-    def contains_raw_strings(self):
-        return any(tok.is_raw_string() for tok in self.tokens)
-
-    @property
-    def contains_multiple_string_tokens(self):
-        return sum(t.toknum == token.STRING for t in self.tokens) > 1
 
     @property
     def quote_type(self) -> Optional[str]:
