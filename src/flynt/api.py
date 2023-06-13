@@ -47,7 +47,7 @@ def _fstringify_file(
             log.error(f"Exception while reading {filename}", exc_info=True)
             return None
 
-    result = fstringify_content(
+    result = fstringify_code(
         contents=contents,
         state=state,
         filename=filename,
@@ -74,11 +74,12 @@ def _fstringify_file(
     return result
 
 
-def fstringify_content(
+def fstringify_code(
     contents: str,
     state: State,
     filename: str = "<code>",
 ) -> Optional[FstringifyResult]:
+    """transform given string, assuming it's python code."""
     try:
         ast_before = ast.parse(contents)
     except SyntaxError:
@@ -148,6 +149,7 @@ def fstringify_files(
     files: List[str],
     state: State,
 ) -> int:
+    """apply transforms to sequence of files, keep shared stats."""
     changed_files = 0
     total_charcount_original = 0
     total_charcount_new = 0

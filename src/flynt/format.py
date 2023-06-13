@@ -20,7 +20,7 @@ class QuoteTypes:
 
 
 def get_quote_type(code: str) -> Optional[str]:
-    from flynt.lexer.PyToken import PyToken
+    from flynt.candidates.PyToken import PyToken
 
     g = tokenize.tokenize(io.BytesIO(code.encode("utf-8")).readline)
     next(g)

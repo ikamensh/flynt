@@ -3,8 +3,8 @@ import random
 import pytest
 
 from flynt.format import QuoteTypes, get_quote_type, set_quote_type
-from flynt.lexer.context import multi_line_context
-from flynt.lexer.split import get_chunks
+from flynt.candidates.context import multi_line_context
+from flynt.candidates.split import get_chunks
 
 
 @pytest.mark.parametrize(
