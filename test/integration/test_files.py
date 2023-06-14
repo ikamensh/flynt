@@ -4,7 +4,7 @@ from test.integration.utils import samples, try_on_file
 
 import pytest
 
-from flynt.process import fstringify_code_by_line
+from flynt.code_editor import fstringify_code_by_line
 from flynt.state import State
 
 

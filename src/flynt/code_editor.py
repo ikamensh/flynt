@@ -23,8 +23,8 @@ noqa_regex = re.compile("#[ ]*noqa.*flynt")
 log = logging.getLogger(__name__)
 
 
-class JoinTransformer:
-    """JoinTransformer merges original and edited code by keeping track of last edit location.
+class CodeEditor:
+    """CodeEditor applies local edits, and keeps most of the original code.
 
     As parsing and unparsing a file risks unintended changes ( escaped chars,
     formatting quirks, etc.), we try to keep most characters of the original,
@@ -60,8 +60,10 @@ class JoinTransformer:
         self.last_line = 0
         self.last_idx = 0
         self.used_up = False
+        self.output: str | None = None
 
-    def fstringify_code_by_line(self) -> Tuple[str, int]:
+    def edit(self) -> Tuple[str, int]:
+        """Apply edits to the original code."""
         assert not self.used_up, "Tried to use JT twice."
         for chunk in self.candidates_iter:
             self.fill_up_to(chunk)
@@ -69,7 +71,8 @@ class JoinTransformer:
 
         self.add_rest()
         self.used_up = True
-        return "".join(self.results)[:-1], self.count_expressions
+        self.output = "".join(self.results)[:-1]
+        return self.output, self.count_expressions
 
     def fill_up_to(self, chunk: Union[Chunk, AstChunk]) -> None:
         start_line, start_idx, _ = (chunk.start_line, chunk.start_idx, chunk.end_idx)
@@ -87,14 +90,17 @@ class JoinTransformer:
 
         self.last_idx = start_idx
 
-    def fill_up_to_line(self, start_line: int) -> None:
-        while self.last_line < start_line:
+    def fill_up_to_line(self, line: int) -> None:
+        while self.last_line < line:
             self.results.append(self.src_lines[self.last_line] + "\n")
             self.last_line += 1
 
     def try_chunk(self, chunk: Union[Chunk, AstChunk]) -> None:
+        """Try applying a transform to a chunk of code.
 
-        for line in self.src_lines[chunk.start_line : chunk.start_line + chunk.n_lines]:
+        Transformation function is free to decide to refuse conversion,
+        e.g. in edge cases that are not supported."""
+        for line in self.src_lines[chunk.start_line : chunk.end_line+1]:
             if noqa_regex.findall(line):
                 # user does not wish for this line to be converted.
                 return
@@ -126,6 +132,9 @@ class JoinTransformer:
         converted: str,
         rest: str,
     ) -> None:
+        """Given a possible edit, see if we want to apply it.
+
+        For example, we might not want to change multiple lines. """
         if contract_lines:
             if get_quote_type(str(chunk)) in (qt.triple_double, qt.triple_single):
                 lines = converted.split("\\n")
@@ -222,9 +231,9 @@ def _transform_code(
     state: State,
 ) -> Tuple[str, int]:
     """returns fstringified version of the code and amount of lines edited."""
-    return JoinTransformer(
+    return CodeEditor(
         code,
         state.len_limit,
         candidates_iter_factory,
         transform_func,
-    ).fstringify_code_by_line()
+    ).edit()

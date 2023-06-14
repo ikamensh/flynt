@@ -5,8 +5,8 @@ import sys
 import pytest
 
 import flynt
+from flynt.api import farewell_message
 from flynt.cli import run_flynt_cli
-from flynt.cli_messages import farewell_message
 
 
 def test_cli_no_args(capsys):

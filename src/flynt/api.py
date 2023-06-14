@@ -10,8 +10,7 @@ from typing import Collection, List, Optional, Tuple
 
 import astor
 
-from flynt.cli_messages import farewell_message
-from flynt.process import (
+from flynt.code_editor import (
     fstringify_code_by_line,
     fstringify_concats,
     fstringify_static_joins,
@@ -184,6 +183,13 @@ def fstringify_files(
         )
 
     return changed_files
+
+
+farewell_message = (
+    "Please run your tests before committing. Did flynt get a perfect conversion? give it a star at: "
+    "\n~ https://github.com/ikamensh/flynt ~"
+    "\nThank you for using flynt. Upgrade more projects and recommend it to your colleagues!\n"
+)
 
 
 def _print_report(

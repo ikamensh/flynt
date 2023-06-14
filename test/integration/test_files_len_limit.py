@@ -4,7 +4,7 @@ from test.integration.utils import try_on_file
 
 import pytest
 
-from flynt.process import fstringify_concats
+from flynt.code_editor import fstringify_concats
 
 
 @pytest.mark.parametrize("filename", ["multiline_limit.py"])
