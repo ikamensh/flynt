@@ -2,7 +2,7 @@ import logging
 import re
 import string
 import sys
-from functools import partial
+from functools import partial, cache
 from typing import Callable, List, Optional, Tuple, Union
 
 from flynt.candidates.ast_call_candidates import call_candidates
@@ -92,6 +92,7 @@ class CodeEditor:
             result.append(self.src_lines[end_line][:end_idx])
         return "\n".join(result)
 
+    @cache
     def code_in_chunk(self, chunk: Union[Chunk, AstChunk]):
         return self.code_between(
             chunk.start_line, chunk.start_idx, chunk.end_line, chunk.end_idx
@@ -132,7 +133,7 @@ class CodeEditor:
             quote_type = (
                 qt.double
                 if chunk.string_in_string and chunk.n_lines == 1
-                else chunk.quote_type
+                else get_quote_type(self.code_in_chunk(chunk))
             )
         except FlyntException:
             quote_type = qt.double

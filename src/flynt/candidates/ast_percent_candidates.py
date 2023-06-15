@@ -8,12 +8,10 @@ import ast
 
 
 def is_percent_format(node):
-    return all(
-        [
-            isinstance(node, ast.BinOp),
-            isinstance(node.op, ast.Mod),
-            isinstance(node.left, ast.Str),
-        ]
+    return (
+        isinstance(node, ast.BinOp) and
+        isinstance(node.op, ast.Mod) and
+        isinstance(node.left, ast.Str)
     )
 
 

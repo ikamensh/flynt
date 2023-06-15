@@ -8,13 +8,11 @@ import ast
 
 
 def is_call_format(node):
-    return all(
-        [
-            isinstance(node, ast.Call),
-            isinstance(node.func, ast.Attribute),
-            isinstance(node.func.value, ast.Str),
-            node.func.attr == "format",
-        ]
+    return (
+        isinstance(node, ast.Call) and
+        isinstance(node.func, ast.Attribute) and
+        node.func.attr == "format" and
+        isinstance(node.func.value, (ast.Str, ast.Name))
     )
 
 
