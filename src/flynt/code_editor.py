@@ -74,6 +74,23 @@ class CodeEditor:
         self.output = "".join(self.results)[:-1]
         return self.output, self.count_expressions
 
+    def code_between(
+        self, start_line: int, start_idx: int, end_line: int, end_idx: int
+    ) -> str:
+        """get source code in the original between two locations."""
+        assert end_line >= start_line
+        result = []
+        if start_line == end_line:
+            assert end_idx >= start_idx
+            result.append(self.src_lines[start_line][start_idx:end_idx])
+        else:
+            result.append(self.src_lines[start_line][start_idx:])
+            full_lines = range(start=start_line, stop=end_line)
+            for l in full_lines:
+                result.append(self.src_lines[l])
+            result.append(self.src_lines[end_idx][:end_idx])
+        return "\n".join(result)
+
     def fill_up_to(self, chunk: Union[Chunk, AstChunk]) -> None:
         start_line, start_idx, _ = (chunk.start_line, chunk.start_idx, chunk.end_idx)
         if start_line == self.last_line:
