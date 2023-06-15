@@ -85,7 +85,7 @@ class CodeEditor:
             result.append(self.src_lines[start_line][start_idx:end_idx])
         else:
             result.append(self.src_lines[start_line][start_idx:])
-            full_lines = range(start_line, end_line)
+            full_lines = range(start_line+1, end_line)
             for line in full_lines:
                 result.append(self.src_lines[line])
             result.append(self.src_lines[end_line][:end_idx])
