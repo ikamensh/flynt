@@ -88,8 +88,13 @@ class CodeEditor:
             full_lines = range(start_line, end_line)
             for line in full_lines:
                 result.append(self.src_lines[line])
-            result.append(self.src_lines[end_idx][:end_idx])
+            result.append(self.src_lines[end_line][:end_idx])
         return "\n".join(result)
+
+    def code_in_chunk(self, chunk: Union[Chunk, AstChunk]):
+        return self.code_between(
+            chunk.start_line, chunk.start_idx, chunk.end_line, chunk.end_idx
+        )
 
     def fill_up_to(self, chunk: Union[Chunk, AstChunk]) -> None:
         start_line, start_idx, _ = (chunk.start_line, chunk.start_idx, chunk.end_idx)
