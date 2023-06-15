@@ -10,6 +10,7 @@ EXCLUDED = {
     "multiline_limit.py",
 }
 samples = {p.name for p in (int_test_path / "samples_in").glob("*.py")} - EXCLUDED
+# samples = {"multiline_1.py"}
 concat_samples = {p.name for p in (int_test_path / "samples_in_concat").glob("*.py")}
 
 

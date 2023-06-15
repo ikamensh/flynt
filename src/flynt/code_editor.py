@@ -158,7 +158,7 @@ class CodeEditor:
 
         For example, we might not want to change multiple lines."""
         if contract_lines:
-            if get_quote_type(str(chunk)) in (qt.triple_double, qt.triple_single):
+            if get_quote_type(self.code_in_chunk(chunk)) in (qt.triple_double, qt.triple_single):
                 lines = converted.split("\\n")
                 lines[-1] += rest
                 lines_fit = all(
