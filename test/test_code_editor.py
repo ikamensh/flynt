@@ -8,11 +8,13 @@ from flynt.format import get_quote_type
 s1 = """s = '%s' % (
                     v['key'])"""
 
+s2 = """\"%(a)-6d %(a)s" % d"""
+
 
 @pytest.mark.parametrize(
     "s_in",
     [
-        s1,
+        s1, s2
     ],
 )
 def test_code_between(s_in):
