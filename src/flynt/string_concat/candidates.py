@@ -1,5 +1,5 @@
 import ast
-from typing import Generator, List
+from typing import List, Iterable
 
 from flynt.candidates.ast_chunk import AstChunk
 from flynt.state import State
@@ -30,7 +30,7 @@ class ConcatHound(ast.NodeVisitor):
             self.generic_visit(node)
 
 
-def concat_candidates(code: str, state: State) -> Generator[AstChunk, None, None]:
+def concat_candidates(code: str, state: State) -> Iterable[AstChunk]:
     tree = ast.parse(code)
 
     ch = ConcatHound()
@@ -38,4 +38,4 @@ def concat_candidates(code: str, state: State) -> Generator[AstChunk, None, None
 
     state.concat_candidates += len(ch.victims)
 
-    yield from ch.victims
+    return ch.victims
