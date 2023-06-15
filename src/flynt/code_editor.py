@@ -5,8 +5,9 @@ import sys
 from functools import partial
 from typing import Callable, List, Optional, Tuple, Union
 
-from flynt.candidates import split
+from flynt.candidates.ast_call_candidates import call_candidates
 from flynt.candidates.ast_chunk import AstChunk
+from flynt.candidates.ast_percent_candidates import percent_candidates
 from flynt.candidates.chunk import Chunk
 from flynt.exceptions import FlyntException
 from flynt.format import QuoteTypes as qt
@@ -218,9 +219,13 @@ class CodeEditor:
 
 def fstringify_code_by_line(code: str, state: State) -> Tuple[str, int]:
     """returns fstringified version of the code and amount of lines edited."""
+
+    def candidates(code, state):
+        return percent_candidates(code, state) + call_candidates(code, state)
+
     return _transform_code(
         code,
-        partial(split.get_fstringify_chunks, lexer_context=state.lexer_context),
+        partial(candidates, state=state),
         partial(transform_chunk, state=state),
         state,
     )
