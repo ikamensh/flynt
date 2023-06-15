@@ -363,7 +363,8 @@ def test_percent_dict_reused_key_aggressive(state: State):
 
     state.aggressive = True
     assert (
-        code_editor.fstringify_code_by_line(percent_dict_reused_key, state)[0] == s_expected
+        code_editor.fstringify_code_by_line(percent_dict_reused_key, state)[0]
+        == s_expected
     )
 
 

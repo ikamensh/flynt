@@ -60,7 +60,7 @@ class CodeEditor:
         self.last_line = 0
         self.last_idx = 0
         self.used_up = False
-        self.output: str | None = None
+        self.output: Optional[str] = None
 
     def edit(self) -> Tuple[str, int]:
         """Apply edits to the original code."""
@@ -100,7 +100,7 @@ class CodeEditor:
 
         Transformation function is free to decide to refuse conversion,
         e.g. in edge cases that are not supported."""
-        for line in self.src_lines[chunk.start_line : chunk.end_line+1]:
+        for line in self.src_lines[chunk.start_line : chunk.end_line + 1]:
             if noqa_regex.findall(line):
                 # user does not wish for this line to be converted.
                 return
@@ -134,7 +134,7 @@ class CodeEditor:
     ) -> None:
         """Given a possible edit, see if we want to apply it.
 
-        For example, we might not want to change multiple lines. """
+        For example, we might not want to change multiple lines."""
         if contract_lines:
             if get_quote_type(str(chunk)) in (qt.triple_double, qt.triple_single):
                 lines = converted.split("\\n")
