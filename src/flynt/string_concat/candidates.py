@@ -1,5 +1,5 @@
 import ast
-from typing import List, Iterable
+from typing import Iterable, List
 
 from flynt.candidates.ast_chunk import AstChunk
 from flynt.state import State
