@@ -1,5 +1,7 @@
 #### v.1.0.0
 
+Drop support for python 3.7.
+
 ##### Moved % and .format expression identification to `ast` instead of legacy token state machine. 
 This has led to small changes in formatting of output code, e.g. type of quotes in ambiguous cases 
 might have changed. Example:

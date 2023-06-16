@@ -2,7 +2,7 @@ import logging
 import re
 import string
 import sys
-from functools import cache, partial
+from functools import lru_cache, partial
 from typing import Callable, List, Optional, Tuple, Union
 
 from flynt.candidates.ast_call_candidates import call_candidates
@@ -93,7 +93,7 @@ class CodeEditor:
             result.append(self.src_lines[end_line][:end_idx])
         return "\n".join(result)
 
-    @cache
+    @lru_cache(None)
     def code_in_chunk(self, chunk: Union[Chunk, AstChunk]):
         return self.code_between(
             chunk.start_line, chunk.start_idx, chunk.end_line, chunk.end_idx
