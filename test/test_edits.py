@@ -540,6 +540,7 @@ def test_unknown_mod_percend_dictionary(state: State):
 
 s_in_mixed_quotes = """'one is {} '"and two is {}".format(one, two)"""
 
+
 def test_mixed_quote_types(state: State):
     """Test that a multiline, mixed-quotes expression is transformed."""
 
@@ -549,7 +550,8 @@ def test_mixed_quote_types(state: State):
     assert out == expected
 
 
-s_in_mixed_quotes_unsafe = """'one is "{}" '"and two is {}".format('"'.join(one), two)"""
+s_in_mixed_quotes_unsafe = """'one "{}" '", two {}".format('"'.join(one), two)"""
+
 
 def test_mixed_quote_types_unsafe(state: State):
     """Test that a multiline, mixed-quotes expression is transformed."""

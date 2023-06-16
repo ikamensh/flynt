@@ -14,9 +14,7 @@ s2 = """\"%(a)-6d %(a)s" % d"""
 
 @pytest.mark.parametrize(
     "s_in",
-    [
-        s1, s2
-    ],
+    [s1, s2],
 )
 def test_code_between_qoute_types(s_in):
 
@@ -28,9 +26,7 @@ def test_code_between_qoute_types(s_in):
 
 @pytest.mark.parametrize(
     "s_in",
-    [
-        s0, s2
-    ],
+    [s0, s2],
 )
 def test_code_between_exact(s_in):
     chunk = set(split.get_fstringify_chunks(s_in)).pop()

@@ -8,9 +8,9 @@ from .ast_chunk import AstChunk
 
 def is_percent_format(node):
     return (
-        isinstance(node, ast.BinOp) and
-        isinstance(node.op, ast.Mod) and
-        isinstance(node.left, ast.Str)
+        isinstance(node, ast.BinOp)
+        and isinstance(node.op, ast.Mod)
+        and isinstance(node.left, ast.Str)
     )
 
 
