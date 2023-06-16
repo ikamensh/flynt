@@ -130,9 +130,13 @@ class CodeEditor:
         if contains_comment(self.code_in_chunk(chunk)):
             return
 
+        # skip raw strings
+        if self.code_in_chunk(chunk)[0] == "r":
+            return
+
+        # skip lines with # noqa comment
         for line in self.src_lines[chunk.start_line : chunk.end_line + 1]:
             if noqa_regex.findall(line):
-                # user does not wish for this line to be converted.
                 return
 
         try:
