@@ -18,6 +18,7 @@ from flynt.static_join.transformer import transform_join
 from flynt.string_concat.candidates import concat_candidates
 from flynt.string_concat.transformer import transform_concat
 from flynt.transform.transform import transform_chunk
+from flynt.utils import contains_comment
 
 noqa_regex = re.compile("#[ ]*noqa.*flynt")
 
@@ -86,7 +87,7 @@ class CodeEditor:
             result.append(self.src_lines[start_line][start_idx:end_idx])
         else:
             result.append(self.src_lines[start_line][start_idx:])
-            full_lines = range(start_line+1, end_line)
+            full_lines = range(start_line + 1, end_line)
             for line in full_lines:
                 result.append(self.src_lines[line])
             result.append(self.src_lines[end_line][:end_idx])
@@ -124,6 +125,11 @@ class CodeEditor:
 
         Transformation function is free to decide to refuse conversion,
         e.g. in edge cases that are not supported."""
+
+        # if a chunk has a comment in it, we should abort.
+        if contains_comment(self.code_in_chunk(chunk)):
+            return
+
         for line in self.src_lines[chunk.start_line : chunk.end_line + 1]:
             if noqa_regex.findall(line):
                 # user does not wish for this line to be converted.
@@ -160,7 +166,10 @@ class CodeEditor:
 
         For example, we might not want to change multiple lines."""
         if contract_lines:
-            if get_quote_type(self.code_in_chunk(chunk)) in (qt.triple_double, qt.triple_single):
+            if get_quote_type(self.code_in_chunk(chunk)) in (
+                qt.triple_double,
+                qt.triple_single,
+            ):
                 lines = converted.split("\\n")
                 lines[-1] += rest
                 lines_fit = all(

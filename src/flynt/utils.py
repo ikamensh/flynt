@@ -7,6 +7,8 @@ from astor.string_repr import pretty_string
 from flynt.exceptions import ConversionRefused
 from flynt.format import QuoteTypes, set_quote_type
 from flynt.linting.fstr_lint import FstrInliner
+import tokenize
+import io
 
 
 def nicer_pretty_string(
@@ -77,3 +79,11 @@ def fixup_transformed(tree: ast.AST, quote_type: Optional[str] = None) -> str:
     new_code = new_code.replace("\n", "\\n")
     new_code = new_code.replace("\t", "\\t")
     return new_code
+
+
+def contains_comment(code: str) -> bool:
+    tokens = tokenize.generate_tokens(io.StringIO(code).readline)
+    for token in tokens:
+        if token.type == tokenize.COMMENT:
+            return True
+    return False
