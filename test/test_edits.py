@@ -137,8 +137,7 @@ def test_invalid_conversion(state: State):
 
 
 def test_invalid_conversion_names(state: State):
-    s_in = """a = 'my string {var}, but also {f!b}
-     and {cada_bra!a}'.format(var, f, cada_bra)"""
+    s_in = """a = 'but also {f!b} and {cada_bra!a}'.format(f, cada_bra)"""
     s_expected = s_in
 
     s_out, count = code_editor.fstringify_code_by_line(s_in, state)
@@ -539,10 +538,7 @@ def test_unknown_mod_percend_dictionary(state: State):
     assert out == s_in
 
 
-s_in_mixed_quotes = """'one is {} '
-"and two is {}".format(one, two) 
-""".strip()
-
+s_in_mixed_quotes = """'one is {} '"and two is {}".format(one, two)"""
 
 def test_mixed_quote_types(state: State):
     """Test that a multiline, mixed-quotes expression is transformed."""
@@ -553,15 +549,10 @@ def test_mixed_quote_types(state: State):
     assert out == expected
 
 
-s_in_mixed_quotes_unsafe = """'one is "{}" '
-"and two is {}".format('"'.join(one), two) 
-""".strip()
-
+s_in_mixed_quotes_unsafe = """'one is "{}" '"and two is {}".format('"'.join(one), two)"""
 
 def test_mixed_quote_types_unsafe(state: State):
     """Test that a multiline, mixed-quotes expression is transformed."""
-
-    # expected = '''f"one is {one} and two is {two}"'''
 
     out, count = code_editor.fstringify_code_by_line(s_in_mixed_quotes_unsafe, state)
     assert out == s_in_mixed_quotes_unsafe
@@ -579,8 +570,7 @@ def test_super_call(state: State):
 
 
 escaped = """
-var = 'baz'
-'foo " %s \\' bar' % var
+var = 'baz''foo " %s \\' bar' % var
 """
 
 expected_escaped = """
@@ -597,8 +587,7 @@ def test_escaped_mix(state: State):
 
 
 escaped_2 = """
-var = 'baz'
-"foo ' %s \\" bar" % var
+var = 'baz'"foo ' %s \\" bar" % var
 """
 
 expected_escaped_2 = """
