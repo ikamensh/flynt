@@ -543,7 +543,7 @@ s_in_mixed_quotes = """'one is {} '"and two is {}".format(one, two)"""
 def test_mixed_quote_types(state: State):
     """Test that a multiline, mixed-quotes expression is transformed."""
 
-    expected = '''f"one is {one} and two is {two}"'''
+    expected = """f'one is {one} and two is {two}'"""
 
     out, count = code_editor.fstringify_code_by_line(s_in_mixed_quotes, state)
     assert out == expected
@@ -591,7 +591,7 @@ var = 'baz'"foo ' %s \\" bar" % var
 """
 
 expected_escaped_2 = """
-var = f"bazfoo ' {var} \\" bar"
+var = f'bazfoo \\' {var} " bar'
 """
 
 
