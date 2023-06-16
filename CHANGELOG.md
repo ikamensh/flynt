@@ -1,3 +1,16 @@
+#### v.1.0.0
+
+Drop support for python 3.7.
+
+##### Moved % and .format expression identification to `ast` instead of legacy token state machine. 
+This has led to small changes in formatting of output code, e.g. type of quotes in ambiguous cases 
+might have changed. Example:
+`'first part {}'"second part {}".format(one, two)` used to result in `"` quotes, 
+and now results in `'`, as in `f'first part {one}second part {two}'`. I think it's a minor change
+in the output. At the same time it's a huge simplification of the source code that should help 
+maintain and develop this project in the future.
+
+
 #### v.0.77
 
 *[Contributed by Aarni Koskela]* `--transform-joins` (`-tj`) will transform string join operations on static operands

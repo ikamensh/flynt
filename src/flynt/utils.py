@@ -1,4 +1,6 @@
 import ast
+import io
+import tokenize
 from typing import Optional
 
 import astor
@@ -77,3 +79,11 @@ def fixup_transformed(tree: ast.AST, quote_type: Optional[str] = None) -> str:
     new_code = new_code.replace("\n", "\\n")
     new_code = new_code.replace("\t", "\\t")
     return new_code
+
+
+def contains_comment(code: str) -> bool:
+    tokens = tokenize.generate_tokens(io.StringIO(code).readline)
+    for token in tokens:
+        if token.type == tokenize.COMMENT:
+            return True
+    return False

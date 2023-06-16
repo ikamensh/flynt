@@ -2,7 +2,7 @@
 from old "%-formatted" and .format(...) strings into Python 3.6+'s f-strings.
 Learn more about f-strings at https://www.python.org/dev/peps/pep-0498/"""
 
-__version__ = "0.78"
+__version__ = "1.0.0"
 
 from flynt.cli import main
 

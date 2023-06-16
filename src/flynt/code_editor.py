@@ -2,11 +2,12 @@ import logging
 import re
 import string
 import sys
-from functools import partial
+from functools import lru_cache, partial
 from typing import Callable, List, Optional, Tuple, Union
 
-from flynt.candidates import split
+from flynt.candidates.ast_call_candidates import call_candidates
 from flynt.candidates.ast_chunk import AstChunk
+from flynt.candidates.ast_percent_candidates import percent_candidates
 from flynt.candidates.chunk import Chunk
 from flynt.exceptions import FlyntException
 from flynt.format import QuoteTypes as qt
@@ -17,6 +18,7 @@ from flynt.static_join.transformer import transform_join
 from flynt.string_concat.candidates import concat_candidates
 from flynt.string_concat.transformer import transform_concat
 from flynt.transform.transform import transform_chunk
+from flynt.utils import contains_comment
 
 noqa_regex = re.compile("#[ ]*noqa.*flynt")
 
@@ -74,6 +76,29 @@ class CodeEditor:
         self.output = "".join(self.results)[:-1]
         return self.output, self.count_expressions
 
+    def code_between(
+        self, start_line: int, start_idx: int, end_line: int, end_idx: int
+    ) -> str:
+        """get source code in the original between two locations."""
+        assert end_line >= start_line
+        result = []
+        if start_line == end_line:
+            assert end_idx >= start_idx
+            result.append(self.src_lines[start_line][start_idx:end_idx])
+        else:
+            result.append(self.src_lines[start_line][start_idx:])
+            full_lines = range(start_line + 1, end_line)
+            for line in full_lines:
+                result.append(self.src_lines[line])
+            result.append(self.src_lines[end_line][:end_idx])
+        return "\n".join(result)
+
+    @lru_cache(None)
+    def code_in_chunk(self, chunk: Union[Chunk, AstChunk]):
+        return self.code_between(
+            chunk.start_line, chunk.start_idx, chunk.end_line, chunk.end_idx
+        )
+
     def fill_up_to(self, chunk: Union[Chunk, AstChunk]) -> None:
         start_line, start_idx, _ = (chunk.start_line, chunk.start_idx, chunk.end_idx)
         if start_line == self.last_line:
@@ -100,16 +125,25 @@ class CodeEditor:
 
         Transformation function is free to decide to refuse conversion,
         e.g. in edge cases that are not supported."""
+
+        # if a chunk has a comment in it, we should abort.
+        if contains_comment(self.code_in_chunk(chunk)):
+            return
+
+        # skip raw strings
+        if self.code_in_chunk(chunk)[0] == "r":
+            return
+
+        # skip lines with # noqa comment
         for line in self.src_lines[chunk.start_line : chunk.end_line + 1]:
             if noqa_regex.findall(line):
-                # user does not wish for this line to be converted.
                 return
 
         try:
             quote_type = (
                 qt.double
                 if chunk.string_in_string and chunk.n_lines == 1
-                else chunk.quote_type
+                else get_quote_type(self.code_in_chunk(chunk))
             )
         except FlyntException:
             quote_type = qt.double
@@ -136,7 +170,10 @@ class CodeEditor:
 
         For example, we might not want to change multiple lines."""
         if contract_lines:
-            if get_quote_type(str(chunk)) in (qt.triple_double, qt.triple_single):
+            if get_quote_type(self.code_in_chunk(chunk)) in (
+                qt.triple_double,
+                qt.triple_single,
+            ):
                 lines = converted.split("\\n")
                 lines[-1] += rest
                 lines_fit = all(
@@ -196,9 +233,15 @@ class CodeEditor:
 
 def fstringify_code_by_line(code: str, state: State) -> Tuple[str, int]:
     """returns fstringified version of the code and amount of lines edited."""
+
+    def candidates(code, state):
+        chunks = percent_candidates(code, state) + call_candidates(code, state)
+        chunks.sort(key=lambda c: (c.start_line, c.start_idx))
+        return chunks
+
     return _transform_code(
         code,
-        partial(split.get_fstringify_chunks, lexer_context=state.lexer_context),
+        partial(candidates, state=state),
         partial(transform_chunk, state=state),
         state,
     )

@@ -2,8 +2,6 @@
 
 import ast
 
-from flynt.format import QuoteTypes
-
 
 class AstChunk:
     def __init__(self, node: ast.AST) -> None:
@@ -39,7 +37,7 @@ class AstChunk:
 
     @property
     def quote_type(self) -> str:
-        return QuoteTypes.double
+        raise NotImplementedError
 
     def __str__(self) -> str:
         from flynt.utils import ast_to_string
