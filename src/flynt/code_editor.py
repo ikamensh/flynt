@@ -222,7 +222,9 @@ def fstringify_code_by_line(code: str, state: State) -> Tuple[str, int]:
     """returns fstringified version of the code and amount of lines edited."""
 
     def candidates(code, state):
-        return percent_candidates(code, state) + call_candidates(code, state)
+        chunks = percent_candidates(code, state) + call_candidates(code, state)
+        chunks.sort(key=lambda c: (c.start_line, c.start_idx))
+        return chunks
 
     return _transform_code(
         code,
