@@ -2,7 +2,7 @@ import logging
 import re
 import string
 import sys
-from functools import partial, cache
+from functools import cache, partial
 from typing import Callable, List, Optional, Tuple, Union
 
 from flynt.candidates.ast_call_candidates import call_candidates

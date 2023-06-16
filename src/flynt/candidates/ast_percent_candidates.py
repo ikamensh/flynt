@@ -1,10 +1,9 @@
+import ast
 from typing import List
 
-from .ast_chunk import AstChunk
 from flynt.state import State
 
-
-import ast
+from .ast_chunk import AstChunk
 
 
 def is_percent_format(node):
