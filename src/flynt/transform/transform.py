@@ -38,8 +38,8 @@ def transform_chunk(
         state.invalid_conversions += 1
         return code, False
     except Exception:
-        traceback.print_exc()
-        log.exception("Exception during conversion of code '%s'", code)
+        msg = traceback.format_exc()
+        log.exception("Exception during conversion of code '%s': %s", code, msg)
         state.invalid_conversions += 1
         return code, False
     else:
