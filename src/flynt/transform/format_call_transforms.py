@@ -89,7 +89,9 @@ def joined_string(
 
     if all(isinstance(segment, ast.Str) for segment in new_segments):
         return (
-            ast.Str("".join(segment.value for segment in new_segments)),  #type:ignore[misc]
+            ast.Str(
+                "".join(segment.value for segment in new_segments) # type:ignore[misc]
+            ),
             False,
         )
 
