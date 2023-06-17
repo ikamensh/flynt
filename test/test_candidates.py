@@ -2,7 +2,7 @@ from functools import partial
 
 from flynt.candidates.ast_percent_candidates import percent_candidates
 from flynt.code_editor import fstring_candidates
-from flynt.utils.state import State
+from flynt.state import State
 
 percent_candidates = partial(percent_candidates, state=State())
 fstring_candidates = partial(fstring_candidates, state=State())

@@ -5,7 +5,7 @@ from typing import Tuple
 
 import pytest
 
-from flynt.utils.state import State
+from flynt.state import State
 from flynt.static_join.candidates import JoinHound, join_candidates
 
 pytestmark = pytest.mark.skipif(

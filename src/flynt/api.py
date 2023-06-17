@@ -15,7 +15,7 @@ from flynt.code_editor import (
     fstringify_concats,
     fstringify_static_joins,
 )
-from flynt.utils.state import State
+from flynt.state import State
 
 log = logging.getLogger(__name__)
 

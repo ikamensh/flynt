@@ -3,7 +3,7 @@ import sys
 import pytest
 
 from flynt import code_editor
-from flynt.utils.state import State
+from flynt.state import State
 
 
 def test_timestamp(state: State):

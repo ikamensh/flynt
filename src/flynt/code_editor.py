@@ -11,7 +11,7 @@ from flynt.candidates.ast_percent_candidates import percent_candidates
 from flynt.exceptions import FlyntException
 from flynt.utils.format import QuoteTypes as qt
 from flynt.utils.format import get_quote_type
-from flynt.utils.state import State
+from flynt.state import State
 from flynt.static_join.candidates import join_candidates
 from flynt.static_join.transformer import transform_join
 from flynt.string_concat.candidates import concat_candidates

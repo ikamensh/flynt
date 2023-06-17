@@ -4,7 +4,7 @@ import sys
 
 import pytest
 
-from flynt.utils.state import State
+from flynt.state import State
 from flynt.string_concat.candidates import ConcatHound, concat_candidates
 
 

@@ -2,7 +2,7 @@ import ast
 from typing import Iterable, List
 
 from flynt.candidates.ast_chunk import AstChunk
-from flynt.utils.state import State
+from flynt.state import State
 from flynt.utils.utils import is_str_literal
 
 

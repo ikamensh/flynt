@@ -1,7 +1,7 @@
 import ast
 from typing import List
 
-from flynt.utils.state import State
+from flynt.state import State
 
 from .ast_chunk import AstChunk
 

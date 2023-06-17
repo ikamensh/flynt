@@ -5,7 +5,7 @@ import pytest
 
 from flynt import api
 from flynt.api import _fstringify_file
-from flynt.utils.state import State
+from flynt.state import State
 
 # These "files" are byte-string constants instead of actual files to prevent e.g. Git or text editors from accidentally changing the encoding
 invalid_unicode = b"# This is not valid unicode: " + bytes([0xFF, 0xFF])
