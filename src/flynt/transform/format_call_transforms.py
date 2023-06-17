@@ -8,7 +8,6 @@ from flynt.exceptions import ConversionRefused, FlyntException
 from flynt.utils import ast_formatted_value, ast_string_node
 
 
-
 stdlib_parse = string.Formatter().parse
 
 
