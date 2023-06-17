@@ -9,14 +9,14 @@ from flynt.candidates.ast_call_candidates import call_candidates
 from flynt.candidates.ast_chunk import AstChunk
 from flynt.candidates.ast_percent_candidates import percent_candidates
 from flynt.exceptions import FlyntException
-from flynt.utils.format import QuoteTypes as qt
-from flynt.utils.format import get_quote_type
 from flynt.state import State
 from flynt.static_join.candidates import join_candidates
 from flynt.static_join.transformer import transform_join
 from flynt.string_concat.candidates import concat_candidates
 from flynt.string_concat.transformer import transform_concat
 from flynt.transform.transform import transform_chunk
+from flynt.utils.format import QuoteTypes as qt
+from flynt.utils.format import get_quote_type
 from flynt.utils.utils import contains_comment
 
 noqa_regex = re.compile("#[ ]*noqa.*flynt")

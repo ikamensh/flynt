@@ -1,14 +1,14 @@
 import ast
 import io
 import tokenize
-from typing import Optional
+from typing import Optional, Union
 
 import astor
 from astor.string_repr import pretty_string
 
 from flynt.exceptions import ConversionRefused
-from flynt.utils.format import QuoteTypes, set_quote_type
 from flynt.linting.fstr_lint import FstrInliner
+from flynt.utils.format import QuoteTypes, set_quote_type
 
 
 def nicer_pretty_string(
@@ -41,7 +41,7 @@ def ast_formatted_value(
     val: ast.AST,
     fmt_str: Optional[str] = None,
     conversion: Optional[str] = None,
-) -> ast.FormattedValue:
+) -> Union[ast.FormattedValue, ast.Str]:
     if isinstance(val, ast.FormattedValue):
         return val
 
@@ -56,6 +56,10 @@ def ast_formatted_value(
         format_spec = None
 
     conversion_val = -1 if conversion is None else ord(conversion.replace("!", ""))
+
+    if format_spec is None and isinstance(val, ast.Str):
+        return val
+
     return ast.FormattedValue(
         value=val,
         conversion=conversion_val,

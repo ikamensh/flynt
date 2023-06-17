@@ -1,7 +1,7 @@
 import ast
 import re
 from collections import deque
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
 from flynt.exceptions import ConversionRefused, FlyntException
 from flynt.transform.format_call_transforms import ast_formatted_value, ast_string_node
@@ -48,7 +48,7 @@ def formatted_value(
     val: ast.AST,
     *,
     aggressive: bool = False,
-) -> ast.FormattedValue:
+) -> Union[ast.FormattedValue, ast.Str]:
     if fmt_spec in integer_specificers:
         fmt_prefix = fmt_prefix.replace(".", "0")
 
@@ -204,11 +204,11 @@ def transform_generic(
     if has_dict_str_format:
         return transform_dict(node, aggressive=aggressive), True
 
-    # if it's just a name then pretend it's tuple to use that code
     str_in_str = any(
         isinstance(n, (ast.Str, ast.JoinedStr)) for n in ast.walk(node.right)
     )
 
+    # if it's just a name then pretend it's tuple to use that code
     node.right = ast.Tuple(elts=[node.right])
     return transform_tuple(node, aggressive=aggressive), str_in_str
 

@@ -655,3 +655,11 @@ def test_110_nonaggr(state: State):
     s_in = "'{conn.login}:{conn.password}@'.format(conn=x)"
     out, count = code_editor.fstringify_code_by_line(s_in, state)
     assert count == 0
+
+
+def test_literal_direct(state: State):
+    s_in = """s = "%s/%s/%s" % (x, "two", y)"""
+    expected_out = 's = f"{x}/two/{y}"'
+    out, count = code_editor.fstringify_code_by_line(s_in, state)
+    assert count == 1
+    assert out == expected_out

@@ -5,9 +5,9 @@ import traceback
 from typing import Tuple
 
 from flynt.exceptions import ConversionRefused
-from flynt.utils.format import QuoteTypes
 from flynt.state import State
 from flynt.transform.FstringifyTransformer import fstringify_node
+from flynt.utils.format import QuoteTypes
 from flynt.utils.utils import fixup_transformed
 
 log = logging.getLogger(__name__)

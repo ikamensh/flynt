@@ -9,8 +9,8 @@ from typing import List, Optional
 
 from flynt import __version__
 from flynt.api import fstringify, fstringify_code
-from flynt.utils.pyproject_finder import find_pyproject_toml, parse_pyproject_toml
 from flynt.state import State
+from flynt.utils.pyproject_finder import find_pyproject_toml, parse_pyproject_toml
 
 
 def main():
