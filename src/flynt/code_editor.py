@@ -3,12 +3,11 @@ import re
 import string
 import sys
 from functools import lru_cache, partial
-from typing import Callable, List, Optional, Tuple, Union
+from typing import Callable, List, Optional, Tuple
 
 from flynt.candidates.ast_call_candidates import call_candidates
 from flynt.candidates.ast_chunk import AstChunk
 from flynt.candidates.ast_percent_candidates import percent_candidates
-from flynt.candidates.chunk import Chunk
 from flynt.exceptions import FlyntException
 from flynt.format import QuoteTypes as qt
 from flynt.format import get_quote_type
@@ -94,12 +93,12 @@ class CodeEditor:
         return "\n".join(result)
 
     @lru_cache(None)
-    def code_in_chunk(self, chunk: Union[Chunk, AstChunk]):
+    def code_in_chunk(self, chunk: AstChunk):
         return self.code_between(
             chunk.start_line, chunk.start_idx, chunk.end_line, chunk.end_idx
         )
 
-    def fill_up_to(self, chunk: Union[Chunk, AstChunk]) -> None:
+    def fill_up_to(self, chunk: AstChunk) -> None:
         start_line, start_idx, _ = (chunk.start_line, chunk.start_idx, chunk.end_idx)
         if start_line == self.last_line:
             self.results.append(
@@ -120,7 +119,7 @@ class CodeEditor:
             self.results.append(self.src_lines[self.last_line] + "\n")
             self.last_line += 1
 
-    def try_chunk(self, chunk: Union[Chunk, AstChunk]) -> None:
+    def try_chunk(self, chunk: AstChunk) -> None:
         """Try applying a transform to a chunk of code.
 
         Transformation function is free to decide to refuse conversion,
@@ -161,7 +160,7 @@ class CodeEditor:
 
     def maybe_replace(
         self,
-        chunk: Union[Chunk, AstChunk],
+        chunk: AstChunk,
         contract_lines: int,
         converted: str,
         rest: str,
@@ -231,17 +230,18 @@ class CodeEditor:
             self.last_line += 1
 
 
+def fstring_candidates(code, state):
+    chunks = percent_candidates(code, state) + call_candidates(code, state)
+    chunks.sort(key=lambda c: (c.start_line, c.start_idx))
+    return chunks
+
+
 def fstringify_code_by_line(code: str, state: State) -> Tuple[str, int]:
     """returns fstringified version of the code and amount of lines edited."""
 
-    def candidates(code, state):
-        chunks = percent_candidates(code, state) + call_candidates(code, state)
-        chunks.sort(key=lambda c: (c.start_line, c.start_idx))
-        return chunks
-
     return _transform_code(
         code,
-        partial(candidates, state=state),
+        partial(fstring_candidates, state=state),
         partial(transform_chunk, state=state),
         state,
     )

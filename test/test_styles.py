@@ -3,27 +3,6 @@ import random
 import pytest
 
 from flynt.format import QuoteTypes, get_quote_type, set_quote_type
-from flynt.candidates.context import multi_line_context
-from flynt.candidates.split import get_chunks
-
-
-@pytest.mark.parametrize(
-    argnames=["code", "quote_type"],
-    argvalues=[
-        ("'abra'", QuoteTypes.single),
-        ('"bobro"', QuoteTypes.double),
-        ("'''abra'''", QuoteTypes.triple_single),
-        ('"""bobro"""', QuoteTypes.triple_double),
-    ],
-)
-def test_get_quote_type_token(code, quote_type):
-
-    g = get_chunks(code, lexer_context=multi_line_context)
-    next(g)
-    chunk = next(g)
-    token = chunk.tokens[0]
-
-    assert token.get_quote_type() == quote_type
 
 
 @pytest.mark.parametrize(
