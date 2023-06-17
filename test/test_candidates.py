@@ -1,25 +1,32 @@
-from flynt.candidates import split
+from functools import partial
+
+from flynt.candidates.ast_percent_candidates import percent_candidates
+from flynt.code_editor import fstring_candidates
+from flynt.state import State
+
+percent_candidates = partial(percent_candidates, state=State())
+fstring_candidates = partial(fstring_candidates, state=State())
 
 
 def test_str_newline():
     s_in = """a = '%s\\n' % var"""
-    generator = split.get_fstringify_chunks(s_in)
-    assert len(list(generator)) == 1
+    candidates = percent_candidates(s_in)
+    assert len(list(candidates)) == 1
 
 
 def test_triple():
     s_in = """print("{}".format(Bar + 1), '%d' % var, "{s}".format(s=foo))"""
-    generator = split.get_fstringify_chunks(s_in)
-    assert len(list(generator)) == 3
+    candidates = fstring_candidates(s_in)
+    assert len(list(candidates)) == 3
 
 
 def test_one_string():
     s = """"my string {}, but also {} and {}".format(var, f, cada_bra)"""
-    chunks_gen = split.get_fstringify_chunks(s)
+    chunks_gen = fstring_candidates(s)
     assert len(list(chunks_gen)) == 1
 
-    generator = split.get_fstringify_chunks(s)
-    chunk = next(generator)
+    candidates = fstring_candidates(s)
+    chunk = next(iter(candidates))
 
     assert chunk.start_line == 0
     assert s[: chunk.end_idx] == s
@@ -27,28 +34,27 @@ def test_one_string():
 
 def test_yields_parsable():
     code_in = """attrs = {'r': '{}'.format(row_idx)}"""
-    generator = split.get_fstringify_chunks(code_in)
-    chunk = next(generator)
+    candidates = fstring_candidates(code_in)
+    chunk = next(iter(candidates))
 
-    assert chunk.is_parseable
     assert code_in[chunk.start_idx : chunk.end_idx] == "'{}'.format(row_idx)"
 
 
 def test_percent_attribute():
     code_in = """src_info = 'application "%s"' % srcobj.import_name"""
 
-    generator = split.get_fstringify_chunks(code_in)
-    chunk = next(generator)
+    candidates = fstring_candidates(code_in)
+    chunk = next(iter(candidates))
 
     expected = """'application "%s"' % srcobj.import_name"""
     assert code_in[chunk.start_idx : chunk.end_idx] == expected
 
 
 def test_percent_call():
-    code_in = """"filename*": "UTF-8''%s" % url_quote(attachment_filename)"""
+    code_in = """{"filename*": "UTF-8''%s" % url_quote(attachment_filename)}"""
 
-    generator = split.get_fstringify_chunks(code_in)
-    chunk = next(generator)
+    candidates = fstring_candidates(code_in)
+    chunk = next(iter(candidates))
 
     expected = """"UTF-8''%s" % url_quote(attachment_filename)"""
     assert code_in[chunk.start_idx : chunk.end_idx] == expected
@@ -60,35 +66,37 @@ def test_two_strings():
         + 'b = "my string {}, but also {} and {}".format(var, what, cada_bra)'
     )
 
-    chunks_gen = split.get_fstringify_chunks(s)
+    chunks_gen = fstring_candidates(s)
     assert len(list(chunks_gen)) == 2
 
-    generator = split.get_fstringify_chunks(s)
+    candidates = fstring_candidates(s)
     lines = s.split("\n")
 
-    chunk = next(generator)
+    chunk = candidates[0]
 
     assert chunk.start_line == 0
     assert lines[0][: chunk.end_idx] == lines[0]
 
-    chunk = next(generator)
+    chunk = candidates[1]
 
     assert chunk.start_line == 1
     assert lines[1][: chunk.end_idx] == lines[1]
 
 
-def test_indented():
-    indented = """
-    var = 5
-    if var % 3 == 0:
-        a = "my string {}".format(var)""".strip()
+indented = """
+var = 5
+if var % 3 == 0:
+    a = "my string {}".format(var)""".strip()
 
-    generator = split.get_fstringify_chunks(indented)
-    assert len(list(generator)) == 1
+
+def test_indented():
+
+    candidates = fstring_candidates(indented)
+    assert len(list(candidates)) == 1
     lines = indented.split("\n")
 
-    generator = split.get_fstringify_chunks(indented)
-    chunk = next(generator)
+    candidates = fstring_candidates(indented)
+    chunk = next(iter(candidates))
 
     assert chunk.start_line == 2
     assert lines[2][: chunk.end_idx] == lines[2]
@@ -100,10 +108,10 @@ def test_empty_line():
     
         attrs = {'r': '{}'.format(row_idx)}""".strip()
 
-    generator = split.get_fstringify_chunks(code_empty_line)
+    candidates = fstring_candidates(code_empty_line)
     lines = code_empty_line.split("\n")
 
-    chunk = next(generator)
+    chunk = next(iter(candidates))
 
     assert chunk.start_line == 2
     assert lines[2][chunk.start_idx : chunk.end_idx] == "'{}'.format(row_idx)"
@@ -119,8 +127,8 @@ raise NoAppException(
 
 
 def test_multiline():
-    generator = split.get_fstringify_chunks(multiline_code)
-    assert len(list(generator)) == 1
+    candidates = fstring_candidates(multiline_code)
+    assert len(list(candidates)) == 1
 
 
 not_implicit_concat = """
@@ -129,8 +137,8 @@ html_title = "Flask Documentation ({})".format(version)""".strip()
 
 
 def test_not_implicit_concat():
-    generator = split.get_fstringify_chunks(not_implicit_concat)
-    assert len(list(generator)) == 1
+    candidates = fstring_candidates(not_implicit_concat)
+    assert len(list(candidates)) == 1
 
 
 line_continuation = """
@@ -139,8 +147,8 @@ a = "Hello {}" \\
 
 
 def test_line_continuation():
-    generator = split.get_fstringify_chunks(line_continuation)
-    assert len(list(generator)) == 1
+    candidates = fstring_candidates(line_continuation)
+    assert len(list(candidates)) == 1
 
 
 tuple_in_list = """
@@ -150,14 +158,14 @@ latex_documents = [
 
 
 def test_tuple_list():
-    generator = split.get_fstringify_chunks(tuple_in_list)
-    assert len(list(generator)) == 1
+    candidates = fstring_candidates(tuple_in_list)
+    assert len(list(candidates)) == 1
 
 
 def test_indexed_percent():
     code = 'return "Hello %s!" % flask.request.args[name]'
-    generator = split.get_fstringify_chunks(code)
-    chunk = next(generator)
+    candidates = fstring_candidates(code)
+    chunk = next(iter(candidates))
 
     assert (
         code[chunk.start_idx : chunk.end_idx]
@@ -167,5 +175,5 @@ def test_indexed_percent():
 
 def test_tuple_percent():
     code = """print("%s %s " % (var+var, abc))"""
-    generator = split.get_fstringify_chunks(tuple_in_list)
-    assert len(list(generator)) == 1
+    candidates = fstring_candidates(code)
+    assert len(list(candidates)) == 1
