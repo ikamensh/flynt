@@ -39,8 +39,7 @@ class JoinTransformer(ast.NodeTransformer):
         return ast.JoinedStr(args_with_interleaved_joiner)
 
 
-def transform_join(code: str, *args, **kwargs) -> Tuple[str, bool]:
-    tree = ast.parse(f"({code})")
+def transform_join(tree: ast.AST, *args, **kwargs) -> Tuple[str, bool]:
 
     jt = JoinTransformer()
     jt.visit(tree)

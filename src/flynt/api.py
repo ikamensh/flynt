@@ -5,6 +5,7 @@ import logging
 import os
 import sys
 import time
+import traceback
 from difflib import unified_diff
 from typing import Collection, List, Optional, Tuple
 
@@ -94,19 +95,31 @@ def fstringify_code(
                 state=state,
             )
         if state.transform_concat:
-            new_code, concat_changes = fstringify_concats(
-                new_code,
-                state=state,
-            )
-            changes += concat_changes
-            state.concat_changes += concat_changes
+            try:
+                new_code, concat_changes = fstringify_concats(
+                    new_code,
+                    state=state,
+                )
+            except Exception:
+                msg = traceback.format_exc()
+                log.error("Transforming concatenation of literal strings failed")
+                log.error(msg)
+            else:
+                changes += concat_changes
+                state.concat_changes += concat_changes
         if state.transform_join:
-            new_code, join_changes = fstringify_static_joins(
-                new_code,
-                state=state,
-            )
-            changes += join_changes
-            state.join_changes += join_changes
+            try:
+                new_code, join_changes = fstringify_static_joins(
+                    new_code,
+                    state=state,
+                )
+            except Exception:
+                msg = traceback.format_exc()
+                log.error("Transforming concatenation of literal strings failed")
+                log.error(msg)
+            else:
+                changes += join_changes
+                state.join_changes += join_changes
 
     except Exception as e:
         msg = str(e) or e.__class__.__name__

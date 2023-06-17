@@ -1,3 +1,4 @@
+import ast
 import sys
 from test.test_static_join.utils import CASES
 from typing import Optional
@@ -13,7 +14,7 @@ pytestmark = pytest.mark.skipif(
 
 @pytest.mark.parametrize("source, expected", CASES)
 def test_transform(source: str, expected: Optional[str]):
-    new, changed = transform_join(source)
+    new, changed = transform_join(ast.parse(source))
     if changed:
         assert new == expected
     else:

@@ -61,11 +61,10 @@ class ConcatTransformer(ast.NodeTransformer):
         return ast.JoinedStr(segments)
 
 
-def transform_concat(code: str, *args, **kwargs) -> Tuple[str, bool]:
-    tree = ast.parse(f"({code})")
+def transform_concat(tree: ast.AST, *args, **kwargs) -> Tuple[str, bool]:
 
     ft = ConcatTransformer()
-    ft.visit(tree)
-    new_code = fixup_transformed(tree)
+    new = ft.visit(tree)
+    new_code = fixup_transformed(new)
 
     return new_code, ft.counter > 0

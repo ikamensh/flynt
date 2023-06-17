@@ -143,7 +143,7 @@ class CodeEditor:
         except FlyntException:
             quote_type = qt.double
 
-        converted, changed = self.transform_func(str(chunk), quote_type=quote_type)
+        converted, changed = self.transform_func(chunk.node, quote_type=quote_type)
         if changed:
             contract_lines = chunk.n_lines - 1
             if contract_lines == 0:
