@@ -5,7 +5,7 @@ from collections import deque
 from typing import Any, Dict, List, Tuple, Union
 
 from flynt.exceptions import ConversionRefused, FlyntException
-from flynt.utils import ast_formatted_value, ast_string_node
+from flynt.utils.utils import ast_formatted_value, ast_string_node
 
 stdlib_parse = string.Formatter().parse
 

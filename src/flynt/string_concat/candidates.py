@@ -2,8 +2,8 @@ import ast
 from typing import Iterable, List
 
 from flynt.candidates.ast_chunk import AstChunk
-from flynt.state import State
-from flynt.utils import is_str_literal
+from flynt.utils.state import State
+from flynt.utils.utils import is_str_literal
 
 
 def is_string_concat(node: ast.AST) -> bool:

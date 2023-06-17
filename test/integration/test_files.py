@@ -5,7 +5,7 @@ from test.integration.utils import samples, try_on_file
 import pytest
 
 from flynt.code_editor import fstringify_code_by_line
-from flynt.state import State
+from flynt.utils.state import State
 
 
 @pytest.mark.parametrize("filename", samples)

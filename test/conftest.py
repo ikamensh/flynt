@@ -1,6 +1,6 @@
 import pytest
 
-from flynt.state import State
+from flynt.utils.state import State
 
 
 @pytest.fixture

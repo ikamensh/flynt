@@ -2,7 +2,7 @@ import ast
 from typing import List, Tuple
 
 from flynt.static_join.utils import get_static_join_bits
-from flynt.utils import ast_formatted_value, ast_string_node, fixup_transformed
+from flynt.utils.utils import ast_formatted_value, ast_string_node, fixup_transformed
 
 
 class JoinTransformer(ast.NodeTransformer):

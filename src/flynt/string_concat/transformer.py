@@ -3,7 +3,7 @@ from typing import List, Tuple
 
 from flynt.string_concat.candidates import is_string_concat
 from flynt.string_concat.string_in_string import check_sns_depth
-from flynt.utils import ast_formatted_value, ast_string_node, fixup_transformed
+from flynt.utils.utils import ast_formatted_value, ast_string_node, fixup_transformed
 
 
 def unpack_binop(node: ast.BinOp) -> List[ast.AST]:

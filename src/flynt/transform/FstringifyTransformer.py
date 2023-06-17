@@ -3,7 +3,7 @@ from typing import Tuple
 
 from flynt.candidates.ast_call_candidates import is_call_format
 from flynt.linting.fstr_lint import FstrInliner
-from flynt.state import State
+from flynt.utils.state import State
 from flynt.transform.format_call_transforms import joined_string
 from flynt.transform.percent_transformer import is_percent_stringify, transform_binop
 

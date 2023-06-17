@@ -7,7 +7,7 @@ import astor
 from astor.string_repr import pretty_string
 
 from flynt.exceptions import ConversionRefused
-from flynt.format import QuoteTypes, set_quote_type
+from flynt.utils.format import QuoteTypes, set_quote_type
 from flynt.linting.fstr_lint import FstrInliner
 
 

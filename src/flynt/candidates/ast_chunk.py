@@ -40,7 +40,7 @@ class AstChunk:
         raise NotImplementedError
 
     def __str__(self) -> str:
-        from flynt.utils import ast_to_string
+        from flynt.utils.utils import ast_to_string
 
         src = ast_to_string(self.node)
         if src.startswith("(") and src.endswith(")"):

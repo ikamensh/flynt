@@ -2,7 +2,7 @@ import ast
 from typing import List
 
 from flynt.candidates.ast_chunk import AstChunk
-from flynt.state import State
+from flynt.utils.state import State
 from flynt.static_join.utils import get_static_join_bits
 
 

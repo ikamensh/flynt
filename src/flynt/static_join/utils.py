@@ -1,7 +1,7 @@
 import ast
 from typing import List, Optional, Sequence, Tuple
 
-from flynt.utils import is_str_literal
+from flynt.utils.utils import is_str_literal
 
 
 def get_joiner_from_static_join(func: ast.AST) -> Optional[str]:

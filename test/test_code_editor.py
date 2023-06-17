@@ -2,7 +2,7 @@ import pytest
 
 from flynt.candidates.ast_percent_candidates import percent_candidates
 from flynt.code_editor import CodeEditor
-from flynt.state import State
+from flynt.utils.state import State
 
 s0 = """'%s' % (
                     v['key'])"""

@@ -2,7 +2,7 @@ import random
 
 import pytest
 
-from flynt.format import QuoteTypes, get_quote_type, set_quote_type
+from flynt.utils.format import QuoteTypes, get_quote_type, set_quote_type
 
 
 @pytest.mark.parametrize(

@@ -5,7 +5,7 @@ from test.integration.utils import concat_samples, try_on_file
 import pytest
 
 from flynt.code_editor import fstringify_code_by_line, fstringify_concats
-from flynt.state import State
+from flynt.utils.state import State
 
 
 def fstringify_and_concats(code: str):
