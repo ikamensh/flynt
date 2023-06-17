@@ -57,10 +57,7 @@ def transform_chunk(
                     exc_info=True,
                 )
                 state.invalid_conversions += 1
-                return (
-                    None,
-                    False,
-                )  # type:ignore # ideally should return one optional str
+                return None, False  # type:ignore # should return one optional str
             else:
                 return new_code, changed
 
