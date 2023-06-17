@@ -9,6 +9,7 @@ from flynt.state import State
 from flynt.transform.FstringifyTransformer import fstringify_node
 from flynt.utils.format import QuoteTypes
 from flynt.utils.utils import fixup_transformed
+from flynt.utils.utils import str_in_str as str_in_str_fn
 
 log = logging.getLogger(__name__)
 
@@ -29,10 +30,11 @@ def transform_chunk(
     """
     try:
         tree = ast.parse(code)
-        converted, changed, str_in_str = fstringify_node(
+        converted, changed = fstringify_node(
             copy.deepcopy(tree),
             state=state,
         )
+        str_in_str = str_in_str_fn(converted)
     except ConversionRefused as cr:
         log.warning("Not converting code '%s': %s", code, cr)
         state.invalid_conversions += 1

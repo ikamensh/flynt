@@ -32,10 +32,6 @@ class AstChunk:
         return 1 + self.end_line - self.start_line
 
     @property
-    def string_in_string(self) -> bool:
-        return False
-
-    @property
     def quote_type(self) -> str:
         raise NotImplementedError
 

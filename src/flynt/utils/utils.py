@@ -37,6 +37,36 @@ def is_str_literal(node: ast.AST) -> bool:
     return isinstance(node, (ast.Str, ast.JoinedStr))
 
 
+class StringInStringVisitor(ast.NodeVisitor):
+    def __init__(self):
+        self.string_in_string = False
+        self.in_fmt_value = False
+
+    def visit_FormattedValue(self, node):
+        if self.in_fmt_value:
+            self.generic_visit(node.value)
+            return
+
+        self.in_fmt_value = True
+        self.generic_visit(node.value)
+        self.in_fmt_value = False
+
+    def visit_JoinedStr(self, node):
+        if self.in_fmt_value:
+            self.string_in_string = True
+        self.generic_visit(node)
+
+    def visit_Str(self, node):
+        if self.in_fmt_value:
+            self.string_in_string = True
+
+
+def str_in_str(node: ast.AST) -> bool:
+    sisv = StringInStringVisitor()
+    sisv.visit(node)
+    return sisv.string_in_string
+
+
 def ast_formatted_value(
     val: ast.AST,
     fmt_str: Optional[str] = None,

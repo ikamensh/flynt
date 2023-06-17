@@ -139,11 +139,7 @@ class CodeEditor:
                 return
 
         try:
-            quote_type = (
-                qt.double
-                if chunk.string_in_string and chunk.n_lines == 1
-                else get_quote_type(self.code_in_chunk(chunk))
-            )
+            quote_type = get_quote_type(self.code_in_chunk(chunk))
         except FlyntException:
             quote_type = qt.double
 

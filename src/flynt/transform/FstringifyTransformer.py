@@ -16,7 +16,6 @@ class FstringifyTransformer(ast.NodeTransformer):
         super().__init__()
         self.state = state
         self.counter = 0
-        self.string_in_string = False
 
     def visit_Call(self, node: ast.Call) -> ast.AST:
         """
@@ -29,11 +28,10 @@ class FstringifyTransformer(ast.NodeTransformer):
             if any(isinstance(arg, ast.Starred) for arg in node.args):
                 return node
 
-            result_node, str_in_str = joined_string(
+            result_node = joined_string(
                 node,
                 aggressive=self.state.aggressive,
             )
-            self.string_in_string = str_in_str
             self.visit(result_node)
             self.counter += 1
             self.state.call_transforms += 1
@@ -71,11 +69,10 @@ class FstringifyTransformer(ast.NodeTransformer):
                 ):
                     return node
 
-            result_node, str_in_str = transform_binop(
+            result_node = transform_binop(
                 node,
                 aggressive=self.state.aggressive,
             )
-            self.string_in_string = str_in_str
             self.counter += 1
             self.state.percent_transforms += 1
             return result_node
@@ -86,10 +83,10 @@ class FstringifyTransformer(ast.NodeTransformer):
 def fstringify_node(
     node: ast.AST,
     state: State,
-) -> Tuple[ast.AST, bool, bool]:
+) -> Tuple[ast.AST, bool]:
     ft = FstringifyTransformer(state)
     result = ft.visit(node)
     il = FstrInliner()
     il.visit(result)
 
-    return result, ft.counter > 0, ft.string_in_string
+    return result, ft.counter > 0

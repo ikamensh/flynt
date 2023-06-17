@@ -1,7 +1,7 @@
 import ast
 import re
 from collections import deque
-from typing import List, Tuple, Union
+from typing import List, Union
 
 from flynt.exceptions import ConversionRefused, FlyntException
 from flynt.transform.format_call_transforms import ast_formatted_value, ast_string_node
@@ -186,7 +186,7 @@ def transform_tuple(node: ast.BinOp, *, aggressive: bool = False) -> ast.JoinedS
 def transform_generic(
     node: ast.BinOp,
     aggressive: bool = False,
-) -> Tuple[ast.JoinedStr, bool]:
+) -> ast.JoinedStr:
     """Convert a `BinOp` `%` formatted str with a unknown name on the `node.right` to an f-string.
 
     When `node.right` is a Name since we don't know if it's a single var or a dict so we sniff the string.
@@ -202,15 +202,13 @@ def transform_generic(
     assert isinstance(node.left, ast.Str)
     has_dict_str_format = DICT_PATTERN.findall(node.left.s)
     if has_dict_str_format:
-        return transform_dict(node, aggressive=aggressive), True
+        return transform_dict(node, aggressive=aggressive)
 
-    str_in_str = any(
-        isinstance(n, (ast.Str, ast.JoinedStr)) for n in ast.walk(node.right)
-    )
+    any(isinstance(n, (ast.Str, ast.JoinedStr)) for n in ast.walk(node.right))
 
     # if it's just a name then pretend it's tuple to use that code
     node.right = ast.Tuple(elts=[node.right])
-    return transform_tuple(node, aggressive=aggressive), str_in_str
+    return transform_tuple(node, aggressive=aggressive)
 
 
 supported_operands = [
@@ -228,18 +226,15 @@ def transform_binop(
     node: ast.BinOp,
     *,
     aggressive: bool = False,
-) -> Tuple[ast.JoinedStr, bool]:
+) -> ast.JoinedStr:
     if isinstance(node.right, tuple(supported_operands)):
         return transform_generic(node, aggressive=aggressive)
 
     if isinstance(node.right, ast.Tuple):
-        return (
-            transform_tuple(node, aggressive=aggressive),
-            any(isinstance(n, (ast.Str, ast.JoinedStr)) for n in ast.walk(node.right)),
-        )
+        return transform_tuple(node, aggressive=aggressive)
 
     if isinstance(node.right, ast.Dict):
         # todo adapt transform dict to Dict literal
-        return transform_dict(node, aggressive=aggressive), False
+        return transform_dict(node, aggressive=aggressive)
 
     raise ConversionRefused(f"Unsupported `node.right` class: {type(node.right)}")

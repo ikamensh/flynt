@@ -1,7 +1,7 @@
 import ast
 import string
 from collections import deque
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Dict, List, Union
 
 from flynt.exceptions import ConversionRefused, FlyntException
 from flynt.utils.utils import ast_formatted_value, ast_string_node
@@ -13,7 +13,7 @@ def joined_string(
     fmt_call: ast.Call,
     *,
     aggressive: bool = False,
-) -> Tuple[Union[ast.JoinedStr, ast.Str], bool]:
+) -> Union[ast.JoinedStr, ast.Str]:
     """Transform a "...".format() call node into a f-string node."""
     assert isinstance(fmt_call.func, ast.Attribute) and isinstance(
         fmt_call.func.value,
@@ -26,9 +26,7 @@ def joined_string(
         inserted_value_nodes += list(ast.walk(a))
     for kw in fmt_call.keywords:
         inserted_value_nodes += list(ast.walk(kw.value))
-    str_in_str = any(
-        isinstance(n, (ast.Str, ast.JoinedStr)) for n in inserted_value_nodes
-    )
+    any(isinstance(n, (ast.Str, ast.JoinedStr)) for n in inserted_value_nodes)
 
     for i, val in enumerate(fmt_call.args):
         var_map[i] = val
@@ -88,11 +86,8 @@ def joined_string(
         )
 
     if all(isinstance(segment, ast.Str) for segment in new_segments):
-        return (
-            ast.Str(
-                "".join(segment.value for segment in new_segments)  # type:ignore[misc]
-            ),
-            False,
+        return ast.Str(
+            "".join(segment.value for segment in new_segments)  # type:ignore[misc]
         )
 
-    return ast.JoinedStr(new_segments), str_in_str
+    return ast.JoinedStr(new_segments)
