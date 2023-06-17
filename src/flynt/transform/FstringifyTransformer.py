@@ -1,9 +1,10 @@
 import ast
 from typing import Tuple
 
+from flynt.candidates.ast_call_candidates import is_call_format
 from flynt.linting.fstr_lint import FstrInliner
 from flynt.state import State
-from flynt.transform.format_call_transforms import joined_string, matching_call
+from flynt.transform.format_call_transforms import joined_string
 from flynt.transform.percent_transformer import is_percent_stringify, transform_binop
 
 
@@ -21,7 +22,7 @@ class FstringifyTransformer(ast.NodeTransformer):
         """
         Convert `ast.Call` to `ast.JoinedStr` f-string.
         """
-        if self.state.transform_format and matching_call(node):
+        if self.state.transform_format and is_call_format(node):
             self.state.call_candidates += 1
 
             # bail in these edge cases...

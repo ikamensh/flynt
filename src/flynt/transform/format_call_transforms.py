@@ -8,19 +8,6 @@ from flynt.exceptions import ConversionRefused, FlyntException
 from flynt.utils import ast_formatted_value, ast_string_node
 
 
-def matching_call(node: ast.Call) -> bool:
-    """
-    Check if an ast Node represents a "...".format() call.
-    """
-    func = node.func
-    if not isinstance(func, ast.Attribute):
-        return False
-    call_from_string = hasattr(func, "value") and (
-        isinstance(func.value, ast.Str)
-        or (isinstance(func.value, ast.Constant) and isinstance(func.value.value, str))
-    )
-    return isinstance(node, ast.Call) and call_from_string and func.attr == "format"
-
 
 stdlib_parse = string.Formatter().parse
 
