@@ -53,9 +53,6 @@ class PyToken:
     def is_legacy_unicode_string(self) -> bool:
         return self.toknum == token.STRING and self.tokval[0] == "u"
 
-    def is_raw_string(self) -> bool:
-        return self.toknum == token.STRING and self.tokval[0] == "r"
-
     def __repr__(self):
         return f"PyToken {self.toknum} : {self.tokval}"
 
