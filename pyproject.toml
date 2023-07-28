@@ -83,7 +83,7 @@ max-branches = 18
 max-statements = 67
 
 [tool.ruff.per-file-ignores]
-"test/*" = ["I"]
+"test/*" = ["I", "S"]
 "test/integration/*" = [
     "F523",
     "F821",
