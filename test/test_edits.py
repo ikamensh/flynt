@@ -663,3 +663,12 @@ def test_literal_direct(state: State):
     out, count = code_editor.fstringify_code_by_line(s_in, state)
     assert count == 1
     assert out == expected_out
+
+
+def test_joins():
+
+    s_in = """';'.join(['a', 'b', 'c'])"""
+    expected_out = '"a;b;c"'
+    out, count = code_editor.fstringify_static_joins(s_in, State())
+    assert count > 0
+    assert out == expected_out

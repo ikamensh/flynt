@@ -101,7 +101,18 @@ def ast_string_node(string: str) -> ast.Str:
     return ast.Str(s=string)
 
 
+def check_is_string_node(tree: ast.AST):
+    """Raise an exception is tree doesn't represent a string"""
+    if isinstance(tree, ast.Module):
+        tree = tree.body[0]
+    if isinstance(tree, ast.Expr):
+        tree = tree.value
+    assert isinstance(tree, (ast.JoinedStr, ast.Str)), f"found {type(tree)}"
+
+
 def fixup_transformed(tree: ast.AST, quote_type: Optional[str] = None) -> str:
+    """Given a transformed string / fstring ast node, transform it to a string."""
+    # check_is_string_node(tree)
     il = FstrInliner()
     il.visit(tree)
     new_code = ast_to_string(tree)
@@ -112,6 +123,7 @@ def fixup_transformed(tree: ast.AST, quote_type: Optional[str] = None) -> str:
         new_code = set_quote_type(new_code, quote_type)
     new_code = new_code.replace("\n", "\\n")
     new_code = new_code.replace("\t", "\\t")
+    # ast.parse(new_code)
     return new_code
 
 

@@ -65,6 +65,9 @@ def transform_concat(tree: ast.AST, *args, **kwargs) -> Tuple[str, bool]:
 
     ft = ConcatTransformer()
     new = ft.visit(tree)
-    new_code = fixup_transformed(new)
-
-    return new_code, ft.counter > 0
+    changed = ft.counter > 0
+    if changed:
+        new_code = fixup_transformed(new)
+    else:
+        new_code = ""
+    return new_code, changed
