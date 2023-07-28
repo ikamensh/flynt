@@ -42,6 +42,10 @@ class JoinTransformer(ast.NodeTransformer):
 def transform_join(tree: ast.AST, *args, **kwargs) -> Tuple[str, bool]:
 
     jt = JoinTransformer()
-    jt.visit(tree)
-    new_code = fixup_transformed(tree)
-    return new_code, jt.counter > 0
+    new_tree = jt.visit(tree)
+    changed = jt.counter > 0
+    if changed:
+        new_code = fixup_transformed(new_tree)
+    else:
+        new_code = ""
+    return new_code, changed
