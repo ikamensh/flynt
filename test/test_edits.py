@@ -40,6 +40,24 @@ def test_call(state: State):
 
 def test_string_specific_len(state: State):
     s_in = """'%5s' % CLASS_NAMES[labels[j]]"""
+    s_expected = """f'{CLASS_NAMES[labels[j]]:>5}'"""
+
+    state.aggressive = True
+    s_out, count = code_editor.fstringify_code_by_line(s_in, state)
+    assert s_out == s_expected
+
+
+def test_string_specific_len_right_aligned(state: State):
+    s_in = """'%5s' % CLASS_NAMES[labels[j]]"""
+    s_expected = """f'{CLASS_NAMES[labels[j]]:>5}'"""
+
+    state.aggressive = True
+    s_out, count = code_editor.fstringify_code_by_line(s_in, state)
+    assert s_out == s_expected
+
+
+def test_string_specific_len_left_aligned(state: State):
+    s_in = """'%-5s' % CLASS_NAMES[labels[j]]"""
     s_expected = """f'{CLASS_NAMES[labels[j]]:5}'"""
 
     state.aggressive = True
