@@ -151,7 +151,7 @@ def fstringify_code(
     if not len(ast_before.body) == len(ast_after.body):
         log.error(
             f"Faulty result during conversion on {filename}: "
-            f"statement count has changed, which is not intended - skipping.",
+            "statement count has changed, which is not intended - skipping.",
         )
         return None
     return result

@@ -228,7 +228,7 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
             supported_args.sort()
             warnings.warn(
                 f"Unknown config options: {redundant}. "
-                f"This might be a spelling problem. "
+                "This might be a spelling problem. "
                 f"Supported options are: {supported_args}",
             )
         parser.set_defaults(**cfg)
