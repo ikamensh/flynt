@@ -556,8 +556,10 @@ s_in_mixed_quotes_unsafe = """'one "{}" '", two {}".format('"'.join(one), two)""
 def test_mixed_quote_types_unsafe(state: State):
     """Test that a multiline, mixed-quotes expression is transformed."""
 
-    out, count = code_editor.fstringify_code_by_line(s_in_mixed_quotes_unsafe, state)
-    assert out == s_in_mixed_quotes_unsafe
+    expected = '''f"one is \\"{'\\"'.join(one)}\\" and two is {two}"'''
+
+    out, count = process.fstringify_code_by_line(s_in_mixed_quotes_unsafe, state)
+    assert out == expected
 
 
 def test_super_call(state: State):
