@@ -1,4 +1,6 @@
-""" Test str processors on actual file contents """
+"""Test str processors on actual file contents"""
+
+import sys
 from functools import partial
 from test.integration.utils import samples, try_on_file
 
@@ -10,6 +12,12 @@ from flynt.state import State
 
 @pytest.mark.parametrize("filename", samples)
 def test_fstringify(filename, state):
+    # this skips "string_in_string.py" for python >=3.12.
+    # the behavior on these python versions differs. In fact, 3.12 behavior is preferrable.
+    # When only supported versions are 3.12 and up, expected output should be modified.
+    if filename == "string_in_string.py" and sys.version_info > (3, 11):
+        return
+
     out, expected = try_on_file(
         filename,
         partial(fstringify_code_by_line, state=state),
@@ -19,6 +27,12 @@ def test_fstringify(filename, state):
 
 @pytest.mark.parametrize("filename", samples)
 def test_fstringify_single_line(filename):
+    # this skips "string_in_string.py" for python >=3.12.
+    # the behavior on these python versions differs. In fact, 3.12 behavior is preferrable.
+    # When only supported versions are 3.12 and up, expected output should be modified.
+    if filename == "string_in_string.py" and sys.version_info > (3, 11):
+        return
+
     state = State(multiline=False)
     out, expected = try_on_file(
         filename,

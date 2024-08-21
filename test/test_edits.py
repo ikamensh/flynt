@@ -558,7 +558,7 @@ def test_mixed_quote_types_unsafe(state: State):
 
     Currently its transformed when running on python >= 3.12, otherwise not."""
 
-    expected = '''f"one is \\"{'\\"'.join(one)}\\" and two is {two}"'''
+    expected = '''f"one \\"{'\\"'.join(one)}\\" , two {two}"'''
 
     out, count = code_editor.fstringify_code_by_line(s_in_mixed_quotes_unsafe, state)
     if sys.version_info < (3, 12):
