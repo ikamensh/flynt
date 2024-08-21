@@ -558,7 +558,7 @@ def test_mixed_quote_types_unsafe(state: State):
 
     expected = '''f"one is \\"{'\\"'.join(one)}\\" and two is {two}"'''
 
-    out, count = process.fstringify_code_by_line(s_in_mixed_quotes_unsafe, state)
+    out, count = code_editor.fstringify_code_by_line(s_in_mixed_quotes_unsafe, state)
     assert out == expected
 
 
