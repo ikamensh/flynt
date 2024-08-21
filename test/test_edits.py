@@ -572,10 +572,17 @@ s_in_mixed_quotes_unsafe = """'one "{}" '", two {}".format('"'.join(one), two)""
 
 
 def test_mixed_quote_types_unsafe(state: State):
-    """Test that a multiline, mixed-quotes expression is transformed."""
+    """Transforming an expression with quotes in it is more tricky.
+
+    Currently its transformed when running on python >= 3.12, otherwise not."""
+
+    expected = '''f"one \\"{'\\"'.join(one)}\\" , two {two}"'''
 
     out, count = code_editor.fstringify_code_by_line(s_in_mixed_quotes_unsafe, state)
-    assert out == s_in_mixed_quotes_unsafe
+    if sys.version_info < (3, 12):
+        assert out == s_in_mixed_quotes_unsafe
+    else:
+        assert out == expected
 
 
 def test_super_call(state: State):
