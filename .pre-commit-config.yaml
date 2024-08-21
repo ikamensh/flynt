@@ -12,7 +12,7 @@ repos:
     rev: v0.6.1
     hooks:
       - id: ruff
-  - repo: https://github.com/psf/blackˆc
+  - repo: https://github.com/psf/black
     rev: 22.10.0
     hooks:
       - id: black
