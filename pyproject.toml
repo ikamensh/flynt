@@ -62,6 +62,11 @@ module = "astor"
 ignore_missing_imports = true
 
 [tool.ruff]
+line-length = 141
+target-version = "py37"
+exclude = ["build/**"]
+
+[tool.ruff.lint]
 extend-select = [
     "C9",
     "I",
@@ -71,18 +76,16 @@ extend-select = [
 extend-ignore = [
     "S101",
 ]
-line-length = 141
-target-version = "py37"
 
-[tool.ruff.mccabe]
+[tool.ruff.lint.mccabe]
 max-complexity = 22
 
-[tool.ruff.pylint]
+[tool.ruff.lint.pylint]
 max-args = 7
 max-branches = 18
 max-statements = 67
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "test/*" = ["I", "S"]
 "test/integration/*" = [
     "F523",
@@ -93,3 +96,5 @@ max-statements = 67
 "test/test_lexer.py" = ["F841"]
 "test/test_pyproject.py" = ["E712"]
 "test/test_styles.py" = ["S311"]
+"**/tests/*" = ["S101", "ANN"]
+"**/__init__.py" = ["F401"]
