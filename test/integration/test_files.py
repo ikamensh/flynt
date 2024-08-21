@@ -13,7 +13,7 @@ from flynt.state import State
 @pytest.mark.parametrize("filename", samples)
 def test_fstringify(filename, state):
     # this skips "string_in_string.py" for python >=3.12.
-    # the behavior on these python versions differs. In fact, 3.12 behavior is preferrable.
+    # the behavior on these python versions differs. In fact, 3.12 behavior is preferable.
     # When only supported versions are 3.12 and up, expected output should be modified.
     if filename == "string_in_string.py" and sys.version_info > (3, 11):
         return
@@ -28,7 +28,7 @@ def test_fstringify(filename, state):
 @pytest.mark.parametrize("filename", samples)
 def test_fstringify_single_line(filename):
     # this skips "string_in_string.py" for python >=3.12.
-    # the behavior on these python versions differs. In fact, 3.12 behavior is preferrable.
+    # the behavior on these python versions differs. In fact, 3.12 behavior is preferable.
     # When only supported versions are 3.12 and up, expected output should be modified.
     if filename == "string_in_string.py" and sys.version_info > (3, 11):
         return
