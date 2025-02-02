@@ -36,7 +36,20 @@ def is_percent_stringify(node: ast.BinOp) -> bool:
     )
 
 
+def _is_builtin_int_call(val: ast.AST) -> bool:
+    return _is_int_call(val) or _is_len_call(val)
+
+
+def _is_int_call(val: ast.AST) -> bool:
+    return (
+        isinstance(val, ast.Call)
+        and isinstance(val.func, ast.Name)
+        and val.func.id == "int"
+    )
+
+
 def _is_len_call(val: ast.AST) -> bool:
+    # assume built-in len always returns int
     return (
         isinstance(val, ast.Call)
         and isinstance(val.func, ast.Name)
@@ -67,8 +80,8 @@ def formatted_value(
         )
     fmt_spec = translate_conversion_types.get(fmt_spec, fmt_spec)
     if fmt_spec == "d":
-        # assume built-in len always returns int
-        if not _is_len_call(val):
+        # test if is a built-in that returns int
+        if not _is_builtin_int_call(val):
             if not aggressive:
                 raise ConversionRefused(
                     "Skipping %d formatting - fstrings behave differently from % formatting.",
