@@ -65,6 +65,15 @@ def test_string_specific_len_left_aligned(state: State):
     assert s_out == s_expected
 
 
+def test_dont_wrap_int(state: State):
+    s_in = """print('Int cast %d' % int(18.81))"""
+    s_expected = """print(f'Int cast {int(18.81)}')"""
+
+    state.aggressive = True
+    s_out, count = code_editor.fstringify_code_by_line(s_in, state)
+    assert s_out == s_expected
+
+
 def test_dont_wrap_len(state: State):
     s_in = """print('List length %d' % len(sys.argv))"""
     s_expected = """print(f'List length {len(sys.argv)}')"""
@@ -84,6 +93,14 @@ def test_string_in_string_single(state: State):
 
 def test_percent_tuple(state: State):
     s_in = """print("%s %s " % (var+var, abc))"""
+    s_expected = """print(f"{var + var} {abc} ")"""
+
+    s_out, count = code_editor.fstringify_code_by_line(s_in, state)
+    assert s_out == s_expected
+
+
+def test_percent_list(state: State):
+    s_in = """print("%s %s " % [var+var, abc])"""
     s_expected = """print(f"{var + var} {abc} ")"""
 
     s_out, count = code_editor.fstringify_code_by_line(s_in, state)

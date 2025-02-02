@@ -314,6 +314,8 @@ def _resolve_files(
         else:
             files.append(abs_path)
 
+    files = [f.replace("\\", "/") for f in files]
+    _blacklist = {f.replace("\\", "/") for f in _blacklist}
     files = [f for f in files if all(b not in f for b in _blacklist)]
     return files
 
