@@ -30,7 +30,9 @@ def is_percent_stringify(node: ast.BinOp) -> bool:
     return (
         isinstance(node.left, ast.Str)
         and isinstance(node.op, ast.Mod)
-        and isinstance(node.right, tuple([ast.Tuple, ast.Dict, *supported_operands]))
+        and isinstance(
+            node.right, tuple([ast.Tuple, ast.List, ast.Dict, *supported_operands])
+        )
     )
 
 
@@ -196,6 +198,25 @@ def transform_tuple(node: ast.BinOp, *, aggressive: bool = False) -> ast.JoinedS
     return ast.JoinedStr(segments)
 
 
+def transform_list(node: ast.BinOp, *, aggressive: bool = False) -> ast.JoinedStr:
+    """Convert a `BinOp` `%` formatted str with a list on the right to an f-string.
+
+    Takes an ast.BinOp representing `"1. %s 2. %s" % [a, b]`
+    and converted it to a ast.JoinedStr representing `f"1. {a} 2. {b}"`
+    Borrow the core logic by converting the list into a ast.Tuple
+
+    Args:
+       node (ast.BinOp): The node to convert to a f-string
+
+    Returns ast.JoinedStr (f-string)
+    """
+    assert isinstance(node.right, ast.List)
+
+    # convert the list to a tuple to use that code
+    node.right = ast.Tuple(elts=node.right.elts)
+    return transform_tuple(node, aggressive=aggressive)
+
+
 def transform_generic(
     node: ast.BinOp,
     aggressive: bool = False,
@@ -245,6 +266,9 @@ def transform_binop(
 
     if isinstance(node.right, ast.Tuple):
         return transform_tuple(node, aggressive=aggressive)
+
+    if isinstance(node.right, ast.List):
+        return transform_list(node, aggressive=aggressive)
 
     if isinstance(node.right, ast.Dict):
         # todo adapt transform dict to Dict literal

@@ -81,6 +81,14 @@ def test_percent_tuple(state: State):
     assert s_out == s_expected
 
 
+def test_percent_list(state: State):
+    s_in = """print("%s %s " % [var+var, abc])"""
+    s_expected = """print(f"{var + var} {abc} ")"""
+
+    s_out, count = code_editor.fstringify_code_by_line(s_in, state)
+    assert s_out == s_expected
+
+
 def test_part_of_concat(state: State):
     s_in = """print('blah{}'.format(thing) + 'blah' + otherThing + "is %f" % x)"""
     s_expected = """print(f'blah{thing}' + 'blah' + otherThing + f"is {x:f}")"""

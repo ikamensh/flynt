@@ -43,7 +43,7 @@ class FstringifyTransformer(ast.NodeTransformer):
         """Convert `ast.BinOp` to `ast.JoinedStr` f-string.
 
         Currently only if a string literal `ast.Str` is on the left side of the `%`
-        and one of `ast.Tuple`, `ast.Name`, `ast.Dict` is on the right
+        and one of `ast.Tuple`, `ast.List`, `ast.Name`, `ast.Dict` is on the right
 
         Args:
             node (ast.BinOp): The node to convert to a f-string
