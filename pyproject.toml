@@ -23,6 +23,8 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Utilities",
 ]
@@ -63,7 +65,7 @@ ignore_missing_imports = true
 
 [tool.ruff]
 line-length = 141
-target-version = "py37"
+target-version = "py39"
 exclude = ["build/**"]
 
 [tool.ruff.lint]
