@@ -11,7 +11,7 @@ FORMATS = "diouxXeEfFgGcrsa"
 FORMAT_GROUP = f"[hlL]?[{FORMATS}]"
 FORMAT_GROUP_MATCH = f"[hlL]?([{FORMATS}])"
 
-PREFIX_GROUP = "[0-9]*[.]?[0-9]*"
+PREFIX_GROUP = "[+-]?[0-9]*[.]?[0-9]*"
 
 ANY_DICT = re.compile(r"(?<!%)%\([^)]+?\)")
 DICT_PATTERN = re.compile(rf"(%\([^)]+\){PREFIX_GROUP}{FORMAT_GROUP})")
@@ -68,6 +68,32 @@ def formatted_value(
         fmt_prefix = fmt_prefix.replace(".", "0")
 
     if fmt_spec in conversion_methods:
+        if fmt_spec == "s" and fmt_prefix:
+            # Strings are right aligned in percent fmt by default, and indicate
+            # left alignment through a negative prefix.
+            #
+            # fstrings left align by default, and separate signs from alignment
+            #
+            # Python even accepts float values here, for both percent fmt
+            # and fstrings
+            #
+            # In order to not have to figure out what sort of number we are
+            # dealing with, just look at the leading - sign (if there is one)
+            # and remove it for the conversion
+            if fmt_prefix.startswith("-"):
+                # Left alignment
+                return ast_formatted_value(
+                    val,
+                    fmt_str=f"{fmt_prefix[1:]}",
+                    conversion=conversion_methods[fmt_spec],
+                )
+            if aggressive and not fmt_prefix.startswith("-"):
+                # Right alignment
+                return ast_formatted_value(
+                    val,
+                    fmt_str=f">{fmt_prefix}",
+                    conversion=conversion_methods[fmt_spec],
+                )
         if not aggressive and fmt_prefix:
             raise ConversionRefused(
                 "Default text alignment has changed between percent fmt and fstrings. "
