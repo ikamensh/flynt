@@ -80,7 +80,7 @@ def formatted_value(
             # In order to not have to figure out what sort of number we are
             # dealing with, just look at the leading - sign (if there is one)
             # and remove it for the conversion
-            if aggressive and fmt_prefix.startswith("-"):
+            if fmt_prefix.startswith("-"):
                 # Left alignment
                 return ast_formatted_value(
                     val,
