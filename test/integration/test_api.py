@@ -4,7 +4,7 @@ import shutil
 import pytest
 
 from flynt import api
-from flynt.api import _fstringify_file
+from flynt.api import _fstringify_file, _resolve_files
 from flynt.state import State
 
 # These "files" are byte-string constants instead of actual files to prevent e.g. Git or text editors from accidentally changing the encoding
@@ -13,6 +13,20 @@ mixed_line_endings_before = b"'{}'.format(1)\n'{}'.format(2)# Linux line ending\
 mixed_line_endings_after = (
     b"f'{1}'\nf'{2}'# Linux line ending\nf'{3}'# Windows line ending\r\n"
 )
+fake_path_tree = (
+    r"src/flynt/test/unix/code.py",
+    r"src/flynt/test/unix/exclude/code.py",
+    r"src/flynt/test/win/code.py",
+    r"src/flynt/test/win/exclude/code.py",
+    r"src/flynt/test/mixed/code.py",
+    r"src/flynt/test/mixed/exclude/code.py",
+)
+uniform_path_exclude = (
+    r"test/unix/exclude",
+    r"test\win\exclude",
+    r"test/mixed\exclude",
+)
+uniform_path_count_result = len(fake_path_tree) - len(uniform_path_exclude)
 
 
 @pytest.fixture()
@@ -184,3 +198,22 @@ def test_bom(bom_file):
 
     result = _fstringify_file(bom_file, state=State(multiline=True, len_limit=1000))
     assert result.n_changes
+
+
+@pytest.fixture()
+def fake_folder_tree(tmpdir):
+    folder = os.path.join(tmpdir, "fake_tree")
+    for fake_file in fake_path_tree:
+        tmp_path = os.path.join(folder, fake_file)
+        os.makedirs(os.path.dirname(tmp_path), exist_ok=True)
+        with open(tmp_path, "wb") as file:
+            file.write(b"")
+
+    return folder
+
+
+def test_uniform_path(fake_folder_tree):
+    """Test if the arguments for excluding path is depending of the OS path separator."""
+
+    result = _resolve_files([fake_folder_tree], uniform_path_exclude)
+    assert len(result) == uniform_path_count_result
