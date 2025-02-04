@@ -3,33 +3,13 @@ import io
 import tokenize
 from typing import Optional, Union
 
-import astor
-from astor.string_repr import pretty_string
-
 from flynt.exceptions import ConversionRefused
 from flynt.linting.fstr_lint import FstrInliner
 from flynt.utils.format import QuoteTypes, set_quote_type
 
 
-def nicer_pretty_string(
-    s,
-    embedded,
-    current_line,
-    uni_lit=False,
-):
-    r = repr(s)
-    if "\\x" in r:
-        # If the string contains an escape sequence,
-        # we need to work around a bug in upstream astor;
-        # the easiest workaround is to just use the repr
-        # of the string and be done with it.
-        return r
-    return pretty_string(s, embedded, current_line, uni_lit=uni_lit)
-
-
 def ast_to_string(node: ast.AST) -> str:
-    # TODO: this could use `ast.unparse` when targeting Python 3.9+ only.
-    return astor.to_source(node, pretty_string=nicer_pretty_string).rstrip()
+    return ast.unparse(node).rstrip()
 
 
 def is_str_literal(node: ast.AST) -> bool:
