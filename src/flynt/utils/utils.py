@@ -3,13 +3,16 @@ import io
 import tokenize
 from typing import Optional, Union
 
+from black import Mode, format_str
+
 from flynt.exceptions import ConversionRefused
 from flynt.linting.fstr_lint import FstrInliner
 from flynt.utils.format import QuoteTypes, set_quote_type
 
 
 def ast_to_string(node: ast.AST) -> str:
-    return ast.unparse(node).rstrip()
+    # ast.unparse() favors single quotes, use Black to turn them into double quotes
+    return format_str(ast.unparse(node), mode=Mode()).rstrip()
 
 
 def is_str_literal(node: ast.AST) -> bool:
