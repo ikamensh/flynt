@@ -90,7 +90,7 @@ def test_string_in_string():
 def test_concats_fstring():
 
     txt = """print(f'blah{thing}' + 'blah' + otherThing + f"is {x:d}")"""
-    expected = """print(f'blah{thing}blah{otherThing}is {x:d}')"""
+    expected = """print(f"blah{thing}blah{otherThing}is {x:d}")"""
 
     new, changed = transform_concat_from_str(txt)
 
@@ -105,7 +105,7 @@ def test_string_in_string_x3():
     new, changed = transform_concat_from_str(txt)
 
     assert changed
-    assert "'blah' +" in new
+    assert '"blah" +' in new
 
 
 def test_existing_fstr():
@@ -133,7 +133,7 @@ def test_existing_fstr_expr():
 def test_embedded_fstr():
 
     txt = """print(f"{f'blah{var}' + abc}blah")"""
-    expected = """print(f'blah{var}{abc}blah')"""
+    expected = """print(f"blah{var}{abc}blah")"""
 
     new, changed = transform_concat_from_str(txt)
 

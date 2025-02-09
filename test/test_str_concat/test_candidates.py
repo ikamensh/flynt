@@ -28,7 +28,7 @@ def test_find_victims_primitives(pycode_with_2_concats: str):
     assert len(ch.victims) == 2
 
     v1, v2 = ch.victims
-    assert str(v1) == "a + ' World'"
+    assert str(v1) == 'a + " World"'
     assert 'a + " World"' in pycode_with_2_concats.split("\n")[v1.start_line]
 
 
@@ -40,7 +40,7 @@ def test_find_victims_api(pycode_with_2_concats: str, state: State):
     assert len(lst) == 2
 
     v1, v2 = lst
-    assert str(v1) == "a + ' World'"
+    assert str(v1) == 'a + " World"'
     assert 'a + " World"' in pycode_with_2_concats.split("\n")[v1.start_line]
 
 
@@ -53,4 +53,4 @@ def test_find_victims_parens(state: State):
     assert len(lst) == 1
 
     v1 = lst[0]
-    assert str(v1) == """'blah' + (thing - 1)"""
+    assert str(v1) == '''"blah" + (thing - 1)'''
