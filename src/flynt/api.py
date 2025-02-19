@@ -100,10 +100,8 @@ def fstringify_code(
                     new_code,
                     state=state,
                 )
-            except Exception:
-                msg = traceback.format_exc()
-                log.error("Transforming concatenation of literal strings failed")
-                log.error(msg)
+            except Exception as exc:
+                log.error("Transforming concatenation of literal strings failed", exc_info=exc)
             else:
                 changes += concat_changes
                 state.concat_changes += concat_changes
@@ -113,10 +111,8 @@ def fstringify_code(
                     new_code,
                     state=state,
                 )
-            except Exception:
-                msg = traceback.format_exc()
-                log.error("Transforming concatenation of literal strings failed")
-                log.error(msg)
+            except Exception as exc:
+                log.error("Transforming concatenation of literal strings failed", exc_info=exc)
             else:
                 changes += join_changes
                 state.join_changes += join_changes

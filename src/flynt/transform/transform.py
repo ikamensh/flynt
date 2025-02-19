@@ -1,7 +1,6 @@
 import ast
 import copy
 import logging
-import traceback
 from typing import Tuple
 
 from flynt.exceptions import ConversionRefused
@@ -39,9 +38,8 @@ def transform_chunk(
         state.invalid_conversions += 1
         return None, False  # type:ignore # ideally should return one optional str
     except Exception as exc:
-        msg = traceback.format_exc()
-        level = logging.DEBUG if isinstance(exc, AssertionError) else logging.EXCEPTION
-        log.log(level, "Exception during conversion of code: %s", msg)
+        level = logging.DEBUG if isinstance(exc, AssertionError) else logging.ERROR
+        log.log(level, "Exception during conversion of code", exc_info=exc)
         state.invalid_conversions += 1
         return None, False  # type:ignore # ideally should return one optional str
     else:
