@@ -38,9 +38,10 @@ def transform_chunk(
         log.warning("Not converting code due to: %s", cr)
         state.invalid_conversions += 1
         return None, False  # type:ignore # ideally should return one optional str
-    except Exception:
+    except Exception as exc:
         msg = traceback.format_exc()
-        log.exception("Exception during conversion of code: %s", msg)
+        level = logging.DEBUG if isinstance(exc, AssertionError) else logging.EXCEPTION
+        log.log(level, "Exception during conversion of code: %s", msg)
         state.invalid_conversions += 1
         return None, False  # type:ignore # ideally should return one optional str
     else:
