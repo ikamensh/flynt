@@ -62,7 +62,7 @@ def find_pyproject_toml(path_search_start: Tuple[str, ...]) -> Optional[str]:
         return str(path_pyproject_toml)
 
     try:
-        path_user_pyproject_toml = find_user_pyproject_toml()
+        path_user_pyproject_toml = find_user_config_toml()
         return (
             str(path_user_pyproject_toml)
             if path_user_pyproject_toml.is_file()
@@ -90,8 +90,8 @@ def parse_pyproject_toml(path_config: str) -> Dict[str, Any]:
 
 
 @lru_cache()
-def find_user_pyproject_toml() -> Path:
-    r"""Return the path to the top-level user configuration for black.
+def find_user_config_toml() -> Path:
+    r"""Return the path to the top-level user configuration for flynt.
 
     This looks for ~\.flynt on Windows and ~/.config/flynt on Linux and other
     Unix systems.
