@@ -5,7 +5,6 @@ from flynt.exceptions import StringEmbeddingTooDeep
 
 class SinSDetector(ast.NodeVisitor):
     def __init__(self, maxdepth: int) -> None:
-
         self.sns_depth = 0
         self.maxdepth = maxdepth
 

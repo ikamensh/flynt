@@ -90,7 +90,6 @@ if var % 3 == 0:
 
 
 def test_indented():
-
     candidates = fstring_candidates(indented)
     assert len(list(candidates)) == 1
     lines = indented.split("\n")

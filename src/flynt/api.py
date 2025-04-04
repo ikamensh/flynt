@@ -301,7 +301,6 @@ def _resolve_files(
         _blacklist.update(set(excluded_files_or_paths))
 
     for file_or_path in files_or_paths:
-
         abs_path = os.path.abspath(file_or_path)
 
         if not os.path.exists(abs_path):

@@ -58,7 +58,6 @@ class PyToken:
 
 
 def get_quote_type(code: str) -> Optional[str]:
-
     g = tokenize.tokenize(io.BytesIO(code.encode("utf-8")).readline)
     next(g)
     t = PyToken(next(g))

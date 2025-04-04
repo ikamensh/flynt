@@ -40,7 +40,6 @@ class JoinTransformer(ast.NodeTransformer):
 
 
 def transform_join(tree: ast.AST, *args, **kwargs) -> Tuple[str, bool]:
-
     jt = JoinTransformer()
     new_tree = jt.visit(tree)
     changed = jt.counter > 0

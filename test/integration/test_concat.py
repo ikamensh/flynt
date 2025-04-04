@@ -1,4 +1,5 @@
-""" Test str processors on actual file contents """
+"""Test str processors on actual file contents"""
+
 from test.integration.utils import concat_samples, try_on_file
 
 import pytest

@@ -1,6 +1,7 @@
 """
 Updates the README.md file with the latest help output from flynt.
 """
+
 import contextlib
 import io
 import os
@@ -31,9 +32,13 @@ def main():
     # Redirect the output,
     # disable argparse exiting the entire program when it prints help,
     # and patch the terminal size so we get the same output all the time
-    with contextlib.redirect_stdout(sio), contextlib.suppress(
-        SystemExit,
-    ), patch_terminal_size():
+    with (
+        contextlib.redirect_stdout(sio),
+        contextlib.suppress(
+            SystemExit,
+        ),
+        patch_terminal_size(),
+    ):
         sys.argv = ["flynt", "--help"]
         run_flynt_cli()
     flynt_help = sio.getvalue()
