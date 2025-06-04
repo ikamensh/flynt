@@ -699,7 +699,6 @@ def test_literal_direct(state: State):
 
 
 def test_joins():
-
     s_in = """';'.join(['a', 'b', 'c'])"""
     expected_out = '"a;b;c"'
     out, count = code_editor.fstringify_static_joins(s_in, State())

@@ -69,7 +69,6 @@ def joined_string(
             ast_name = var_map[identifier]
         else:
             try:
-
                 ast_name = var_map.pop(identifier)
             except KeyError as e:
                 raise ConversionRefused(

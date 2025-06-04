@@ -62,7 +62,6 @@ class ConcatTransformer(ast.NodeTransformer):
 
 
 def transform_concat(tree: ast.AST, *args, **kwargs) -> Tuple[str, bool]:
-
     ft = ConcatTransformer()
     new = ft.visit(tree)
     changed = ft.counter > 0

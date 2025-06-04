@@ -71,7 +71,6 @@ def mixed_line_endings_file(tmpdir):
 
 
 def test_py2(py2_file):
-
     with open(py2_file) as f:
         content_before = f.read()
 
@@ -97,7 +96,6 @@ def test_invalid_unicode(invalid_unicode_file):
 
 
 def test_works(formattable_file):
-
     with open(formattable_file) as f:
         content_before = f.read()
 
@@ -113,7 +111,6 @@ def test_works(formattable_file):
 
 
 def test_break_safe(formattable_file, monkeypatch):
-
     with open(formattable_file) as f:
         content_before = f.read()
 
@@ -134,7 +131,6 @@ def test_break_safe(formattable_file, monkeypatch):
 
 
 def test_catches_subtle(formattable_file, monkeypatch):
-
     with open(formattable_file) as f:
         content_before = f.read()
 
