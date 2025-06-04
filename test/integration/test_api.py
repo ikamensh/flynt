@@ -213,3 +213,23 @@ def test_uniform_path(fake_folder_tree):
 
     result = _resolve_files([fake_folder_tree], uniform_path_exclude)
     assert len(result) == uniform_path_count_result
+
+
+def test_fstringify_files_charcount(tmp_path, monkeypatch):
+    source = "'{}'.format(1)\n"
+    f = tmp_path / "a.py"
+    f.write_text(source)
+
+    captured = {}
+
+    def fake_print_report(state, found_files, changed_files, total_cc_new, total_cc_original, total_expr, total_time):
+        captured["new"] = total_cc_new
+        captured["orig"] = total_cc_original
+
+    monkeypatch.setattr(api, "_print_report", fake_print_report)
+
+    state = State()
+    api.fstringify_files([str(f)], state)
+
+    assert captured["orig"] == len(source)
+    assert captured["new"] == len("f'{1}'\n")
