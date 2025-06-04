@@ -218,11 +218,19 @@ def test_uniform_path(fake_folder_tree):
 def test_fstringify_files_charcount(tmp_path, monkeypatch):
     source = "'{}'.format(1)\n"
     f = tmp_path / "a.py"
-    f.write_text(source)
+    f.write_text(source, newline="")
 
     captured = {}
 
-    def fake_print_report(state, found_files, changed_files, total_cc_new, total_cc_original, total_expr, total_time):
+    def fake_print_report(
+        state,
+        found_files,
+        changed_files,
+        total_cc_new,
+        total_cc_original,
+        total_expr,
+        total_time,
+    ):
         captured["new"] = total_cc_new
         captured["orig"] = total_cc_original
 
