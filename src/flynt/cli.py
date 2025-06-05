@@ -29,9 +29,9 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
     verbosity_group.add_argument(
         "-v",
         "--verbose",
-        action="store_true",
+        action="count",
         help="run with verbose output",
-        default=False,
+        default=0,
     )
     verbosity_group.add_argument(
         "-q",
@@ -194,8 +194,8 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
     )
 
     state = state_from_args(args)
-    if args.verbose:
-        logging.getLogger("flynt").setLevel(logging.DEBUG)
+    if args.verbose > 0:
+        logging.getLogger("flynt").setLevel(logging.DEBUG if args.verbose > 1 else logging.INFO)
 
     if args.string:
         content = " ".join(args.src)
