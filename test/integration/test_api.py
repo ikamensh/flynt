@@ -218,7 +218,8 @@ def test_uniform_path(fake_folder_tree):
 def test_fstringify_files_charcount(tmp_path, monkeypatch):
     source = "'{}'.format(1)\n"
     f = tmp_path / "a.py"
-    f.write_text(source, newline="")
+    with open(f, "w", newline="") as fh:
+        fh.write(source)
 
     captured = {}
 
