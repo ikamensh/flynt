@@ -177,7 +177,7 @@ def fstringify_files(
                 changed_files += 1
                 total_expressions += result.n_changes
             total_charcount_original += result.original_length
-            total_charcount_new += result.n_changes
+            total_charcount_new += result.new_length
             status = "modified" if result.n_changes else "no change"
         else:
             status = "failed"
