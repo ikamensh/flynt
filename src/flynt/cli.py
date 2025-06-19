@@ -195,7 +195,9 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
 
     state = state_from_args(args)
     if args.verbose > 0:
-        logging.getLogger("flynt").setLevel(logging.DEBUG if args.verbose > 1 else logging.INFO)
+        logging.getLogger("flynt").setLevel(
+            logging.DEBUG if args.verbose > 1 else logging.INFO
+        )
 
     if args.string:
         content = " ".join(args.src)
