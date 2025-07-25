@@ -41,9 +41,9 @@ def is_str_literal(node: ast.AST) -> bool:
 
 def is_str_constant(node: ast.AST) -> bool:
     """Return ``True`` if ``node`` represents a plain string constant."""
-    return isinstance(node, ast.Str) or (
+    return (
         isinstance(node, ast.Constant) and isinstance(node.value, str)
-    )
+    ) or isinstance(node, ast.Str)
 
 
 def get_str_value(node: ast.AST) -> str:
