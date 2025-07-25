@@ -113,7 +113,7 @@ def ast_formatted_value(
     conversion_val = -1 if conversion is None else ord(conversion.replace("!", ""))
 
     if format_spec is None and is_str_constant(val):
-        return val
+        return val  # type:ignore[return-value]
 
     return ast.FormattedValue(
         value=val,
@@ -132,7 +132,9 @@ def check_is_string_node(tree: ast.AST):
         tree = tree.body[0]
     if isinstance(tree, ast.Expr):
         tree = tree.value
-    assert isinstance(tree, (ast.JoinedStr, ast.Str, ast.Constant)), f"found {type(tree)}"
+    assert isinstance(tree, (ast.JoinedStr, ast.Str, ast.Constant)), (
+        f"found {type(tree)}"
+    )
 
 
 def fixup_transformed(tree: ast.AST, quote_type: Optional[str] = None) -> str:
