@@ -57,6 +57,12 @@ include = [
     "/src",
 ]
 
+[tool.pytest.ini_options]
+filterwarnings = [
+    # Ignore every warning whose ``__module__`` starts with ``astor``
+    "ignore:::astor\\..*",
+]
+
 [tool.mypy]
 exclude = "test/integration/(actual|expected|samples).*"
 
