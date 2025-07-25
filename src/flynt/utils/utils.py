@@ -33,14 +33,36 @@ def ast_to_string(node: ast.AST) -> str:
 
 
 def is_str_literal(node: ast.AST) -> bool:
-    """Returns True if a node is a string literal. f-string is also a string literal."""
-    return isinstance(node, (ast.Str, ast.JoinedStr))
+    """Return ``True`` if ``node`` is a string literal or an f-string."""
+    return isinstance(node, (ast.JoinedStr, ast.Str)) or (
+        isinstance(node, ast.Constant) and isinstance(node.value, str)
+    )
+
+
+def is_str_constant(node: ast.AST) -> bool:
+    """Return ``True`` if ``node`` represents a plain string constant."""
+    return (
+        isinstance(node, ast.Constant) and isinstance(node.value, str)
+    ) or isinstance(node, ast.Str)
+
+
+def get_str_value(node: ast.AST) -> str:
+    """Extract the string value from ``node`` which must be a str constant."""
+    if isinstance(node, ast.Str):
+        return node.s
+    if isinstance(node, ast.Constant) and isinstance(node.value, str):
+        return node.value
+    raise TypeError(f"Expected string constant, got {type(node)}")
 
 
 class StringInStringVisitor(ast.NodeVisitor):
     def __init__(self):
         self.string_in_string = False
         self.in_fmt_value = False
+
+    def _visit_string_node(self) -> None:
+        if self.in_fmt_value:
+            self.string_in_string = True
 
     def visit_FormattedValue(self, node):
         if self.in_fmt_value:
@@ -57,8 +79,11 @@ class StringInStringVisitor(ast.NodeVisitor):
         self.generic_visit(node)
 
     def visit_Str(self, node):
-        if self.in_fmt_value:
-            self.string_in_string = True
+        self._visit_string_node()
+
+    def visit_Constant(self, node):
+        if isinstance(node.value, str):
+            self._visit_string_node()
 
 
 def str_in_str(node: ast.AST) -> bool:
@@ -71,7 +96,7 @@ def ast_formatted_value(
     val: ast.AST,
     fmt_str: Optional[str] = None,
     conversion: Optional[str] = None,
-) -> Union[ast.FormattedValue, ast.Str]:
+) -> Union[ast.FormattedValue, ast.Constant]:
     if isinstance(val, ast.FormattedValue):
         return val
 
@@ -87,8 +112,8 @@ def ast_formatted_value(
 
     conversion_val = -1 if conversion is None else ord(conversion.replace("!", ""))
 
-    if format_spec is None and isinstance(val, ast.Str):
-        return val
+    if format_spec is None and is_str_constant(val):
+        return val  # type:ignore[return-value]
 
     return ast.FormattedValue(
         value=val,
@@ -97,8 +122,8 @@ def ast_formatted_value(
     )
 
 
-def ast_string_node(string: str) -> ast.Str:
-    return ast.Str(s=string)
+def ast_string_node(string: str) -> ast.Constant:
+    return ast.Constant(value=string)
 
 
 def check_is_string_node(tree: ast.AST):
@@ -107,7 +132,9 @@ def check_is_string_node(tree: ast.AST):
         tree = tree.body[0]
     if isinstance(tree, ast.Expr):
         tree = tree.value
-    assert isinstance(tree, (ast.JoinedStr, ast.Str)), f"found {type(tree)}"
+    assert isinstance(tree, (ast.JoinedStr, ast.Str, ast.Constant)), (
+        f"found {type(tree)}"
+    )
 
 
 def fixup_transformed(tree: ast.AST, quote_type: Optional[str] = None) -> str:

@@ -2,6 +2,7 @@ import ast
 from typing import List
 
 from flynt.state import State
+from flynt.utils.utils import is_str_constant
 
 from .ast_chunk import AstChunk
 
@@ -14,7 +15,7 @@ def is_call_format(node):
         # We only support literal format strings, not variables holding
         # format strings. `joined_string` will refuse non literals, but
         # filtering them here avoids unnecessary processing.
-        and isinstance(node.func.value, ast.Str)
+        and is_str_constant(node.func.value)
     )
 
 
