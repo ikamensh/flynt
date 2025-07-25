@@ -202,3 +202,11 @@ def test_disabled_transforms():
         '"my string {:.2f}" % var',
         state=State(transform_percent=False),
     )[1]
+
+
+def test_skip_variable_format(state: State):
+    code = 'template = "Hello {0}"\nresult = template.format(name)'
+
+    new, changed = transform_chunk_from_str(code, state)
+
+    assert not changed

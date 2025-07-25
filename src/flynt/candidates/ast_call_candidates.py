@@ -11,7 +11,10 @@ def is_call_format(node):
         isinstance(node, ast.Call)
         and isinstance(node.func, ast.Attribute)
         and node.func.attr == "format"
-        and isinstance(node.func.value, (ast.Str, ast.Name))
+        # We only support literal format strings, not variables holding
+        # format strings. `joined_string` will refuse non literals, but
+        # filtering them here avoids unnecessary processing.
+        and isinstance(node.func.value, ast.Str)
     )
 
 
