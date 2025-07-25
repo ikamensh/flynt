@@ -34,22 +34,16 @@ def ast_to_string(node: ast.AST) -> str:
 
 def is_str_literal(node: ast.AST) -> bool:
     """Return ``True`` if ``node`` is a string literal or an f-string."""
-    return isinstance(node, (ast.JoinedStr, ast.Str)) or (
-        isinstance(node, ast.Constant) and isinstance(node.value, str)
-    )
+    return isinstance(node, ast.JoinedStr) or is_str_constant(node)
 
 
 def is_str_constant(node: ast.AST) -> bool:
     """Return ``True`` if ``node`` represents a plain string constant."""
-    return (
-        isinstance(node, ast.Constant) and isinstance(node.value, str)
-    ) or isinstance(node, ast.Str)
+    return isinstance(node, ast.Constant) and isinstance(node.value, str)
 
 
 def get_str_value(node: ast.AST) -> str:
     """Extract the string value from ``node`` which must be a str constant."""
-    if isinstance(node, ast.Str):
-        return node.s
     if isinstance(node, ast.Constant) and isinstance(node.value, str):
         return node.value
     raise TypeError(f"Expected string constant, got {type(node)}")
@@ -124,17 +118,6 @@ def ast_formatted_value(
 
 def ast_string_node(string: str) -> ast.Constant:
     return ast.Constant(value=string)
-
-
-def check_is_string_node(tree: ast.AST):
-    """Raise an exception is tree doesn't represent a string"""
-    if isinstance(tree, ast.Module):
-        tree = tree.body[0]
-    if isinstance(tree, ast.Expr):
-        tree = tree.value
-    assert isinstance(tree, (ast.JoinedStr, ast.Str, ast.Constant)), (
-        f"found {type(tree)}"
-    )
 
 
 def fixup_transformed(tree: ast.AST, quote_type: Optional[str] = None) -> str:
