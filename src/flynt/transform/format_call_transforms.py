@@ -15,10 +15,12 @@ def joined_string(
     aggressive: bool = False,
 ) -> Union[ast.JoinedStr, ast.Str]:
     """Transform a "...".format() call node into a f-string node."""
-    assert isinstance(fmt_call.func, ast.Attribute) and isinstance(
-        fmt_call.func.value,
-        ast.Str,
-    )
+    if not (
+        isinstance(fmt_call.func, ast.Attribute)
+        and isinstance(fmt_call.func.value, ast.Str)
+    ):
+        raise ConversionRefused("Only literal format strings are supported")
+
     string = fmt_call.func.value.s
     var_map: Dict[Any, Any] = {kw.arg: kw.value for kw in fmt_call.keywords}
     inserted_value_nodes = []
