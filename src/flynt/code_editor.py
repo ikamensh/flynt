@@ -20,6 +20,7 @@ from flynt.utils.format import get_quote_type
 from flynt.utils.utils import contains_comment
 
 noqa_regex = re.compile("#[ ]*noqa.*flynt")
+flynt_skip_regex = re.compile(r"#\s*flynt:\s*skip")
 
 log = logging.getLogger(__name__)
 
@@ -133,9 +134,9 @@ class CodeEditor:
         if self.code_in_chunk(chunk)[0] == "r":
             return
 
-        # skip lines with # noqa comment
+        # skip lines with # noqa comment or # flynt: skip
         for line in self.src_lines[chunk.start_line : chunk.end_line + 1]:
-            if noqa_regex.findall(line):
+            if noqa_regex.findall(line) or flynt_skip_regex.findall(line):
                 return
 
         try:
