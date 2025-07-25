@@ -142,7 +142,7 @@ Add a new section to `.pre-commit-config.yaml`:
 
 This will run flynt on all modified files before committing.
 
-You can skip conversion of certain lines by adding `# noqa [: anything else] flynt [anything else]`
+You can skip conversion of certain lines by adding `# noqa [: anything else] flynt [anything else]` or `# flynt: skip`
 
 
 ### Configuration files

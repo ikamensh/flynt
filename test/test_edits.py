@@ -138,6 +138,13 @@ def test_noqa_other(state: State):
     assert s_out == s_expected
 
 
+def test_flynt_skip(state: State):
+    s_in = """a = 'my string {}, but also {} and {}'.format(var, f, cada_bra)  # flynt: skip"""
+    s_expected = """a = 'my string {}, but also {} and {}'.format(var, f, cada_bra)  # flynt: skip"""
+
+    s_out, count = code_editor.fstringify_code_by_line(s_in, state)
+    assert s_out == s_expected
+
 def test_multiline(state: State):
     s_in = """a = 'my string {}, but also {} and {}'.format(\nvar, \nf, \ncada_bra)"""
     s_expected = """a = f'my string {var}, but also {f} and {cada_bra}'"""

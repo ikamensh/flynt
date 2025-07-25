@@ -10,6 +10,8 @@ and now results in `'`, as in `f'first part {one}second part {two}'`. I think it
 in the output. At the same time it's a huge simplification of the source code that should help 
 maintain and develop this project in the future.
 
+* Added `# flynt: skip` comment to ignore a line during conversion without using `# noqa`.
+
 
 #### v.0.77
 
