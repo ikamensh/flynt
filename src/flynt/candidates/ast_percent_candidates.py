@@ -2,6 +2,7 @@ import ast
 from typing import List
 
 from flynt.state import State
+from flynt.utils.utils import is_str_constant
 
 from .ast_chunk import AstChunk
 
@@ -10,7 +11,7 @@ def is_percent_format(node):
     return (
         isinstance(node, ast.BinOp)
         and isinstance(node.op, ast.Mod)
-        and isinstance(node.left, ast.Str)
+        and is_str_constant(node.left)
     )
 
 

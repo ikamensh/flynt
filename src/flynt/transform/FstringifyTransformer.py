@@ -5,7 +5,11 @@ from flynt.candidates.ast_call_candidates import is_call_format
 from flynt.linting.fstr_lint import FstrInliner
 from flynt.state import State
 from flynt.transform.format_call_transforms import joined_string
-from flynt.transform.percent_transformer import is_percent_stringify, transform_binop
+from flynt.transform.percent_transformer import (
+    is_percent_stringify,
+    transform_binop,
+)
+from flynt.utils.utils import get_str_value, is_str_constant
 
 
 class FstringifyTransformer(ast.NodeTransformer):
@@ -42,7 +46,7 @@ class FstringifyTransformer(ast.NodeTransformer):
     def visit_BinOp(self, node: ast.BinOp) -> ast.AST:
         """Convert `ast.BinOp` to `ast.JoinedStr` f-string.
 
-        Currently only if a string literal `ast.Str` is on the left side of the `%`
+        Currently only if a string literal is on the left side of the `%`
         and one of `ast.Tuple`, `ast.List`, `ast.Name`, `ast.Dict` is on the right
 
         Args:
@@ -53,19 +57,22 @@ class FstringifyTransformer(ast.NodeTransformer):
         if self.state.transform_percent and is_percent_stringify(node):
             # Mypy doesn't understand the is_percent_stringify acts
             # as a type guard, so we need the assert here.
-            assert isinstance(node.left, ast.Str)
+            assert is_str_constant(node.left)
             self.state.percent_candidates += 1
 
             # bail in these edge cases...
             no_good = ["}", "{"]
             for ng in no_good:
-                if ng in node.left.s:
+                if ng in get_str_value(node.left):
                     return node
             for ch in ast.walk(node.right):
                 # f-string expression part cannot include a backslash
-                if isinstance(ch, ast.Str) and (
-                    any(x in ch.s for x in ("\n", "\t", "\r", "'", '"', "%s", "%%"))
-                    or "\\" in ch.s
+                if is_str_constant(ch) and (
+                    any(
+                        x in get_str_value(ch)
+                        for x in ("\n", "\t", "\r", "'", '"', "%s", "%")
+                    )
+                    or "\\" in get_str_value(ch)
                 ):
                     return node
 

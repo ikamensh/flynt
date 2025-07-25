@@ -5,6 +5,7 @@ from typing import List, Union
 
 from flynt.exceptions import ConversionRefused, FlyntException
 from flynt.transform.format_call_transforms import ast_formatted_value, ast_string_node
+from flynt.utils.utils import get_str_value, is_str_constant, is_str_literal
 
 FORMATS = "diouxXeEfFgGcrsa"
 
@@ -28,7 +29,7 @@ integer_specificers = "dxXob"
 
 def is_percent_stringify(node: ast.BinOp) -> bool:
     return (
-        isinstance(node.left, ast.Str)
+        is_str_constant(node.left)
         and isinstance(node.op, ast.Mod)
         and isinstance(
             node.right, tuple([ast.Tuple, ast.List, ast.Dict, *supported_operands])
@@ -63,7 +64,7 @@ def formatted_value(
     val: ast.AST,
     *,
     aggressive: bool = False,
-) -> Union[ast.FormattedValue, ast.Str]:
+) -> Union[ast.FormattedValue, ast.Constant]:
     if fmt_spec in integer_specificers:
         fmt_prefix = fmt_prefix.replace(".", "0")
 
@@ -132,8 +133,8 @@ def transform_dict(node: ast.BinOp, aggressive: bool = False) -> ast.JoinedStr:
 
     Returns ast.JoinedStr (f-string)
     """
-    assert isinstance(node.left, ast.Str)
-    format_str = node.left.s
+    assert is_str_constant(node.left)
+    format_str = get_str_value(node.left)
     matches = DICT_PATTERN.findall(format_str)
     if len(matches) != len(ANY_DICT.findall(format_str)):
         raise ConversionRefused("Some locations have unknown format modifiers.")
@@ -165,7 +166,7 @@ def transform_dict(node: ast.BinOp, aggressive: bool = False) -> ast.JoinedStr:
         def make_fv(key: str):
             return ast.Subscript(
                 value=node.right,
-                slice=ast.Index(value=ast.Str(s=key)),
+                slice=ast.Index(value=ast.Constant(value=key)),
             )
 
     for block in blocks:
@@ -181,7 +182,7 @@ def transform_dict(node: ast.BinOp, aggressive: bool = False) -> ast.JoinedStr:
             segments.append(fv)
         else:
             # no match means it's just a literal string
-            segments.append(ast.Str(s=block.replace("%%", "%")))
+            segments.append(ast_string_node(block.replace("%%", "%")))
 
     return ast.JoinedStr(segments)
 
@@ -197,8 +198,8 @@ def transform_tuple(node: ast.BinOp, *, aggressive: bool = False) -> ast.JoinedS
 
     Returns ast.JoinedStr (f-string)
     """
-    assert isinstance(node.left, ast.Str)
-    format_str = node.left.s
+    assert is_str_constant(node.left)
+    format_str = get_str_value(node.left)
     matches = VAR_KEY_PATTERN.findall(format_str)
 
     assert isinstance(node.right, ast.Tuple)
@@ -259,12 +260,12 @@ def transform_generic(
 
     Returns ast.JoinedStr (f-string), bool: str-in-str
     """
-    assert isinstance(node.left, ast.Str)
-    has_dict_str_format = DICT_PATTERN.findall(node.left.s)
+    assert is_str_constant(node.left)
+    has_dict_str_format = DICT_PATTERN.findall(get_str_value(node.left))
     if has_dict_str_format:
         return transform_dict(node, aggressive=aggressive)
 
-    any(isinstance(n, (ast.Str, ast.JoinedStr)) for n in ast.walk(node.right))
+    any(is_str_literal(n) for n in ast.walk(node.right))
 
     # if it's just a name then pretend it's tuple to use that code
     node.right = ast.Tuple(elts=[node.right])
@@ -274,7 +275,7 @@ def transform_generic(
 supported_operands = [
     ast.Name,
     ast.Attribute,
-    ast.Str,
+    ast.Constant,
     ast.Subscript,
     ast.Call,
     ast.BinOp,

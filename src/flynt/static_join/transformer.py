@@ -2,7 +2,13 @@ import ast
 from typing import List, Tuple
 
 from flynt.static_join.utils import get_static_join_bits
-from flynt.utils.utils import ast_formatted_value, ast_string_node, fixup_transformed
+from flynt.utils.utils import (
+    ast_formatted_value,
+    ast_string_node,
+    fixup_transformed,
+    get_str_value,
+    is_str_constant,
+)
 
 
 class JoinTransformer(ast.NodeTransformer):
@@ -21,20 +27,17 @@ class JoinTransformer(ast.NodeTransformer):
         self.counter += 1
         args_with_interleaved_joiner: List[ast.AST] = []
         for arg in args:
-            if isinstance(arg, ast.Str):
+            if is_str_constant(arg):
                 args_with_interleaved_joiner.append(arg)
             else:
                 args_with_interleaved_joiner.append(ast_formatted_value(arg))
             args_with_interleaved_joiner.append(ast_string_node(joiner))
         args_with_interleaved_joiner.pop()  # remove the last joiner
-        if all(isinstance(arg, ast.Str) for arg in args_with_interleaved_joiner):
-            # Additional `isinstance` required to satisfy mypy
-            return ast.Str(
-                s="".join(
-                    arg.s
-                    for arg in args_with_interleaved_joiner
-                    if isinstance(arg, ast.Str)
-                ),
+        if all(is_str_constant(arg) for arg in args_with_interleaved_joiner):
+            return ast.Constant(
+                value="".join(
+                    get_str_value(arg) for arg in args_with_interleaved_joiner
+                )
             )
         return ast.JoinedStr(args_with_interleaved_joiner)
 
