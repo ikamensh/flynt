@@ -45,10 +45,10 @@ def joined_string(
             else:
                 continue
 
-            if (
-                any(ch in val_str for ch in ("\n", "\t", "\r", "%s", "%"))
-                or "\\" in val_str
-            ):
+            if any(ch in val_str for ch in ("\n", "\t", "\r", "\\")) or val_str in {
+                '"',
+                "'",
+            }:
                 raise ConversionRefused(
                     "f-string expression part cannot include a backslash"
                 )
