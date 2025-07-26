@@ -8,4 +8,3 @@ def f():
         lorem ipsum
         """.format(arg)
     )
-

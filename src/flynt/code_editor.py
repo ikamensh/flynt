@@ -172,10 +172,22 @@ class CodeEditor:
             ):
                 lines = converted.split("\\n")
                 lines[-1] += rest
-                lines_fit = all(
-                    len(line) <= self.len_limit - chunk.start_idx for line in lines
-                )
+                first_line = self.code_in_chunk(chunk).split("\n", 1)[0].rstrip()
+                if self.len_limit == 0 and first_line.endswith("\\"):
+                    lines_fit = True
+                else:
+                    lines_fit = all(
+                        len(line) <= self.len_limit - chunk.start_idx for line in lines
+                    )
                 converted = converted.replace("\\n", "\n")
+
+                # if the original string had a newline escape immediately after
+                # the opening quotes, preserve it in the transformed version
+                if first_line.endswith("\\"):
+                    if converted.startswith('f"""'):
+                        converted = 'f"""\\\n' + converted[len('f"""') :]
+                    elif converted.startswith("f'''"):
+                        converted = "f'''\\\n" + converted[len("f'''") :]
             else:
                 lines_fit = (
                     len(f"{converted}{rest}") <= self.len_limit - chunk.start_idx
