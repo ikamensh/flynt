@@ -19,9 +19,12 @@ This repository contains `flynt`, a Python package that converts old string form
 
 ### How integration tests work
 
-You can see existing tests in folder `test/integration`. All files from `samples_in` folder will be processed with `flynt`,
-transformed, and result is compared with `expected_out`. Files are matched by name, i.e. transformed version of samples_in/file.py
-should exactly match expected_out/file.py. Sometimes we check for no changes to be done, then sample_in version is the same as expected_out.
+You can see existing tests in folder `test/integration`. All files from `test/integration/samples_in` folder will be processed with `flynt`,
+transformed, and result is compared with `test/integration/expected_out`.
+Files are matched by name, i.e. transformed version of samples_in/file.py
+should exactly match expected_out/file.py.
+Sometimes we check for no changes to be done, then sample_in version is the same as expected_out.
+there is also `test/integration/expected_out_single_line` folder, which checks for output of flynt when multiline edits are disabled.
 
 
 ## Notes
