@@ -33,6 +33,11 @@ def transform_chunk(
             state=state,
         )
         str_in_str = str_in_str_fn(converted)
+        if changed:
+            if str_in_str and quote_type == QuoteTypes.single:
+                quote_type = QuoteTypes.double
+            new_code = fixup_transformed(converted, quote_type=quote_type)
+
     except ConversionRefused as cr:
         log.warning("Not converting code due to: %s", cr)
         state.invalid_conversions += 1
@@ -44,9 +49,6 @@ def transform_chunk(
         return None, False  # type:ignore # ideally should return one optional str
     else:
         if changed:
-            if str_in_str and quote_type == QuoteTypes.single:
-                quote_type = QuoteTypes.double
-            new_code = fixup_transformed(converted, quote_type=quote_type)
             try:
                 ast.parse(new_code)
             except SyntaxError:

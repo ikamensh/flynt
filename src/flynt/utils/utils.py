@@ -119,7 +119,10 @@ def fixup_transformed(tree: ast.AST, quote_type: Optional[str] = None) -> str:
         # ``ast.unparse`` raises ``ValueError`` on invalid conversions prior to
         # Python 3.12.  Treat this as a refused conversion so the caller can
         # gracefully skip the transformation.
-        raise ConversionRefused(str(exc)) from exc
+        if "Unknown f-string conversion" in str(exc):
+            raise ConversionRefused(str(exc)) from exc
+        else:
+            raise
     if quote_type is None:
         if isinstance(tree, ast.Constant) and isinstance(tree.value, str):
             quote_type = QuoteTypes.double
