@@ -16,11 +16,9 @@ then checking for exactly the expected output.
 
 ## How integration tests work
 
-You can see existing tests in folder `test/integration`. Very high level description is that `conftest.py` lists files to try,
-and then they read from `samples_in` folder, transformed, and result is compared with `expected_out`.
-Output is also written for manual inspection to `actual_out` folder. There are multiple `expected_out`
-folders depending on what mode is used (single line, string concat). `test_files.py` tests via `fstringify_code_by_line` function call, 
-which includes all processing steps except for CLI parsing and messages.
+You can see existing tests in folder `test/integration`. All files from `samples_in` folder will be processed with `flynt`,
+transformed, and result is compared with `expected_out`. Files are matched by name, i.e. transformed version of samples_in/file.py
+should exactly match expected_out/file.py. Sometimes we check for no changes to be done, then sample_in version is the same as expected_out.
 
 
 ## CLI tests
