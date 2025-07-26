@@ -36,6 +36,23 @@ def joined_string(
         inserted_value_nodes += list(ast.walk(kw.value))
     any(is_str_literal(n) for n in inserted_value_nodes)
 
+    for node in inserted_value_nodes:
+        if isinstance(node, ast.Constant):
+            if isinstance(node.value, str):
+                val_str = node.value
+            elif isinstance(node.value, (bytes, bytearray)):
+                val_str = node.value.decode("latin1")
+            else:
+                continue
+
+            if (
+                any(ch in val_str for ch in ("\n", "\t", "\r", "%s", "%"))
+                or "\\" in val_str
+            ):
+                raise ConversionRefused(
+                    "f-string expression part cannot include a backslash"
+                )
+
     for i, val in enumerate(fmt_call.args):
         var_map[i] = val
 
