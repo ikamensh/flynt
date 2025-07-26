@@ -157,6 +157,13 @@ def test_digit_grouping_2(state: State):
         '"{a}{b}".format(a=a)',
         # too complex syntax
         '"{:{}}".format(x, y)',
+        '"{}".format(b"\\n")',
+        '"{}".format("\\n".join(items))',
+        'msg = "{}\\nPossible solutions:\\n{}".format(msg, "\\n".join(solutions))',
+        "return '{}({})'.format(node.__class__.__name__, ',\\n    '.join(values))",
+        'self.assertEqual(len(expected), len(result), "Unmatched lines. Got:\\n{}\\nExpected:\\n{}".format("\\n".join(expected), "\\n".join(result)))',
+        'self.assertEqual(len(result_lines), len(expected_lines), "Unmatched lines. Got:\\n{}\\nExpected:\\n{}".format("\\n".join(result_lines), expected))',
+        "code.putln('\"{}.{}\",'.format(self.full_module_name, classname.replace('\"', '')))",
     ),
 )
 def test_fix_fstrings_noop(s, state: State):
