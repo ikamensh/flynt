@@ -237,7 +237,7 @@ def test_fstringify_files_charcount(tmp_path, monkeypatch):
 
     monkeypatch.setattr(api, "_print_report", fake_print_report)
 
-    state = State()
+    state = State(report=True)
     api.fstringify_files([str(f)], state)
 
     assert captured["orig"] == len(source)

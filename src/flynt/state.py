@@ -13,6 +13,7 @@ class State:
     stdout: bool = False
     multiline: bool = True
     len_limit: Optional[int] = None
+    report: bool = False
     transform_percent: bool = True
     transform_format: bool = True
     transform_concat: bool = False
