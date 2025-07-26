@@ -172,42 +172,10 @@ class CodeEditor:
             ):
                 lines = converted.split("\\n")
                 lines[-1] += rest
-                chunk_code = self.code_in_chunk(chunk)
-                first_line = chunk_code.split("\n", 1)[0].rstrip()
-                if self.len_limit == 0 and first_line.endswith("\\"):
-                    lines_fit = True
-                else:
-                    lines_fit = all(
-                        len(line) <= self.len_limit - chunk.start_idx for line in lines
-                    )
+                lines_fit = all(
+                    len(line) <= self.len_limit - chunk.start_idx for line in lines
+                )
                 converted = converted.replace("\\n", "\n")
-
-                # if the original string had a newline escape immediately after
-                # the opening quotes, preserve it in the transformed version
-                if first_line.endswith("\\"):
-                    escape_count = 1
-                    lines_chunk = chunk_code.split("\n")
-                    for line in lines_chunk[1:]:
-                        if line.strip() == "\\":
-                            escape_count += 1
-                        else:
-                            break
-
-                    indent = ""
-                    if len(lines_chunk) > escape_count:
-                        indent_match = re.match(r"\s*", lines_chunk[escape_count])
-                        if indent_match:
-                            indent = indent_match.group(0)
-
-                    prefix = 'f"""' if converted.startswith('f"""') else "f'''"
-                    body = converted[len(prefix) :].lstrip()
-                    converted = (
-                        prefix
-                        + "\\\n"
-                        + (indent + "\\\n") * (escape_count - 1)
-                        + indent
-                        + body
-                    )
             else:
                 lines_fit = (
                     len(f"{converted}{rest}") <= self.len_limit - chunk.start_idx
