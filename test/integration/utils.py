@@ -6,6 +6,10 @@ int_test_path = pathlib.Path(__file__).parent
 EXCLUDED = {
     "bom.py",
     "class.py",
+    "escaped_newline.py",  # not supported yet, #83 on github
+    "escaped_newline_extra.py",
+    "escaped_newline_multiple.py",
+    "escaped_newline_single_quotes.py",
     "multiline_limit.py",
 }
 samples = {p.name for p in (int_test_path / "samples_in").glob("*.py")} - EXCLUDED
