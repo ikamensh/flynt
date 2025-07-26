@@ -87,6 +87,18 @@ def ast_formatted_value(
             "values starting with '{' are better left not transformed.",
         )
 
+    if (
+        fmt_str in (None, "")
+        and conversion is None
+        and isinstance(val, ast.Call)
+        and isinstance(val.func, ast.Name)
+        and val.func.id in {"str", "repr"}
+        and not val.keywords
+        and len(val.args) == 1
+    ):
+        conversion = f"!{'s' if val.func.id == 'str' else 'r'}"
+        val = val.args[0]
+
     if fmt_str:
         format_spec = ast.JoinedStr([ast_string_node(fmt_str)])
     else:
