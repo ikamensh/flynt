@@ -29,3 +29,4 @@ there is also `test/integration/expected_out_single_line` folder, which checks f
 
 ## Notes
 - `pytest` and `pre-commit` should pass before sending a PR.
+- If you change CLI flags, run `python update_readme.py` to put latest help output into readme.

@@ -35,10 +35,9 @@ From the output of `flynt -h`:
 
 <!-- begin-options -->
 ```
-usage: flynt [-h] [-v | -q] [--no-multiline | -ll LINE_LENGTH]
-             [-d | --stdout] [-s] [--no-tp] [--no-tf] [-tc] [-tj]
-             [-f] [-a] [-e EXCLUDE [EXCLUDE ...]] [--version]
-             [--report]
+usage: flynt [-h] [-v | -q] [--no-multiline | -ll LINE_LENGTH] [-d |
+             --stdout] [-s] [--no-tp] [--no-tf] [-tc] [-tj] [-f]
+             [-a] [-e EXCLUDE [EXCLUDE ...]] [--version] [--report]
              [src ...]
 
 flynt v.1.0.3
@@ -52,7 +51,7 @@ options:
   -v, --verbose         run with verbose output
   -q, --quiet           run without outputting statistics to stdout
   --no-multiline        convert only single line expressions
-  -ll LINE_LENGTH, --line-length LINE_LENGTH
+  -ll, --line-length LINE_LENGTH
                         for expressions spanning multiple lines,
                         convert only if the resulting single line
                         will fit into the line length limit. Default
@@ -91,7 +90,7 @@ options:
                         purposes)
   -a, --aggressive      Include conversions with potentially changed
                         behavior.
-  -e EXCLUDE [EXCLUDE ...], --exclude EXCLUDE [EXCLUDE ...]
+  -e, --exclude EXCLUDE [EXCLUDE ...]
                         ignore files with given strings in it's
                         absolute path.
   --version             Print the current version number and exit.
@@ -110,8 +109,6 @@ Resolving deltas: 100% (12203/12203), done.
 Running flynt v.1.0.3
 
 Modified 21 of 21 files in 0.79s
-Remember to run your tests before committing.
-Thank you for using flynt.
 
 38f9d3a65222:~ ikkamens$
 ```

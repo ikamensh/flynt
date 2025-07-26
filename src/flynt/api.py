@@ -204,14 +204,8 @@ def fstringify_files(
             )
         else:
             _print_summary(len(files), changed_files, total_time)
-            print(farewell_message)
 
     return changed_files
-
-
-farewell_message = (
-    "Remember to run your tests before committing.\nThank you for using flynt.\n"
-)
 
 
 def _print_report(
@@ -277,7 +271,6 @@ def _print_report(
             print("To find out specific error messages, use --verbose flag.")
 
     print(f"\n{'_-_.' * 25}")
-    print(farewell_message)
 
 
 def _print_summary(found_files: int, changed_files: int, total_time: float) -> None:
@@ -285,7 +278,8 @@ def _print_summary(found_files: int, changed_files: int, total_time: float) -> N
     if changed_files:
         print(f"Modified {changed_files} of {found_files} files in {total_time:.2f}s")
     else:
-        print(f"No changes made to {found_files} files in {total_time:.2f}s")
+        plural = "s" if found_files != 1 else ""
+        print(f"No changes made to {found_files} file{plural} in {total_time:.2f}s")
 
 
 def fstringify(

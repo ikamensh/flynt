@@ -5,7 +5,6 @@ import sys
 import pytest
 
 import flynt
-from flynt.api import farewell_message
 from flynt.cli import run_flynt_cli
 
 
@@ -151,7 +150,6 @@ def test_cli_dry_run(capsys, sample_file):
                 "Converted source line missing from output"
             )
 
-    assert out.strip().endswith(farewell_message.strip())
     assert err == ""
 
 
@@ -183,7 +181,6 @@ def test_cli_stdout(capsys, sample_file):
         assert line in actual_lines
     for line in actual_lines:
         assert line in expected_lines
-    assert not out.strip().endswith(farewell_message.strip())
     assert err == ""
 
 
