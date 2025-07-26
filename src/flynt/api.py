@@ -6,9 +6,7 @@ import os
 import sys
 import time
 from difflib import unified_diff
-from typing import Collection, List, Optional, Tuple
-
-import astor
+from typing import Collection, Iterable, List, Optional, Tuple
 
 from flynt.code_editor import (
     fstringify_code_by_line,
@@ -28,6 +26,16 @@ class FstringifyResult:
     original_length: int
     new_length: int
     content: str
+
+
+def _find_py_files(path: str) -> Iterable[Tuple[str, str]]:
+    """Yield ``(folder, filename)`` pairs for all Python files under ``path``."""
+    if not os.path.isdir(path):
+        yield os.path.split(path)
+        return
+    for srcpath, _, fnames in os.walk(path):
+        for fname in (f for f in fnames if f.endswith(".py")):
+            yield srcpath, fname
 
 
 def _fstringify_file(
@@ -307,7 +315,7 @@ def _resolve_files(
             sys.exit(1)
 
         if os.path.isdir(abs_path):
-            for folder, filename in astor.code_to_ast.find_py_files(abs_path):
+            for folder, filename in _find_py_files(abs_path):
                 files.append(os.path.join(folder, filename))
         else:
             files.append(abs_path)

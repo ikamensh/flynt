@@ -8,7 +8,7 @@ dynamic = ["version"]
 description = "CLI tool to convert a python project's %-formatted strings to f-strings."
 readme = "README.md"
 license = { text = "MIT" }
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 authors = [
     { name = "Ilya Kamenshchikov" },
 ]
@@ -19,7 +19,6 @@ keywords = [
 classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -29,7 +28,6 @@ classifiers = [
     "Topic :: Utilities",
 ]
 dependencies = [
-    "astor",
     "tomli>=1.1.0; python_version < '3.11'"
 ]
 
@@ -57,18 +55,10 @@ include = [
     "/src",
 ]
 
-[tool.pytest.ini_options]
-filterwarnings = [
-    # Ignore every warning whose ``__module__`` starts with ``astor``
-    "ignore:::astor\\..*",
-]
+
 
 [tool.mypy]
 exclude = "test/integration/(actual|expected|samples).*"
-
-[[tool.mypy.overrides]]
-module = "astor"
-ignore_missing_imports = true
 
 [tool.ruff]
 line-length = 88

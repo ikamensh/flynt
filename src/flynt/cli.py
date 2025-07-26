@@ -112,7 +112,7 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
         action="store_true",
         default=False,
         help="Replace string concatenations (defined as + operations involving string literals) "
-        "with f-strings. Available only if flynt is installed with 3.8+ interpreter.",
+        "with f-strings. Available only if flynt is installed with a 3.9+ interpreter.",
     )
 
     parser.add_argument(
@@ -121,7 +121,7 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
         action="store_true",
         default=False,
         help="Replace static joins (where the joiner is a string literal and the joinee is a static-length list) "
-        "with f-strings. Available only if flynt is installed with 3.8+ interpreter.",
+        "with f-strings. Available only if flynt is installed with a 3.9+ interpreter.",
     )
 
     parser.add_argument(
@@ -176,16 +176,16 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
         parser.print_usage()
         return 1
 
-    if args.transform_concats and sys.version_info < (3, 8):
+    if args.transform_concats and sys.version_info < (3, 9):
         raise Exception(
             f"""Transforming string concatenations is only possible with flynt
-                installed to a python3.8+ interpreter. Currently using {sys.version_info}.""",
+                installed to a python3.9+ interpreter. Currently using {sys.version_info}.""",
         )
 
-    if args.transform_joins and sys.version_info < (3, 8):
+    if args.transform_joins and sys.version_info < (3, 9):
         raise Exception(
             f"""Transforming joins is only possible with flynt
-                installed to a python3.8+ interpreter. Currently using {sys.version_info}.""",
+                installed to a python3.9+ interpreter. Currently using {sys.version_info}.""",
         )
 
     logging.basicConfig(

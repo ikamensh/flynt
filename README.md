@@ -16,7 +16,7 @@ F-Strings:
 
 ### Installation
 
-`pip install flynt`. It requires Python version 3.7+.
+`pip install flynt`. It requires Python version 3.9+.
 
 ### Usage
 
@@ -79,12 +79,12 @@ optional arguments:
                         Replace string concatenations (defined as +
                         operations involving string literals) with
                         f-strings. Available only if flynt is
-                        installed with 3.8+ interpreter.
+                        installed with a 3.9+ interpreter.
   -tj, --transform-joins
                         Replace static joins (where the joiner is a
                         string literal and the joinee is a static-
                         length list) with f-strings. Available only
-                        if flynt is installed with 3.8+ interpreter.
+                        if flynt is installed with a 3.9+ interpreter.
   -f, --fail-on-change  Fail when changing files (for linting
                         purposes)
   -a, --aggressive      Include conversions with potentially changed
@@ -174,6 +174,6 @@ Furthermore, some arguments cause formatting of strings to throw exceptions. One
 
 ### Other Credits / Dependencies / Links
 
-- [astor](https://github.com/berkerpeksag/astor) is used to turn the transformed AST back into code.
+- Python's built-in `ast.unparse` is used to turn the transformed AST back into code.
 - Thanks to folks from [pyddf](https://www.pyddf.de/) for their support, advice and participation during spring hackathon 2019, in particular Holger Hass, Farid Muradov, Charlie Clark.
 - Logic finding the pyproject.toml and parsing it was partially copied from [black](https://github.com/psf/black) 

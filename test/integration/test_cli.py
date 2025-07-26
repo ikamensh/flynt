@@ -85,7 +85,7 @@ def test_cli_string_unquoted(capsys, code_in, code_out):
     assert err == ""
 
 
-@pytest.mark.skipif(sys.version_info < (3, 8), reason="requires python3.8 or higher")
+@pytest.mark.skipif(sys.version_info < (3, 9), reason="requires python3.9 or higher")
 def test_cli_string_supports_flags(capsys):
     """
     Tests a --string invocation also does additional transformations.

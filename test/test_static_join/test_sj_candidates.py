@@ -9,7 +9,7 @@ from flynt.state import State
 from flynt.static_join.candidates import JoinHound, join_candidates
 
 pytestmark = pytest.mark.skipif(
-    sys.version_info < (3, 8), reason="requires python3.8 or higher"
+    sys.version_info < (3, 9), reason="requires python3.9 or higher"
 )
 
 
