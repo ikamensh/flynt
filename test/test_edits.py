@@ -99,8 +99,8 @@ def test_percent_list(state: State):
 
 
 def test_percent_str_call(state: State):
-    s_in = """'%s' % str(var)"""
-    s_expected = """f'{var!s}'"""
+    s_in = """'%s %s' % (str(var), uno)"""
+    s_expected = """f'{var!s} {uno}'"""
 
     s_out, count = code_editor.fstringify_code_by_line(s_in, state)
     assert s_out == s_expected
