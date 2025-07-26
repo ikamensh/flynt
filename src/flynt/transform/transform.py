@@ -53,8 +53,7 @@ def transform_chunk(
                 ast.parse(new_code)
             except SyntaxError:
                 log.error(
-                    "Failed to parse transformed code '%s'",
-                    new_code,
+                    f"Failed to parse transformed code `{new_code}`",
                     exc_info=True,
                 )
                 state.invalid_conversions += 1
