@@ -164,6 +164,12 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
         default=False,
         help="Print the current version number and exit.",
     )
+    parser.add_argument(
+        "--report",
+        action="store_true",
+        default=False,
+        help="Show detailed conversion report",
+    )
     args = parser.parse_args(arglist)
     if args.stdout and args.verbose:
         parser.error("--stdout should not be used with -v/--verbose")
@@ -262,4 +268,5 @@ def state_from_args(args) -> State:
         transform_format=args.transform_format,
         transform_join=args.transform_joins,
         transform_percent=args.transform_percent,
+        report=args.report,
     )

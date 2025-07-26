@@ -185,3 +185,15 @@ def test_cli_stdout(capsys, sample_file):
         assert line in expected_lines
     assert not out.strip().endswith(farewell_message.strip())
     assert err == ""
+
+
+def test_cli_report_flag(capsys):
+    folder = os.path.dirname(__file__)
+    source_path = os.path.join(folder, "samples_in", "all_named.py")
+
+    return_code = run_flynt_cli(["--dry-run", "--report", source_path])
+    assert return_code == 0
+
+    out, err = capsys.readouterr()
+    assert "Flynt run has finished. Stats:" in out
+    assert err == ""
