@@ -18,7 +18,7 @@ def pycode_with_2_concats():
     yield content
 
 
-@pytest.mark.skipif(sys.version_info < (3, 8), reason="requires python3.8 or higher")
+@pytest.mark.skipif(sys.version_info < (3, 9), reason="requires python3.9 or higher")
 def test_find_victims_primitives(pycode_with_2_concats: str):
     tree = ast.parse(pycode_with_2_concats)
 
@@ -32,7 +32,7 @@ def test_find_victims_primitives(pycode_with_2_concats: str):
     assert 'a + " World"' in pycode_with_2_concats.split("\n")[v1.start_line]
 
 
-@pytest.mark.skipif(sys.version_info < (3, 8), reason="requires python3.8 or higher")
+@pytest.mark.skipif(sys.version_info < (3, 9), reason="requires python3.9 or higher")
 def test_find_victims_api(pycode_with_2_concats: str, state: State):
     gen = concat_candidates(pycode_with_2_concats, state)
     lst = list(gen)
@@ -44,7 +44,7 @@ def test_find_victims_api(pycode_with_2_concats: str, state: State):
     assert 'a + " World"' in pycode_with_2_concats.split("\n")[v1.start_line]
 
 
-@pytest.mark.skipif(sys.version_info < (3, 8), reason="requires python3.8 or higher")
+@pytest.mark.skipif(sys.version_info < (3, 9), reason="requires python3.9 or higher")
 def test_find_victims_parens(state: State):
     txt_in = """print('blah' + (thing - 1))"""
     gen = concat_candidates(txt_in, state)

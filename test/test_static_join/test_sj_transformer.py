@@ -8,7 +8,7 @@ import pytest
 from flynt.static_join.transformer import transform_join
 
 pytestmark = pytest.mark.skipif(
-    sys.version_info < (3, 8), reason="requires python3.8 or higher"
+    sys.version_info < (3, 9), reason="requires python3.9 or higher"
 )
 
 

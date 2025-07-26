@@ -1,35 +1,23 @@
 import ast
 import io
+import re
 import tokenize
 from typing import Optional, Union
-
-import astor
-from astor.string_repr import pretty_string
 
 from flynt.exceptions import ConversionRefused
 from flynt.linting.fstr_lint import FstrInliner
 from flynt.utils.format import QuoteTypes, set_quote_type
 
 
-def nicer_pretty_string(
-    s,
-    embedded,
-    current_line,
-    uni_lit=False,
-):
-    r = repr(s)
-    if "\\x" in r:
-        # If the string contains an escape sequence,
-        # we need to work around a bug in upstream astor;
-        # the easiest workaround is to just use the repr
-        # of the string and be done with it.
-        return r
-    return pretty_string(s, embedded, current_line, uni_lit=uni_lit)
-
-
 def ast_to_string(node: ast.AST) -> str:
-    # TODO: this could use `ast.unparse` when targeting Python 3.9+ only.
-    return astor.to_source(node, pretty_string=nicer_pretty_string).rstrip()
+    """Convert ``node`` back into source code."""
+    txt = ast.unparse(node).rstrip()
+    # ``ast.unparse`` wraps ternary expressions in ``FormattedValue`` with
+    # redundant parentheses, e.g. ``f"{(a if c else b)}"``.  Remove them to
+    # match the style previously produced via ``astor``.
+    if isinstance(node, ast.JoinedStr):
+        txt = re.sub(r"\{\(([^{}]+?\sif\s[^{}]+?\selse\s[^{}]+?)\)\}", r"{\1}", txt)
+    return txt
 
 
 def is_str_literal(node: ast.AST) -> bool:
@@ -127,7 +115,11 @@ def fixup_transformed(tree: ast.AST, quote_type: Optional[str] = None) -> str:
     il.visit(tree)
     new_code = ast_to_string(tree)
     if quote_type is None:
-        if new_code[:4] == 'f"""' or new_code[:3] == "'''" or new_code[:3] == '"""':
+        if isinstance(tree, ast.Constant) and isinstance(tree.value, str):
+            quote_type = QuoteTypes.double
+        elif isinstance(tree, ast.JoinedStr):
+            quote_type = QuoteTypes.double
+        elif new_code[:4] == 'f"""' or new_code[:3] == "'''" or new_code[:3] == '"""':
             quote_type = QuoteTypes.double
     if quote_type is not None:
         new_code = set_quote_type(new_code, quote_type)
