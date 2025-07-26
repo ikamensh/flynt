@@ -500,19 +500,19 @@ def test_equiv_expressions_s(state: State):
     assert eval(out) == eval(s_in)
 
 
-@pytest.mark.skipif(sys.version_info < (3, 8), reason="requires python3.8 or higher")
+@pytest.mark.skipif(sys.version_info < (3, 9), reason="requires python3.9 or higher")
 def test_concat(state: State):
     s_in = """msg = a + " World\""""
-    s_expected = """msg = f"{a} World\""""
+    s_expected = """msg = f\"{a} World\""""
 
     s_out, count = code_editor.fstringify_concats(s_in, state)
     assert s_out == s_expected
 
 
-@pytest.mark.skipif(sys.version_info < (3, 8), reason="requires python3.8 or higher")
+@pytest.mark.skipif(sys.version_info < (3, 9), reason="requires python3.9 or higher")
 def test_concat_two_sides(state: State):
     s_in = """t = 'T is a string of value: ' + val + ' and thats great!'"""
-    s_expected = """t = f"T is a string of value: {val} and thats great!\""""
+    s_expected = """t = f\"T is a string of value: {val} and thats great!\""""
 
     s_out, count = code_editor.fstringify_concats(s_in, state)
     assert s_out == s_expected

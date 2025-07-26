@@ -1,4 +1,4 @@
-"""Uses py3.8 AST to define a chunk of code as an AST node."""
+"""Uses Python 3.9 AST to define a chunk of code as an AST node."""
 
 import ast
 

@@ -2,6 +2,7 @@ import ast
 from typing import List, Tuple
 
 from flynt.static_join.utils import get_static_join_bits
+from flynt.utils.format import QuoteTypes
 from flynt.utils.utils import (
     ast_formatted_value,
     ast_string_node,
@@ -47,7 +48,7 @@ def transform_join(tree: ast.AST, *args, **kwargs) -> Tuple[str, bool]:
     new_tree = jt.visit(tree)
     changed = jt.counter > 0
     if changed:
-        new_code = fixup_transformed(new_tree)
+        new_code = fixup_transformed(new_tree, quote_type=QuoteTypes.double)
     else:
         new_code = ""
     return new_code, changed

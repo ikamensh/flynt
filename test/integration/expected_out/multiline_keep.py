@@ -5,5 +5,5 @@ text = f"""
 
 [flake8]
 max-line-length={length}
-inline-quotes="{quotes}\"
+inline-quotes="{quotes}"
 """
