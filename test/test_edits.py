@@ -98,6 +98,22 @@ def test_percent_list(state: State):
     assert s_out == s_expected
 
 
+def test_percent_str_call(state: State):
+    s_in = """'%s %s' % (str(var), uno)"""
+    s_expected = """f'{var!s} {uno}'"""
+
+    s_out, count = code_editor.fstringify_code_by_line(s_in, state)
+    assert s_out == s_expected
+
+
+def test_percent_repr_call(state: State):
+    s_in = """'%s' % repr(var)"""
+    s_expected = """f'{var!r}'"""
+
+    s_out, count = code_editor.fstringify_code_by_line(s_in, state)
+    assert s_out == s_expected
+
+
 def test_part_of_concat(state: State):
     s_in = """print('blah{}'.format(thing) + 'blah' + otherThing + "is %f" % x)"""
     s_expected = """print(f'blah{thing}' + 'blah' + otherThing + f"is {x:f}")"""
@@ -117,6 +133,22 @@ def test_one_string(state: State):
 def test_nonatomic(state: State):
     s_in = """'blah{0}'.format(thing - 1)"""
     s_expected = """f'blah{thing - 1}'"""
+
+    s_out, count = code_editor.fstringify_code_by_line(s_in, state)
+    assert s_out == s_expected
+
+
+def test_format_str_call(state: State):
+    s_in = """'{}'.format(str(var))"""
+    s_expected = """f'{var!s}'"""
+
+    s_out, count = code_editor.fstringify_code_by_line(s_in, state)
+    assert s_out == s_expected
+
+
+def test_format_repr_call(state: State):
+    s_in = """'{}'.format(repr(var))"""
+    s_expected = """f'{var!r}'"""
 
     s_out, count = code_editor.fstringify_code_by_line(s_in, state)
     assert s_out == s_expected

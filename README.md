@@ -35,23 +35,23 @@ From the output of `flynt -h`:
 
 <!-- begin-options -->
 ```
-usage: flynt [-h] [-v | -q] [--no-multiline | -ll LINE_LENGTH]
-             [-d | --stdout] [-s] [--no-tp] [--no-tf] [-tc] [-tj]
-             [-f] [-a] [-e EXCLUDE [EXCLUDE ...]] [--version]
+usage: flynt [-h] [-v | -q] [--no-multiline | -ll LINE_LENGTH] [-d |
+             --stdout] [-s] [--no-tp] [--no-tf] [-tc] [-tj] [-f]
+             [-a] [-e EXCLUDE [EXCLUDE ...]] [--version] [--report]
              [src ...]
 
-flynt v.0.78
+flynt v.1.0.3
 
 positional arguments:
   src                   source file(s) or directory (or a single `-`
                         to read stdin and output to stdout)
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   -v, --verbose         run with verbose output
   -q, --quiet           run without outputting statistics to stdout
   --no-multiline        convert only single line expressions
-  -ll LINE_LENGTH, --line-length LINE_LENGTH
+  -ll, --line-length LINE_LENGTH
                         for expressions spanning multiple lines,
                         convert only if the resulting single line
                         will fit into the line length limit. Default
@@ -84,47 +84,31 @@ optional arguments:
                         Replace static joins (where the joiner is a
                         string literal and the joinee is a static-
                         length list) with f-strings. Available only
-                        if flynt is installed with a 3.9+ interpreter.
+                        if flynt is installed with a 3.9+
+                        interpreter.
   -f, --fail-on-change  Fail when changing files (for linting
                         purposes)
   -a, --aggressive      Include conversions with potentially changed
                         behavior.
-  -e EXCLUDE [EXCLUDE ...], --exclude EXCLUDE [EXCLUDE ...]
+  -e, --exclude EXCLUDE [EXCLUDE ...]
                         ignore files with given strings in it's
                         absolute path.
   --version             Print the current version number and exit.
+  --report              Show detailed conversion report
 
 ```
 
 ### Sample output of a successful run:
 ```
-38f9d3a65222:~ ikkamens$ git clone https://github.com/pallets/flask.git
+$ git clone https://github.com/pallets/flask.git
 Cloning into 'flask'...
 ...
 Resolving deltas: 100% (12203/12203), done.
 
-38f9d3a65222:open_source ikkamens$ flynt flask
-Running flynt v.0.40
-
-Flynt run has finished. Stats:
-
-Execution time:                            0.789s
-Files modified:                            21
-Character count reduction:                 299 (0.06%)
-
-Per expression type:
-Old style (`%`) expressions attempted:     40/42 (95.2%)
-`.format(...)` calls attempted:            26/33 (78.8%)
-F-string expressions created:              48
-Out of all attempted transforms, 7 resulted in errors.
-To find out specific error messages, use --verbose flag.
-
-_-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_._-_.
-Please run your tests before committing. Did flynt get a perfect conversion? give it a star at:
-~ https://github.com/ikamensh/flynt ~
-Thank you for using flynt. Upgrade more projects and recommend it to your colleagues!
-
-38f9d3a65222:~ ikkamens$
+$ flynt flask
+Running flynt v.1.0.3
+Modified 21 of 70 files in 0.79s
+$
 ```
 
 ### Pre-commit hook

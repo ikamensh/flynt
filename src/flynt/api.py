@@ -192,24 +192,20 @@ def fstringify_files(
     total_time = time.time() - start_time
 
     if not state.quiet:
-        _print_report(
-            state,
-            len(files),
-            changed_files,
-            total_charcount_new,
-            total_charcount_original,
-            total_expressions,
-            total_time,
-        )
+        if state.report:
+            _print_report(
+                state,
+                len(files),
+                changed_files,
+                total_charcount_new,
+                total_charcount_original,
+                total_expressions,
+                total_time,
+            )
+        else:
+            _print_summary(len(files), changed_files, total_time)
 
     return changed_files
-
-
-farewell_message = (
-    "Please run your tests before committing. Did flynt get a perfect conversion? give it a star at: "
-    "\n~ https://github.com/ikamensh/flynt ~"
-    "\nThank you for using flynt. Upgrade more projects and recommend it to your colleagues!\n"
-)
 
 
 def _print_report(
@@ -275,7 +271,15 @@ def _print_report(
             print("To find out specific error messages, use --verbose flag.")
 
     print(f"\n{'_-_.' * 25}")
-    print(farewell_message)
+
+
+def _print_summary(found_files: int, changed_files: int, total_time: float) -> None:
+    """Print a concise conversion summary."""
+    if changed_files:
+        print(f"Modified {changed_files} of {found_files} files in {total_time:.2f}s")
+    else:
+        plural = "s" if found_files != 1 else ""
+        print(f"No changes made to {found_files} file{plural} in {total_time:.2f}s")
 
 
 def fstringify(
