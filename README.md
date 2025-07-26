@@ -100,17 +100,15 @@ options:
 
 ### Sample output of a successful run:
 ```
-38f9d3a65222:~ ikkamens$ git clone https://github.com/pallets/flask.git
+$ git clone https://github.com/pallets/flask.git
 Cloning into 'flask'...
 ...
 Resolving deltas: 100% (12203/12203), done.
 
-38f9d3a65222:open_source ikkamens$ flynt flask
+$ flynt flask
 Running flynt v.1.0.3
-
-Modified 21 of 21 files in 0.79s
-
-38f9d3a65222:~ ikkamens$
+Modified 21 of 70 files in 0.79s
+$
 ```
 
 ### Pre-commit hook
