@@ -68,7 +68,7 @@ def test_unicode_escape_preserved():
     assert out == "print(f\"Feels like: {data['main']['feels_like']}\\u00B0F\")"
     assert count == 1
 
-@pytest.mark.xfail
+
 def test_unicode_escape_mixed_preserved():
     """Unicode escaped characters should be kept as such."""
     code = 'print("Feels like: {}\\u00B0F°".format(data["main"]["feels_like"]))'
