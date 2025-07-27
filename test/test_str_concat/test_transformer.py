@@ -152,6 +152,16 @@ def test_parens():
     assert new == expected
 
 
+def test_concat_only_literals():
+    txt = '"here" + r"\\there"'
+    expected = '"here\\\\there"'
+
+    new, changed = transform_concat_from_str(txt)
+
+    assert changed
+    assert new == expected
+
+
 noexc_in = """individual_tests = [re.sub(r"\.py$", "", test) + ".py" for test in tests if not test.endswith('*')]"""
 noexc_out = """individual_tests = [f"{re.sub(r"\.py$", "", test)}.py" for test in tests if not test.endswith('*')]"""
 
