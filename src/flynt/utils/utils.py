@@ -1,12 +1,13 @@
 import ast
+import codecs
 import io
 import re
 import tokenize
-from typing import Optional, Union
+from typing import Dict, Optional, Union
 
 from flynt.exceptions import ConversionRefused
 from flynt.linting.fstr_lint import FstrInliner
-from flynt.utils.format import QuoteTypes, set_quote_type
+from flynt.utils.format import QuoteTypes, get_quote_type, set_quote_type
 
 
 def ast_to_string(node: ast.AST) -> str:
@@ -156,3 +157,41 @@ def contains_comment(code: str) -> bool:
         if token.type == tokenize.COMMENT:
             return True
     return False
+
+
+unicode_escape_re = re.compile(
+    r"\\(?:u[0-9a-fA-F]{4}|U[0-9a-fA-F]{8}|x[0-9a-fA-F]{2}|N\{[^}]+\})"
+)
+
+
+def unicode_escape_map(literal: str) -> Dict[str, str]:
+    """Return mapping of characters to their unicode escape sequences."""
+    quote = get_quote_type(literal)
+    if quote is None:
+        return {}
+    idx = 0
+    while idx < len(literal) and literal[idx] in "furbFURB":
+        idx += 1
+    body = literal[idx + len(quote) : -len(quote)]
+    mapping: Dict[str, str] = {}
+    for m in unicode_escape_re.finditer(body):
+        esc = m.group(0)
+        try:
+            char = codecs.decode(esc, "unicode_escape")
+        except Exception:  # noqa: S112
+            continue
+        mapping[char] = esc
+    return mapping
+
+
+def apply_unicode_escape_map(code: str, mapping: Dict[str, str]) -> str:
+    """Replace characters in ``code`` with their escape sequences."""
+    if not mapping:
+        return code
+    pattern = "[" + "".join(re.escape(c) for c in mapping) + "]"
+    return re.sub(pattern, lambda m: mapping[m.group(0)], code)
+
+
+def contains_unicode_escape(code: str) -> bool:
+    """Return ``True`` if ``code`` contains unicode escape sequences."""
+    return bool(unicode_escape_re.search(code))
