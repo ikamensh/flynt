@@ -34,7 +34,7 @@ class FstringifyTransformer(ast.NodeTransformer):
 
             result_node = joined_string(
                 node,
-                aggressive=self.state.aggressive,
+                aggressive=self.state.aggressive >= 1,
             )
             self.visit(result_node)
             self.counter += 1

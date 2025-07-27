@@ -135,9 +135,12 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
     parser.add_argument(
         "-a",
         "--aggressive",
-        action="store_true",
-        default=False,
-        help="Include conversions with potentially changed behavior.",
+        action="count",
+        default=0,
+        help=(
+            "Include conversions with potentially changed behavior. "
+            "Use -aa to omit int() wrapping for %%d conversions."
+        ),
     )
 
     parser.add_argument(
