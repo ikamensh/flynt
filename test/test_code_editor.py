@@ -26,6 +26,7 @@ def test_code_between_exact(s_in):
 
 
 def test_unicode_offset_translation():
+    """Can do successful edits with multi-byte unicode characters."""
     code = 'print("Feels like: {}°F".format(data["main"]["feels_like"]))'
     state = State()
     chunk = next(iter(call_candidates(code, state)))
@@ -41,11 +42,12 @@ def test_unicode_offset_translation():
 
 
 def test_unicode_chunk_no_token_error():
-    code = 'print("Feels like: {}°F".format(data["main"]["feels_like"]))'
+    """Using multi-byte unicode symbols should not mess with finding right substrings."""
+    code = 'print("Feels l°°ike: {}ﭗ°°\u1234F".format(data["main"]["feels_like"]))'
     chunk = next(iter(call_candidates(code, State())))
-    editor = CodeEditor(code, None, lambda _=None: [chunk], None)
+    editor = CodeEditor(code, None, lambda _: [chunk], None)
 
     snippet = editor.code_in_chunk(chunk)
 
-    assert snippet == '"Feels like: {}°F".format(data["main"]["feels_like"])'
+    assert snippet == '"Feels l°°ike: {}ﭗ°°\u1234F".format(data["main"]["feels_like"])'
     assert contains_comment(snippet) is False
