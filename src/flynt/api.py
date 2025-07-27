@@ -278,6 +278,10 @@ def _print_summary(found_files: int, changed_files: int, total_time: float) -> N
     if changed_files:
         print(f"Modified {changed_files} of {found_files} files in {total_time:.2f}s")
     else:
+
+
+
+
         plural = "s" if found_files != 1 else ""
         print(f"No changes made to {found_files} file{plural} in {total_time:.2f}s")
 
