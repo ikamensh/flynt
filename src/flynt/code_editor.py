@@ -55,6 +55,7 @@ class CodeEditor:
         self.candidates_iter = candidates_iter_factory(code)
         self.transform_func = transform_func
         self.src_lines = code.split("\n")
+        self._src_lines_bytes = [line.encode("utf-8") for line in self.src_lines]
 
         self.results: List[str] = []
         self.count_expressions = 0
@@ -63,6 +64,10 @@ class CodeEditor:
         self.last_idx = 0
         self.used_up = False
         self.output: Optional[str] = None
+
+    def _byte_to_char_idx(self, line_no: int, byte_idx: int) -> int:
+        line_bytes = self._src_lines_bytes[line_no]
+        return len(line_bytes[:byte_idx].decode("utf-8"))
 
     def edit(self) -> Tuple[str, int]:
         """Apply edits to the original code."""
@@ -84,13 +89,17 @@ class CodeEditor:
         result = []
         if start_line == end_line:
             assert end_idx >= start_idx
-            result.append(self.src_lines[start_line][start_idx:end_idx])
+            s = self._byte_to_char_idx(start_line, start_idx)
+            e = self._byte_to_char_idx(end_line, end_idx)
+            result.append(self.src_lines[start_line][s:e])
         else:
-            result.append(self.src_lines[start_line][start_idx:])
+            s = self._byte_to_char_idx(start_line, start_idx)
+            result.append(self.src_lines[start_line][s:])
             full_lines = range(start_line + 1, end_line)
             for line in full_lines:
                 result.append(self.src_lines[line])
-            result.append(self.src_lines[end_line][:end_idx])
+            e = self._byte_to_char_idx(end_line, end_idx)
+            result.append(self.src_lines[end_line][:e])
         return "\n".join(result)
 
     @lru_cache(None)
@@ -100,7 +109,11 @@ class CodeEditor:
         )
 
     def fill_up_to(self, chunk: AstChunk) -> None:
-        start_line, start_idx, _ = (chunk.start_line, chunk.start_idx, chunk.end_idx)
+        start_line, start_idx, _ = (
+            chunk.start_line,
+            self._byte_to_char_idx(chunk.start_line, chunk.start_idx),
+            chunk.end_idx,
+        )
         if start_line == self.last_line:
             self.results.append(
                 self.src_lines[self.last_line][self.last_idx : start_idx],
@@ -149,10 +162,14 @@ class CodeEditor:
             contract_lines = chunk.n_lines - 1
             if contract_lines == 0:
                 line = self.src_lines[chunk.start_line]
-                rest = line[chunk.end_idx :]
+                end_c = self._byte_to_char_idx(chunk.start_line, chunk.end_idx)
+                rest = line[end_c:]
             else:
                 next_line = self.src_lines[chunk.start_line + contract_lines]
-                rest = next_line[chunk.end_idx :]
+                end_c = self._byte_to_char_idx(
+                    chunk.start_line + contract_lines, chunk.end_idx
+                )
+                rest = next_line[end_c:]
             self.maybe_replace(chunk, contract_lines, converted, rest)
 
     def maybe_replace(
@@ -173,12 +190,17 @@ class CodeEditor:
                 lines = converted.split("\\n")
                 lines[-1] += rest
                 lines_fit = all(
-                    len(line) <= self.len_limit - chunk.start_idx for line in lines
+                    len(line)
+                    <= self.len_limit
+                    - self._byte_to_char_idx(chunk.start_line, chunk.start_idx)
+                    for line in lines
                 )
                 converted = converted.replace("\\n", "\n")
             else:
-                lines_fit = (
-                    len(f"{converted}{rest}") <= self.len_limit - chunk.start_idx
+                lines_fit = len(
+                    f"{converted}{rest}"
+                ) <= self.len_limit - self._byte_to_char_idx(
+                    chunk.start_line, chunk.start_idx
                 )
 
         else:
@@ -195,7 +217,7 @@ class CodeEditor:
         self.results.append(converted)
         self.count_expressions += 1
         self.last_line += contract_lines
-        self.last_idx = chunk.end_idx
+        self.last_idx = self._byte_to_char_idx(chunk.end_line, chunk.end_idx)
 
         # remove redundant parenthesis
         if len(self.results) < 2 or not self.results[-2]:
