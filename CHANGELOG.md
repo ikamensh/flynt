@@ -57,8 +57,10 @@ print( f"|{111:5}|{999_999:5}|{77:5}|" )
 """
 ```
 
-* %d format specifier is transformed only in `--aggressive` mode, 
-and will result in `"%d" % var` -> `f"{int(var)}"`. See https://github.com/ikamensh/flynt/issues/59.
+* %d format specifier is transformed only in `--aggressive` mode,
+  resulting in `"%d" % var` -> `f"{int(var)}"`.
+  Use `-aa` to omit the `int()` call.
+  See https://github.com/ikamensh/flynt/issues/59.
 
 * added short versions to other flags:
 ```

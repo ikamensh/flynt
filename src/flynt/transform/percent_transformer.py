@@ -63,7 +63,7 @@ def formatted_value(
     fmt_spec: str,
     val: ast.AST,
     *,
-    aggressive: bool = False,
+    aggressive: int = 0,
 ) -> Union[ast.FormattedValue, ast.Constant]:
     if fmt_spec in integer_specificers:
         fmt_prefix = fmt_prefix.replace(".", "0")
@@ -88,14 +88,14 @@ def formatted_value(
                     fmt_str=f"{fmt_prefix[1:]}",
                     conversion=conversion_methods[fmt_spec],
                 )
-            if aggressive and not fmt_prefix.startswith("-"):
+            if aggressive >= 1 and not fmt_prefix.startswith("-"):
                 # Right alignment
                 return ast_formatted_value(
                     val,
                     fmt_str=f">{fmt_prefix}",
                     conversion=conversion_methods[fmt_spec],
                 )
-        if not aggressive and fmt_prefix:
+        if aggressive < 1 and fmt_prefix:
             raise ConversionRefused(
                 "Default text alignment has changed between percent fmt and fstrings. "
                 "Proceeding would result in changed code behaviour.",
@@ -109,20 +109,21 @@ def formatted_value(
     if fmt_spec == "d":
         # test if is a built-in that returns int
         if not _is_builtin_int_call(val):
-            if not aggressive:
+            if aggressive < 1:
                 raise ConversionRefused(
                     "Skipping %d formatting - fstrings behave differently from % formatting.",
                 )
-            val = ast.Call(
-                func=ast.Name(id="int", ctx=ast.Load()),
-                args=[val],
-                keywords={},
-            )
+            if aggressive < 2:
+                val = ast.Call(
+                    func=ast.Name(id="int", ctx=ast.Load()),
+                    args=[val],
+                    keywords={},
+                )
         fmt_spec = ""
     return ast_formatted_value(val, fmt_str=fmt_prefix + fmt_spec)
 
 
-def transform_dict(node: ast.BinOp, aggressive: bool = False) -> ast.JoinedStr:
+def transform_dict(node: ast.BinOp, aggressive: int = 0) -> ast.JoinedStr:
     """Convert a `BinOp` `%` formatted str with a name representing a Dict on the right to an f-string.
 
     Takes an ast.BinOp representing `"1. %(key1)s 2. %(key2)s" % mydict`
@@ -187,7 +188,7 @@ def transform_dict(node: ast.BinOp, aggressive: bool = False) -> ast.JoinedStr:
     return ast.JoinedStr(segments)
 
 
-def transform_tuple(node: ast.BinOp, *, aggressive: bool = False) -> ast.JoinedStr:
+def transform_tuple(node: ast.BinOp, *, aggressive: int = 0) -> ast.JoinedStr:
     """Convert a `BinOp` `%` formatted str with a tuple on the right to an f-string.
 
     Takes an ast.BinOp representing `"1. %s 2. %s" % (a, b)`
@@ -225,7 +226,7 @@ def transform_tuple(node: ast.BinOp, *, aggressive: bool = False) -> ast.JoinedS
     return ast.JoinedStr(segments)
 
 
-def transform_list(node: ast.BinOp, *, aggressive: bool = False) -> ast.JoinedStr:
+def transform_list(node: ast.BinOp, *, aggressive: int = 0) -> ast.JoinedStr:
     """Convert a `BinOp` `%` formatted str with a list on the right to an f-string.
 
     Takes an ast.BinOp representing `"1. %s 2. %s" % [a, b]`
@@ -244,10 +245,7 @@ def transform_list(node: ast.BinOp, *, aggressive: bool = False) -> ast.JoinedSt
     return transform_tuple(node, aggressive=aggressive)
 
 
-def transform_generic(
-    node: ast.BinOp,
-    aggressive: bool = False,
-) -> ast.JoinedStr:
+def transform_generic(node: ast.BinOp, aggressive: int = 0) -> ast.JoinedStr:
     """Convert a `BinOp` `%` formatted str with a unknown name on the `node.right` to an f-string.
 
     When `node.right` is a Name since we don't know if it's a single var or a dict so we sniff the string.
@@ -283,11 +281,7 @@ supported_operands = [
 ]
 
 
-def transform_binop(
-    node: ast.BinOp,
-    *,
-    aggressive: bool = False,
-) -> ast.JoinedStr:
+def transform_binop(node: ast.BinOp, *, aggressive: int = 0) -> ast.JoinedStr:
     if isinstance(node.right, tuple(supported_operands)):
         return transform_generic(node, aggressive=aggressive)
 

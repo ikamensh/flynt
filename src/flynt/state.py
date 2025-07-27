@@ -8,7 +8,7 @@ from typing import Optional
 class State:
     # -- Options
     quiet: bool = False
-    aggressive: bool = False
+    aggressive: int = 0
     dry_run: bool = False
     stdout: bool = False
     multiline: bool = True

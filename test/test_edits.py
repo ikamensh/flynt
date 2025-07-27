@@ -42,7 +42,7 @@ def test_string_specific_len_right_aligned(state: State):
     s_in = """'%5s' % CLASS_NAMES[labels[j]]"""
     s_expected = """f'{CLASS_NAMES[labels[j]]:>5}'"""
 
-    state.aggressive = True
+    state.aggressive = 1
     s_out, count = code_editor.fstringify_code_by_line(s_in, state)
     assert s_out == s_expected
 
@@ -51,7 +51,7 @@ def test_string_specific_len_left_aligned(state: State):
     s_in = """'%-5s' % CLASS_NAMES[labels[j]]"""
     s_expected = """f'{CLASS_NAMES[labels[j]]:5}'"""
 
-    state.aggressive = True
+    state.aggressive = 1
     s_out, count = code_editor.fstringify_code_by_line(s_in, state)
     assert s_out == s_expected
 
@@ -60,7 +60,7 @@ def test_dont_wrap_int(state: State):
     s_in = """print('Int cast %d' % int(18.81))"""
     s_expected = """print(f'Int cast {int(18.81)}')"""
 
-    state.aggressive = True
+    state.aggressive = 1
     s_out, count = code_editor.fstringify_code_by_line(s_in, state)
     assert s_out == s_expected
 
@@ -69,7 +69,7 @@ def test_dont_wrap_len(state: State):
     s_in = """print('List length %d' % len(sys.argv))"""
     s_expected = """print(f'List length {len(sys.argv)}')"""
 
-    state.aggressive = True
+    state.aggressive = 1
     s_out, count = code_editor.fstringify_code_by_line(s_in, state)
     assert s_out == s_expected
 
@@ -402,7 +402,14 @@ def test_percent_dict(state: State):
 def test_percent_dict_fmt(state: State):
     s_in = """a = '%(?)ld world' % {'?': var}"""
     s_expected = """a = f'{int(var)} world'"""
-    state.aggressive = True
+    state.aggressive = 1
+    assert code_editor.fstringify_code_by_line(s_in, state)[0] == s_expected
+
+
+def test_percent_dict_fmt_extra_aggressive(state: State):
+    s_in = """a = '%(?)ld world' % {'?': var}"""
+    s_expected = """a = f'{var} world'"""
+    state.aggressive = 2
     assert code_editor.fstringify_code_by_line(s_in, state)[0] == s_expected
 
 
@@ -426,7 +433,7 @@ def test_percent_dict_reused_key_noop(state: State):
 def test_percent_dict_reused_key_aggressive(state: State):
     s_expected = """a = f'{var} {var}'"""
 
-    state.aggressive = True
+    state.aggressive = 1
     assert (
         code_editor.fstringify_code_by_line(percent_dict_reused_key, state)[0]
         == s_expected
@@ -466,7 +473,16 @@ def test_legacy_fmtspec(state: State):
     s_in = """d = '%i' % var"""
     s_expected = """d = f'{int(var)}'"""
 
-    state.aggressive = True
+    state.aggressive = 1
+    out, count = code_editor.fstringify_code_by_line(s_in, state)
+    assert out == s_expected
+
+
+def test_legacy_fmtspec_extra_aggressive(state: State):
+    s_in = """d = '%i' % var"""
+    s_expected = """d = f'{var}'"""
+
+    state.aggressive = 2
     out, count = code_editor.fstringify_code_by_line(s_in, state)
     assert out == s_expected
 
@@ -501,7 +517,7 @@ def test_width_spec(state: State):
     s_in = "{'r': '%03f' % row_idx}"
     s_expected = """{'r': f'{row_idx:03f}'}"""
 
-    state.aggressive = True
+    state.aggressive = 1
     assert code_editor.fstringify_code_by_line(s_in, state)[0] == s_expected
 
 
@@ -712,7 +728,7 @@ def test_110(state: State):
     """Test for issue #110 on github"""
     s_in = "'{conn.login}:{conn.password}@'.format(conn=x)"
     expected_out = "f'{x.login}:{x.password}@'"
-    state.aggressive = True
+    state.aggressive = 1
     out, count = code_editor.fstringify_code_by_line(s_in, state)
     assert count == 1
     assert out == expected_out
