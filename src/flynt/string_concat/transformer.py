@@ -10,6 +10,7 @@ from flynt.utils.utils import (
     ast_string_node,
     fixup_transformed,
     get_str_value,
+    is_str_constant,
 )
 
 
@@ -44,7 +45,6 @@ class ConcatTransformer(ast.NodeTransformer):
         """
         if not is_string_concat(node):
             return self.generic_visit(node)
-        self.counter += 1
         parts_raw = unpack_binop(node)
         visited_parts = [self.visit(p) for p in parts_raw]
 
@@ -62,15 +62,24 @@ class ConcatTransformer(ast.NodeTransformer):
                 parts.append(p)
 
         segments: List[ast.AST] = []
+        has_expr = False
         for p in parts:
             if isinstance(p, ast.Constant):
                 segments.append(ast_string_node(p.value))
             else:
                 segments.append(ast_formatted_value(p))
+                has_expr = True
+
+        if has_expr:
+            for ch in ast.walk(node):
+                if is_str_constant(ch) and "\\" in get_str_value(ch):
+                    return self.generic_visit(node)
 
         if all(isinstance(p, ast.Constant) for p in segments):
+            self.counter += 1
             return ast.Constant(value="".join(get_str_value(p) for p in segments))
 
+        self.counter += 1
         return ast.JoinedStr(segments)
 
 
