@@ -100,7 +100,7 @@ def test_cli_string_supports_flags(capsys):
     )
     assert return_code == 0
     out, err = capsys.readouterr()
-    assert out.strip() == 'test_string = f"This may not work"'
+    assert out.strip() == 'test_string = "This may not work"'
     assert err == ""
 
 
