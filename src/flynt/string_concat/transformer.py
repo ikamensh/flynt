@@ -15,14 +15,17 @@ from flynt.utils.utils import (
 
 def unpack_binop(node: ast.BinOp) -> List[ast.AST]:
     assert isinstance(node, ast.BinOp)
-    result = []
+    if not isinstance(node.op, ast.Add):
+        return [node]
 
-    if isinstance(node.left, ast.BinOp):
+    result: List[ast.AST] = []
+
+    if isinstance(node.left, ast.BinOp) and isinstance(node.left.op, ast.Add):
         result.extend(unpack_binop(node.left))
     else:
         result.append(node.left)
 
-    if isinstance(node.right, ast.BinOp):
+    if isinstance(node.right, ast.BinOp) and isinstance(node.right.op, ast.Add):
         result.extend(unpack_binop(node.right))
     else:
         result.append(node.right)
@@ -42,19 +45,19 @@ class ConcatTransformer(ast.NodeTransformer):
         if not is_string_concat(node):
             return self.generic_visit(node)
         self.counter += 1
-        left, right = node.left, node.right
-        left = self.visit(left)
-        right = self.visit(right)
+        parts_raw = unpack_binop(node)
+        visited_parts = [self.visit(p) for p in parts_raw]
 
-        if not check_sns_depth(left) or not check_sns_depth(right):
-            node.left = left
-            node.right = right
-            return node
+        if any(not check_sns_depth(p) for p in visited_parts):
+            res = visited_parts[0]
+            for sub in visited_parts[1:]:
+                res = ast.BinOp(left=res, op=ast.Add(), right=sub)
+            return res
 
-        parts = []
-        for p in [left, right]:
+        parts: List[ast.AST] = []
+        for p in visited_parts:
             if isinstance(p, ast.JoinedStr):
-                parts += p.values
+                parts.extend(p.values)
             else:
                 parts.append(p)
 
