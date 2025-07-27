@@ -16,7 +16,7 @@ from flynt.string_concat.candidates import concat_candidates
 from flynt.string_concat.transformer import transform_concat
 from flynt.transform.transform import transform_chunk
 from flynt.utils.format import QuoteTypes as qt
-from flynt.utils.format import get_quote_type
+from flynt.utils.format import get_quote_type, get_string_prefix
 from flynt.utils.utils import (
     apply_unicode_escape_map,
     contains_comment,
@@ -147,16 +147,23 @@ class CodeEditor:
         if contains_comment(self.code_in_chunk(chunk)):
             return
 
-        # skip raw strings
-        if self.code_in_chunk(chunk)[0] == "r":
-            return
+        snippet = self.code_in_chunk(chunk)
+        stripped = snippet.lstrip()
+        prefix_match = re.match(r"[furbFURB]*(['\"]{3}|['\"])", stripped)
+        if prefix_match:
+            prefix = get_string_prefix(stripped)
+            if "b" in prefix.lower():
+                return
+            is_raw = "r" in prefix.lower()
+        else:
+            prefix = ""
+            is_raw = False
 
         # skip lines with # noqa comment or # flynt: skip
         for line in self.src_lines[chunk.start_line : chunk.end_line + 1]:
             if noqa_regex.findall(line) or flynt_skip_regex.findall(line):
                 return
 
-        snippet = self.code_in_chunk(chunk)
         # try/except only needed for python 3.9 due to quote issues
         try:
             quote_type = get_quote_type(snippet)
@@ -166,7 +173,7 @@ class CodeEditor:
             escape_map = {}
 
         converted, changed = self.transform_func(chunk.node, quote_type=quote_type)
-        if changed and escape_map:
+        if changed and escape_map and not is_raw:
             converted = apply_unicode_escape_map(converted, escape_map)
         if changed:
             contract_lines = chunk.n_lines - 1
@@ -180,7 +187,7 @@ class CodeEditor:
                     chunk.start_line + contract_lines, chunk.end_idx
                 )
                 rest = next_line[end_c:]
-            self.maybe_replace(chunk, contract_lines, converted, rest)
+            self.maybe_replace(chunk, contract_lines, converted, rest, is_raw)
 
     def maybe_replace(
         self,
@@ -188,12 +195,18 @@ class CodeEditor:
         contract_lines: int,
         converted: str,
         rest: str,
+        is_raw: bool,
     ) -> None:
         """Given a possible edit, see if we want to apply it.
 
         For example, we might not want to change multiple lines."""
         if contract_lines:
-            if get_quote_type(self.code_in_chunk(chunk)) in (
+            try:
+                snippet_quote = get_quote_type(self.code_in_chunk(chunk))
+            except FlyntException:
+                snippet_quote = None
+
+            if snippet_quote in (
                 qt.triple_double,
                 qt.triple_single,
             ):
@@ -223,6 +236,11 @@ class CodeEditor:
                 str(chunk),
             )
             return
+
+        if is_raw:
+            converted = converted.replace("\\\\", "\\")
+            if not converted.startswith(("r", "R")):
+                converted = "r" + converted
 
         self.results.append(converted)
         self.count_expressions += 1

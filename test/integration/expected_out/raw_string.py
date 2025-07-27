@@ -8,7 +8,7 @@ def set_filename_version(filename, version_number, pattern):
 
     with open(filename) as f:
         contents = re.sub(
-            r"^(\s*%s\s*=\s*')(.+?)(')" % pattern,
+            rf"^(\s*{pattern}\s*=\s*')(.+?)(')",
             inject_version,
             f.read(),
             flags=re.DOTALL | re.MULTILINE,

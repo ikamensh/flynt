@@ -3,7 +3,7 @@ import codecs
 import io
 import re
 import tokenize
-from typing import Dict, Optional, Union
+from typing import Dict, List, Optional, Union
 
 from flynt.exceptions import ConversionRefused
 from flynt.linting.fstr_lint import FstrInliner
@@ -160,12 +160,18 @@ def contains_comment(code: str) -> bool:
 
 
 unicode_escape_re = re.compile(
-    r"\\(?:u[0-9a-fA-F]{4}|U[0-9a-fA-F]{8}|x[0-9a-fA-F]{2}|N\{[^}]+\})"
+    r"\\(?:u[0-9a-fA-F]{4}|U[0-9a-fA-F]{8}|x[0-9a-fA-F]{2}|N\{[^}]+\}|[0-7]{1,3})"
 )
 
 
-def unicode_escape_map(literal: str) -> Dict[str, str]:
-    """Return mapping of characters to their unicode escape sequences."""
+def unicode_escape_map(literal: str) -> Dict[str, List[str]]:
+    """Return mapping of characters to all unicode or octal escape sequences used for them.
+
+    Multiple occurrences of the same character may appear both escaped and
+    unescaped in the literal.  This function preserves the order of escapes so
+    that they can later be re-applied only to the characters that were escaped
+    originally.
+    """
     quote = get_quote_type(literal)
     if quote is None:
         return {}
@@ -173,25 +179,33 @@ def unicode_escape_map(literal: str) -> Dict[str, str]:
     while idx < len(literal) and literal[idx] in "furbFURB":
         idx += 1
     body = literal[idx + len(quote) : -len(quote)]
-    mapping: Dict[str, str] = {}
+    mapping: Dict[str, List[str]] = {}
     for m in unicode_escape_re.finditer(body):
         esc = m.group(0)
         try:
             char = codecs.decode(esc, "unicode_escape")
         except Exception:  # noqa: S112
             continue
-        mapping[char] = esc
+        mapping.setdefault(char, []).append(esc)
     return mapping
 
 
-def apply_unicode_escape_map(code: str, mapping: Dict[str, str]) -> str:
-    """Replace characters in ``code`` with their escape sequences."""
+def apply_unicode_escape_map(code: str, mapping: Dict[str, List[str]]) -> str:
+    """Replace characters in ``code`` with their original escape sequences."""
     if not mapping:
         return code
     pattern = "[" + "".join(re.escape(c) for c in mapping) + "]"
-    return re.sub(pattern, lambda m: mapping[m.group(0)], code)
+
+    def repl(match: re.Match[str]) -> str:
+        char = match.group(0)
+        escapes = mapping.get(char)
+        if escapes:
+            return escapes.pop(0)
+        return char
+
+    return re.sub(pattern, repl, code)
 
 
 def contains_unicode_escape(code: str) -> bool:
-    """Return ``True`` if ``code`` contains unicode escape sequences."""
+    """Return ``True`` if ``code`` contains unicode or octal escape sequences."""
     return bool(unicode_escape_re.search(code))
