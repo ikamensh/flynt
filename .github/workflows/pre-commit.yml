@@ -9,7 +9,29 @@ on:
 jobs:
   pre-commit:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v4
-      - uses: pre-commit/action@v3.0.0
+      - run: pip install pre-commit
+      - id: pc
+        run: |
+          set +e
+          pre-commit run -a
+          echo "rc=$?" >> "$GITHUB_OUTPUT"
+          exit 0
+      - name: commit fixes
+        if: steps.pc.outputs.rc != '0'
+        run: |
+          if ! git diff --quiet; then
+            git config user.name "github-actions"
+            git config user.email "github-actions@github.com"
+            git commit -am "chore: apply ruff fixes"
+            git push
+          fi
+      - name: verify
+        if: steps.pc.outputs.rc != '0'
+        run: pre-commit run -a

@@ -5,6 +5,8 @@ In order for imports to work, install package in editable mode in your environme
 [pre-commit](https://github.com/pre-commit/pre-commit) is used, to run code checks before committing changes.
 
 If you have pre-commit installed (e.g. from the dev requirements), simply run ``pre-commit install`` to install the hooks for this repo.
+In CI, ruff fixes are committed automatically if needed.
+
 
 # Integration tests
 
