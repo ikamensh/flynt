@@ -739,3 +739,11 @@ def test_joins():
     out, count = code_editor.fstringify_static_joins(s_in, State())
     assert count > 0
     assert out == expected_out
+
+
+def test_joins_octal_escape():
+    s_in = """'\\40'.join(['a', 'b'])"""
+    expected_out = '"a\\40b"'
+    out, count = code_editor.fstringify_static_joins(s_in, State())
+    assert count > 0
+    assert out == expected_out
