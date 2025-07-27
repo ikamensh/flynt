@@ -54,6 +54,7 @@ def test_unicode_chunk_no_token_error():
 
 
 def test_unicode_escape_preserved():
+    """Unicode escaped characters should be kept as such. """
     code = 'print("Feels like: {}\\u00B0F".format(data["main"]["feels_like"]))'
     state = State()
     chunk = next(iter(call_candidates(code, state)))
