@@ -157,12 +157,8 @@ class CodeEditor:
                 return
 
         snippet = self.code_in_chunk(chunk)
-        try:
-            quote_type = get_quote_type(snippet)
-            escape_map = unicode_escape_map(snippet)
-        except FlyntException:
-            quote_type = qt.double
-            escape_map = {}
+        quote_type = get_quote_type(snippet)
+        escape_map = unicode_escape_map(snippet)
 
         converted, changed = self.transform_func(chunk.node, quote_type=quote_type)
         if changed and escape_map:
