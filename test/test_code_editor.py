@@ -7,6 +7,7 @@ from flynt.candidates.ast_call_candidates import call_candidates
 from flynt.code_editor import CodeEditor
 from flynt.state import State
 from flynt.transform.transform import transform_chunk
+from flynt.utils.utils import contains_comment
 
 s0 = """'%s' % (
                     v['key'])"""
@@ -37,3 +38,14 @@ def test_unicode_offset_translation():
     out, count = editor.edit()
     assert out == "print(f\"Feels like: {data['main']['feels_like']}°F\")"
     assert count == 1
+
+
+def test_unicode_chunk_no_token_error():
+    code = 'print("Feels like: {}°F".format(data["main"]["feels_like"]))'
+    chunk = next(iter(call_candidates(code, State())))
+    editor = CodeEditor(code, None, lambda _=None: [chunk], None)
+
+    snippet = editor.code_in_chunk(chunk)
+
+    assert snippet == '"Feels like: {}°F".format(data["main"]["feels_like"])'
+    assert contains_comment(snippet) is False
