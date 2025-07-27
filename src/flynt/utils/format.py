@@ -23,6 +23,14 @@ class QuoteTypes:
     all = [triple_double, triple_single, single, double]
 
 
+def get_string_prefix(code: str) -> str:
+    """Return the leading string prefix characters (r, u, b, f)."""
+    idx = 0
+    while idx < len(code) and code[idx] in "furbFURB":
+        idx += 1
+    return code[:idx]
+
+
 line_num = int
 char_idx = int
 
@@ -39,19 +47,16 @@ class PyToken:
         if self.toknum is not token.STRING:
             return None
 
+        tokval = self.tokval
+        idx = 0
+        while idx < len(tokval) and tokval[idx] in "furbFURB":
+            idx += 1
+
         for qt in QuoteTypes.all:
-            if self.tokval[: len(qt)] == qt and self.tokval[-len(qt) :] == qt:
+            if tokval[idx : idx + len(qt)] == qt and tokval[-len(qt) :] == qt:
                 return qt
 
-        if self.is_legacy_unicode_string():
-            for qt in QuoteTypes.all:
-                if self.tokval[1 : len(qt) + 1] == qt and self.tokval[-len(qt) :] == qt:
-                    return qt
-
         raise FlyntException(f"Can't determine quote type of the string {self.tokval}.")
-
-    def is_legacy_unicode_string(self) -> bool:
-        return self.toknum == token.STRING and self.tokval[0] == "u"
 
     def __repr__(self):
         return f"PyToken {self.toknum} : {self.tokval}"
@@ -66,17 +71,18 @@ def get_quote_type(code: str) -> Optional[str]:
 
 
 def remove_quotes(code: str) -> str:
+    prefix = get_string_prefix(code)
     quote_type = get_quote_type(code)
     if quote_type:
-        return code[len(quote_type) : -len(quote_type)]
-    return code
+        return code[len(prefix) + len(quote_type) : -len(quote_type)]
+    return code[len(prefix) :]
 
 
 def set_quote_type(code: str, quote_type: str) -> str:
-    if code[0] == "f":
-        prefix, body = "f", remove_quotes(code[1:])
-    else:
-        prefix, body = "", remove_quotes(code)
+    prefix = get_string_prefix(code)
+    has_f = "f" in prefix.lower()
+    other_prefix = "".join(ch for ch in prefix if ch.lower() != "f")
+    body = remove_quotes(code)
     if quote_type in (QuoteTypes.single, QuoteTypes.triple_double):
         if body[-2:] == '\\"':
             body = f'{body[:-2]}"'
@@ -86,4 +92,4 @@ def set_quote_type(code: str, quote_type: str) -> str:
     if quote_type == QuoteTypes.single:
         body = lonely_single_quote.sub("\\'", body)
 
-    return prefix + quote_type + body + quote_type
+    return other_prefix + ("f" if has_f else "") + quote_type + body + quote_type
