@@ -201,7 +201,12 @@ class CodeEditor:
 
         For example, we might not want to change multiple lines."""
         if contract_lines:
-            if get_quote_type(self.code_in_chunk(chunk)) in (
+            try:
+                snippet_quote = get_quote_type(self.code_in_chunk(chunk))
+            except FlyntException:
+                snippet_quote = None
+
+            if snippet_quote in (
                 qt.triple_double,
                 qt.triple_single,
             ):

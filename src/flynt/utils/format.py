@@ -1,13 +1,7 @@
-"""This module deals with quote types for strings.
+"""Utilities for working with string quote types."""
 
-It includes checking the quote type and changing it."""
-
-import io
 import re
-import token
-import tokenize
-from tokenize import TokenInfo
-from typing import Optional, Tuple
+from typing import Optional
 
 from flynt.exceptions import FlyntException
 
@@ -31,43 +25,12 @@ def get_string_prefix(code: str) -> str:
     return code[:idx]
 
 
-line_num = int
-char_idx = int
-
-
-class PyToken:
-    def __init__(self, t: TokenInfo) -> None:
-        toknum, tokval, start, end, line = t
-        self.toknum: int = toknum
-        self.tokval: str = tokval
-        self.start: Tuple[line_num, char_idx] = start
-        self.end: Tuple[line_num, char_idx] = end
-
-    def get_quote_type(self) -> Optional[str]:
-        if self.toknum is not token.STRING:
-            return None
-
-        tokval = self.tokval
-        idx = 0
-        while idx < len(tokval) and tokval[idx] in "furbFURB":
-            idx += 1
-
-        for qt in QuoteTypes.all:
-            if tokval[idx : idx + len(qt)] == qt and tokval[-len(qt) :] == qt:
-                return qt
-
-        raise FlyntException(f"Can't determine quote type of the string {self.tokval}.")
-
-    def __repr__(self):
-        return f"PyToken {self.toknum} : {self.tokval}"
-
-
 def get_quote_type(code: str) -> Optional[str]:
-    g = tokenize.tokenize(io.BytesIO(code.encode("utf-8")).readline)
-    next(g)
-    t = PyToken(next(g))
-
-    return t.get_quote_type()
+    """Return the quote token used for ``code``."""
+    match = re.match(r"[furbFURB]*(['\"]{3}|['\"])", code)
+    if match:
+        return match.group(1)
+    raise FlyntException(f"Can't determine quote type of the string {code}.")
 
 
 def remove_quotes(code: str) -> str:
