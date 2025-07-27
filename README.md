@@ -35,9 +35,10 @@ From the output of `flynt -h`:
 
 <!-- begin-options -->
 ```
-usage: flynt [-h] [-v | -q] [--no-multiline | -ll LINE_LENGTH] [-d |
-             --stdout] [-s] [--no-tp] [--no-tf] [-tc] [-tj] [-f]
-             [-a] [-e EXCLUDE [EXCLUDE ...]] [--version] [--report]
+usage: flynt [-h] [-v | -q] [--no-multiline | -ll LINE_LENGTH]
+             [-d | --stdout] [-s] [--no-tp] [--no-tf] [-tc] [-tj]
+             [-f] [-a] [-e EXCLUDE [EXCLUDE ...]] [--version]
+             [--report]
              [src ...]
 
 flynt v.1.0.3
