@@ -9,6 +9,7 @@ from flynt.utils.utils import (
     ast_formatted_value,
     ast_string_node,
     fixup_transformed,
+    get_str_value,
 )
 
 
@@ -67,6 +68,9 @@ class ConcatTransformer(ast.NodeTransformer):
             else:
                 segments.append(ast_formatted_value(p))
 
+        if all(isinstance(p, ast.Constant) for p in segments):
+            return ast.Constant(value="".join(get_str_value(p) for p in segments))
+
         return ast.JoinedStr(segments)
 
 
@@ -83,7 +87,7 @@ def transform_concat(tree: ast.AST, *args, **kwargs) -> Tuple[str, bool]:
             and isinstance(new.body[0], ast.Expr)
         ):
             target = new.body[0].value
-        if isinstance(target, ast.JoinedStr):
+        if isinstance(target, (ast.JoinedStr, ast.Constant)):
             qt = QuoteTypes.double
         try:
             new_code = fixup_transformed(new, quote_type=qt)
