@@ -17,7 +17,11 @@ from flynt.string_concat.transformer import transform_concat
 from flynt.transform.transform import transform_chunk
 from flynt.utils.format import QuoteTypes as qt
 from flynt.utils.format import get_quote_type
-from flynt.utils.utils import contains_comment
+from flynt.utils.utils import (
+    apply_unicode_escape_map,
+    contains_comment,
+    unicode_escape_map,
+)
 
 noqa_regex = re.compile("#[ ]*noqa.*flynt")
 flynt_skip_regex = re.compile(r"#\s*flynt:\s*skip")
@@ -152,12 +156,17 @@ class CodeEditor:
             if noqa_regex.findall(line) or flynt_skip_regex.findall(line):
                 return
 
+        snippet = self.code_in_chunk(chunk)
         try:
-            quote_type = get_quote_type(self.code_in_chunk(chunk))
+            quote_type = get_quote_type(snippet)
+            escape_map = unicode_escape_map(snippet)
         except FlyntException:
             quote_type = qt.double
+            escape_map = {}
 
         converted, changed = self.transform_func(chunk.node, quote_type=quote_type)
+        if changed and escape_map:
+            converted = apply_unicode_escape_map(converted, escape_map)
         if changed:
             contract_lines = chunk.n_lines - 1
             if contract_lines == 0:
