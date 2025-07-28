@@ -1,3 +1,18 @@
+#### v.1.0.5
+
+* added -nb / --notebook flag to convert .ipynb files. Note: the feature is not thoroughly tested yet, use with caution.
+
+#### v.1.0.4
+* Multiple bugfixes closing the issues accumulated over the years. Much of the credit goes to openai codex.
+* Introduced -aa for double aggressive where we do dangerous changes like ignoring int conversion
+in %d .
+* better handling of escaped unicode characters, and multibyte unicode characters.
+
+#### v.1.0.3
+
+* Multiple bugfixes closing the issues accumulated over the years. Much of the credit goes to openai codex.
+
+
 #### v.1.0.0
 
 Drop support for python 3.7.
