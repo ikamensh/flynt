@@ -152,6 +152,13 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
     )
 
     parser.add_argument(
+        "--notebook",
+        action="store_true",
+        default=False,
+        help="Also search and transform Jupyter notebooks (.ipynb files)",
+    )
+
+    parser.add_argument(
         "src",
         action="store",
         nargs="*",
@@ -272,4 +279,5 @@ def state_from_args(args) -> State:
         transform_join=args.transform_joins,
         transform_percent=args.transform_percent,
         report=args.report,
+        process_notebooks=args.notebook,
     )

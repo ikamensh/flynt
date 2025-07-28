@@ -37,8 +37,8 @@ From the output of `flynt -h`:
 ```
 usage: flynt [-h] [-v | -q] [--no-multiline | -ll LINE_LENGTH]
              [-d | --stdout] [-s] [--no-tp] [--no-tf] [-tc] [-tj]
-             [-f] [-a] [-e EXCLUDE [EXCLUDE ...]] [--version]
-             [--report]
+             [-f] [-a] [-e EXCLUDE [EXCLUDE ...]] [--notebook]
+             [--version] [--report]
              [src ...]
 
 flynt v.1.0.3
@@ -52,7 +52,7 @@ options:
   -v, --verbose         run with verbose output
   -q, --quiet           run without outputting statistics to stdout
   --no-multiline        convert only single line expressions
-  -ll, --line-length LINE_LENGTH
+  -ll LINE_LENGTH, --line-length LINE_LENGTH
                         for expressions spanning multiple lines,
                         convert only if the resulting single line
                         will fit into the line length limit. Default
@@ -90,10 +90,13 @@ options:
   -f, --fail-on-change  Fail when changing files (for linting
                         purposes)
   -a, --aggressive      Include conversions with potentially changed
-                        behavior.
-  -e, --exclude EXCLUDE [EXCLUDE ...]
+                        behavior. Use -aa to omit int() wrapping for
+                        %d conversions.
+  -e EXCLUDE [EXCLUDE ...], --exclude EXCLUDE [EXCLUDE ...]
                         ignore files with given strings in it's
                         absolute path.
+  --notebook            Also search and transform Jupyter notebooks
+                        (.ipynb files)
   --version             Print the current version number and exit.
   --report              Show detailed conversion report
 
