@@ -62,7 +62,11 @@ include = [
     "/src",
 ]
 
+[tool.setuptools_scm]
 
+write_to = "src/flynt/_git_version.py"
+version_scheme = "no-guess-dev"
+local_scheme   = "node-and-date"
 
 [tool.mypy]
 exclude = "test/integration/(actual|expected|samples).*"

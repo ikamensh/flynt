@@ -1,4 +1,5 @@
 import os
+import json
 import shutil
 
 import pytest
@@ -211,7 +212,7 @@ def fake_folder_tree(tmpdir):
 def test_uniform_path(fake_folder_tree):
     """Test if the arguments for excluding path is depending of the OS path separator."""
 
-    result = _resolve_files([fake_folder_tree], uniform_path_exclude)
+    result = _resolve_files([fake_folder_tree], uniform_path_exclude, State())
     assert len(result) == uniform_path_count_result
 
 
@@ -242,3 +243,37 @@ def test_fstringify_files_charcount(tmp_path, monkeypatch):
 
     assert captured["orig"] == len(source)
     assert captured["new"] == len("f'{1}'\n")
+
+
+def _write_notebook(path: str) -> None:
+    """Create a simple notebook with one formattable code cell."""
+    nb = {
+        "cells": [
+            {"cell_type": "code", "source": ["print('{}'.format(1))\n"]},
+            {"cell_type": "markdown", "source": ["# header"]},
+        ]
+    }
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(nb, f)
+
+
+def test_notebook_ignored_without_flag(tmp_path):
+    """Without the notebook flag ipynb files were previously skipped."""
+    nb = tmp_path / "t.ipynb"
+    _write_notebook(nb)
+    result = _fstringify_file(str(nb), State())
+    assert result is None
+    with open(nb) as fh:
+        data = json.load(fh)
+    assert "format(1)" in "".join(data["cells"][0]["source"])
+
+
+def test_notebook_conversion(tmp_path):
+    """With the notebook flag enabled code cells are converted."""
+    nb = tmp_path / "t.ipynb"
+    _write_notebook(nb)
+    result = _fstringify_file(str(nb), State(process_notebooks=True))
+    assert result and result.n_changes == 1
+    with open(nb) as fh:
+        data = json.load(fh)
+    assert "f'{1}'" in "".join(data["cells"][0]["source"])
