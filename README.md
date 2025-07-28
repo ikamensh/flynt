@@ -35,9 +35,9 @@ From the output of `flynt -h`:
 
 <!-- begin-options -->
 ```
-usage: flynt [-h] [-v | -q] [--no-multiline | -ll LINE_LENGTH]
-             [-d | --stdout] [-s] [--no-tp] [--no-tf] [-tc] [-tj]
-             [-f] [-a] [-e EXCLUDE [EXCLUDE ...]] [--version]
+usage: flynt [-h] [-v | -q] [--no-multiline | -ll LINE_LENGTH] [-d |
+             --stdout] [-s] [--no-tp] [--no-tf] [-tc] [-tj] [-f]
+             [-a] [-e EXCLUDE [EXCLUDE ...]] [-nb] [--version]
              [--report]
              [src ...]
 
@@ -90,10 +90,14 @@ options:
   -f, --fail-on-change  Fail when changing files (for linting
                         purposes)
   -a, --aggressive      Include conversions with potentially changed
-                        behavior.
+                        behavior. Use -aa to omit int() wrapping for
+                        %d conversions.
   -e, --exclude EXCLUDE [EXCLUDE ...]
                         ignore files with given strings in it's
                         absolute path.
+  -nb, --notebook       Also search and transform Jupyter notebooks
+                        (.ipynb files). Warning: feature in alpha
+                        and was not thoroughly tested.
   --version             Print the current version number and exit.
   --report              Show detailed conversion report
 

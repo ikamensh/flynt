@@ -1,6 +1,7 @@
 import ast
 import codecs
 import dataclasses
+import json
 import logging
 import os
 import sys
@@ -28,14 +29,59 @@ class FstringifyResult:
     content: str
 
 
-def _find_py_files(path: str) -> Iterable[Tuple[str, str]]:
-    """Yield ``(folder, filename)`` pairs for all Python files under ``path``."""
+def _find_source_files(path: str, include_ipynb: bool) -> Iterable[Tuple[str, str]]:
+    """Yield ``(folder, filename)`` pairs for all source files under ``path``."""
     if not os.path.isdir(path):
         yield os.path.split(path)
         return
+
     for srcpath, _, fnames in os.walk(path):
-        for fname in (f for f in fnames if f.endswith(".py")):
-            yield srcpath, fname
+        for fname in fnames:
+            if fname.endswith(".py") or (include_ipynb and fname.endswith(".ipynb")):
+                yield srcpath, fname
+
+
+def _fstringify_notebook(filename: str, state: State) -> Optional[FstringifyResult]:
+    """Apply fstringify transformations to all code cells in a notebook."""
+    try:
+        with open(filename, encoding="utf-8") as f:
+            nb = json.load(f)
+    except Exception:
+        log.error(f"Exception while reading {filename}", exc_info=True)
+        return None
+
+    original_dump = json.dumps(nb, ensure_ascii=False, indent=1)
+    changes = 0
+
+    for idx, cell in enumerate(nb.get("cells", [])):
+        if cell.get("cell_type") != "code":
+            continue
+        source = "".join(cell.get("source", []))
+        result = fstringify_code(source, state, filename=f"{filename}[{idx}]")
+        if not result:
+            continue
+        changes += result.n_changes
+        if result.content != source:
+            cell["source"] = result.content.splitlines(keepends=True)
+
+    new_dump = json.dumps(nb, ensure_ascii=False, indent=1)
+    if state.dry_run and changes:
+        diff = unified_diff(
+            original_dump.split("\n"), new_dump.split("\n"), fromfile=filename
+        )
+        print("\n".join(diff))
+    elif state.stdout:
+        print(new_dump)
+    elif changes:
+        with open(filename, "w", encoding="utf-8") as f:
+            f.write(new_dump)
+
+    return FstringifyResult(
+        n_changes=changes,
+        original_length=len(original_dump),
+        new_length=len(new_dump),
+        content=new_dump,
+    )
 
 
 def _fstringify_file(
@@ -45,6 +91,11 @@ def _fstringify_file(
     """
     F-stringify a file, write changes, and return a change result.
     """
+    if filename.endswith(".ipynb"):
+        if not state.process_notebooks:
+            return None
+        return _fstringify_notebook(filename, state)
+
     encoding, bom = encoding_by_bom(filename)
 
     with open(filename, encoding=encoding, newline="") as f:
@@ -289,7 +340,7 @@ def fstringify(
     excluded_files_or_paths: Optional[Collection[str]] = None,
 ) -> int:
     """determine if a directory or a single file was passed, and f-stringify it."""
-    files = _resolve_files(files_or_paths, excluded_files_or_paths)
+    files = _resolve_files(files_or_paths, excluded_files_or_paths, state)
 
     status = fstringify_files(
         files,
@@ -304,8 +355,9 @@ def fstringify(
 def _resolve_files(
     files_or_paths: List[str],
     excluded_files_or_paths: Optional[Collection[str]],
+    state: State,
 ) -> List[str]:
-    """Resolve relative paths and directory names into a list of absolute paths to python files."""
+    """Resolve relative paths and directory names into a list of absolute paths to source files."""
     files = []
     _blacklist = blacklist.copy()
     if excluded_files_or_paths is not None:
@@ -319,10 +371,15 @@ def _resolve_files(
             sys.exit(1)
 
         if os.path.isdir(abs_path):
-            for folder, filename in _find_py_files(abs_path):
+            for folder, filename in _find_source_files(
+                abs_path, state.process_notebooks
+            ):
                 files.append(os.path.join(folder, filename))
         else:
-            files.append(abs_path)
+            if abs_path.endswith(".py") or (
+                state.process_notebooks and abs_path.endswith(".ipynb")
+            ):
+                files.append(abs_path)
 
     files = [f.replace("\\", "/") for f in files]
     _blacklist = {f.replace("\\", "/") for f in _blacklist}
