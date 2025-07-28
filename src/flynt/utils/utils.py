@@ -209,3 +209,30 @@ def apply_unicode_escape_map(code: str, mapping: Dict[str, List[str]]) -> str:
 def contains_unicode_escape(code: str) -> bool:
     """Return ``True`` if ``code`` contains unicode or octal escape sequences."""
     return bool(unicode_escape_re.search(code))
+
+
+def preserve_escaped_newlines(original: str, converted: str) -> str:
+    """Restore backslash newline escapes lost during AST transformation."""
+    orig_lines = original.splitlines()
+    conv_lines = converted.splitlines()
+    if not orig_lines or not conv_lines:
+        return converted
+    if orig_lines[0].rstrip().endswith("\\") and not conv_lines[0].rstrip().endswith(
+        "\\"
+    ):
+        m = re.match(r"(\s*[furbFURB]*[\'\"]{3})", conv_lines[0])
+        if m:
+            prefix = m.group(1)
+            rest = conv_lines[0][len(prefix) :].lstrip()
+            if len(orig_lines) > 1:
+                indent = len(orig_lines[1]) - len(orig_lines[1].lstrip())
+            else:
+                indent = len(prefix) - len(prefix.lstrip())
+            conv_lines[0] = prefix + "\\"
+            if rest:
+                conv_lines.insert(1, " " * indent + rest)
+    for idx, line in enumerate(orig_lines[1:], start=1):
+        if line.strip() == "\\":
+            indent = len(line) - len(line.lstrip())
+            conv_lines.insert(idx, " " * indent + "\\")
+    return "\n".join(conv_lines)
