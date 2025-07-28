@@ -155,7 +155,6 @@ def test_parens():
 def test_concat_only_literals():
     txt = '"here" + r"\\there"'
     expected = '"here\\\\there"'
-
     new, changed = transform_concat_from_str(txt)
 
     assert changed
@@ -168,6 +167,5 @@ noexc_out = """individual_tests = [f"{re.sub(r"\.py$", "", test)}.py" for test i
 
 def test_noexc():
     new, changed = transform_concat_from_str(noexc_in)
-    # TODO this doesn't produce expected output - number of escapes is surprising
-    # assert changed
-    # assert new == noexc_out
+    assert not changed
+    assert new == ""
