@@ -152,10 +152,11 @@ def run_flynt_cli(arglist: Optional[List[str]] = None) -> int:
     )
 
     parser.add_argument(
+        "-nb",
         "--notebook",
         action="store_true",
         default=False,
-        help="Also search and transform Jupyter notebooks (.ipynb files)",
+        help="Also search and transform Jupyter notebooks (.ipynb files). Warning: feature in alpha and was not thoroughly tested.",
     )
 
     parser.add_argument(
