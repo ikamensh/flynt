@@ -1,3 +1,7 @@
+#### v.1.0.6
+
+* minor efficiency improvement by removing some dead code
+
 #### v.1.0.5
 
 * added -nb / --notebook flag to convert .ipynb files. Note: the feature is not thoroughly tested yet, use with caution.

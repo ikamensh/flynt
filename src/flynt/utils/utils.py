@@ -204,8 +204,3 @@ def apply_unicode_escape_map(code: str, mapping: Dict[str, List[str]]) -> str:
         return char
 
     return re.sub(pattern, repl, code)
-
-
-def contains_unicode_escape(code: str) -> bool:
-    """Return ``True`` if ``code`` contains unicode or octal escape sequences."""
-    return bool(unicode_escape_re.search(code))
