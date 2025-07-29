@@ -9,7 +9,6 @@ from flynt.utils.utils import (
     ast_string_node,
     get_str_value,
     is_str_constant,
-    is_str_literal,
 )
 
 stdlib_parse = string.Formatter().parse
@@ -34,7 +33,6 @@ def joined_string(
         inserted_value_nodes += list(ast.walk(a))
     for kw in fmt_call.keywords:
         inserted_value_nodes += list(ast.walk(kw.value))
-    any(is_str_literal(n) for n in inserted_value_nodes)
 
     for node in inserted_value_nodes:
         if isinstance(node, ast.Constant):
