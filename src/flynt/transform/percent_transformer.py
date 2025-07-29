@@ -5,7 +5,7 @@ from typing import List, Union
 
 from flynt.exceptions import ConversionRefused, FlyntException
 from flynt.transform.format_call_transforms import ast_formatted_value, ast_string_node
-from flynt.utils.utils import get_str_value, is_str_constant, is_str_literal
+from flynt.utils.utils import get_str_value, is_str_constant
 
 FORMATS = "diouxXeEfFgGcrsa"
 
@@ -262,8 +262,6 @@ def transform_generic(node: ast.BinOp, aggressive: int = 0) -> ast.JoinedStr:
     has_dict_str_format = DICT_PATTERN.findall(get_str_value(node.left))
     if has_dict_str_format:
         return transform_dict(node, aggressive=aggressive)
-
-    any(is_str_literal(n) for n in ast.walk(node.right))
 
     # if it's just a name then pretend it's tuple to use that code
     node.right = ast.Tuple(elts=[node.right])
