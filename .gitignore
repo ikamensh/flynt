@@ -15,3 +15,6 @@ __pycache__/
 .vscode
 .idea
 .run
+
+# release version
+src/flynt/_git_version.py
