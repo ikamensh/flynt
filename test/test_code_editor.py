@@ -1,6 +1,5 @@
 import pytest
 
-from functools import partial
 
 from flynt.candidates.ast_percent_candidates import percent_candidates
 from flynt.candidates.ast_call_candidates import call_candidates
@@ -19,8 +18,9 @@ s1 = """\"%(a)-6d %(a)s" % d"""
     [s0, s1],
 )
 def test_code_between_exact(s_in):
-    chunk = set(percent_candidates(s_in, State())).pop()
-    editor = CodeEditor(s_in, None, lambda *args: None, None)
+    state = State()
+    chunk = set(percent_candidates(s_in, state)).pop()
+    editor = CodeEditor(s_in, None, lambda *args: None, None, state)
 
     assert editor.code_in_chunk(chunk) == s_in
 
@@ -33,8 +33,9 @@ def test_unicode_offset_translation():
     editor = CodeEditor(
         code,
         state.len_limit,
-        lambda _=None: [chunk],
-        partial(transform_chunk, state=state),
+        lambda *_: [chunk],
+        transform_chunk,
+        state,
     )
     out, count = editor.edit()
     assert out == "print(f\"Feels like: {data['main']['feels_like']}°F\")"
@@ -44,8 +45,9 @@ def test_unicode_offset_translation():
 def test_unicode_chunk_no_token_error():
     """Using multi-byte unicode symbols should not mess with finding right substrings."""
     code = 'print("Feels l°°ike: {}ﭗ°°\u1234F".format(data["main"]["feels_like"]))'
-    chunk = next(iter(call_candidates(code, State())))
-    editor = CodeEditor(code, None, lambda _: [chunk], None)
+    state = State()
+    chunk = next(iter(call_candidates(code, state)))
+    editor = CodeEditor(code, None, lambda *_: [chunk], None, state)
 
     snippet = editor.code_in_chunk(chunk)
 
@@ -61,8 +63,9 @@ def test_unicode_escape_preserved():
     editor = CodeEditor(
         code,
         state.len_limit,
-        lambda _=None: [chunk],
-        partial(transform_chunk, state=state),
+        lambda *_: [chunk],
+        transform_chunk,
+        state,
     )
     out, count = editor.edit()
     assert out == "print(f\"Feels like: {data['main']['feels_like']}\\u00B0F\")"
@@ -77,8 +80,9 @@ def test_unicode_escape_mixed_preserved():
     editor = CodeEditor(
         code,
         state.len_limit,
-        lambda _=None: [chunk],
-        partial(transform_chunk, state=state),
+        lambda *_: [chunk],
+        transform_chunk,
+        state,
     )
     out, count = editor.edit()
     assert out == "print(f\"Feels like: {data['main']['feels_like']}\\u00B0F°\")"
