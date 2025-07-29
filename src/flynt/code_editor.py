@@ -20,6 +20,7 @@ from flynt.utils.format import get_quote_type, get_string_prefix
 from flynt.utils.utils import (
     apply_unicode_escape_map,
     contains_comment,
+    preserve_escaped_newlines,
     unicode_escape_map,
 )
 
@@ -180,6 +181,7 @@ class CodeEditor:
         if changed and escape_map and not is_raw:
             converted = apply_unicode_escape_map(converted, escape_map)
         if changed:
+            converted = preserve_escaped_newlines(snippet, converted)
             contract_lines = chunk.n_lines - 1
             if contract_lines == 0:
                 line = self.src_lines[chunk.start_line]
@@ -222,7 +224,9 @@ class CodeEditor:
                     - self._byte_to_char_idx(chunk.start_line, chunk.start_idx)
                     for line in lines
                 )
-                converted = converted.replace("\\n", "\n")
+                snippet_text = self.code_in_chunk(chunk)
+                if "\\n" not in snippet_text:
+                    converted = converted.replace("\\n", "\n")
             else:
                 lines_fit = len(
                     f"{converted}{rest}"
