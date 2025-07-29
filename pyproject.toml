@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
@@ -49,6 +49,9 @@ Homepage = "https://github.com/ikamensh/flynt"
 
 [tool.hatch.version]
 path = "src/flynt/__init__.py"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/flynt/_git_version.py"
 
 [tool.hatch.build.targets.sdist]
 include = [
