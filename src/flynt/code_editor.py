@@ -2,7 +2,7 @@ import logging
 import re
 import string
 import sys
-from functools import lru_cache, partial
+from functools import lru_cache
 from typing import Callable, List, Optional, Tuple
 
 from flynt.candidates.ast_call_candidates import call_candidates
@@ -51,13 +51,15 @@ class CodeEditor:
         len_limit: Optional[int],
         candidates_iter_factory: Callable,
         transform_func: Callable,
+        state: State,
     ) -> None:
         if len_limit is None:
             len_limit = sys.maxsize
 
         self.len_limit = len_limit
-        self.candidates_iter = candidates_iter_factory(code)
+        self.candidates_iter = candidates_iter_factory(code, state)
         self.transform_func = transform_func
+        self.state = state
         self.src_lines = code.split("\n")
         self._src_lines_bytes = [line.encode("utf-8") for line in self.src_lines]
 
@@ -172,7 +174,9 @@ class CodeEditor:
             quote_type = qt.double
             escape_map = {}
 
-        converted, changed = self.transform_func(chunk.node, quote_type=quote_type)
+        converted, changed = self.transform_func(
+            chunk.node, state=self.state, quote_type=quote_type
+        )
         if changed and escape_map and not is_raw:
             converted = apply_unicode_escape_map(converted, escape_map)
         if changed:
@@ -288,8 +292,8 @@ def fstringify_code_by_line(code: str, state: State) -> Tuple[str, int]:
 
     return _transform_code(
         code,
-        partial(fstring_candidates, state=state),
-        partial(transform_chunk, state=state),
+        fstring_candidates,
+        transform_chunk,
         state,
     )
 
@@ -298,8 +302,8 @@ def fstringify_concats(code: str, state: State) -> Tuple[str, int]:
     """replace string literal concatenations with f-string expressions."""
     return _transform_code(
         code,
-        partial(concat_candidates, state=state),
-        partial(transform_concat, state=state),
+        concat_candidates,
+        transform_concat,
         state,
     )
 
@@ -308,8 +312,8 @@ def fstringify_static_joins(code: str, state: State) -> Tuple[str, int]:
     """replace joins on static content with f-string expressions."""
     return _transform_code(
         code,
-        partial(join_candidates, state=state),
-        partial(transform_join, state=state),
+        join_candidates,
+        transform_join,
         state,
     )
 
@@ -326,4 +330,5 @@ def _transform_code(
         state.len_limit,
         candidates_iter_factory,
         transform_func,
+        state,
     ).edit()
