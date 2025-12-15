@@ -18,7 +18,7 @@ jobs:
           python-version: "3.11"
       - run: pip install build
       - run: python -m build
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v6
         with:
           name: dist
           path: dist/*
