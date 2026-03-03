@@ -1,3 +1,5 @@
+### A new tool: try [kodo](https://github.com/ikamensh/kodo), open source agentic coding orchestrator.
+
 # flynt - string formatting converter
 
 <p align="center">
