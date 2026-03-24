@@ -3,7 +3,7 @@
 This repository contains `flynt`, a Python package that converts old string formatting to f-strings. The code lives in `src/` and tests in `test/`.
 
 ## Development Setup
-- Use **Python 3.8+**.
+- Use **Python 3.9+**.
 - Install dependencies in editable mode: `pip install -e .[dev]`.
 - Install pre-commit hooks with `pre-commit install`.
 
