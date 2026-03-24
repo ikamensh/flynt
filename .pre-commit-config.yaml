@@ -8,7 +8,7 @@ repos:
         args: [--fix, --exit-non-zero-on-fix]
         exclude: test/integration/(actual|expected|samples).*
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.2.2
+    rev: 2ccb47ff45ad361a21071a7eedda4c37e6ae8c5a  # frozen: v2.4.2
     hooks:
       - id: codespell  # See pyproject.toml for args
   - repo: https://github.com/pre-commit/mirrors-mypy
