@@ -155,8 +155,6 @@ def test_digit_grouping_2(state: State):
         # not enough placeholders / placeholders missing
         '"{}{}".format(a)',
         '"{a}{b}".format(a=a)',
-        # too complex syntax
-        '"{:{}}".format(x, y)',
         '"{}".format(b"\\n")',
         '"{}".format("\\n".join(items))',
         'msg = "{}\\nPossible solutions:\\n{}".format(msg, "\\n".join(solutions))',
@@ -191,9 +189,38 @@ def test_fix_fstrings_noop(s, state: State):
         ('"{}" . format(x)', 'f"""{x}"""'),
         # spans multiple lines
         ('"{}".format(\n    a,\n)', 'f"""{a}"""'),
+        # nested field references in format spec
+        ('"{:{}}".format(x, y)', 'f"""{x:{y}}"""'),
+        ('"{:{fill}}".format(x, fill=c)', 'f"""{x:{c}}"""'),
+        ('"{} {:>{}}".format(a, b, c)', 'f"""{a} {b:>{c}}"""'),
     ),
 )
 def test_fix_fstrings(s, expected, state: State):
+    new, changed = transform_chunk_from_str(s, state)
+    assert changed
+    assert new == expected
+
+
+@pytest.mark.parametrize(
+    ("s", "expected"),
+    (
+        # nested field references in format spec (needs aggressive for numbered)
+        (
+            """'{0:>{1}}'.format(bench[prop], widths[prop])""",
+            'f"""{bench[prop]:>{widths[prop]}}"""',
+        ),
+        (
+            '"{0:{1}.{2}f}".format(x, w, p)',
+            'f"""{x:{w}.{p}f}"""',
+        ),
+        (
+            '"{0:*>{1}}".format(x, n)',
+            'f"""{x:*>{n}}"""',
+        ),
+    ),
+)
+def test_fix_fstrings_aggressive(s, expected, state: State):
+    state.aggressive = 1
     new, changed = transform_chunk_from_str(s, state)
     assert changed
     assert new == expected

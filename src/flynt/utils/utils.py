@@ -2,12 +2,15 @@ import ast
 import codecs
 import io
 import re
+import string
 import tokenize
 from typing import Dict, List, Optional, Union
 
 from flynt.exceptions import ConversionRefused
 from flynt.linting.fstr_lint import FstrInliner
 from flynt.utils.format import QuoteTypes, get_quote_type, set_quote_type
+
+stdlib_parse = string.Formatter().parse
 
 
 def ast_to_string(node: ast.AST) -> str:
@@ -80,8 +83,70 @@ def ast_formatted_value(
     fmt_str: Optional[str] = None,
     conversion: Optional[str] = None,
 ) -> Union[ast.FormattedValue, ast.Constant]:
+    return _ast_formatted_value_impl(val, fmt_str, conversion)[0]
+
+
+def ast_formatted_value_with_nested(
+    val: ast.expr,
+    fmt_str: Optional[str],
+    conversion: Optional[str],
+    var_map: Dict,
+    seq_ctr: int = 0,
+) -> tuple[Union[ast.FormattedValue, ast.Constant], int, set]:
+    """Like :func:`ast_formatted_value` but resolves nested field references.
+
+    Returns ``(node, implicit_count, used_keys)`` where *implicit_count* is the
+    number of implicit positional fields consumed from the format spec and
+    *used_keys* is the set of var_map keys referenced by the format spec.
+    """
+    return _ast_formatted_value_impl(val, fmt_str, conversion, var_map, seq_ctr)
+
+
+def _build_format_spec(
+    fmt_str: str,
+    var_map: Dict,
+    seq_ctr: int = 0,
+) -> tuple[ast.JoinedStr, int, set]:
+    """Build a JoinedStr for a format spec, resolving nested field references.
+
+    Returns ``(node, implicit_count, used_keys)`` where *implicit_count* is the
+    number of implicit positional fields consumed from *seq_ctr* onwards and
+    *used_keys* is the set of var_map keys referenced.
+    """
+    parts: List[ast.expr] = []
+    consumed = 0
+    used_keys = set()
+    for literal, field_name, nested_fmt, _conv in stdlib_parse(fmt_str):
+        if literal:
+            parts.append(ast_string_node(literal))
+        if field_name is not None:
+            if field_name.isdigit():
+                key: Union[str, int] = int(field_name)
+            elif field_name == "":
+                key = seq_ctr + consumed
+                consumed += 1
+            else:
+                key = field_name
+            used_keys.add(key)
+            parts.append(
+                ast.FormattedValue(
+                    value=var_map[key],
+                    conversion=-1,
+                    format_spec=None,
+                )
+            )
+    return ast.JoinedStr(parts), consumed, used_keys
+
+
+def _ast_formatted_value_impl(
+    val: ast.expr,
+    fmt_str: Optional[str] = None,
+    conversion: Optional[str] = None,
+    var_map: Optional[Dict] = None,
+    seq_ctr: int = 0,
+) -> tuple[Union[ast.FormattedValue, ast.Constant], int, set]:
     if isinstance(val, ast.FormattedValue):
-        return val
+        return val, 0, set()
 
     if ast_to_string(val).startswith("{"):
         raise ConversionRefused(
@@ -100,21 +165,29 @@ def ast_formatted_value(
         conversion = f"!{'s' if val.func.id == 'str' else 'r'}"
         val = val.args[0]
 
+    consumed = 0
+    used_keys: set = set()
     if fmt_str:
-        format_spec = ast.JoinedStr([ast_string_node(fmt_str)])
+        if var_map is not None and "{" in fmt_str:
+            format_spec, consumed, used_keys = _build_format_spec(
+                fmt_str, var_map, seq_ctr=seq_ctr
+            )
+        else:
+            format_spec = ast.JoinedStr([ast_string_node(fmt_str)])
     else:
         format_spec = None
 
     conversion_val = -1 if conversion is None else ord(conversion.replace("!", ""))
 
     if format_spec is None and is_str_constant(val):
-        return val  # type:ignore[return-value]
+        return val, consumed, used_keys  # type:ignore[return-value]
 
-    return ast.FormattedValue(
+    node = ast.FormattedValue(
         value=val,
         conversion=conversion_val,
         format_spec=format_spec,
     )
+    return (node, consumed, used_keys)
 
 
 def ast_string_node(string: str) -> ast.Constant:
