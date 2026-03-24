@@ -1,10 +1,10 @@
 repos:
-  - repo: https://github.com/astral-sh/ruff-pre-commit # Note the new organization astral-sh
-    rev: 'v0.11.3'
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: 'e05c5c0818279e5ac248ac9e954431ba58865e61'  # frozen: v0.15.7
     hooks:
       - id: ruff-format
         exclude: test/integration/(actual|expected|samples).*
-      - id: ruff
+      - id: ruff-check
         args: [--fix, --exit-non-zero-on-fix]
         exclude: test/integration/(actual|expected|samples).*
   - repo: https://github.com/codespell-project/codespell

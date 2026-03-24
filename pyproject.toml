@@ -38,7 +38,7 @@ dev = [
     "pytest",
     "pytest-cov",
     "twine",
-    "ruff",
+    "ruff~=0.15.7",
 ]
 
 [project.scripts]
@@ -70,7 +70,10 @@ exclude = "test/integration/(actual|expected|samples).*"
 [tool.ruff]
 line-length = 88
 target-version = "py39"
-exclude = ["build/**"]
+exclude = [
+    "build/**",
+    "*.ipynb", # ipynbs in the repo are somewhat malformed
+]
 
 [tool.ruff.lint]
 extend-select = [
@@ -87,6 +90,7 @@ extend-ignore = [
     "F523",
     "F821",
     "F841",
+    "F541",
     "I",
  ]
 "test/test_lexer.py" = ["F841"]
@@ -94,6 +98,11 @@ extend-ignore = [
 "test/test_styles.py" = ["S311"]
 "**/tests/*" = ["S101", "ANN"]
 "**/__init__.py" = ["F401"]
+
+[tool.ruff.format]
+exclude = [
+    "test/integration/*",
+]
 
 [tool.codespell]
 ignore-words-list = ["hass", "thats"]
