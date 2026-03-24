@@ -94,3 +94,6 @@ extend-ignore = [
 "test/test_styles.py" = ["S311"]
 "**/tests/*" = ["S101", "ANN"]
 "**/__init__.py" = ["F401"]
+
+[tool.codespell]
+ignore-words-list = ["hass", "thats"]
