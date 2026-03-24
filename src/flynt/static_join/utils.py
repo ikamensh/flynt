@@ -14,9 +14,9 @@ def get_joiner_from_static_join(func: ast.AST) -> Optional[str]:
     return None
 
 
-def get_arguments_from_static_join(args: Sequence[ast.AST]) -> Optional[List[ast.AST]]:
+def get_arguments_from_static_join(args: Sequence[ast.AST]) -> Optional[List[ast.expr]]:
     if len(args) == 1 and isinstance(args[0], (ast.List, ast.Tuple, ast.Set)):
-        elts: List[ast.AST] = list(args[0].elts)
+        elts: List[ast.expr] = list(args[0].elts)
         if any(isinstance(elt, ast.Starred) for elt in elts):
             # If there's a `*starred` element in the list, it's not valid.
             return None
@@ -24,7 +24,7 @@ def get_arguments_from_static_join(args: Sequence[ast.AST]) -> Optional[List[ast
     return None
 
 
-def get_static_join_bits(node: ast.Call) -> Optional[Tuple[str, List[ast.AST]]]:
+def get_static_join_bits(node: ast.Call) -> Optional[Tuple[str, List[ast.expr]]]:
     joiner = get_joiner_from_static_join(node.func)
     if joiner is None:
         return None

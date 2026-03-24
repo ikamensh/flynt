@@ -76,7 +76,7 @@ def str_in_str(node: ast.AST) -> bool:
 
 
 def ast_formatted_value(
-    val: ast.AST,
+    val: ast.expr,
     fmt_str: Optional[str] = None,
     conversion: Optional[str] = None,
 ) -> Union[ast.FormattedValue, ast.Constant]:

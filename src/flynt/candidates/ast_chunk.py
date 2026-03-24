@@ -4,7 +4,7 @@ import ast
 
 
 class AstChunk:
-    def __init__(self, node: ast.AST) -> None:
+    def __init__(self, node: ast.expr) -> None:
         self.node = node
 
     @property
