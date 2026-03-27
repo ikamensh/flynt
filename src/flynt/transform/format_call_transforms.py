@@ -1,17 +1,15 @@
 import ast
-import string
 from collections import deque
 from typing import Any, Dict, List, Union
 
 from flynt.exceptions import ConversionRefused, FlyntException
 from flynt.utils.utils import (
-    ast_formatted_value,
+    ast_formatted_value_with_nested,
     ast_string_node,
     get_str_value,
     is_str_constant,
+    stdlib_parse,
 )
-
-stdlib_parse = string.Formatter().parse
 
 
 def joined_string(
@@ -100,7 +98,16 @@ def joined_string(
 
         if suffix:
             ast_name = ast.Attribute(value=ast_name, attr=suffix)
-        new_segments.append(ast_formatted_value(ast_name, fmt_str, conversion))
+
+        node, consumed, used_keys = ast_formatted_value_with_nested(
+            ast_name, fmt_str, conversion, var_map=var_map, seq_ctr=seq_ctr
+        )
+        seq_ctr += consumed
+        if not aggressive:
+            for key in used_keys:
+                var_map.pop(key, None)
+
+        new_segments.append(node)
 
     if var_map and not aggressive:
         raise FlyntException(
