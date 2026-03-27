@@ -4,8 +4,12 @@ from collections import deque
 from typing import List, Union
 
 from flynt.exceptions import ConversionRefused, FlyntException
-from flynt.transform.format_call_transforms import ast_formatted_value, ast_string_node
-from flynt.utils.utils import get_str_value, is_str_constant
+from flynt.utils.utils import (
+    ast_formatted_value,
+    ast_string_node,
+    get_str_value,
+    is_str_constant,
+)
 
 FORMATS = "diouxXeEfFgGcrsa"
 
@@ -61,7 +65,7 @@ def _is_len_call(val: ast.AST) -> bool:
 def formatted_value(
     fmt_prefix: str,
     fmt_spec: str,
-    val: ast.AST,
+    val: ast.expr,
     *,
     aggressive: int = 0,
 ) -> Union[ast.FormattedValue, ast.Constant]:
@@ -117,7 +121,7 @@ def formatted_value(
                 val = ast.Call(
                     func=ast.Name(id="int", ctx=ast.Load()),
                     args=[val],
-                    keywords={},
+                    keywords=[],
                 )
         fmt_spec = ""
     return ast_formatted_value(val, fmt_str=fmt_prefix + fmt_spec)
@@ -148,7 +152,7 @@ def transform_dict(node: ast.BinOp, aggressive: int = 0) -> ast.JoinedStr:
         spec.append((prefix, var_key, fmt_str))
 
     # build result node
-    segments: List[ast.AST] = []
+    segments: List[ast.expr] = []
     spec.reverse()
     blocks = DICT_PATTERN.split(format_str)
 
@@ -167,7 +171,7 @@ def transform_dict(node: ast.BinOp, aggressive: int = 0) -> ast.JoinedStr:
         def make_fv(key: str):
             return ast.Subscript(
                 value=node.right,
-                slice=ast.Index(value=ast.Constant(value=key)),
+                slice=ast.Constant(value=key),
             )
 
     for block in blocks:
@@ -209,7 +213,7 @@ def transform_tuple(node: ast.BinOp, *, aggressive: int = 0) -> ast.JoinedStr:
 
     str_vars = deque(node.right.elts)
 
-    segments: List[ast.AST] = []
+    segments: List[ast.expr] = []
     blocks = deque(VAR_KEY_PATTERN.split(format_str))
     segments.append(ast_string_node(blocks.popleft().replace("%%", "%")))
 

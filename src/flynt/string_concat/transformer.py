@@ -54,17 +54,17 @@ class ConcatTransformer(ast.NodeTransformer):
                 res = ast.BinOp(left=res, op=ast.Add(), right=sub)
             return res
 
-        parts: List[ast.AST] = []
+        parts: List[ast.expr] = []
         for p in visited_parts:
             if isinstance(p, ast.JoinedStr):
                 parts.extend(p.values)
             else:
                 parts.append(p)
 
-        segments: List[ast.AST] = []
+        segments: List[ast.expr] = []
         has_expr = False
         for p in parts:
-            if isinstance(p, ast.Constant):
+            if isinstance(p, ast.Constant) and isinstance(p.value, str):
                 segments.append(ast_string_node(p.value))
             else:
                 segments.append(ast_formatted_value(p))

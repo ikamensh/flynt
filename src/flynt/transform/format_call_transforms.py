@@ -57,7 +57,7 @@ def joined_string(
     splits = deque(stdlib_parse(string))
 
     seq_ctr = 0
-    new_segments: List[Union[ast.Constant, ast.FormattedValue]] = []
+    new_segments: List[ast.expr] = []
     manual_field_ordering = False
 
     for raw, var_name, fmt_str, conversion in splits:

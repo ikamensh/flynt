@@ -26,7 +26,7 @@ class JoinTransformer(ast.NodeTransformer):
             return self.generic_visit(node)
         joiner, args = res
         self.counter += 1
-        args_with_interleaved_joiner: List[ast.AST] = []
+        args_with_interleaved_joiner: List[ast.expr] = []
         for arg in args:
             if is_str_constant(arg):
                 args_with_interleaved_joiner.append(arg)
