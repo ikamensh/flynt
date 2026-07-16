@@ -1,6 +1,6 @@
 [package]
 name = "flynt-rs"
-version = "0.1.0"
+version = "1.0.6"
 edition = "2021"
 description = "Rust port of flynt: convert %-format and .format() strings to f-strings"
 license = "MIT"
