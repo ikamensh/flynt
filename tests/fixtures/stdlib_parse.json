@@ -1,0 +1,1253 @@
+[
+ {
+  "src": "a{0}b",
+  "fields": [
+   [
+    "a",
+    "0",
+    "",
+    null
+   ],
+   [
+    "b",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "{}",
+  "fields": [
+   [
+    "",
+    "",
+    "",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "x{name!r:>{w}}y",
+  "fields": [
+   [
+    "x",
+    "name",
+    ">{w}",
+    "r"
+   ],
+   [
+    "y",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "{}.{}f",
+  "fields": [
+   [
+    "",
+    "",
+    "",
+    null
+   ],
+   [
+    ".",
+    "",
+    "",
+    null
+   ],
+   [
+    "f",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "literal only",
+  "fields": [
+   [
+    "literal only",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "{:>5}",
+  "fields": [
+   [
+    "",
+    "",
+    ">5",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "pre{x}",
+  "fields": [
+   [
+    "pre",
+    "x",
+    "",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "{{literal}}",
+  "fields": [
+   [
+    "{",
+    null,
+    null,
+    null
+   ],
+   [
+    "literal}",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "a}}b",
+  "fields": [
+   [
+    "a}",
+    null,
+    null,
+    null
+   ],
+   [
+    "b",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "{x:{y}}",
+  "fields": [
+   [
+    "",
+    "x",
+    "{y}",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "{x:{y:{z}}}",
+  "fields": [
+   [
+    "",
+    "x",
+    "{y:{z}}",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "100%% {x}",
+  "fields": [
+   [
+    "100%% ",
+    "x",
+    "",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "{}{}",
+  "fields": [
+   [
+    "",
+    "",
+    "",
+    null
+   ],
+   [
+    "",
+    "",
+    "",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "{d[a:b]}",
+  "fields": [
+   [
+    "",
+    "d[a:b]",
+    "",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "{0.name}",
+  "fields": [
+   [
+    "",
+    "0.name",
+    "",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "{x!s}",
+  "fields": [
+   [
+    "",
+    "x",
+    "",
+    "s"
+   ]
+  ]
+ },
+ {
+  "src": "",
+  "fields": []
+ },
+ {
+  "src": "no fields",
+  "fields": [
+   [
+    "no fields",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "{a}{b}{c}",
+  "fields": [
+   [
+    "",
+    "a",
+    "",
+    null
+   ],
+   [
+    "",
+    "b",
+    "",
+    null
+   ],
+   [
+    "",
+    "c",
+    "",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "{:.2f}",
+  "fields": [
+   [
+    "",
+    "",
+    ".2f",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "{name:{spec}}",
+  "fields": [
+   [
+    "",
+    "name",
+    "{spec}",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "Need more {} to activate {}",
+  "fields": [
+   [
+    "Need more ",
+    "",
+    "",
+    null
+   ],
+   [
+    " to activate ",
+    "",
+    "",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "my string {first}, but also {second} and {foo}",
+  "fields": [
+   [
+    "my string ",
+    "first",
+    "",
+    null
+   ],
+   [
+    ", but also ",
+    "second",
+    "",
+    null
+   ],
+   [
+    " and ",
+    "foo",
+    "",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "{{}}my string {:.2f}{{}}",
+  "fields": [
+   [
+    "{",
+    null,
+    null,
+    null
+   ],
+   [
+    "}",
+    null,
+    null,
+    null
+   ],
+   [
+    "my string ",
+    "",
+    ".2f",
+    null
+   ],
+   [
+    "{",
+    null,
+    null,
+    null
+   ],
+   [
+    "}",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "{name} ({date:%B %d, %Y})",
+  "fields": [
+   [
+    "",
+    "name",
+    "",
+    null
+   ],
+   [
+    " (",
+    "date",
+    "%B %d, %Y",
+    null
+   ],
+   [
+    ")",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "Search: finished in {0:,} ms.",
+  "fields": [
+   [
+    "Search: finished in ",
+    "0",
+    ",",
+    null
+   ],
+   [
+    " ms.",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "{s}",
+  "fields": [
+   [
+    "",
+    "s",
+    "",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "=== Images[{}]: {} === Rest: \"{}\"",
+  "fields": [
+   [
+    "=== Images[",
+    "",
+    "",
+    null
+   ],
+   [
+    "]: ",
+    "",
+    "",
+    null
+   ],
+   [
+    " === Rest: \"",
+    "",
+    "",
+    null
+   ],
+   [
+    "\"",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "    some {}\n",
+  "fields": [
+   [
+    "    some ",
+    "",
+    "",
+    null
+   ],
+   [
+    "\n",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "            some {}\n",
+  "fields": [
+   [
+    "            some ",
+    "",
+    "",
+    null
+   ],
+   [
+    "\n",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "                some {}\n        lorem ipsum\n        ",
+  "fields": [
+   [
+    "                some ",
+    "",
+    "",
+    null
+   ],
+   [
+    "\n        lorem ipsum\n        ",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "my string {}, but also {} and {}",
+  "fields": [
+   [
+    "my string ",
+    "",
+    "",
+    null
+   ],
+   [
+    ", but also ",
+    "",
+    "",
+    null
+   ],
+   [
+    " and ",
+    "",
+    "",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "my string {}, {} and {}",
+  "fields": [
+   [
+    "my string ",
+    "",
+    "",
+    null
+   ],
+   [
+    ", ",
+    "",
+    "",
+    null
+   ],
+   [
+    " and ",
+    "",
+    "",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "my string {}, {f} and {var}",
+  "fields": [
+   [
+    "my string ",
+    "",
+    "",
+    null
+   ],
+   [
+    ", ",
+    "f",
+    "",
+    null
+   ],
+   [
+    " and ",
+    "var",
+    "",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "my string {var}, {f} and {var}",
+  "fields": [
+   [
+    "my string ",
+    "var",
+    "",
+    null
+   ],
+   [
+    ", ",
+    "f",
+    "",
+    null
+   ],
+   [
+    " and ",
+    "var",
+    "",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "python{x[0]}.{x[1]}",
+  "fields": [
+   [
+    "python",
+    "x[0]",
+    "",
+    null
+   ],
+   [
+    ".",
+    "x[1]",
+    "",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "\n        some {}\n        lorem ipsum\n        ",
+  "fields": [
+   [
+    "\n        some ",
+    "",
+    "",
+    null
+   ],
+   [
+    "\n        lorem ipsum\n        ",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "\u001b[1m{0}\u001b[0m",
+  "fields": [
+   [
+    "\u001b[1m",
+    "0",
+    "",
+    null
+   ],
+   [
+    "\u001b[0m",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "{}\nPossible solutions:\n{}",
+  "fields": [
+   [
+    "",
+    "",
+    "",
+    null
+   ],
+   [
+    "\nPossible solutions:\n",
+    "",
+    "",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "{}({})",
+  "fields": [
+   [
+    "",
+    "",
+    "",
+    null
+   ],
+   [
+    "(",
+    "",
+    "",
+    null
+   ],
+   [
+    ")",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "Unmatched lines. Got:\n{}\nExpected:\n{}",
+  "fields": [
+   [
+    "Unmatched lines. Got:\n",
+    "",
+    "",
+    null
+   ],
+   [
+    "\nExpected:\n",
+    "",
+    "",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "\"{}.{}\",",
+  "fields": [
+   [
+    "\"",
+    "",
+    "",
+    null
+   ],
+   [
+    ".",
+    "",
+    "",
+    null
+   ],
+   [
+    "\",",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "{} hello, {}",
+  "fields": [
+   [
+    "",
+    "",
+    "",
+    null
+   ],
+   [
+    " hello, ",
+    "",
+    "",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "{} non-str {}",
+  "fields": [
+   [
+    "",
+    "",
+    "",
+    null
+   ],
+   [
+    " non-str ",
+    "",
+    "",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "{} with quote {}",
+  "fields": [
+   [
+    "",
+    "",
+    "",
+    null
+   ],
+   [
+    " with quote ",
+    "",
+    "",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "hello, {}",
+  "fields": [
+   [
+    "hello, ",
+    "",
+    "",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "with quote {}",
+  "fields": [
+   [
+    "with quote ",
+    "",
+    "",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "Flask Documentation ({})",
+  "fields": [
+   [
+    "Flask Documentation (",
+    "",
+    "",
+    null
+   ],
+   [
+    ")",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "Detected multiple Flask applications in module \"{}\". Use \"FLASK_APP={}:name\" to specify the correct one.",
+  "fields": [
+   [
+    "Detected multiple Flask applications in module \"",
+    "",
+    "",
+    null
+   ],
+   [
+    "\". Use \"FLASK_APP=",
+    "",
+    "",
+    null
+   ],
+   [
+    ":name\" to specify the correct one.",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "Hello {} {} {}",
+  "fields": [
+   [
+    "Hello ",
+    "",
+    "",
+    null
+   ],
+   [
+    " ",
+    "",
+    "",
+    null
+   ],
+   [
+    " ",
+    "",
+    "",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "Hello %s %s %s",
+  "fields": [
+   [
+    "Hello %s %s %s",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "\n# This is an example configuration\n# Hash lines are comments\n\n[flake8]\nmax-line-length={0}\ninline-quotes=\"{1}\"\n",
+  "fields": [
+   [
+    "\n# This is an example configuration\n# Hash lines are comments\n\n[flake8]\nmax-line-length=",
+    "0",
+    "",
+    null
+   ],
+   [
+    "\ninline-quotes=\"",
+    "1",
+    "",
+    null
+   ],
+   [
+    "\"\n",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "Detected multiple Flask applications in module \"{module}\". Use \"FLASK_APP={module}:name\" to specify the correct one.",
+  "fields": [
+   [
+    "Detected multiple Flask applications in module \"",
+    "module",
+    "",
+    null
+   ],
+   [
+    "\". Use \"FLASK_APP=",
+    "module",
+    "",
+    null
+   ],
+   [
+    ":name\" to specify the correct one.",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "my string {first} and {second}",
+  "fields": [
+   [
+    "my string ",
+    "first",
+    "",
+    null
+   ],
+   [
+    " and ",
+    "second",
+    "",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "my string {}",
+  "fields": [
+   [
+    "my string ",
+    "",
+    "",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "my string {:.2f}",
+  "fields": [
+   [
+    "my string ",
+    "",
+    ".2f",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "{} my string",
+  "fields": [
+   [
+    "",
+    "",
+    "",
+    null
+   ],
+   [
+    " my string",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "echo '{}'\n",
+  "fields": [
+   [
+    "echo '",
+    "",
+    "",
+    null
+   ],
+   [
+    "'\n",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "echo '{}'\\n",
+  "fields": [
+   [
+    "echo '",
+    "",
+    "",
+    null
+   ],
+   [
+    "'\\n",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "echo '{}'\r",
+  "fields": [
+   [
+    "echo '",
+    "",
+    "",
+    null
+   ],
+   [
+    "'\r",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "echo '{}'\\r",
+  "fields": [
+   [
+    "echo '",
+    "",
+    "",
+    null
+   ],
+   [
+    "'\\r",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "echo '{}'\t",
+  "fields": [
+   [
+    "echo '",
+    "",
+    "",
+    null
+   ],
+   [
+    "'\t",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "echo '{}'\\t",
+  "fields": [
+   [
+    "echo '",
+    "",
+    "",
+    null
+   ],
+   [
+    "'\\t",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "echo \"SCREEN_EXIT:$?\" ; echo \"{EOS}\"\n",
+  "fields": [
+   [
+    "echo \"SCREEN_EXIT:$?\" ; echo \"",
+    "EOS",
+    "",
+    null
+   ],
+   [
+    "\"\n",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "echo \"{}\"",
+  "fields": [
+   [
+    "echo \"",
+    "",
+    "",
+    null
+   ],
+   [
+    "\"",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "my string {}, but also {} and {foo}",
+  "fields": [
+   [
+    "my string ",
+    "",
+    "",
+    null
+   ],
+   [
+    ", but also ",
+    "",
+    "",
+    null
+   ],
+   [
+    " and ",
+    "foo",
+    "",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "{:>50} \t {:>6} \t {:>6}\n",
+  "fields": [
+   [
+    "",
+    "",
+    ">50",
+    null
+   ],
+   [
+    " \t ",
+    "",
+    ">6",
+    null
+   ],
+   [
+    " \t ",
+    "",
+    ">6",
+    null
+   ],
+   [
+    "\n",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "beautiful numbers to follow: {}",
+  "fields": [
+   [
+    "beautiful numbers to follow: ",
+    "",
+    "",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "Flask-{}.tex",
+  "fields": [
+   [
+    "Flask-",
+    "",
+    "",
+    null
+   ],
+   [
+    ".tex",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "line 1 {} line 2 {}",
+  "fields": [
+   [
+    "line 1 ",
+    "",
+    "",
+    null
+   ],
+   [
+    " line 2 ",
+    "",
+    "",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "line 1234567890 1234567890 1234567890 1234567890 {} 1234567890 1234567890 1234567890 1234567890  {}",
+  "fields": [
+   [
+    "line 1234567890 1234567890 1234567890 1234567890 ",
+    "",
+    "",
+    null
+   ],
+   [
+    " 1234567890 1234567890 1234567890 1234567890  ",
+    "",
+    "",
+    null
+   ]
+  ]
+ },
+ {
+  "src": "Feels like: {}°F",
+  "fields": [
+   [
+    "Feels like: ",
+    "",
+    "",
+    null
+   ],
+   [
+    "°F",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "Feels like: {}\\u00B0F",
+  "fields": [
+   [
+    "Feels like: ",
+    "",
+    "",
+    null
+   ],
+   [
+    "\\u00B0F",
+    null,
+    null,
+    null
+   ]
+  ]
+ },
+ {
+  "src": "blah{}",
+  "fields": [
+   [
+    "blah",
+    "",
+    "",
+    null
+   ]
+  ]
+ }
+]

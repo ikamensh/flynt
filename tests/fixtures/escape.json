@@ -1,0 +1,90 @@
+[
+ {
+  "literal": "\"Feels like: {}\\u00B0F\"",
+  "map": {
+   "°": [
+    "\\u00B0"
+   ]
+  },
+  "decoded": "Feels like: {}°F",
+  "applied": "Feels like: {}\\u00B0F"
+ },
+ {
+  "literal": "\"Feels like: {}\\u00B0F°\"",
+  "map": {
+   "°": [
+    "\\u00B0"
+   ]
+  },
+  "decoded": "Feels like: {}°F°",
+  "applied": "Feels like: {}\\u00B0F°"
+ },
+ {
+  "literal": "\"plain\"",
+  "map": {},
+  "decoded": "plain",
+  "applied": "plain"
+ },
+ {
+  "literal": "\"tab\\tend\"",
+  "map": {},
+  "decoded": "tab\tend",
+  "applied": "tab\tend"
+ },
+ {
+  "literal": "\"\\x41\\x42\"",
+  "map": {
+   "A": [
+    "\\x41"
+   ],
+   "B": [
+    "\\x42"
+   ]
+  },
+  "decoded": "AB",
+  "applied": "\\x41\\x42"
+ },
+ {
+  "literal": "\"octal \\101\\102\"",
+  "map": {
+   "A": [
+    "\\101"
+   ],
+   "B": [
+    "\\102"
+   ]
+  },
+  "decoded": "octal AB",
+  "applied": "octal \\101\\102"
+ },
+ {
+  "literal": "\"mixed °\\u00B0 both\"",
+  "map": {
+   "°": [
+    "\\u00B0"
+   ]
+  },
+  "decoded": "mixed °° both",
+  "applied": "mixed \\u00B0° both"
+ },
+ {
+  "literal": "'single \\u00e9'",
+  "map": {
+   "é": [
+    "\\u00e9"
+   ]
+  },
+  "decoded": "single é",
+  "applied": "single \\u00e9"
+ },
+ {
+  "literal": "\"\\U0001F600 grin\"",
+  "map": {
+   "😀": [
+    "\\U0001F600"
+   ]
+  },
+  "decoded": "😀 grin",
+  "applied": "\\U0001F600 grin"
+ }
+]

@@ -1,0 +1,3986 @@
+[
+ {
+  "src": "f'{x!r}'",
+  "expected": "f'{x!r}'"
+ },
+ {
+  "src": "f'{x!s}'",
+  "expected": "f'{x!s}'"
+ },
+ {
+  "src": "f'{x!a}'",
+  "expected": "f'{x!a}'"
+ },
+ {
+  "src": "f'{str(x)}'",
+  "expected": "f'{str(x)}'"
+ },
+ {
+  "src": "f'{repr(x)}'",
+  "expected": "f'{repr(x)}'"
+ },
+ {
+  "src": "f'{x:>10}'",
+  "expected": "f'{x:>10}'"
+ },
+ {
+  "src": "f'{x:.03f}'",
+  "expected": "f'{x:.03f}'"
+ },
+ {
+  "src": "f'{x:{width}}'",
+  "expected": "f'{x:{width}}'"
+ },
+ {
+  "src": "f'{x:{width}.{prec}f}'",
+  "expected": "f'{x:{width}.{prec}f}'"
+ },
+ {
+  "src": "f\"{d['a']}\"",
+  "expected": "f\"{d['a']}\""
+ },
+ {
+  "src": "f'{a}' + f'{b}'",
+  "expected": "f'{a}' + f'{b}'"
+ },
+ {
+  "src": "f'{ {1, 2} }'",
+  "expected": "f'{ {1, 2}}'"
+ },
+ {
+  "src": "f'{a if b else c}'",
+  "expected": "f'{a if b else c}'"
+ },
+ {
+  "src": "f'{(a if b else c)}'",
+  "expected": "f'{a if b else c}'"
+ },
+ {
+  "src": "f'prefix {x if y else z} suffix'",
+  "expected": "f'prefix {x if y else z} suffix'"
+ },
+ {
+  "src": "f'{a + b}'",
+  "expected": "f'{a + b}'"
+ },
+ {
+  "src": "f'{a * b + c}'",
+  "expected": "f'{a * b + c}'"
+ },
+ {
+  "src": "f'{-x}'",
+  "expected": "f'{-x}'"
+ },
+ {
+  "src": "f'{func(a, b, c)}'",
+  "expected": "f'{func(a, b, c)}'"
+ },
+ {
+  "src": "f'{obj.attr.method()}'",
+  "expected": "f'{obj.attr.method()}'"
+ },
+ {
+  "src": "f'{d[0]}'",
+  "expected": "f'{d[0]}'"
+ },
+ {
+  "src": "a % b",
+  "expected": "a % b"
+ },
+ {
+  "src": "'x' + y",
+  "expected": "'x' + y"
+ },
+ {
+  "src": "x.format(y)",
+  "expected": "x.format(y)"
+ },
+ {
+  "src": "f'{x}{y}{z}'",
+  "expected": "f'{x}{y}{z}'"
+ },
+ {
+  "src": "f'{ {\"k\": v} }'",
+  "expected": "f\"{ {'k': v}}\""
+ },
+ {
+  "src": "f'{{literal}}'",
+  "expected": "f'{{literal}}'"
+ },
+ {
+  "src": "f'{x}%'",
+  "expected": "f'{x}%'"
+ },
+ {
+  "src": "f'°{x}°'",
+  "expected": "f'°{x}°'"
+ },
+ {
+  "src": "PydolonsError",
+  "expected": "PydolonsError"
+ },
+ {
+  "src": "missing in ['mana', 'stamina', 'health']",
+  "expected": "missing in ['mana', 'stamina', 'health']"
+ },
+ {
+  "src": "self.active",
+  "expected": "self.active"
+ },
+ {
+  "src": "active",
+  "expected": "active"
+ },
+ {
+  "src": "self.missing",
+  "expected": "self.missing"
+ },
+ {
+  "src": "missing",
+  "expected": "missing"
+ },
+ {
+  "src": "'Need more {} to activate {}'.format(self.missing, self.active)",
+  "expected": "'Need more {} to activate {}'.format(self.missing, self.active)"
+ },
+ {
+  "src": "['mana', 'stamina', 'health']",
+  "expected": "['mana', 'stamina', 'health']"
+ },
+ {
+  "src": "self",
+  "expected": "self"
+ },
+ {
+  "src": "'Need more {} to activate {}'.format",
+  "expected": "'Need more {} to activate {}'.format"
+ },
+ {
+  "src": "'mana'",
+  "expected": "'mana'"
+ },
+ {
+  "src": "'stamina'",
+  "expected": "'stamina'"
+ },
+ {
+  "src": "'health'",
+  "expected": "'health'"
+ },
+ {
+  "src": "'Need more {} to activate {}'",
+  "expected": "'Need more {} to activate {}'"
+ },
+ {
+  "src": "(var, f, cada_bra, what)",
+  "expected": "(var, f, cada_bra, what)"
+ },
+ {
+  "src": "(1, 2, 3, 4)",
+  "expected": "(1, 2, 3, 4)"
+ },
+ {
+  "src": "a",
+  "expected": "a"
+ },
+ {
+  "src": "'my string {first}, but also {second} and {foo}'.format(first=var, second=f, foo=cada_bra)",
+  "expected": "'my string {first}, but also {second} and {foo}'.format(first=var, second=f, foo=cada_bra)"
+ },
+ {
+  "src": "var",
+  "expected": "var"
+ },
+ {
+  "src": "f",
+  "expected": "f"
+ },
+ {
+  "src": "cada_bra",
+  "expected": "cada_bra"
+ },
+ {
+  "src": "what",
+  "expected": "what"
+ },
+ {
+  "src": "1",
+  "expected": "1"
+ },
+ {
+  "src": "2",
+  "expected": "2"
+ },
+ {
+  "src": "3",
+  "expected": "3"
+ },
+ {
+  "src": "4",
+  "expected": "4"
+ },
+ {
+  "src": "'my string {first}, but also {second} and {foo}'.format",
+  "expected": "'my string {first}, but also {second} and {foo}'.format"
+ },
+ {
+  "src": "'my string {first}, but also {second} and {foo}'",
+  "expected": "'my string {first}, but also {second} and {foo}'"
+ },
+ {
+  "src": "5",
+  "expected": "5"
+ },
+ {
+  "src": "object",
+  "expected": "object"
+ },
+ {
+  "src": "print(Mysterios.a)",
+  "expected": "print(Mysterios.a)"
+ },
+ {
+  "src": "'{{}}my string {:.2f}{{}}'.format(var)",
+  "expected": "'{{}}my string {:.2f}{{}}'.format(var)"
+ },
+ {
+  "src": "print",
+  "expected": "print"
+ },
+ {
+  "src": "Mysterios.a",
+  "expected": "Mysterios.a"
+ },
+ {
+  "src": "'{{}}my string {:.2f}{{}}'.format",
+  "expected": "'{{}}my string {:.2f}{{}}'.format"
+ },
+ {
+  "src": "Mysterios",
+  "expected": "Mysterios"
+ },
+ {
+  "src": "'{{}}my string {:.2f}{{}}'",
+  "expected": "'{{}}my string {:.2f}{{}}'"
+ },
+ {
+  "src": "attrs",
+  "expected": "attrs"
+ },
+ {
+  "src": "{'r': '{}'.format(row_idx)}",
+  "expected": "{'r': '{}'.format(row_idx)}"
+ },
+ {
+  "src": "'r'",
+  "expected": "'r'"
+ },
+ {
+  "src": "'{}'.format(row_idx)",
+  "expected": "'{}'.format(row_idx)"
+ },
+ {
+  "src": "'{}'.format",
+  "expected": "'{}'.format"
+ },
+ {
+  "src": "row_idx",
+  "expected": "row_idx"
+ },
+ {
+  "src": "'{}'",
+  "expected": "'{}'"
+ },
+ {
+  "src": "test",
+  "expected": "test"
+ },
+ {
+  "src": "'Test'",
+  "expected": "'Test'"
+ },
+ {
+  "src": "'{name} ({date:%B %d, %Y})'.format(name=test, date=datetime.datetime.now())",
+  "expected": "'{name} ({date:%B %d, %Y})'.format(name=test, date=datetime.datetime.now())"
+ },
+ {
+  "src": "'{name} ({date:%B %d, %Y})'.format",
+  "expected": "'{name} ({date:%B %d, %Y})'.format"
+ },
+ {
+  "src": "'{name} ({date:%B %d, %Y})'",
+  "expected": "'{name} ({date:%B %d, %Y})'"
+ },
+ {
+  "src": "datetime.datetime.now()",
+  "expected": "datetime.datetime.now()"
+ },
+ {
+  "src": "datetime.datetime.now",
+  "expected": "datetime.datetime.now"
+ },
+ {
+  "src": "datetime.datetime",
+  "expected": "datetime.datetime"
+ },
+ {
+  "src": "datetime",
+  "expected": "datetime"
+ },
+ {
+  "src": "log.notice('Search: finished in {0:,} ms.'.format(vm.search_time_elapsed_ms))",
+  "expected": "log.notice('Search: finished in {0:,} ms.'.format(vm.search_time_elapsed_ms))"
+ },
+ {
+  "src": "log.notice",
+  "expected": "log.notice"
+ },
+ {
+  "src": "'Search: finished in {0:,} ms.'.format(vm.search_time_elapsed_ms)",
+  "expected": "'Search: finished in {0:,} ms.'.format(vm.search_time_elapsed_ms)"
+ },
+ {
+  "src": "log",
+  "expected": "log"
+ },
+ {
+  "src": "'Search: finished in {0:,} ms.'.format",
+  "expected": "'Search: finished in {0:,} ms.'.format"
+ },
+ {
+  "src": "vm.search_time_elapsed_ms",
+  "expected": "vm.search_time_elapsed_ms"
+ },
+ {
+  "src": "'Search: finished in {0:,} ms.'",
+  "expected": "'Search: finished in {0:,} ms.'"
+ },
+ {
+  "src": "vm",
+  "expected": "vm"
+ },
+ {
+  "src": "print('{}'.format(Bar + 1), '%f' % var, '{s}'.format(s=foo))",
+  "expected": "print('{}'.format(Bar + 1), '%f' % var, '{s}'.format(s=foo))"
+ },
+ {
+  "src": "'{}'.format(Bar + 1)",
+  "expected": "'{}'.format(Bar + 1)"
+ },
+ {
+  "src": "'%f' % var",
+  "expected": "'%f' % var"
+ },
+ {
+  "src": "'{s}'.format(s=foo)",
+  "expected": "'{s}'.format(s=foo)"
+ },
+ {
+  "src": "Bar + 1",
+  "expected": "Bar + 1"
+ },
+ {
+  "src": "'%f'",
+  "expected": "'%f'"
+ },
+ {
+  "src": "'{s}'.format",
+  "expected": "'{s}'.format"
+ },
+ {
+  "src": "Bar",
+  "expected": "Bar"
+ },
+ {
+  "src": "'{s}'",
+  "expected": "'{s}'"
+ },
+ {
+  "src": "foo",
+  "expected": "foo"
+ },
+ {
+  "src": "(a, b, c)",
+  "expected": "(a, b, c)"
+ },
+ {
+  "src": "(1, 2, 3)",
+  "expected": "(1, 2, 3)"
+ },
+ {
+  "src": "t1",
+  "expected": "t1"
+ },
+ {
+  "src": "'=== Images[{}]: {} === Rest: \"{}\"'.format(a, b, c)",
+  "expected": "'=== Images[{}]: {} === Rest: \"{}\"'.format(a, b, c)"
+ },
+ {
+  "src": "b",
+  "expected": "b"
+ },
+ {
+  "src": "c",
+  "expected": "c"
+ },
+ {
+  "src": "'=== Images[{}]: {} === Rest: \"{}\"'.format",
+  "expected": "'=== Images[{}]: {} === Rest: \"{}\"'.format"
+ },
+ {
+  "src": "'=== Images[{}]: {} === Rest: \"{}\"'",
+  "expected": "'=== Images[{}]: {} === Rest: \"{}\"'"
+ },
+ {
+  "src": "arg",
+  "expected": "arg"
+ },
+ {
+  "src": "'text'",
+  "expected": "'text'"
+ },
+ {
+  "src": "dedent('                some {}\\n        lorem ipsum\\n        '.format(arg))",
+  "expected": "dedent('                some {}\\n        lorem ipsum\\n        '.format(arg))"
+ },
+ {
+  "src": "'    some {}\\n'.format(arg)",
+  "expected": "'    some {}\\n'.format(arg)"
+ },
+ {
+  "src": "'            some {}\\n'.format(arg)",
+  "expected": "'            some {}\\n'.format(arg)"
+ },
+ {
+  "src": "dedent",
+  "expected": "dedent"
+ },
+ {
+  "src": "'                some {}\\n        lorem ipsum\\n        '.format(arg)",
+  "expected": "'                some {}\\n        lorem ipsum\\n        '.format(arg)"
+ },
+ {
+  "src": "'    some {}\\n'.format",
+  "expected": "'    some {}\\n'.format"
+ },
+ {
+  "src": "'            some {}\\n'.format",
+  "expected": "'            some {}\\n'.format"
+ },
+ {
+  "src": "'                some {}\\n        lorem ipsum\\n        '.format",
+  "expected": "'                some {}\\n        lorem ipsum\\n        '.format"
+ },
+ {
+  "src": "'    some {}\\n'",
+  "expected": "'    some {}\\n'"
+ },
+ {
+  "src": "'            some {}\\n'",
+  "expected": "'            some {}\\n'"
+ },
+ {
+  "src": "'                some {}\\n        lorem ipsum\\n        '",
+  "expected": "'                some {}\\n        lorem ipsum\\n        '"
+ },
+ {
+  "src": "'my string {}, but also {} and {}'.format(var, f, cada_bra)",
+  "expected": "'my string {}, but also {} and {}'.format(var, f, cada_bra)"
+ },
+ {
+  "src": "'my string {}, but also {} and {}'.format(var, what, cada_bra)",
+  "expected": "'my string {}, but also {} and {}'.format(var, what, cada_bra)"
+ },
+ {
+  "src": "'my string {}, but also {} and {}'.format",
+  "expected": "'my string {}, but also {} and {}'.format"
+ },
+ {
+  "src": "'my string {}, but also {} and {}'",
+  "expected": "'my string {}, but also {} and {}'"
+ },
+ {
+  "src": "name",
+  "expected": "name"
+ },
+ {
+  "src": "'mari'",
+  "expected": "'mari'"
+ },
+ {
+  "src": "'Setting %20r must be uppercase.' % name",
+  "expected": "'Setting %20r must be uppercase.' % name"
+ },
+ {
+  "src": "print(a)",
+  "expected": "print(a)"
+ },
+ {
+  "src": "i",
+  "expected": "i"
+ },
+ {
+  "src": "10",
+  "expected": "10"
+ },
+ {
+  "src": "'_%03X' % i",
+  "expected": "'_%03X' % i"
+ },
+ {
+  "src": "print(b)",
+  "expected": "print(b)"
+ },
+ {
+  "src": "coord",
+  "expected": "coord"
+ },
+ {
+  "src": "(1, 2)",
+  "expected": "(1, 2)"
+ },
+ {
+  "src": "'%f %f' % (coord[1], coord[0])",
+  "expected": "'%f %f' % (coord[1], coord[0])"
+ },
+ {
+  "src": "print(c)",
+  "expected": "print(c)"
+ },
+ {
+  "src": "d",
+  "expected": "d"
+ },
+ {
+  "src": "'%i' % i",
+  "expected": "'%i' % i"
+ },
+ {
+  "src": "e",
+  "expected": "e"
+ },
+ {
+  "src": "'%.03f' % i",
+  "expected": "'%.03f' % i"
+ },
+ {
+  "src": "print(d, e)",
+  "expected": "print(d, e)"
+ },
+ {
+  "src": "print(f'{a} hello')",
+  "expected": "print(f'{a} hello')"
+ },
+ {
+  "src": "'Setting %20r must be uppercase.'",
+  "expected": "'Setting %20r must be uppercase.'"
+ },
+ {
+  "src": "'_%03X'",
+  "expected": "'_%03X'"
+ },
+ {
+  "src": "'%f %f'",
+  "expected": "'%f %f'"
+ },
+ {
+  "src": "(coord[1], coord[0])",
+  "expected": "(coord[1], coord[0])"
+ },
+ {
+  "src": "'%i'",
+  "expected": "'%i'"
+ },
+ {
+  "src": "'%.03f'",
+  "expected": "'%.03f'"
+ },
+ {
+  "src": "f'{a} hello'",
+  "expected": "f'{a} hello'"
+ },
+ {
+  "src": "coord[1]",
+  "expected": "coord[1]"
+ },
+ {
+  "src": "coord[0]",
+  "expected": "coord[0]"
+ },
+ {
+  "src": "{a}",
+  "expected": "{a}"
+ },
+ {
+  "src": "' hello'",
+  "expected": "' hello'"
+ },
+ {
+  "src": "0",
+  "expected": "0"
+ },
+ {
+  "src": "(var, f, cada_bra)",
+  "expected": "(var, f, cada_bra)"
+ },
+ {
+  "src": "'my string {}, {} and {}'.format(var, f, cada_bra)",
+  "expected": "'my string {}, {} and {}'.format(var, f, cada_bra)"
+ },
+ {
+  "src": "'my string {}, {} and {}'.format",
+  "expected": "'my string {}, {} and {}'.format"
+ },
+ {
+  "src": "'my string {}, {} and {}'",
+  "expected": "'my string {}, {} and {}'"
+ },
+ {
+  "src": "'my string {}, {f} and {var}'.format(cada_bra, var=var, f=f)",
+  "expected": "'my string {}, {f} and {var}'.format(cada_bra, var=var, f=f)"
+ },
+ {
+  "src": "'my string {}, {f} and {var}'.format",
+  "expected": "'my string {}, {f} and {var}'.format"
+ },
+ {
+  "src": "'my string {}, {f} and {var}'",
+  "expected": "'my string {}, {f} and {var}'"
+ },
+ {
+  "src": "'my string {var}, {f} and {var}'.format(var=var, f=f)",
+  "expected": "'my string {var}, {f} and {var}'.format(var=var, f=f)"
+ },
+ {
+  "src": "'my string {var}, {f} and {var}'.format",
+  "expected": "'my string {var}, {f} and {var}'.format"
+ },
+ {
+  "src": "'my string {var}, {f} and {var}'",
+  "expected": "'my string {var}, {f} and {var}'"
+ },
+ {
+  "src": "pytest.fixture",
+  "expected": "pytest.fixture"
+ },
+ {
+  "src": "'Create a fake site-packages.'",
+  "expected": "'Create a fake site-packages.'"
+ },
+ {
+  "src": "rv",
+  "expected": "rv"
+ },
+ {
+  "src": "modules_tmpdir.mkdir('lib').mkdir('python{x[0]}.{x[1]}'.format(x=sys.version_info)).mkdir('site-packages')",
+  "expected": "modules_tmpdir.mkdir('lib').mkdir('python{x[0]}.{x[1]}'.format(x=sys.version_info)).mkdir('site-packages')"
+ },
+ {
+  "src": "monkeypatch.syspath_prepend(str(rv))",
+  "expected": "monkeypatch.syspath_prepend(str(rv))"
+ },
+ {
+  "src": "pytest",
+  "expected": "pytest"
+ },
+ {
+  "src": "modules_tmpdir.mkdir('lib').mkdir('python{x[0]}.{x[1]}'.format(x=sys.version_info)).mkdir",
+  "expected": "modules_tmpdir.mkdir('lib').mkdir('python{x[0]}.{x[1]}'.format(x=sys.version_info)).mkdir"
+ },
+ {
+  "src": "'site-packages'",
+  "expected": "'site-packages'"
+ },
+ {
+  "src": "monkeypatch.syspath_prepend",
+  "expected": "monkeypatch.syspath_prepend"
+ },
+ {
+  "src": "str(rv)",
+  "expected": "str(rv)"
+ },
+ {
+  "src": "modules_tmpdir.mkdir('lib').mkdir('python{x[0]}.{x[1]}'.format(x=sys.version_info))",
+  "expected": "modules_tmpdir.mkdir('lib').mkdir('python{x[0]}.{x[1]}'.format(x=sys.version_info))"
+ },
+ {
+  "src": "monkeypatch",
+  "expected": "monkeypatch"
+ },
+ {
+  "src": "str",
+  "expected": "str"
+ },
+ {
+  "src": "modules_tmpdir.mkdir('lib').mkdir",
+  "expected": "modules_tmpdir.mkdir('lib').mkdir"
+ },
+ {
+  "src": "'python{x[0]}.{x[1]}'.format(x=sys.version_info)",
+  "expected": "'python{x[0]}.{x[1]}'.format(x=sys.version_info)"
+ },
+ {
+  "src": "modules_tmpdir.mkdir('lib')",
+  "expected": "modules_tmpdir.mkdir('lib')"
+ },
+ {
+  "src": "'python{x[0]}.{x[1]}'.format",
+  "expected": "'python{x[0]}.{x[1]}'.format"
+ },
+ {
+  "src": "modules_tmpdir.mkdir",
+  "expected": "modules_tmpdir.mkdir"
+ },
+ {
+  "src": "'lib'",
+  "expected": "'lib'"
+ },
+ {
+  "src": "'python{x[0]}.{x[1]}'",
+  "expected": "'python{x[0]}.{x[1]}'"
+ },
+ {
+  "src": "sys.version_info",
+  "expected": "sys.version_info"
+ },
+ {
+  "src": "modules_tmpdir",
+  "expected": "modules_tmpdir"
+ },
+ {
+  "src": "sys",
+  "expected": "sys"
+ },
+ {
+  "src": "app.route('/')",
+  "expected": "app.route('/')"
+ },
+ {
+  "src": "'Hello %s!' % flask.request.args[name]",
+  "expected": "'Hello %s!' % flask.request.args[name]"
+ },
+ {
+  "src": "app.route",
+  "expected": "app.route"
+ },
+ {
+  "src": "'/'",
+  "expected": "'/'"
+ },
+ {
+  "src": "'Hello %s!'",
+  "expected": "'Hello %s!'"
+ },
+ {
+  "src": "flask.request.args[name]",
+  "expected": "flask.request.args[name]"
+ },
+ {
+  "src": "app",
+  "expected": "app"
+ },
+ {
+  "src": "flask.request.args",
+  "expected": "flask.request.args"
+ },
+ {
+  "src": "flask.request",
+  "expected": "flask.request"
+ },
+ {
+  "src": "flask",
+  "expected": "flask"
+ },
+ {
+  "src": "'\\n        some {}\\n        lorem ipsum\\n        '.format('text')",
+  "expected": "'\\n        some {}\\n        lorem ipsum\\n        '.format('text')"
+ },
+ {
+  "src": "'\\n        some {}\\n        lorem ipsum\\n        '.format",
+  "expected": "'\\n        some {}\\n        lorem ipsum\\n        '.format"
+ },
+ {
+  "src": "'\\n        some {}\\n        lorem ipsum\\n        '",
+  "expected": "'\\n        some {}\\n        lorem ipsum\\n        '"
+ },
+ {
+  "src": "s",
+  "expected": "s"
+ },
+ {
+  "src": "'wot?'",
+  "expected": "'wot?'"
+ },
+ {
+  "src": "print('\\x1b[1m{0}\\x1b[0m'.format(s))",
+  "expected": "print('\\x1b[1m{0}\\x1b[0m'.format(s))"
+ },
+ {
+  "src": "print('\\x1b[2m%s\\x1b[0m' % s)",
+  "expected": "print('\\x1b[2m%s\\x1b[0m' % s)"
+ },
+ {
+  "src": "'\\x1b[1m{0}\\x1b[0m'.format(s)",
+  "expected": "'\\x1b[1m{0}\\x1b[0m'.format(s)"
+ },
+ {
+  "src": "'\\x1b[2m%s\\x1b[0m' % s",
+  "expected": "'\\x1b[2m%s\\x1b[0m' % s"
+ },
+ {
+  "src": "'\\x1b[1m{0}\\x1b[0m'.format",
+  "expected": "'\\x1b[1m{0}\\x1b[0m'.format"
+ },
+ {
+  "src": "'\\x1b[2m%s\\x1b[0m'",
+  "expected": "'\\x1b[2m%s\\x1b[0m'"
+ },
+ {
+  "src": "'\\x1b[1m{0}\\x1b[0m'",
+  "expected": "'\\x1b[1m{0}\\x1b[0m'"
+ },
+ {
+  "src": "msg",
+  "expected": "msg"
+ },
+ {
+  "src": "'{}\\nPossible solutions:\\n{}'.format(msg, '\\n'.join(solutions))",
+  "expected": "'{}\\nPossible solutions:\\n{}'.format(msg, '\\n'.join(solutions))"
+ },
+ {
+  "src": "self.assertEqual(len(expected), len(result), 'Unmatched lines. Got:\\n{}\\nExpected:\\n{}'.format('\\n'.join(expected), '\\n'.join(result)))",
+  "expected": "self.assertEqual(len(expected), len(result), 'Unmatched lines. Got:\\n{}\\nExpected:\\n{}'.format('\\n'.join(expected), '\\n'.join(result)))"
+ },
+ {
+  "src": "self.assertEqual(len(result_lines), len(expected_lines), 'Unmatched lines. Got:\\n{}\\nExpected:\\n{}'.format('\\n'.join(result_lines), expected))",
+  "expected": "self.assertEqual(len(result_lines), len(expected_lines), 'Unmatched lines. Got:\\n{}\\nExpected:\\n{}'.format('\\n'.join(result_lines), expected))"
+ },
+ {
+  "src": "code.putln('\"{}.{}\",'.format(self.full_module_name, classname.replace('\"', '')))",
+  "expected": "code.putln('\"{}.{}\",'.format(self.full_module_name, classname.replace('\"', '')))"
+ },
+ {
+  "src": "'{}'.format(b'\\n')",
+  "expected": "'{}'.format(b'\\n')"
+ },
+ {
+  "src": "'%s\\n' % line if not line.endswith('\\\\') or line.endswith('\\\\\\\\') else '%s' % line[:-1]",
+  "expected": "'%s\\n' % line if not line.endswith('\\\\') or line.endswith('\\\\\\\\') else '%s' % line[:-1]"
+ },
+ {
+  "src": "'{}\\nPossible solutions:\\n{}'.format",
+  "expected": "'{}\\nPossible solutions:\\n{}'.format"
+ },
+ {
+  "src": "'\\n'.join(solutions)",
+  "expected": "'\\n'.join(solutions)"
+ },
+ {
+  "src": "'{}({})'.format(node.__class__.__name__, ',\\n    '.join(values))",
+  "expected": "'{}({})'.format(node.__class__.__name__, ',\\n    '.join(values))"
+ },
+ {
+  "src": "self.assertEqual",
+  "expected": "self.assertEqual"
+ },
+ {
+  "src": "len(expected)",
+  "expected": "len(expected)"
+ },
+ {
+  "src": "len(result)",
+  "expected": "len(result)"
+ },
+ {
+  "src": "'Unmatched lines. Got:\\n{}\\nExpected:\\n{}'.format('\\n'.join(expected), '\\n'.join(result))",
+  "expected": "'Unmatched lines. Got:\\n{}\\nExpected:\\n{}'.format('\\n'.join(expected), '\\n'.join(result))"
+ },
+ {
+  "src": "len(result_lines)",
+  "expected": "len(result_lines)"
+ },
+ {
+  "src": "len(expected_lines)",
+  "expected": "len(expected_lines)"
+ },
+ {
+  "src": "'Unmatched lines. Got:\\n{}\\nExpected:\\n{}'.format('\\n'.join(result_lines), expected)",
+  "expected": "'Unmatched lines. Got:\\n{}\\nExpected:\\n{}'.format('\\n'.join(result_lines), expected)"
+ },
+ {
+  "src": "code.putln",
+  "expected": "code.putln"
+ },
+ {
+  "src": "'\"{}.{}\",'.format(self.full_module_name, classname.replace('\"', ''))",
+  "expected": "'\"{}.{}\",'.format(self.full_module_name, classname.replace('\"', ''))"
+ },
+ {
+  "src": "b'\\n'",
+  "expected": "b'\\n'"
+ },
+ {
+  "src": "not line.endswith('\\\\') or line.endswith('\\\\\\\\')",
+  "expected": "not line.endswith('\\\\') or line.endswith('\\\\\\\\')"
+ },
+ {
+  "src": "'%s\\n' % line",
+  "expected": "'%s\\n' % line"
+ },
+ {
+  "src": "'%s' % line[:-1]",
+  "expected": "'%s' % line[:-1]"
+ },
+ {
+  "src": "'{}\\nPossible solutions:\\n{}'",
+  "expected": "'{}\\nPossible solutions:\\n{}'"
+ },
+ {
+  "src": "'\\n'.join",
+  "expected": "'\\n'.join"
+ },
+ {
+  "src": "solutions",
+  "expected": "solutions"
+ },
+ {
+  "src": "'{}({})'.format",
+  "expected": "'{}({})'.format"
+ },
+ {
+  "src": "node.__class__.__name__",
+  "expected": "node.__class__.__name__"
+ },
+ {
+  "src": "',\\n    '.join(values)",
+  "expected": "',\\n    '.join(values)"
+ },
+ {
+  "src": "len",
+  "expected": "len"
+ },
+ {
+  "src": "expected",
+  "expected": "expected"
+ },
+ {
+  "src": "result",
+  "expected": "result"
+ },
+ {
+  "src": "'Unmatched lines. Got:\\n{}\\nExpected:\\n{}'.format",
+  "expected": "'Unmatched lines. Got:\\n{}\\nExpected:\\n{}'.format"
+ },
+ {
+  "src": "'\\n'.join(expected)",
+  "expected": "'\\n'.join(expected)"
+ },
+ {
+  "src": "'\\n'.join(result)",
+  "expected": "'\\n'.join(result)"
+ },
+ {
+  "src": "result_lines",
+  "expected": "result_lines"
+ },
+ {
+  "src": "expected_lines",
+  "expected": "expected_lines"
+ },
+ {
+  "src": "'\\n'.join(result_lines)",
+  "expected": "'\\n'.join(result_lines)"
+ },
+ {
+  "src": "code",
+  "expected": "code"
+ },
+ {
+  "src": "'\"{}.{}\",'.format",
+  "expected": "'\"{}.{}\",'.format"
+ },
+ {
+  "src": "self.full_module_name",
+  "expected": "self.full_module_name"
+ },
+ {
+  "src": "classname.replace('\"', '')",
+  "expected": "classname.replace('\"', '')"
+ },
+ {
+  "src": "not line.endswith('\\\\')",
+  "expected": "not line.endswith('\\\\')"
+ },
+ {
+  "src": "line.endswith('\\\\\\\\')",
+  "expected": "line.endswith('\\\\\\\\')"
+ },
+ {
+  "src": "'%s\\n'",
+  "expected": "'%s\\n'"
+ },
+ {
+  "src": "line",
+  "expected": "line"
+ },
+ {
+  "src": "'%s'",
+  "expected": "'%s'"
+ },
+ {
+  "src": "line[:-1]",
+  "expected": "line[:-1]"
+ },
+ {
+  "src": "'\\n'",
+  "expected": "'\\n'"
+ },
+ {
+  "src": "'{}({})'",
+  "expected": "'{}({})'"
+ },
+ {
+  "src": "node.__class__",
+  "expected": "node.__class__"
+ },
+ {
+  "src": "',\\n    '.join",
+  "expected": "',\\n    '.join"
+ },
+ {
+  "src": "values",
+  "expected": "values"
+ },
+ {
+  "src": "'Unmatched lines. Got:\\n{}\\nExpected:\\n{}'",
+  "expected": "'Unmatched lines. Got:\\n{}\\nExpected:\\n{}'"
+ },
+ {
+  "src": "'\"{}.{}\",'",
+  "expected": "'\"{}.{}\",'"
+ },
+ {
+  "src": "classname.replace",
+  "expected": "classname.replace"
+ },
+ {
+  "src": "'\"'",
+  "expected": "'\"'"
+ },
+ {
+  "src": "''",
+  "expected": "''"
+ },
+ {
+  "src": "line.endswith('\\\\')",
+  "expected": "line.endswith('\\\\')"
+ },
+ {
+  "src": "line.endswith",
+  "expected": "line.endswith"
+ },
+ {
+  "src": "'\\\\\\\\'",
+  "expected": "'\\\\\\\\'"
+ },
+ {
+  "src": "node",
+  "expected": "node"
+ },
+ {
+  "src": "',\\n    '",
+  "expected": "',\\n    '"
+ },
+ {
+  "src": "classname",
+  "expected": "classname"
+ },
+ {
+  "src": "'\\\\'",
+  "expected": "'\\\\'"
+ },
+ {
+  "src": "-1",
+  "expected": "-1"
+ },
+ {
+  "src": "'aaa'",
+  "expected": "'aaa'"
+ },
+ {
+  "src": "x",
+  "expected": "x"
+ },
+ {
+  "src": "'a\\xa0%s' % a",
+  "expected": "'a\\xa0%s' % a"
+ },
+ {
+  "src": "'a\\xa0%s'",
+  "expected": "'a\\xa0%s'"
+ },
+ {
+  "src": "n",
+  "expected": "n"
+ },
+ {
+  "src": "'{} hello, {}'.format(n, 'world')",
+  "expected": "'{} hello, {}'.format(n, 'world')"
+ },
+ {
+  "src": "'{} non-str {}'.format(n, True)",
+  "expected": "'{} non-str {}'.format(n, True)"
+ },
+ {
+  "src": "'{} with quote {}'.format(n, '\"x\"')",
+  "expected": "'{} with quote {}'.format(n, '\"x\"')"
+ },
+ {
+  "src": "'hello, {}'.format('world')",
+  "expected": "'hello, {}'.format('world')"
+ },
+ {
+  "src": "'with quote {}'.format('\"x\"')",
+  "expected": "'with quote {}'.format('\"x\"')"
+ },
+ {
+  "src": "'{} hello, {}'.format",
+  "expected": "'{} hello, {}'.format"
+ },
+ {
+  "src": "'world'",
+  "expected": "'world'"
+ },
+ {
+  "src": "'{} non-str {}'.format",
+  "expected": "'{} non-str {}'.format"
+ },
+ {
+  "src": "True",
+  "expected": "True"
+ },
+ {
+  "src": "'{} with quote {}'.format",
+  "expected": "'{} with quote {}'.format"
+ },
+ {
+  "src": "'\"x\"'",
+  "expected": "'\"x\"'"
+ },
+ {
+  "src": "'hello, {}'.format",
+  "expected": "'hello, {}'.format"
+ },
+ {
+  "src": "'with quote {}'.format",
+  "expected": "'with quote {}'.format"
+ },
+ {
+  "src": "'{} hello, {}'",
+  "expected": "'{} hello, {}'"
+ },
+ {
+  "src": "'{} non-str {}'",
+  "expected": "'{} non-str {}'"
+ },
+ {
+  "src": "'{} with quote {}'",
+  "expected": "'{} with quote {}'"
+ },
+ {
+  "src": "'hello, {}'",
+  "expected": "'hello, {}'"
+ },
+ {
+  "src": "'with quote {}'",
+  "expected": "'with quote {}'"
+ },
+ {
+  "src": "project",
+  "expected": "project"
+ },
+ {
+  "src": "'Flask'",
+  "expected": "'Flask'"
+ },
+ {
+  "src": "copyright",
+  "expected": "copyright"
+ },
+ {
+  "src": "'2010 Pallets Team'",
+  "expected": "'2010 Pallets Team'"
+ },
+ {
+  "src": "author",
+  "expected": "author"
+ },
+ {
+  "src": "'Pallets Team'",
+  "expected": "'Pallets Team'"
+ },
+ {
+  "src": "(release, version)",
+  "expected": "(release, version)"
+ },
+ {
+  "src": "get_version('Flask')",
+  "expected": "get_version('Flask')"
+ },
+ {
+  "src": "master_doc",
+  "expected": "master_doc"
+ },
+ {
+  "src": "'index'",
+  "expected": "'index'"
+ },
+ {
+  "src": "extensions",
+  "expected": "extensions"
+ },
+ {
+  "src": "['sphinx.ext.autodoc', 'sphinx.ext.intersphinx', 'sphinxcontrib.log_cabinet', 'pallets_sphinx_themes']",
+  "expected": "['sphinx.ext.autodoc', 'sphinx.ext.intersphinx', 'sphinxcontrib.log_cabinet', 'pallets_sphinx_themes']"
+ },
+ {
+  "src": "intersphinx_mapping",
+  "expected": "intersphinx_mapping"
+ },
+ {
+  "src": "{'python': ('https://docs.python.org/3/', None), 'werkzeug': ('http://werkzeug.pocoo.org/docs/', None), 'click': ('https://click.palletsprojects.com/', None), 'jinja': ('http://jinja.pocoo.org/docs/', None), 'itsdangerous': ('https://itsdangerous.palletsprojects.com/', None), 'sqlalchemy': ('https://docs.sqlalchemy.org/', None), 'wtforms': ('https://wtforms.readthedocs.io/en/stable/', None), 'blinker': ('https://pythonhosted.org/blinker/', None)}",
+  "expected": "{'python': ('https://docs.python.org/3/', None), 'werkzeug': ('http://werkzeug.pocoo.org/docs/', None), 'click': ('https://click.palletsprojects.com/', None), 'jinja': ('http://jinja.pocoo.org/docs/', None), 'itsdangerous': ('https://itsdangerous.palletsprojects.com/', None), 'sqlalchemy': ('https://docs.sqlalchemy.org/', None), 'wtforms': ('https://wtforms.readthedocs.io/en/stable/', None), 'blinker': ('https://pythonhosted.org/blinker/', None)}"
+ },
+ {
+  "src": "html_theme",
+  "expected": "html_theme"
+ },
+ {
+  "src": "'flask'",
+  "expected": "'flask'"
+ },
+ {
+  "src": "html_theme_options",
+  "expected": "html_theme_options"
+ },
+ {
+  "src": "{'index_sidebar_logo': False}",
+  "expected": "{'index_sidebar_logo': False}"
+ },
+ {
+  "src": "html_context",
+  "expected": "html_context"
+ },
+ {
+  "src": "{'project_links': [ProjectLink('Donate to Pallets', 'https://palletsprojects.com/donate'), ProjectLink('Flask Website', 'https://palletsprojects.com/p/flask/'), ProjectLink('PyPI releases', 'https://pypi.org/project/Flask/'), ProjectLink('Source Code', 'https://github.com/pallets/flask/'), ProjectLink('Issue Tracker', 'https://github.com/pallets/flask/issues/')]}",
+  "expected": "{'project_links': [ProjectLink('Donate to Pallets', 'https://palletsprojects.com/donate'), ProjectLink('Flask Website', 'https://palletsprojects.com/p/flask/'), ProjectLink('PyPI releases', 'https://pypi.org/project/Flask/'), ProjectLink('Source Code', 'https://github.com/pallets/flask/'), ProjectLink('Issue Tracker', 'https://github.com/pallets/flask/issues/')]}"
+ },
+ {
+  "src": "html_sidebars",
+  "expected": "html_sidebars"
+ },
+ {
+  "src": "{'index': ['project.html', 'localtoc.html', 'versions.html', 'searchbox.html'], '**': ['localtoc.html', 'relations.html', 'versions.html', 'searchbox.html']}",
+  "expected": "{'index': ['project.html', 'localtoc.html', 'versions.html', 'searchbox.html'], '**': ['localtoc.html', 'relations.html', 'versions.html', 'searchbox.html']}"
+ },
+ {
+  "src": "singlehtml_sidebars",
+  "expected": "singlehtml_sidebars"
+ },
+ {
+  "src": "{'index': ['project.html', 'versions.html', 'localtoc.html']}",
+  "expected": "{'index': ['project.html', 'versions.html', 'localtoc.html']}"
+ },
+ {
+  "src": "html_static_path",
+  "expected": "html_static_path"
+ },
+ {
+  "src": "['_static']",
+  "expected": "['_static']"
+ },
+ {
+  "src": "html_favicon",
+  "expected": "html_favicon"
+ },
+ {
+  "src": "'_static/flask-icon.png'",
+  "expected": "'_static/flask-icon.png'"
+ },
+ {
+  "src": "html_logo",
+  "expected": "html_logo"
+ },
+ {
+  "src": "'_static/flask-logo-sidebar.png'",
+  "expected": "'_static/flask-logo-sidebar.png'"
+ },
+ {
+  "src": "html_title",
+  "expected": "html_title"
+ },
+ {
+  "src": "'Flask Documentation ({})'.format(version)",
+  "expected": "'Flask Documentation ({})'.format(version)"
+ },
+ {
+  "src": "html_show_sourcelink",
+  "expected": "html_show_sourcelink"
+ },
+ {
+  "src": "False",
+  "expected": "False"
+ },
+ {
+  "src": "html_domain_indices",
+  "expected": "html_domain_indices"
+ },
+ {
+  "src": "release",
+  "expected": "release"
+ },
+ {
+  "src": "version",
+  "expected": "version"
+ },
+ {
+  "src": "get_version",
+  "expected": "get_version"
+ },
+ {
+  "src": "'sphinx.ext.autodoc'",
+  "expected": "'sphinx.ext.autodoc'"
+ },
+ {
+  "src": "'sphinx.ext.intersphinx'",
+  "expected": "'sphinx.ext.intersphinx'"
+ },
+ {
+  "src": "'sphinxcontrib.log_cabinet'",
+  "expected": "'sphinxcontrib.log_cabinet'"
+ },
+ {
+  "src": "'pallets_sphinx_themes'",
+  "expected": "'pallets_sphinx_themes'"
+ },
+ {
+  "src": "'python'",
+  "expected": "'python'"
+ },
+ {
+  "src": "'werkzeug'",
+  "expected": "'werkzeug'"
+ },
+ {
+  "src": "'click'",
+  "expected": "'click'"
+ },
+ {
+  "src": "'jinja'",
+  "expected": "'jinja'"
+ },
+ {
+  "src": "'itsdangerous'",
+  "expected": "'itsdangerous'"
+ },
+ {
+  "src": "'sqlalchemy'",
+  "expected": "'sqlalchemy'"
+ },
+ {
+  "src": "'wtforms'",
+  "expected": "'wtforms'"
+ },
+ {
+  "src": "'blinker'",
+  "expected": "'blinker'"
+ },
+ {
+  "src": "('https://docs.python.org/3/', None)",
+  "expected": "('https://docs.python.org/3/', None)"
+ },
+ {
+  "src": "('http://werkzeug.pocoo.org/docs/', None)",
+  "expected": "('http://werkzeug.pocoo.org/docs/', None)"
+ },
+ {
+  "src": "('https://click.palletsprojects.com/', None)",
+  "expected": "('https://click.palletsprojects.com/', None)"
+ },
+ {
+  "src": "('http://jinja.pocoo.org/docs/', None)",
+  "expected": "('http://jinja.pocoo.org/docs/', None)"
+ },
+ {
+  "src": "('https://itsdangerous.palletsprojects.com/', None)",
+  "expected": "('https://itsdangerous.palletsprojects.com/', None)"
+ },
+ {
+  "src": "('https://docs.sqlalchemy.org/', None)",
+  "expected": "('https://docs.sqlalchemy.org/', None)"
+ },
+ {
+  "src": "('https://wtforms.readthedocs.io/en/stable/', None)",
+  "expected": "('https://wtforms.readthedocs.io/en/stable/', None)"
+ },
+ {
+  "src": "('https://pythonhosted.org/blinker/', None)",
+  "expected": "('https://pythonhosted.org/blinker/', None)"
+ },
+ {
+  "src": "'index_sidebar_logo'",
+  "expected": "'index_sidebar_logo'"
+ },
+ {
+  "src": "'project_links'",
+  "expected": "'project_links'"
+ },
+ {
+  "src": "[ProjectLink('Donate to Pallets', 'https://palletsprojects.com/donate'), ProjectLink('Flask Website', 'https://palletsprojects.com/p/flask/'), ProjectLink('PyPI releases', 'https://pypi.org/project/Flask/'), ProjectLink('Source Code', 'https://github.com/pallets/flask/'), ProjectLink('Issue Tracker', 'https://github.com/pallets/flask/issues/')]",
+  "expected": "[ProjectLink('Donate to Pallets', 'https://palletsprojects.com/donate'), ProjectLink('Flask Website', 'https://palletsprojects.com/p/flask/'), ProjectLink('PyPI releases', 'https://pypi.org/project/Flask/'), ProjectLink('Source Code', 'https://github.com/pallets/flask/'), ProjectLink('Issue Tracker', 'https://github.com/pallets/flask/issues/')]"
+ },
+ {
+  "src": "'**'",
+  "expected": "'**'"
+ },
+ {
+  "src": "['project.html', 'localtoc.html', 'versions.html', 'searchbox.html']",
+  "expected": "['project.html', 'localtoc.html', 'versions.html', 'searchbox.html']"
+ },
+ {
+  "src": "['localtoc.html', 'relations.html', 'versions.html', 'searchbox.html']",
+  "expected": "['localtoc.html', 'relations.html', 'versions.html', 'searchbox.html']"
+ },
+ {
+  "src": "['project.html', 'versions.html', 'localtoc.html']",
+  "expected": "['project.html', 'versions.html', 'localtoc.html']"
+ },
+ {
+  "src": "'_static'",
+  "expected": "'_static'"
+ },
+ {
+  "src": "'Flask Documentation ({})'.format",
+  "expected": "'Flask Documentation ({})'.format"
+ },
+ {
+  "src": "'https://docs.python.org/3/'",
+  "expected": "'https://docs.python.org/3/'"
+ },
+ {
+  "src": "None",
+  "expected": "None"
+ },
+ {
+  "src": "'http://werkzeug.pocoo.org/docs/'",
+  "expected": "'http://werkzeug.pocoo.org/docs/'"
+ },
+ {
+  "src": "'https://click.palletsprojects.com/'",
+  "expected": "'https://click.palletsprojects.com/'"
+ },
+ {
+  "src": "'http://jinja.pocoo.org/docs/'",
+  "expected": "'http://jinja.pocoo.org/docs/'"
+ },
+ {
+  "src": "'https://itsdangerous.palletsprojects.com/'",
+  "expected": "'https://itsdangerous.palletsprojects.com/'"
+ },
+ {
+  "src": "'https://docs.sqlalchemy.org/'",
+  "expected": "'https://docs.sqlalchemy.org/'"
+ },
+ {
+  "src": "'https://wtforms.readthedocs.io/en/stable/'",
+  "expected": "'https://wtforms.readthedocs.io/en/stable/'"
+ },
+ {
+  "src": "'https://pythonhosted.org/blinker/'",
+  "expected": "'https://pythonhosted.org/blinker/'"
+ },
+ {
+  "src": "ProjectLink('Donate to Pallets', 'https://palletsprojects.com/donate')",
+  "expected": "ProjectLink('Donate to Pallets', 'https://palletsprojects.com/donate')"
+ },
+ {
+  "src": "ProjectLink('Flask Website', 'https://palletsprojects.com/p/flask/')",
+  "expected": "ProjectLink('Flask Website', 'https://palletsprojects.com/p/flask/')"
+ },
+ {
+  "src": "ProjectLink('PyPI releases', 'https://pypi.org/project/Flask/')",
+  "expected": "ProjectLink('PyPI releases', 'https://pypi.org/project/Flask/')"
+ },
+ {
+  "src": "ProjectLink('Source Code', 'https://github.com/pallets/flask/')",
+  "expected": "ProjectLink('Source Code', 'https://github.com/pallets/flask/')"
+ },
+ {
+  "src": "ProjectLink('Issue Tracker', 'https://github.com/pallets/flask/issues/')",
+  "expected": "ProjectLink('Issue Tracker', 'https://github.com/pallets/flask/issues/')"
+ },
+ {
+  "src": "'project.html'",
+  "expected": "'project.html'"
+ },
+ {
+  "src": "'localtoc.html'",
+  "expected": "'localtoc.html'"
+ },
+ {
+  "src": "'versions.html'",
+  "expected": "'versions.html'"
+ },
+ {
+  "src": "'searchbox.html'",
+  "expected": "'searchbox.html'"
+ },
+ {
+  "src": "'relations.html'",
+  "expected": "'relations.html'"
+ },
+ {
+  "src": "'Flask Documentation ({})'",
+  "expected": "'Flask Documentation ({})'"
+ },
+ {
+  "src": "ProjectLink",
+  "expected": "ProjectLink"
+ },
+ {
+  "src": "'Donate to Pallets'",
+  "expected": "'Donate to Pallets'"
+ },
+ {
+  "src": "'https://palletsprojects.com/donate'",
+  "expected": "'https://palletsprojects.com/donate'"
+ },
+ {
+  "src": "'Flask Website'",
+  "expected": "'Flask Website'"
+ },
+ {
+  "src": "'https://palletsprojects.com/p/flask/'",
+  "expected": "'https://palletsprojects.com/p/flask/'"
+ },
+ {
+  "src": "'PyPI releases'",
+  "expected": "'PyPI releases'"
+ },
+ {
+  "src": "'https://pypi.org/project/Flask/'",
+  "expected": "'https://pypi.org/project/Flask/'"
+ },
+ {
+  "src": "'Source Code'",
+  "expected": "'Source Code'"
+ },
+ {
+  "src": "'https://github.com/pallets/flask/'",
+  "expected": "'https://github.com/pallets/flask/'"
+ },
+ {
+  "src": "'Issue Tracker'",
+  "expected": "'Issue Tracker'"
+ },
+ {
+  "src": "'https://github.com/pallets/flask/issues/'",
+  "expected": "'https://github.com/pallets/flask/issues/'"
+ },
+ {
+  "src": "NoAppException('Detected multiple Flask applications in module \"{}\". Use \"FLASK_APP={}:name\" to specify the correct one.'.format(var1, var2))",
+  "expected": "NoAppException('Detected multiple Flask applications in module \"{}\". Use \"FLASK_APP={}:name\" to specify the correct one.'.format(var1, var2))"
+ },
+ {
+  "src": "NoAppException",
+  "expected": "NoAppException"
+ },
+ {
+  "src": "'Detected multiple Flask applications in module \"{}\". Use \"FLASK_APP={}:name\" to specify the correct one.'.format(var1, var2)",
+  "expected": "'Detected multiple Flask applications in module \"{}\". Use \"FLASK_APP={}:name\" to specify the correct one.'.format(var1, var2)"
+ },
+ {
+  "src": "'Detected multiple Flask applications in module \"{}\". Use \"FLASK_APP={}:name\" to specify the correct one.'.format",
+  "expected": "'Detected multiple Flask applications in module \"{}\". Use \"FLASK_APP={}:name\" to specify the correct one.'.format"
+ },
+ {
+  "src": "var1",
+  "expected": "var1"
+ },
+ {
+  "src": "var2",
+  "expected": "var2"
+ },
+ {
+  "src": "'Detected multiple Flask applications in module \"{}\". Use \"FLASK_APP={}:name\" to specify the correct one.'",
+  "expected": "'Detected multiple Flask applications in module \"{}\". Use \"FLASK_APP={}:name\" to specify the correct one.'"
+ },
+ {
+  "src": "12345",
+  "expected": "12345"
+ },
+ {
+  "src": "my_string",
+  "expected": "my_string"
+ },
+ {
+  "src": "'Hello %s' % var",
+  "expected": "'Hello %s' % var"
+ },
+ {
+  "src": "'Some Value'",
+  "expected": "'Some Value'"
+ },
+ {
+  "src": "'Hello %s'",
+  "expected": "'Hello %s'"
+ },
+ {
+  "src": "(var, a, b)",
+  "expected": "(var, a, b)"
+ },
+ {
+  "src": "(12345, 4, 'Beew')",
+  "expected": "(12345, 4, 'Beew')"
+ },
+ {
+  "src": "'Hello {} {} {}'.format(var, a, b)",
+  "expected": "'Hello {} {} {}'.format(var, a, b)"
+ },
+ {
+  "src": "'Beew'",
+  "expected": "'Beew'"
+ },
+ {
+  "src": "'Hello {} {} {}'.format",
+  "expected": "'Hello {} {} {}'.format"
+ },
+ {
+  "src": "'Hello {} {} {}'",
+  "expected": "'Hello {} {} {}'"
+ },
+ {
+  "src": "'Hello %s %s %s'.format(var, a, b)",
+  "expected": "'Hello %s %s %s'.format(var, a, b)"
+ },
+ {
+  "src": "'Hello %s %s %s'.format",
+  "expected": "'Hello %s %s %s'.format"
+ },
+ {
+  "src": "'Hello %s %s %s'",
+  "expected": "'Hello %s %s %s'"
+ },
+ {
+  "src": "{'something': 'what'}",
+  "expected": "{'something': 'what'}"
+ },
+ {
+  "src": "resp",
+  "expected": "resp"
+ },
+ {
+  "src": "'\\n%(something)s\\n' % d",
+  "expected": "'\\n%(something)s\\n' % d"
+ },
+ {
+  "src": "print(resp)",
+  "expected": "print(resp)"
+ },
+ {
+  "src": "'something'",
+  "expected": "'something'"
+ },
+ {
+  "src": "'what'",
+  "expected": "'what'"
+ },
+ {
+  "src": "'\\n%(something)s\\n'",
+  "expected": "'\\n%(something)s\\n'"
+ },
+ {
+  "src": "ValueError('Arithmetic on %s objects with different sizes not permitted' % self.__class__)",
+  "expected": "ValueError('Arithmetic on %s objects with different sizes not permitted' % self.__class__)"
+ },
+ {
+  "src": "ValueError",
+  "expected": "ValueError"
+ },
+ {
+  "src": "'Arithmetic on %s objects with different sizes not permitted' % self.__class__",
+  "expected": "'Arithmetic on %s objects with different sizes not permitted' % self.__class__"
+ },
+ {
+  "src": "'Arithmetic on %s objects with different sizes not permitted'",
+  "expected": "'Arithmetic on %s objects with different sizes not permitted'"
+ },
+ {
+  "src": "self.__class__",
+  "expected": "self.__class__"
+ },
+ {
+  "src": "(length, quotes)",
+  "expected": "(length, quotes)"
+ },
+ {
+  "src": "(15, 20)",
+  "expected": "(15, 20)"
+ },
+ {
+  "src": "text",
+  "expected": "text"
+ },
+ {
+  "src": "'\\n# This is an example configuration\\n# Hash lines are comments\\n\\n[flake8]\\nmax-line-length={0}\\ninline-quotes=\"{1}\"\\n'.format(length, quotes)",
+  "expected": "'\\n# This is an example configuration\\n# Hash lines are comments\\n\\n[flake8]\\nmax-line-length={0}\\ninline-quotes=\"{1}\"\\n'.format(length, quotes)"
+ },
+ {
+  "src": "length",
+  "expected": "length"
+ },
+ {
+  "src": "quotes",
+  "expected": "quotes"
+ },
+ {
+  "src": "15",
+  "expected": "15"
+ },
+ {
+  "src": "20",
+  "expected": "20"
+ },
+ {
+  "src": "'\\n# This is an example configuration\\n# Hash lines are comments\\n\\n[flake8]\\nmax-line-length={0}\\ninline-quotes=\"{1}\"\\n'.format",
+  "expected": "'\\n# This is an example configuration\\n# Hash lines are comments\\n\\n[flake8]\\nmax-line-length={0}\\ninline-quotes=\"{1}\"\\n'.format"
+ },
+ {
+  "src": "'\\n# This is an example configuration\\n# Hash lines are comments\\n\\n[flake8]\\nmax-line-length={0}\\ninline-quotes=\"{1}\"\\n'",
+  "expected": "'\\n# This is an example configuration\\n# Hash lines are comments\\n\\n[flake8]\\nmax-line-length={0}\\ninline-quotes=\"{1}\"\\n'"
+ },
+ {
+  "src": "_app_ctx_stack.top.app",
+  "expected": "_app_ctx_stack.top.app"
+ },
+ {
+  "src": "banner",
+  "expected": "banner"
+ },
+ {
+  "src": "'Python %s on %s\\nApp: %s [%s]\\nInstance: %s' % (sys.version, sys.platform, app.import_name, app.env, app.instance_path)",
+  "expected": "'Python %s on %s\\nApp: %s [%s]\\nInstance: %s' % (sys.version, sys.platform, app.import_name, app.env, app.instance_path)"
+ },
+ {
+  "src": "ctx",
+  "expected": "ctx"
+ },
+ {
+  "src": "{}",
+  "expected": "{}"
+ },
+ {
+  "src": "_app_ctx_stack.top",
+  "expected": "_app_ctx_stack.top"
+ },
+ {
+  "src": "'Python %s on %s\\nApp: %s [%s]\\nInstance: %s'",
+  "expected": "'Python %s on %s\\nApp: %s [%s]\\nInstance: %s'"
+ },
+ {
+  "src": "(sys.version, sys.platform, app.import_name, app.env, app.instance_path)",
+  "expected": "(sys.version, sys.platform, app.import_name, app.env, app.instance_path)"
+ },
+ {
+  "src": "_app_ctx_stack",
+  "expected": "_app_ctx_stack"
+ },
+ {
+  "src": "sys.version",
+  "expected": "sys.version"
+ },
+ {
+  "src": "sys.platform",
+  "expected": "sys.platform"
+ },
+ {
+  "src": "app.import_name",
+  "expected": "app.import_name"
+ },
+ {
+  "src": "app.env",
+  "expected": "app.env"
+ },
+ {
+  "src": "app.instance_path",
+  "expected": "app.instance_path"
+ },
+ {
+  "src": "NoAppException('Detected multiple Flask applications in module \"{module}\". Use \"FLASK_APP={module}:name\" to specify the correct one.'.format(module=module.__name__))",
+  "expected": "NoAppException('Detected multiple Flask applications in module \"{module}\". Use \"FLASK_APP={module}:name\" to specify the correct one.'.format(module=module.__name__))"
+ },
+ {
+  "src": "'Detected multiple Flask applications in module \"{module}\". Use \"FLASK_APP={module}:name\" to specify the correct one.'.format(module=module.__name__)",
+  "expected": "'Detected multiple Flask applications in module \"{module}\". Use \"FLASK_APP={module}:name\" to specify the correct one.'.format(module=module.__name__)"
+ },
+ {
+  "src": "'Detected multiple Flask applications in module \"{module}\". Use \"FLASK_APP={module}:name\" to specify the correct one.'.format",
+  "expected": "'Detected multiple Flask applications in module \"{module}\". Use \"FLASK_APP={module}:name\" to specify the correct one.'.format"
+ },
+ {
+  "src": "'Detected multiple Flask applications in module \"{module}\". Use \"FLASK_APP={module}:name\" to specify the correct one.'",
+  "expected": "'Detected multiple Flask applications in module \"{module}\". Use \"FLASK_APP={module}:name\" to specify the correct one.'"
+ },
+ {
+  "src": "module.__name__",
+  "expected": "module.__name__"
+ },
+ {
+  "src": "module",
+  "expected": "module"
+ },
+ {
+  "src": "'my string {first} and {second}'.format(second=f, first=cada_bra)",
+  "expected": "'my string {first} and {second}'.format(second=f, first=cada_bra)"
+ },
+ {
+  "src": "'my string {first} and {second}'.format",
+  "expected": "'my string {first} and {second}'.format"
+ },
+ {
+  "src": "'my string {first} and {second}'",
+  "expected": "'my string {first} and {second}'"
+ },
+ {
+  "src": "' This is a beautiful python module in that it is very simple.'",
+  "expected": "' This is a beautiful python module in that it is very simple.'"
+ },
+ {
+  "src": "2 + 2",
+  "expected": "2 + 2"
+ },
+ {
+  "src": "print(' '.join(('a', 'b')))",
+  "expected": "print(' '.join(('a', 'b')))"
+ },
+ {
+  "src": "' '.join(('a', 'b'))",
+  "expected": "' '.join(('a', 'b'))"
+ },
+ {
+  "src": "' '.join",
+  "expected": "' '.join"
+ },
+ {
+  "src": "('a', 'b')",
+  "expected": "('a', 'b')"
+ },
+ {
+  "src": "' '",
+  "expected": "' '"
+ },
+ {
+  "src": "'a'",
+  "expected": "'a'"
+ },
+ {
+  "src": "'b'",
+  "expected": "'b'"
+ },
+ {
+  "src": "'wuga'",
+  "expected": "'wuga'"
+ },
+ {
+  "src": "print('%(num)f %(string)s' % {'num': a, 'string': b})",
+  "expected": "print('%(num)f %(string)s' % {'num': a, 'string': b})"
+ },
+ {
+  "src": "'%(num)f %(string)s' % {'num': a, 'string': b}",
+  "expected": "'%(num)f %(string)s' % {'num': a, 'string': b}"
+ },
+ {
+  "src": "'%(num)f %(string)s'",
+  "expected": "'%(num)f %(string)s'"
+ },
+ {
+  "src": "{'num': a, 'string': b}",
+  "expected": "{'num': a, 'string': b}"
+ },
+ {
+  "src": "'num'",
+  "expected": "'num'"
+ },
+ {
+  "src": "'string'",
+  "expected": "'string'"
+ },
+ {
+  "src": "(a, b, c, d, e)",
+  "expected": "(a, b, c, d, e)"
+ },
+ {
+  "src": "tuple(range(5))",
+  "expected": "tuple(range(5))"
+ },
+ {
+  "src": "print('%f %f %e %g %s' % (a, b, c, d, e))",
+  "expected": "print('%f %f %e %g %s' % (a, b, c, d, e))"
+ },
+ {
+  "src": "tuple",
+  "expected": "tuple"
+ },
+ {
+  "src": "range(5)",
+  "expected": "range(5)"
+ },
+ {
+  "src": "'%f %f %e %g %s' % (a, b, c, d, e)",
+  "expected": "'%f %f %e %g %s' % (a, b, c, d, e)"
+ },
+ {
+  "src": "range",
+  "expected": "range"
+ },
+ {
+  "src": "'%f %f %e %g %s'",
+  "expected": "'%f %f %e %g %s'"
+ },
+ {
+  "src": "'%s' % d ** 2",
+  "expected": "'%s' % d ** 2"
+ },
+ {
+  "src": "d ** 2",
+  "expected": "d ** 2"
+ },
+ {
+  "src": "'abra'",
+  "expected": "'abra'"
+ },
+ {
+  "src": "print('%r %s %a' % (a, a, a))",
+  "expected": "print('%r %s %a' % (a, a, a))"
+ },
+ {
+  "src": "'%r %s %a' % (a, a, a)",
+  "expected": "'%r %s %a' % (a, a, a)"
+ },
+ {
+  "src": "'%r %s %a'",
+  "expected": "'%r %s %a'"
+ },
+ {
+  "src": "(a, a, a)",
+  "expected": "(a, a, a)"
+ },
+ {
+  "src": "'%s,%s' % (di1['key'], di2['key'])",
+  "expected": "'%s,%s' % (di1['key'], di2['key'])"
+ },
+ {
+  "src": "'%s,%s'",
+  "expected": "'%s,%s'"
+ },
+ {
+  "src": "(di1['key'], di2['key'])",
+  "expected": "(di1['key'], di2['key'])"
+ },
+ {
+  "src": "di1['key']",
+  "expected": "di1['key']"
+ },
+ {
+  "src": "di2['key']",
+  "expected": "di2['key']"
+ },
+ {
+  "src": "di1",
+  "expected": "di1"
+ },
+ {
+  "src": "'key'",
+  "expected": "'key'"
+ },
+ {
+  "src": "di2",
+  "expected": "di2"
+ },
+ {
+  "src": "changed",
+  "expected": "changed"
+ },
+ {
+  "src": "[]",
+  "expected": "[]"
+ },
+ {
+  "src": "(before, old, after)",
+  "expected": "(before, old, after)"
+ },
+ {
+  "src": "match.groups()",
+  "expected": "match.groups()"
+ },
+ {
+  "src": "changed.append(True)",
+  "expected": "changed.append(True)"
+ },
+ {
+  "src": "before + version_number + after",
+  "expected": "before + version_number + after"
+ },
+ {
+  "src": "open(filename)",
+  "expected": "open(filename)"
+ },
+ {
+  "src": "contents",
+  "expected": "contents"
+ },
+ {
+  "src": "re.sub(\"^(\\\\s*%s\\\\s*=\\\\s*')(.+?)(')\" % pattern, inject_version, f.read(), flags=re.DOTALL | re.MULTILINE)",
+  "expected": "re.sub(\"^(\\\\s*%s\\\\s*=\\\\s*')(.+?)(')\" % pattern, inject_version, f.read(), flags=re.DOTALL | re.MULTILINE)"
+ },
+ {
+  "src": "before",
+  "expected": "before"
+ },
+ {
+  "src": "old",
+  "expected": "old"
+ },
+ {
+  "src": "after",
+  "expected": "after"
+ },
+ {
+  "src": "match.groups",
+  "expected": "match.groups"
+ },
+ {
+  "src": "changed.append",
+  "expected": "changed.append"
+ },
+ {
+  "src": "before + version_number",
+  "expected": "before + version_number"
+ },
+ {
+  "src": "open",
+  "expected": "open"
+ },
+ {
+  "src": "filename",
+  "expected": "filename"
+ },
+ {
+  "src": "re.sub",
+  "expected": "re.sub"
+ },
+ {
+  "src": "\"^(\\\\s*%s\\\\s*=\\\\s*')(.+?)(')\" % pattern",
+  "expected": "\"^(\\\\s*%s\\\\s*=\\\\s*')(.+?)(')\" % pattern"
+ },
+ {
+  "src": "inject_version",
+  "expected": "inject_version"
+ },
+ {
+  "src": "f.read()",
+  "expected": "f.read()"
+ },
+ {
+  "src": "match",
+  "expected": "match"
+ },
+ {
+  "src": "version_number",
+  "expected": "version_number"
+ },
+ {
+  "src": "re",
+  "expected": "re"
+ },
+ {
+  "src": "\"^(\\\\s*%s\\\\s*=\\\\s*')(.+?)(')\"",
+  "expected": "\"^(\\\\s*%s\\\\s*=\\\\s*')(.+?)(')\""
+ },
+ {
+  "src": "pattern",
+  "expected": "pattern"
+ },
+ {
+  "src": "f.read",
+  "expected": "f.read"
+ },
+ {
+  "src": "re.DOTALL | re.MULTILINE",
+  "expected": "re.DOTALL | re.MULTILINE"
+ },
+ {
+  "src": "re.DOTALL",
+  "expected": "re.DOTALL"
+ },
+ {
+  "src": "re.MULTILINE",
+  "expected": "re.MULTILINE"
+ },
+ {
+  "src": "'Logs an exception.  This is called by :meth:`handle_exception`\\n    if debugging is disabled and right before the handler is called.\\n    The default implementation logs the exception as error on the\\n    :attr:`logger`.\\n\\n    .. versionadded:: 0.8\\n    '",
+  "expected": "'Logs an exception.  This is called by :meth:`handle_exception`\\n    if debugging is disabled and right before the handler is called.\\n    The default implementation logs the exception as error on the\\n    :attr:`logger`.\\n\\n    .. versionadded:: 0.8\\n    '"
+ },
+ {
+  "src": "self.logger.error('Exception on %s [%s]' % (request.path, request.method), exc_info=exc_info)",
+  "expected": "self.logger.error('Exception on %s [%s]' % (request.path, request.method), exc_info=exc_info)"
+ },
+ {
+  "src": "self.logger.error",
+  "expected": "self.logger.error"
+ },
+ {
+  "src": "'Exception on %s [%s]' % (request.path, request.method)",
+  "expected": "'Exception on %s [%s]' % (request.path, request.method)"
+ },
+ {
+  "src": "self.logger",
+  "expected": "self.logger"
+ },
+ {
+  "src": "'Exception on %s [%s]'",
+  "expected": "'Exception on %s [%s]'"
+ },
+ {
+  "src": "(request.path, request.method)",
+  "expected": "(request.path, request.method)"
+ },
+ {
+  "src": "exc_info",
+  "expected": "exc_info"
+ },
+ {
+  "src": "request.path",
+  "expected": "request.path"
+ },
+ {
+  "src": "request.method",
+  "expected": "request.method"
+ },
+ {
+  "src": "request",
+  "expected": "request"
+ },
+ {
+  "src": "'my string {}'.format(var)",
+  "expected": "'my string {}'.format(var)"
+ },
+ {
+  "src": "'my string {}'.format",
+  "expected": "'my string {}'.format"
+ },
+ {
+  "src": "'my string {}'",
+  "expected": "'my string {}'"
+ },
+ {
+  "src": "'\\nThis is an awesome source file that should under no conditions get ruined!\\n'",
+  "expected": "'\\nThis is an awesome source file that should under no conditions get ruined!\\n'"
+ },
+ {
+  "src": "'my string {:.2f}'.format(var)",
+  "expected": "'my string {:.2f}'.format(var)"
+ },
+ {
+  "src": "'my string {:.2f}'.format",
+  "expected": "'my string {:.2f}'.format"
+ },
+ {
+  "src": "'my string {:.2f}'",
+  "expected": "'my string {:.2f}'"
+ },
+ {
+  "src": "var % 3 == 0",
+  "expected": "var % 3 == 0"
+ },
+ {
+  "src": "var % 3",
+  "expected": "var % 3"
+ },
+ {
+  "src": "'Test: %s' % var",
+  "expected": "'Test: %s' % var"
+ },
+ {
+  "src": "'Test: %s'",
+  "expected": "'Test: %s'"
+ },
+ {
+  "src": "'{} my string'.format(var)",
+  "expected": "'{} my string'.format(var)"
+ },
+ {
+  "src": "'{} my string'.format",
+  "expected": "'{} my string'.format"
+ },
+ {
+  "src": "'{} my string'",
+  "expected": "'{} my string'"
+ },
+ {
+  "src": "\"echo '{}'\\n\".format(self.FLUSH_CMD)",
+  "expected": "\"echo '{}'\\n\".format(self.FLUSH_CMD)"
+ },
+ {
+  "src": "\"echo '{}'\\\\n\".format(self.FLUSH_CMD)",
+  "expected": "\"echo '{}'\\\\n\".format(self.FLUSH_CMD)"
+ },
+ {
+  "src": "\"echo '%s'\\n\" % self.FLUSH_CMD",
+  "expected": "\"echo '%s'\\n\" % self.FLUSH_CMD"
+ },
+ {
+  "src": "\"echo '%s'\\\\n\" % self.FLUSH_CMD",
+  "expected": "\"echo '%s'\\\\n\" % self.FLUSH_CMD"
+ },
+ {
+  "src": "\"echo '{}'\\n\".format",
+  "expected": "\"echo '{}'\\n\".format"
+ },
+ {
+  "src": "self.FLUSH_CMD",
+  "expected": "self.FLUSH_CMD"
+ },
+ {
+  "src": "\"echo '{}'\\\\n\".format",
+  "expected": "\"echo '{}'\\\\n\".format"
+ },
+ {
+  "src": "\"echo '%s'\\n\"",
+  "expected": "\"echo '%s'\\n\""
+ },
+ {
+  "src": "\"echo '%s'\\\\n\"",
+  "expected": "\"echo '%s'\\\\n\""
+ },
+ {
+  "src": "\"echo '{}'\\n\"",
+  "expected": "\"echo '{}'\\n\""
+ },
+ {
+  "src": "\"echo '{}'\\\\n\"",
+  "expected": "\"echo '{}'\\\\n\""
+ },
+ {
+  "src": "\"echo '{}'\\r\".format(self.FLUSH_CMD)",
+  "expected": "\"echo '{}'\\r\".format(self.FLUSH_CMD)"
+ },
+ {
+  "src": "\"echo '{}'\\\\r\".format(self.FLUSH_CMD)",
+  "expected": "\"echo '{}'\\\\r\".format(self.FLUSH_CMD)"
+ },
+ {
+  "src": "\"echo '%s'\\r\" % self.FLUSH_CMD",
+  "expected": "\"echo '%s'\\r\" % self.FLUSH_CMD"
+ },
+ {
+  "src": "\"echo '%s'\\\\r\" % self.FLUSH_CMD",
+  "expected": "\"echo '%s'\\\\r\" % self.FLUSH_CMD"
+ },
+ {
+  "src": "\"echo '{}'\\r\".format",
+  "expected": "\"echo '{}'\\r\".format"
+ },
+ {
+  "src": "\"echo '{}'\\\\r\".format",
+  "expected": "\"echo '{}'\\\\r\".format"
+ },
+ {
+  "src": "\"echo '%s'\\r\"",
+  "expected": "\"echo '%s'\\r\""
+ },
+ {
+  "src": "\"echo '%s'\\\\r\"",
+  "expected": "\"echo '%s'\\\\r\""
+ },
+ {
+  "src": "\"echo '{}'\\r\"",
+  "expected": "\"echo '{}'\\r\""
+ },
+ {
+  "src": "\"echo '{}'\\\\r\"",
+  "expected": "\"echo '{}'\\\\r\""
+ },
+ {
+  "src": "\"echo '{}'\\t\".format(self.FLUSH_CMD)",
+  "expected": "\"echo '{}'\\t\".format(self.FLUSH_CMD)"
+ },
+ {
+  "src": "\"echo '{}'\\\\t\".format(self.FLUSH_CMD)",
+  "expected": "\"echo '{}'\\\\t\".format(self.FLUSH_CMD)"
+ },
+ {
+  "src": "\"echo '%s'\\t\" % self.FLUSH_CMD",
+  "expected": "\"echo '%s'\\t\" % self.FLUSH_CMD"
+ },
+ {
+  "src": "\"echo '%s'\\\\t\" % self.FLUSH_CMD",
+  "expected": "\"echo '%s'\\\\t\" % self.FLUSH_CMD"
+ },
+ {
+  "src": "\"echo '{}'\\t\".format",
+  "expected": "\"echo '{}'\\t\".format"
+ },
+ {
+  "src": "\"echo '{}'\\\\t\".format",
+  "expected": "\"echo '{}'\\\\t\".format"
+ },
+ {
+  "src": "\"echo '%s'\\t\"",
+  "expected": "\"echo '%s'\\t\""
+ },
+ {
+  "src": "\"echo '%s'\\\\t\"",
+  "expected": "\"echo '%s'\\\\t\""
+ },
+ {
+  "src": "\"echo '{}'\\t\"",
+  "expected": "\"echo '{}'\\t\""
+ },
+ {
+  "src": "\"echo '{}'\\\\t\"",
+  "expected": "\"echo '{}'\\\\t\""
+ },
+ {
+  "src": "OUTPUT_FILE",
+  "expected": "OUTPUT_FILE"
+ },
+ {
+  "src": "'{home}/{name}.txt'",
+  "expected": "'{home}/{name}.txt'"
+ },
+ {
+  "src": "STATUS_CMD",
+  "expected": "STATUS_CMD"
+ },
+ {
+  "src": "'echo \"SCREEN_EXIT:$?\" ; echo \"{EOS}\"\\n'.format(EOS=END_OF_STREAM)",
+  "expected": "'echo \"SCREEN_EXIT:$?\" ; echo \"{EOS}\"\\n'.format(EOS=END_OF_STREAM)"
+ },
+ {
+  "src": "ENTRY_CMD",
+  "expected": "ENTRY_CMD"
+ },
+ {
+  "src": "'echo \"{}\"'.format(START_STREAM)",
+  "expected": "'echo \"{}\"'.format(START_STREAM)"
+ },
+ {
+  "src": "SCREEN_TIMEOUT",
+  "expected": "SCREEN_TIMEOUT"
+ },
+ {
+  "src": "3600",
+  "expected": "3600"
+ },
+ {
+  "src": "'echo \"SCREEN_EXIT:$?\" ; echo \"{EOS}\"\\n'.format",
+  "expected": "'echo \"SCREEN_EXIT:$?\" ; echo \"{EOS}\"\\n'.format"
+ },
+ {
+  "src": "'echo \"{}\"'.format",
+  "expected": "'echo \"{}\"'.format"
+ },
+ {
+  "src": "START_STREAM",
+  "expected": "START_STREAM"
+ },
+ {
+  "src": "'echo \"SCREEN_EXIT:$?\" ; echo \"{EOS}\"\\n'",
+  "expected": "'echo \"SCREEN_EXIT:$?\" ; echo \"{EOS}\"\\n'"
+ },
+ {
+  "src": "END_OF_STREAM",
+  "expected": "END_OF_STREAM"
+ },
+ {
+  "src": "'echo \"{}\"'",
+  "expected": "'echo \"{}\"'"
+ },
+ {
+  "src": "'my string {}, but also {} and {foo}'.format(var, f, foo=cada_bra)",
+  "expected": "'my string {}, but also {} and {foo}'.format(var, f, foo=cada_bra)"
+ },
+ {
+  "src": "'my string {}, but also {} and {foo}'.format",
+  "expected": "'my string {}, but also {} and {foo}'.format"
+ },
+ {
+  "src": "'my string {}, but also {} and {foo}'",
+  "expected": "'my string {}, but also {} and {foo}'"
+ },
+ {
+  "src": "'x'.join([1, 2, 3])",
+  "expected": "'x'.join([1, 2, 3])"
+ },
+ {
+  "src": "'x'.join",
+  "expected": "'x'.join"
+ },
+ {
+  "src": "[1, 2, 3]",
+  "expected": "[1, 2, 3]"
+ },
+ {
+  "src": "'x'",
+  "expected": "'x'"
+ },
+ {
+  "src": "(mean_ser, mean_per)",
+  "expected": "(mean_ser, mean_per)"
+ },
+ {
+  "src": "scores",
+  "expected": "scores"
+ },
+ {
+  "src": "'{:>50} \\t {:>6} \\t {:>6}\\n'.format('Crossvalidation', mean_ser, mean_per)",
+  "expected": "'{:>50} \\t {:>6} \\t {:>6}\\n'.format('Crossvalidation', mean_ser, mean_per)"
+ },
+ {
+  "src": "print(scores)",
+  "expected": "print(scores)"
+ },
+ {
+  "src": "mean_ser",
+  "expected": "mean_ser"
+ },
+ {
+  "src": "mean_per",
+  "expected": "mean_per"
+ },
+ {
+  "src": "'{:>50} \\t {:>6} \\t {:>6}\\n'.format",
+  "expected": "'{:>50} \\t {:>6} \\t {:>6}\\n'.format"
+ },
+ {
+  "src": "'Crossvalidation'",
+  "expected": "'Crossvalidation'"
+ },
+ {
+  "src": "'{:>50} \\t {:>6} \\t {:>6}\\n'",
+  "expected": "'{:>50} \\t {:>6} \\t {:>6}\\n'"
+ },
+ {
+  "src": "lst",
+  "expected": "lst"
+ },
+ {
+  "src": "[2, 3, 4]",
+  "expected": "[2, 3, 4]"
+ },
+ {
+  "src": "'beautiful numbers to follow: {}'.format(' '.join(lst))",
+  "expected": "'beautiful numbers to follow: {}'.format(' '.join(lst))"
+ },
+ {
+  "src": "'beautiful numbers to follow: {}'.format('\\t'.join(lst))",
+  "expected": "'beautiful numbers to follow: {}'.format('\\t'.join(lst))"
+ },
+ {
+  "src": "'beautiful numbers to follow: {}'.format('\\n'.join(lst))",
+  "expected": "'beautiful numbers to follow: {}'.format('\\n'.join(lst))"
+ },
+ {
+  "src": "'beautiful numbers to follow: {}'.format(','.join(lst))",
+  "expected": "'beautiful numbers to follow: {}'.format(','.join(lst))"
+ },
+ {
+  "src": "'beautiful numbers to follow: {}'.format",
+  "expected": "'beautiful numbers to follow: {}'.format"
+ },
+ {
+  "src": "' '.join(lst)",
+  "expected": "' '.join(lst)"
+ },
+ {
+  "src": "'\\t'.join(lst)",
+  "expected": "'\\t'.join(lst)"
+ },
+ {
+  "src": "'\\n'.join(lst)",
+  "expected": "'\\n'.join(lst)"
+ },
+ {
+  "src": "','.join(lst)",
+  "expected": "','.join(lst)"
+ },
+ {
+  "src": "'beautiful numbers to follow: {}'",
+  "expected": "'beautiful numbers to follow: {}'"
+ },
+ {
+  "src": "'\\t'.join",
+  "expected": "'\\t'.join"
+ },
+ {
+  "src": "','.join",
+  "expected": "','.join"
+ },
+ {
+  "src": "'\\t'",
+  "expected": "'\\t'"
+ },
+ {
+  "src": "','",
+  "expected": "','"
+ },
+ {
+  "src": "latex_documents",
+  "expected": "latex_documents"
+ },
+ {
+  "src": "[(master_doc, 'Flask-{}.tex'.format(version), html_title, author, 'manual')]",
+  "expected": "[(master_doc, 'Flask-{}.tex'.format(version), html_title, author, 'manual')]"
+ },
+ {
+  "src": "(master_doc, 'Flask-{}.tex'.format(version), html_title, author, 'manual')",
+  "expected": "(master_doc, 'Flask-{}.tex'.format(version), html_title, author, 'manual')"
+ },
+ {
+  "src": "'Flask-{}.tex'.format(version)",
+  "expected": "'Flask-{}.tex'.format(version)"
+ },
+ {
+  "src": "'manual'",
+  "expected": "'manual'"
+ },
+ {
+  "src": "'Flask-{}.tex'.format",
+  "expected": "'Flask-{}.tex'.format"
+ },
+ {
+  "src": "'Flask-{}.tex'",
+  "expected": "'Flask-{}.tex'"
+ },
+ {
+  "src": "(x, y)",
+  "expected": "(x, y)"
+ },
+ {
+  "src": "'line 1 {} line 2 {}'.format(x, y)",
+  "expected": "'line 1 {} line 2 {}'.format(x, y)"
+ },
+ {
+  "src": "'line 1234567890 1234567890 1234567890 1234567890 {} 1234567890 1234567890 1234567890 1234567890  {}'.format(x, y)",
+  "expected": "'line 1234567890 1234567890 1234567890 1234567890 {} 1234567890 1234567890 1234567890 1234567890  {}'.format(x, y)"
+ },
+ {
+  "src": "y",
+  "expected": "y"
+ },
+ {
+  "src": "'line 1 {} line 2 {}'.format",
+  "expected": "'line 1 {} line 2 {}'.format"
+ },
+ {
+  "src": "'line 1234567890 1234567890 1234567890 1234567890 {} 1234567890 1234567890 1234567890 1234567890  {}'.format",
+  "expected": "'line 1234567890 1234567890 1234567890 1234567890 {} 1234567890 1234567890 1234567890 1234567890  {}'.format"
+ },
+ {
+  "src": "'line 1 {} line 2 {}'",
+  "expected": "'line 1 {} line 2 {}'"
+ },
+ {
+  "src": "'line 1234567890 1234567890 1234567890 1234567890 {} 1234567890 1234567890 1234567890 1234567890  {}'",
+  "expected": "'line 1234567890 1234567890 1234567890 1234567890 {} 1234567890 1234567890 1234567890 1234567890  {}'"
+ },
+ {
+  "src": "print('Feels like: {}°F'.format(data['main']['feels_like']))",
+  "expected": "print('Feels like: {}°F'.format(data['main']['feels_like']))"
+ },
+ {
+  "src": "'Feels like: {}°F'.format(data['main']['feels_like'])",
+  "expected": "'Feels like: {}°F'.format(data['main']['feels_like'])"
+ },
+ {
+  "src": "'Feels like: {}°F'.format",
+  "expected": "'Feels like: {}°F'.format"
+ },
+ {
+  "src": "data['main']['feels_like']",
+  "expected": "data['main']['feels_like']"
+ },
+ {
+  "src": "'Feels like: {}°F'",
+  "expected": "'Feels like: {}°F'"
+ },
+ {
+  "src": "data['main']",
+  "expected": "data['main']"
+ },
+ {
+  "src": "'feels_like'",
+  "expected": "'feels_like'"
+ },
+ {
+  "src": "data",
+  "expected": "data"
+ },
+ {
+  "src": "'main'",
+  "expected": "'main'"
+ },
+ {
+  "src": "print('Feels like: {}\\\\u00B0F'.format(data['main']['feels_like']))",
+  "expected": "print('Feels like: {}\\\\u00B0F'.format(data['main']['feels_like']))"
+ },
+ {
+  "src": "'Feels like: {}\\\\u00B0F'.format(data['main']['feels_like'])",
+  "expected": "'Feels like: {}\\\\u00B0F'.format(data['main']['feels_like'])"
+ },
+ {
+  "src": "'Feels like: {}\\\\u00B0F'.format",
+  "expected": "'Feels like: {}\\\\u00B0F'.format"
+ },
+ {
+  "src": "'Feels like: {}\\\\u00B0F'",
+  "expected": "'Feels like: {}\\\\u00B0F'"
+ },
+ {
+  "src": "f'Need more {self.missing} to activate {self.active}'",
+  "expected": "f'Need more {self.missing} to activate {self.active}'"
+ },
+ {
+  "src": "'Need more '",
+  "expected": "'Need more '"
+ },
+ {
+  "src": "{self.missing}",
+  "expected": "{self.missing}"
+ },
+ {
+  "src": "' to activate '",
+  "expected": "' to activate '"
+ },
+ {
+  "src": "{self.active}",
+  "expected": "{self.active}"
+ },
+ {
+  "src": "f'my string {var}, but also {f} and {cada_bra}'",
+  "expected": "f'my string {var}, but also {f} and {cada_bra}'"
+ },
+ {
+  "src": "'my string '",
+  "expected": "'my string '"
+ },
+ {
+  "src": "{var}",
+  "expected": "{var}"
+ },
+ {
+  "src": "', but also '",
+  "expected": "', but also '"
+ },
+ {
+  "src": "{f}",
+  "expected": "{f}"
+ },
+ {
+  "src": "' and '",
+  "expected": "' and '"
+ },
+ {
+  "src": "{cada_bra}",
+  "expected": "{cada_bra}"
+ },
+ {
+  "src": "f'{{}}my string {var:.2f}{{}}'",
+  "expected": "f'{{}}my string {var:.2f}{{}}'"
+ },
+ {
+  "src": "'{}my string '",
+  "expected": "'{}my string '"
+ },
+ {
+  "src": "f'.2f'",
+  "expected": "f'.2f'"
+ },
+ {
+  "src": "'.2f'",
+  "expected": "'.2f'"
+ },
+ {
+  "src": "{'r': f'{row_idx}'}",
+  "expected": "{'r': f'{row_idx}'}"
+ },
+ {
+  "src": "f'{row_idx}'",
+  "expected": "f'{row_idx}'"
+ },
+ {
+  "src": "{row_idx}",
+  "expected": "{row_idx}"
+ },
+ {
+  "src": "f'{test} ({datetime.datetime.now():%B %d, %Y})'",
+  "expected": "f'{test} ({datetime.datetime.now():%B %d, %Y})'"
+ },
+ {
+  "src": "{test}",
+  "expected": "{test}"
+ },
+ {
+  "src": "' ('",
+  "expected": "' ('"
+ },
+ {
+  "src": "')'",
+  "expected": "')'"
+ },
+ {
+  "src": "f'%B %d, %Y'",
+  "expected": "f'%B %d, %Y'"
+ },
+ {
+  "src": "'%B %d, %Y'",
+  "expected": "'%B %d, %Y'"
+ },
+ {
+  "src": "log.notice(f'Search: finished in {vm.search_time_elapsed_ms:,} ms.')",
+  "expected": "log.notice(f'Search: finished in {vm.search_time_elapsed_ms:,} ms.')"
+ },
+ {
+  "src": "f'Search: finished in {vm.search_time_elapsed_ms:,} ms.'",
+  "expected": "f'Search: finished in {vm.search_time_elapsed_ms:,} ms.'"
+ },
+ {
+  "src": "'Search: finished in '",
+  "expected": "'Search: finished in '"
+ },
+ {
+  "src": "' ms.'",
+  "expected": "' ms.'"
+ },
+ {
+  "src": "f','",
+  "expected": "f','"
+ },
+ {
+  "src": "print(f'{Bar + 1}', f'{var:f}', f'{foo}')",
+  "expected": "print(f'{Bar + 1}', f'{var:f}', f'{foo}')"
+ },
+ {
+  "src": "f'{Bar + 1}'",
+  "expected": "f'{Bar + 1}'"
+ },
+ {
+  "src": "f'{var:f}'",
+  "expected": "f'{var:f}'"
+ },
+ {
+  "src": "f'{foo}'",
+  "expected": "f'{foo}'"
+ },
+ {
+  "src": "{Bar + 1}",
+  "expected": "{Bar + 1}"
+ },
+ {
+  "src": "{var:f}",
+  "expected": "{var: f}"
+ },
+ {
+  "src": "{foo}",
+  "expected": "{foo}"
+ },
+ {
+  "src": "f'f'",
+  "expected": "f'f'"
+ },
+ {
+  "src": "'f'",
+  "expected": "'f'"
+ },
+ {
+  "src": "f'=== Images[{a}]: {b} === Rest: \"{c}\"'",
+  "expected": "f'=== Images[{a}]: {b} === Rest: \"{c}\"'"
+ },
+ {
+  "src": "'=== Images['",
+  "expected": "'=== Images['"
+ },
+ {
+  "src": "']: '",
+  "expected": "']: '"
+ },
+ {
+  "src": "{b}",
+  "expected": "{b}"
+ },
+ {
+  "src": "' === Rest: \"'",
+  "expected": "' === Rest: \"'"
+ },
+ {
+  "src": "{c}",
+  "expected": "{c}"
+ },
+ {
+  "src": "dedent(f'                some {arg}\\n        lorem ipsum\\n        ')",
+  "expected": "dedent(f'                some {arg}\\n        lorem ipsum\\n        ')"
+ },
+ {
+  "src": "f'    some {arg}\\n'",
+  "expected": "f'    some {arg}\\n'"
+ },
+ {
+  "src": "f'            some {arg}\\n'",
+  "expected": "f'            some {arg}\\n'"
+ },
+ {
+  "src": "f'                some {arg}\\n        lorem ipsum\\n        '",
+  "expected": "f'                some {arg}\\n        lorem ipsum\\n        '"
+ },
+ {
+  "src": "'    some '",
+  "expected": "'    some '"
+ },
+ {
+  "src": "{arg}",
+  "expected": "{arg}"
+ },
+ {
+  "src": "'            some '",
+  "expected": "'            some '"
+ },
+ {
+  "src": "'                some '",
+  "expected": "'                some '"
+ },
+ {
+  "src": "'\\n        lorem ipsum\\n        '",
+  "expected": "'\\n        lorem ipsum\\n        '"
+ },
+ {
+  "src": "f'my string {var}, but also {what} and {cada_bra}'",
+  "expected": "f'my string {var}, but also {what} and {cada_bra}'"
+ },
+ {
+  "src": "{what}",
+  "expected": "{what}"
+ },
+ {
+  "src": "f'_{i:03X}'",
+  "expected": "f'_{i:03X}'"
+ },
+ {
+  "src": "f'{coord[1]:f} {coord[0]:f}'",
+  "expected": "f'{coord[1]:f} {coord[0]:f}'"
+ },
+ {
+  "src": "f'{i:.03f}'",
+  "expected": "f'{i:.03f}'"
+ },
+ {
+  "src": "'_'",
+  "expected": "'_'"
+ },
+ {
+  "src": "{coord[1]:f}",
+  "expected": "{coord[1]: f}"
+ },
+ {
+  "src": "{coord[0]:f}",
+  "expected": "{coord[0]: f}"
+ },
+ {
+  "src": "f'03X'",
+  "expected": "f'03X'"
+ },
+ {
+  "src": "f'.03f'",
+  "expected": "f'.03f'"
+ },
+ {
+  "src": "'03X'",
+  "expected": "'03X'"
+ },
+ {
+  "src": "'.03f'",
+  "expected": "'.03f'"
+ },
+ {
+  "src": "f'Hello {flask.request.args[name]}!'",
+  "expected": "f'Hello {flask.request.args[name]}!'"
+ },
+ {
+  "src": "'Hello '",
+  "expected": "'Hello '"
+ },
+ {
+  "src": "{flask.request.args[name]}",
+  "expected": "{flask.request.args[name]}"
+ },
+ {
+  "src": "'!'",
+  "expected": "'!'"
+ },
+ {
+  "src": "'\\n        some text\\n        lorem ipsum\\n        '",
+  "expected": "'\\n        some text\\n        lorem ipsum\\n        '"
+ },
+ {
+  "src": "print(f'\\x1b[1m{s}\\x1b[0m')",
+  "expected": "print(f'\\x1b[1m{s}\\x1b[0m')"
+ },
+ {
+  "src": "print(f'\\x1b[2m{s}\\x1b[0m')",
+  "expected": "print(f'\\x1b[2m{s}\\x1b[0m')"
+ },
+ {
+  "src": "f'\\x1b[1m{s}\\x1b[0m'",
+  "expected": "f'\\x1b[1m{s}\\x1b[0m'"
+ },
+ {
+  "src": "f'\\x1b[2m{s}\\x1b[0m'",
+  "expected": "f'\\x1b[2m{s}\\x1b[0m'"
+ },
+ {
+  "src": "'\\x1b[1m'",
+  "expected": "'\\x1b[1m'"
+ },
+ {
+  "src": "{s}",
+  "expected": "{s}"
+ },
+ {
+  "src": "'\\x1b[0m'",
+  "expected": "'\\x1b[0m'"
+ },
+ {
+  "src": "'\\x1b[2m'",
+  "expected": "'\\x1b[2m'"
+ },
+ {
+  "src": "f'{line}\\n' if not line.endswith('\\\\') or line.endswith('\\\\\\\\') else f'{line[:-1]}'",
+  "expected": "f'{line}\\n' if not line.endswith('\\\\') or line.endswith('\\\\\\\\') else f'{line[:-1]}'"
+ },
+ {
+  "src": "f'{line}\\n'",
+  "expected": "f'{line}\\n'"
+ },
+ {
+  "src": "f'{line[:-1]}'",
+  "expected": "f'{line[:-1]}'"
+ },
+ {
+  "src": "{line}",
+  "expected": "{line}"
+ },
+ {
+  "src": "{line[:-1]}",
+  "expected": "{line[:-1]}"
+ },
+ {
+  "src": "f'a\\xa0{a}'",
+  "expected": "f'a\\xa0{a}'"
+ },
+ {
+  "src": "'a\\xa0'",
+  "expected": "'a\\xa0'"
+ },
+ {
+  "src": "f'{n} hello, world'",
+  "expected": "f'{n} hello, world'"
+ },
+ {
+  "src": "f'{n} non-str {True}'",
+  "expected": "f'{n} non-str {True}'"
+ },
+ {
+  "src": "f'{n} with quote \"x\"'",
+  "expected": "f'{n} with quote \"x\"'"
+ },
+ {
+  "src": "'hello, world'",
+  "expected": "'hello, world'"
+ },
+ {
+  "src": "'with quote \"x\"'",
+  "expected": "'with quote \"x\"'"
+ },
+ {
+  "src": "{n}",
+  "expected": "{n}"
+ },
+ {
+  "src": "' hello, world'",
+  "expected": "' hello, world'"
+ },
+ {
+  "src": "' non-str '",
+  "expected": "' non-str '"
+ },
+ {
+  "src": "{True}",
+  "expected": "{True}"
+ },
+ {
+  "src": "' with quote \"x\"'",
+  "expected": "' with quote \"x\"'"
+ },
+ {
+  "src": "f'Flask Documentation ({version})'",
+  "expected": "f'Flask Documentation ({version})'"
+ },
+ {
+  "src": "'Flask Documentation ('",
+  "expected": "'Flask Documentation ('"
+ },
+ {
+  "src": "{version}",
+  "expected": "{version}"
+ },
+ {
+  "src": "NoAppException(f'Detected multiple Flask applications in module \"{var1}\". Use \"FLASK_APP={var2}:name\" to specify the correct one.')",
+  "expected": "NoAppException(f'Detected multiple Flask applications in module \"{var1}\". Use \"FLASK_APP={var2}:name\" to specify the correct one.')"
+ },
+ {
+  "src": "f'Detected multiple Flask applications in module \"{var1}\". Use \"FLASK_APP={var2}:name\" to specify the correct one.'",
+  "expected": "f'Detected multiple Flask applications in module \"{var1}\". Use \"FLASK_APP={var2}:name\" to specify the correct one.'"
+ },
+ {
+  "src": "'Detected multiple Flask applications in module \"'",
+  "expected": "'Detected multiple Flask applications in module \"'"
+ },
+ {
+  "src": "{var1}",
+  "expected": "{var1}"
+ },
+ {
+  "src": "'\". Use \"FLASK_APP='",
+  "expected": "'\". Use \"FLASK_APP='"
+ },
+ {
+  "src": "{var2}",
+  "expected": "{var2}"
+ },
+ {
+  "src": "':name\" to specify the correct one.'",
+  "expected": "':name\" to specify the correct one.'"
+ },
+ {
+  "src": "f'Hello {var}'",
+  "expected": "f'Hello {var}'"
+ },
+ {
+  "src": "f'Hello {var} {a} {b}'",
+  "expected": "f'Hello {var} {a} {b}'"
+ },
+ {
+  "src": "f\"\\n{d['something']}\\n\"",
+  "expected": "f\"\\n{d['something']}\\n\""
+ },
+ {
+  "src": "{d['something']}",
+  "expected": "{d['something']}"
+ },
+ {
+  "src": "d['something']",
+  "expected": "d['something']"
+ },
+ {
+  "src": "ValueError(f'Arithmetic on {self.__class__} objects with different sizes not permitted')",
+  "expected": "ValueError(f'Arithmetic on {self.__class__} objects with different sizes not permitted')"
+ },
+ {
+  "src": "f'Arithmetic on {self.__class__} objects with different sizes not permitted'",
+  "expected": "f'Arithmetic on {self.__class__} objects with different sizes not permitted'"
+ },
+ {
+  "src": "'Arithmetic on '",
+  "expected": "'Arithmetic on '"
+ },
+ {
+  "src": "{self.__class__}",
+  "expected": "{self.__class__}"
+ },
+ {
+  "src": "' objects with different sizes not permitted'",
+  "expected": "' objects with different sizes not permitted'"
+ },
+ {
+  "src": "f'\\n# This is an example configuration\\n# Hash lines are comments\\n\\n[flake8]\\nmax-line-length={length}\\ninline-quotes=\"{quotes}\"\\n'",
+  "expected": "f'\\n# This is an example configuration\\n# Hash lines are comments\\n\\n[flake8]\\nmax-line-length={length}\\ninline-quotes=\"{quotes}\"\\n'"
+ },
+ {
+  "src": "'\\n# This is an example configuration\\n# Hash lines are comments\\n\\n[flake8]\\nmax-line-length='",
+  "expected": "'\\n# This is an example configuration\\n# Hash lines are comments\\n\\n[flake8]\\nmax-line-length='"
+ },
+ {
+  "src": "{length}",
+  "expected": "{length}"
+ },
+ {
+  "src": "'\\ninline-quotes=\"'",
+  "expected": "'\\ninline-quotes=\"'"
+ },
+ {
+  "src": "{quotes}",
+  "expected": "{quotes}"
+ },
+ {
+  "src": "'\"\\n'",
+  "expected": "'\"\\n'"
+ },
+ {
+  "src": "f'my string {cada_bra} and {f}'",
+  "expected": "f'my string {cada_bra} and {f}'"
+ },
+ {
+  "src": "print(f'{a:f} {b}')",
+  "expected": "print(f'{a:f} {b}')"
+ },
+ {
+  "src": "f'{a:f} {b}'",
+  "expected": "f'{a:f} {b}'"
+ },
+ {
+  "src": "{a:f}",
+  "expected": "{a: f}"
+ },
+ {
+  "src": "print(f'{a:f} {b:f} {c:e} {d:g} {e}')",
+  "expected": "print(f'{a:f} {b:f} {c:e} {d:g} {e}')"
+ },
+ {
+  "src": "f'{a:f} {b:f} {c:e} {d:g} {e}'",
+  "expected": "f'{a:f} {b:f} {c:e} {d:g} {e}'"
+ },
+ {
+  "src": "{b:f}",
+  "expected": "{b: f}"
+ },
+ {
+  "src": "{c:e}",
+  "expected": "{c: e}"
+ },
+ {
+  "src": "{d:g}",
+  "expected": "{d: g}"
+ },
+ {
+  "src": "{e}",
+  "expected": "{e}"
+ },
+ {
+  "src": "f'e'",
+  "expected": "f'e'"
+ },
+ {
+  "src": "f'g'",
+  "expected": "f'g'"
+ },
+ {
+  "src": "'e'",
+  "expected": "'e'"
+ },
+ {
+  "src": "'g'",
+  "expected": "'g'"
+ },
+ {
+  "src": "f'{d ** 2}'",
+  "expected": "f'{d ** 2}'"
+ },
+ {
+  "src": "{d ** 2}",
+  "expected": "{d ** 2}"
+ },
+ {
+  "src": "print(f'{a!r} {a} {a!a}')",
+  "expected": "print(f'{a!r} {a} {a!a}')"
+ },
+ {
+  "src": "f'{a!r} {a} {a!a}'",
+  "expected": "f'{a!r} {a} {a!a}'"
+ },
+ {
+  "src": "f\"{di1['key']},{di2['key']}\"",
+  "expected": "f\"{di1['key']},{di2['key']}\""
+ },
+ {
+  "src": "{di1['key']}",
+  "expected": "{di1['key']}"
+ },
+ {
+  "src": "{di2['key']}",
+  "expected": "{di2['key']}"
+ },
+ {
+  "src": "re.sub(f\"^(\\\\s*{pattern}\\\\s*=\\\\s*')(.+?)(')\", inject_version, f.read(), flags=re.DOTALL | re.MULTILINE)",
+  "expected": "re.sub(f\"^(\\\\s*{pattern}\\\\s*=\\\\s*')(.+?)(')\", inject_version, f.read(), flags=re.DOTALL | re.MULTILINE)"
+ },
+ {
+  "src": "f\"^(\\\\s*{pattern}\\\\s*=\\\\s*')(.+?)(')\"",
+  "expected": "f\"^(\\\\s*{pattern}\\\\s*=\\\\s*')(.+?)(')\""
+ },
+ {
+  "src": "'^(\\\\s*'",
+  "expected": "'^(\\\\s*'"
+ },
+ {
+  "src": "{pattern}",
+  "expected": "{pattern}"
+ },
+ {
+  "src": "\"\\\\s*=\\\\s*')(.+?)(')\"",
+  "expected": "\"\\\\s*=\\\\s*')(.+?)(')\""
+ },
+ {
+  "src": "self.logger.error(f'Exception on {request.path} [{request.method}]', exc_info=exc_info)",
+  "expected": "self.logger.error(f'Exception on {request.path} [{request.method}]', exc_info=exc_info)"
+ },
+ {
+  "src": "f'Exception on {request.path} [{request.method}]'",
+  "expected": "f'Exception on {request.path} [{request.method}]'"
+ },
+ {
+  "src": "'Exception on '",
+  "expected": "'Exception on '"
+ },
+ {
+  "src": "{request.path}",
+  "expected": "{request.path}"
+ },
+ {
+  "src": "' ['",
+  "expected": "' ['"
+ },
+ {
+  "src": "{request.method}",
+  "expected": "{request.method}"
+ },
+ {
+  "src": "']'",
+  "expected": "']'"
+ },
+ {
+  "src": "f'my string {var}'",
+  "expected": "f'my string {var}'"
+ },
+ {
+  "src": "f'my string {var:.2f}'",
+  "expected": "f'my string {var:.2f}'"
+ },
+ {
+  "src": "f'Test: {var}'",
+  "expected": "f'Test: {var}'"
+ },
+ {
+  "src": "'Test: '",
+  "expected": "'Test: '"
+ },
+ {
+  "src": "f'{var} my string'",
+  "expected": "f'{var} my string'"
+ },
+ {
+  "src": "' my string'",
+  "expected": "' my string'"
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\n\"",
+  "expected": "f\"echo '{self.FLUSH_CMD}'\\n\""
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\\\n\"",
+  "expected": "f\"echo '{self.FLUSH_CMD}'\\\\n\""
+ },
+ {
+  "src": "\"echo '\"",
+  "expected": "\"echo '\""
+ },
+ {
+  "src": "{self.FLUSH_CMD}",
+  "expected": "{self.FLUSH_CMD}"
+ },
+ {
+  "src": "\"'\\n\"",
+  "expected": "\"'\\n\""
+ },
+ {
+  "src": "\"'\\\\n\"",
+  "expected": "\"'\\\\n\""
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\r\"",
+  "expected": "f\"echo '{self.FLUSH_CMD}'\\r\""
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\\\r\"",
+  "expected": "f\"echo '{self.FLUSH_CMD}'\\\\r\""
+ },
+ {
+  "src": "\"'\\r\"",
+  "expected": "\"'\\r\""
+ },
+ {
+  "src": "\"'\\\\r\"",
+  "expected": "\"'\\\\r\""
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\t\"",
+  "expected": "f\"echo '{self.FLUSH_CMD}'\\t\""
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\\\t\"",
+  "expected": "f\"echo '{self.FLUSH_CMD}'\\\\t\""
+ },
+ {
+  "src": "\"'\\t\"",
+  "expected": "\"'\\t\""
+ },
+ {
+  "src": "\"'\\\\t\"",
+  "expected": "\"'\\\\t\""
+ },
+ {
+  "src": "f'echo \"SCREEN_EXIT:$?\" ; echo \"{END_OF_STREAM}\"\\n'",
+  "expected": "f'echo \"SCREEN_EXIT:$?\" ; echo \"{END_OF_STREAM}\"\\n'"
+ },
+ {
+  "src": "f'echo \"{START_STREAM}\"'",
+  "expected": "f'echo \"{START_STREAM}\"'"
+ },
+ {
+  "src": "'echo \"SCREEN_EXIT:$?\" ; echo \"'",
+  "expected": "'echo \"SCREEN_EXIT:$?\" ; echo \"'"
+ },
+ {
+  "src": "{END_OF_STREAM}",
+  "expected": "{END_OF_STREAM}"
+ },
+ {
+  "src": "'echo \"'",
+  "expected": "'echo \"'"
+ },
+ {
+  "src": "{START_STREAM}",
+  "expected": "{START_STREAM}"
+ },
+ {
+  "src": "f\"{'Crossvalidation':>50} \\t {mean_ser:>6} \\t {mean_per:>6}\\n\"",
+  "expected": "f\"{'Crossvalidation':>50} \\t {mean_ser:>6} \\t {mean_per:>6}\\n\""
+ },
+ {
+  "src": "' \\t '",
+  "expected": "' \\t '"
+ },
+ {
+  "src": "f'>50'",
+  "expected": "f'>50'"
+ },
+ {
+  "src": "f'>6'",
+  "expected": "f'>6'"
+ },
+ {
+  "src": "'>50'",
+  "expected": "'>50'"
+ },
+ {
+  "src": "'>6'",
+  "expected": "'>6'"
+ },
+ {
+  "src": "f\"beautiful numbers to follow: {' '.join(lst)}\"",
+  "expected": "f\"beautiful numbers to follow: {' '.join(lst)}\""
+ },
+ {
+  "src": "f\"beautiful numbers to follow: {','.join(lst)}\"",
+  "expected": "f\"beautiful numbers to follow: {','.join(lst)}\""
+ },
+ {
+  "src": "'beautiful numbers to follow: '",
+  "expected": "'beautiful numbers to follow: '"
+ },
+ {
+  "src": "{' '.join(lst)}",
+  "expected": "{' '.join(lst)}"
+ },
+ {
+  "src": "{','.join(lst)}",
+  "expected": "{','.join(lst)}"
+ },
+ {
+  "src": "[(master_doc, f'Flask-{version}.tex', html_title, author, 'manual')]",
+  "expected": "[(master_doc, f'Flask-{version}.tex', html_title, author, 'manual')]"
+ },
+ {
+  "src": "(master_doc, f'Flask-{version}.tex', html_title, author, 'manual')",
+  "expected": "(master_doc, f'Flask-{version}.tex', html_title, author, 'manual')"
+ },
+ {
+  "src": "f'Flask-{version}.tex'",
+  "expected": "f'Flask-{version}.tex'"
+ },
+ {
+  "src": "'Flask-'",
+  "expected": "'Flask-'"
+ },
+ {
+  "src": "'.tex'",
+  "expected": "'.tex'"
+ },
+ {
+  "src": "f'line 1 {x} line 2 {y}'",
+  "expected": "f'line 1 {x} line 2 {y}'"
+ },
+ {
+  "src": "f'line 1234567890 1234567890 1234567890 1234567890 {x} 1234567890 1234567890 1234567890 1234567890  {y}'",
+  "expected": "f'line 1234567890 1234567890 1234567890 1234567890 {x} 1234567890 1234567890 1234567890 1234567890  {y}'"
+ },
+ {
+  "src": "'line 1 '",
+  "expected": "'line 1 '"
+ },
+ {
+  "src": "{x}",
+  "expected": "{x}"
+ },
+ {
+  "src": "' line 2 '",
+  "expected": "' line 2 '"
+ },
+ {
+  "src": "{y}",
+  "expected": "{y}"
+ },
+ {
+  "src": "'line 1234567890 1234567890 1234567890 1234567890 '",
+  "expected": "'line 1234567890 1234567890 1234567890 1234567890 '"
+ },
+ {
+  "src": "' 1234567890 1234567890 1234567890 1234567890  '",
+  "expected": "' 1234567890 1234567890 1234567890 1234567890  '"
+ },
+ {
+  "src": "print(f\"Feels like: {data['main']['feels_like']}°F\")",
+  "expected": "print(f\"Feels like: {data['main']['feels_like']}°F\")"
+ },
+ {
+  "src": "f\"Feels like: {data['main']['feels_like']}°F\"",
+  "expected": "f\"Feels like: {data['main']['feels_like']}°F\""
+ },
+ {
+  "src": "'Feels like: '",
+  "expected": "'Feels like: '"
+ },
+ {
+  "src": "{data['main']['feels_like']}",
+  "expected": "{data['main']['feels_like']}"
+ },
+ {
+  "src": "'°F'",
+  "expected": "'°F'"
+ },
+ {
+  "src": "print(f\"Feels like: {data['main']['feels_like']}\\\\u00B0F\")",
+  "expected": "print(f\"Feels like: {data['main']['feels_like']}\\\\u00B0F\")"
+ },
+ {
+  "src": "f\"Feels like: {data['main']['feels_like']}\\\\u00B0F\"",
+  "expected": "f\"Feels like: {data['main']['feels_like']}\\\\u00B0F\""
+ },
+ {
+  "src": "'\\\\u00B0F'",
+  "expected": "'\\\\u00B0F'"
+ },
+ {
+  "src": "blah1",
+  "expected": "blah1"
+ },
+ {
+  "src": "blah2",
+  "expected": "blah2"
+ },
+ {
+  "src": "blah1 + 'b'",
+  "expected": "blah1 + 'b'"
+ },
+ {
+  "src": "print(blah2)",
+  "expected": "print(blah2)"
+ },
+ {
+  "src": "CR",
+  "expected": "CR"
+ },
+ {
+  "src": "'\\r'",
+  "expected": "'\\r'"
+ },
+ {
+  "src": "LF",
+  "expected": "LF"
+ },
+ {
+  "src": "writer.write(CR + LF + 'Goodbye' + CR + LF)",
+  "expected": "writer.write(CR + LF + 'Goodbye' + CR + LF)"
+ },
+ {
+  "src": "writer.write",
+  "expected": "writer.write"
+ },
+ {
+  "src": "CR + LF + 'Goodbye' + CR + LF",
+  "expected": "CR + LF + 'Goodbye' + CR + LF"
+ },
+ {
+  "src": "writer",
+  "expected": "writer"
+ },
+ {
+  "src": "CR + LF + 'Goodbye' + CR",
+  "expected": "CR + LF + 'Goodbye' + CR"
+ },
+ {
+  "src": "CR + LF + 'Goodbye'",
+  "expected": "CR + LF + 'Goodbye'"
+ },
+ {
+  "src": "CR + LF",
+  "expected": "CR + LF"
+ },
+ {
+  "src": "'Goodbye'",
+  "expected": "'Goodbye'"
+ },
+ {
+  "src": "'\\nThis module will be transformed... into something far greater.\\n'",
+  "expected": "'\\nThis module will be transformed... into something far greater.\\n'"
+ },
+ {
+  "src": "'Hello'",
+  "expected": "'Hello'"
+ },
+ {
+  "src": "a[0] + ' World'",
+  "expected": "a[0] + ' World'"
+ },
+ {
+  "src": "print(msg)",
+  "expected": "print(msg)"
+ },
+ {
+  "src": "a[0]",
+  "expected": "a[0]"
+ },
+ {
+  "src": "' World'",
+  "expected": "' World'"
+ },
+ {
+  "src": "res",
+  "expected": "res"
+ },
+ {
+  "src": "'here' + '\\\\there'",
+  "expected": "'here' + '\\\\there'"
+ },
+ {
+  "src": "'here'",
+  "expected": "'here'"
+ },
+ {
+  "src": "'\\\\there'",
+  "expected": "'\\\\there'"
+ },
+ {
+  "src": "thing",
+  "expected": "thing"
+ },
+ {
+  "src": "'1'",
+  "expected": "'1'"
+ },
+ {
+  "src": "print('The line limit we set is 120 and this line is more than 87 characters long' + thing)",
+  "expected": "print('The line limit we set is 120 and this line is more than 87 characters long' + thing)"
+ },
+ {
+  "src": "'The line limit we set is 120 and this line is more than 87 characters long' + thing",
+  "expected": "'The line limit we set is 120 and this line is more than 87 characters long' + thing"
+ },
+ {
+  "src": "'The line limit we set is 120 and this line is more than 87 characters long'",
+  "expected": "'The line limit we set is 120 and this line is more than 87 characters long'"
+ },
+ {
+  "src": "42",
+  "expected": "42"
+ },
+ {
+  "src": "otherThing",
+  "expected": "otherThing"
+ },
+ {
+  "src": "'2'",
+  "expected": "'2'"
+ },
+ {
+  "src": "print('blah{}'.format(thing) + 'blah' + otherThing + 'is %f' % x)",
+  "expected": "print('blah{}'.format(thing) + 'blah' + otherThing + 'is %f' % x)"
+ },
+ {
+  "src": "'blah{}'.format(thing) + 'blah' + otherThing + 'is %f' % x",
+  "expected": "'blah{}'.format(thing) + 'blah' + otherThing + 'is %f' % x"
+ },
+ {
+  "src": "'blah{}'.format(thing) + 'blah' + otherThing",
+  "expected": "'blah{}'.format(thing) + 'blah' + otherThing"
+ },
+ {
+  "src": "'is %f' % x",
+  "expected": "'is %f' % x"
+ },
+ {
+  "src": "'blah{}'.format(thing) + 'blah'",
+  "expected": "'blah{}'.format(thing) + 'blah'"
+ },
+ {
+  "src": "'is %f'",
+  "expected": "'is %f'"
+ },
+ {
+  "src": "'blah{}'.format(thing)",
+  "expected": "'blah{}'.format(thing)"
+ },
+ {
+  "src": "'blah'",
+  "expected": "'blah'"
+ },
+ {
+  "src": "'blah{}'.format",
+  "expected": "'blah{}'.format"
+ },
+ {
+  "src": "'blah{}'",
+  "expected": "'blah{}'"
+ },
+ {
+  "src": "a + ' World'",
+  "expected": "a + ' World'"
+ },
+ {
+  "src": "msg2",
+  "expected": "msg2"
+ },
+ {
+  "src": "'Finally, ' + a + ' World'",
+  "expected": "'Finally, ' + a + ' World'"
+ },
+ {
+  "src": "'Finally, ' + a",
+  "expected": "'Finally, ' + a"
+ },
+ {
+  "src": "'Finally, '",
+  "expected": "'Finally, '"
+ },
+ {
+  "src": "print(dumps(data) + '\\n')",
+  "expected": "print(dumps(data) + '\\n')"
+ },
+ {
+  "src": "dumps(data) + '\\n'",
+  "expected": "dumps(data) + '\\n'"
+ },
+ {
+  "src": "dumps(data)",
+  "expected": "dumps(data)"
+ },
+ {
+  "src": "dumps",
+  "expected": "dumps"
+ },
+ {
+  "src": "property",
+  "expected": "property"
+ },
+ {
+  "src": "'The URL prefix that the static route will be accessible from.\\n\\n    If it was not configured during init, it is derived from\\n    :attr:`static_folder`.\\n    '",
+  "expected": "'The URL prefix that the static route will be accessible from.\\n\\n    If it was not configured during init, it is derived from\\n    :attr:`static_folder`.\\n    '"
+ },
+ {
+  "src": "self._static_url_path is not None",
+  "expected": "self._static_url_path is not None"
+ },
+ {
+  "src": "self.static_folder is not None",
+  "expected": "self.static_folder is not None"
+ },
+ {
+  "src": "self._static_url_path",
+  "expected": "self._static_url_path"
+ },
+ {
+  "src": "self.static_folder",
+  "expected": "self.static_folder"
+ },
+ {
+  "src": "basename",
+  "expected": "basename"
+ },
+ {
+  "src": "os.path.basename(self.static_folder)",
+  "expected": "os.path.basename(self.static_folder)"
+ },
+ {
+  "src": "'/' + basename.rstrip(123)",
+  "expected": "'/' + basename.rstrip(123)"
+ },
+ {
+  "src": "os.path.basename",
+  "expected": "os.path.basename"
+ },
+ {
+  "src": "basename.rstrip(123)",
+  "expected": "basename.rstrip(123)"
+ },
+ {
+  "src": "os.path",
+  "expected": "os.path"
+ },
+ {
+  "src": "basename.rstrip",
+  "expected": "basename.rstrip"
+ },
+ {
+  "src": "123",
+  "expected": "123"
+ },
+ {
+  "src": "os",
+  "expected": "os"
+ },
+ {
+  "src": "('/' + basename).rstrip('/')",
+  "expected": "('/' + basename).rstrip('/')"
+ },
+ {
+  "src": "('/' + basename).rstrip",
+  "expected": "('/' + basename).rstrip"
+ },
+ {
+  "src": "'/' + basename",
+  "expected": "'/' + basename"
+ },
+ {
+  "src": "spam",
+  "expected": "spam"
+ },
+ {
+  "src": "'%s %s' % ('foo', 'bar')",
+  "expected": "'%s %s' % ('foo', 'bar')"
+ },
+ {
+  "src": "individual_tests",
+  "expected": "individual_tests"
+ },
+ {
+  "src": "[re.sub('\\\\.py$', '', test) + '.py' for test in ['a.py', 'b.py', 'c*'] if not test.endswith('*')]",
+  "expected": "[re.sub('\\\\.py$', '', test) + '.py' for test in ['a.py', 'b.py', 'c*'] if not test.endswith('*')]"
+ },
+ {
+  "src": "spam2",
+  "expected": "spam2"
+ },
+ {
+  "src": "'%s %s'",
+  "expected": "'%s %s'"
+ },
+ {
+  "src": "('foo', 'bar')",
+  "expected": "('foo', 'bar')"
+ },
+ {
+  "src": "re.sub('\\\\.py$', '', test) + '.py'",
+  "expected": "re.sub('\\\\.py$', '', test) + '.py'"
+ },
+ {
+  "src": "'foo'",
+  "expected": "'foo'"
+ },
+ {
+  "src": "'bar'",
+  "expected": "'bar'"
+ },
+ {
+  "src": "re.sub('\\\\.py$', '', test)",
+  "expected": "re.sub('\\\\.py$', '', test)"
+ },
+ {
+  "src": "'.py'",
+  "expected": "'.py'"
+ },
+ {
+  "src": "['a.py', 'b.py', 'c*']",
+  "expected": "['a.py', 'b.py', 'c*']"
+ },
+ {
+  "src": "not test.endswith('*')",
+  "expected": "not test.endswith('*')"
+ },
+ {
+  "src": "'\\\\.py$'",
+  "expected": "'\\\\.py$'"
+ },
+ {
+  "src": "'a.py'",
+  "expected": "'a.py'"
+ },
+ {
+  "src": "'b.py'",
+  "expected": "'b.py'"
+ },
+ {
+  "src": "'c*'",
+  "expected": "'c*'"
+ },
+ {
+  "src": "test.endswith('*')",
+  "expected": "test.endswith('*')"
+ },
+ {
+  "src": "test.endswith",
+  "expected": "test.endswith"
+ },
+ {
+  "src": "'*'",
+  "expected": "'*'"
+ },
+ {
+  "src": "f'{blah1}b'",
+  "expected": "f'{blah1}b'"
+ },
+ {
+  "src": "{blah1}",
+  "expected": "{blah1}"
+ },
+ {
+  "src": "writer.write(f'{CR}{LF}Goodbye{CR}{LF}')",
+  "expected": "writer.write(f'{CR}{LF}Goodbye{CR}{LF}')"
+ },
+ {
+  "src": "f'{CR}{LF}Goodbye{CR}{LF}'",
+  "expected": "f'{CR}{LF}Goodbye{CR}{LF}'"
+ },
+ {
+  "src": "{CR}",
+  "expected": "{CR}"
+ },
+ {
+  "src": "{LF}",
+  "expected": "{LF}"
+ },
+ {
+  "src": "f'{a[0]} World'",
+  "expected": "f'{a[0]} World'"
+ },
+ {
+  "src": "{a[0]}",
+  "expected": "{a[0]}"
+ },
+ {
+  "src": "'here\\\\there'",
+  "expected": "'here\\\\there'"
+ },
+ {
+  "src": "print(f'The line limit we set is 120 and this line is more than 87 characters long{thing}')",
+  "expected": "print(f'The line limit we set is 120 and this line is more than 87 characters long{thing}')"
+ },
+ {
+  "src": "f'The line limit we set is 120 and this line is more than 87 characters long{thing}'",
+  "expected": "f'The line limit we set is 120 and this line is more than 87 characters long{thing}'"
+ },
+ {
+  "src": "{thing}",
+  "expected": "{thing}"
+ },
+ {
+  "src": "print(f'blah{thing}blah{otherThing}is {x:f}')",
+  "expected": "print(f'blah{thing}blah{otherThing}is {x:f}')"
+ },
+ {
+  "src": "f'blah{thing}blah{otherThing}is {x:f}'",
+  "expected": "f'blah{thing}blah{otherThing}is {x:f}'"
+ },
+ {
+  "src": "{otherThing}",
+  "expected": "{otherThing}"
+ },
+ {
+  "src": "'is '",
+  "expected": "'is '"
+ },
+ {
+  "src": "{x:f}",
+  "expected": "{x: f}"
+ },
+ {
+  "src": "f'{a} World'",
+  "expected": "f'{a} World'"
+ },
+ {
+  "src": "f'Finally, {a} World'",
+  "expected": "f'Finally, {a} World'"
+ },
+ {
+  "src": "print(f'{dumps(data)}\\n')",
+  "expected": "print(f'{dumps(data)}\\n')"
+ },
+ {
+  "src": "f'{dumps(data)}\\n'",
+  "expected": "f'{dumps(data)}\\n'"
+ },
+ {
+  "src": "{dumps(data)}",
+  "expected": "{dumps(data)}"
+ },
+ {
+  "src": "f'/{basename.rstrip(123)}'",
+  "expected": "f'/{basename.rstrip(123)}'"
+ },
+ {
+  "src": "{basename.rstrip(123)}",
+  "expected": "{basename.rstrip(123)}"
+ },
+ {
+  "src": "f'/{basename}'.rstrip('/')",
+  "expected": "f'/{basename}'.rstrip('/')"
+ },
+ {
+  "src": "f'/{basename}'.rstrip",
+  "expected": "f'/{basename}'.rstrip"
+ },
+ {
+  "src": "f'/{basename}'",
+  "expected": "f'/{basename}'"
+ },
+ {
+  "src": "{basename}",
+  "expected": "{basename}"
+ },
+ {
+  "src": "f'foo bar'",
+  "expected": "f'foo bar'"
+ },
+ {
+  "src": "'foo bar'",
+  "expected": "'foo bar'"
+ }
+]

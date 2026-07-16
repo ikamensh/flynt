@@ -1,0 +1,42 @@
+[
+ {
+  "code": "x = 1",
+  "result": false
+ },
+ {
+  "code": "x = 1  # trailing comment",
+  "result": true
+ },
+ {
+  "code": "# leading comment",
+  "result": true
+ },
+ {
+  "code": "'a string # with hash'",
+  "result": false
+ },
+ {
+  "code": "\"# not a comment\"",
+  "result": false
+ },
+ {
+  "code": "f'{x}  # inside fstring? no'",
+  "result": false
+ },
+ {
+  "code": "a = [1, 2]  # list",
+  "result": true
+ },
+ {
+  "code": "'%s' % x",
+  "result": false
+ },
+ {
+  "code": "'{}'.format(y)",
+  "result": false
+ },
+ {
+  "code": "'no comment here at all'",
+  "result": false
+ }
+]
