@@ -118,7 +118,7 @@ checksum = "877a4ace8713b0bcf2a4e7eec82529c029f1d0619886d18145fea96c3ffe5c0f"
 
 [[package]]
 name = "flynt-rs"
-version = "0.1.0"
+version = "1.0.6"
 dependencies = [
  "ruff_python_ast",
  "ruff_python_codegen",
@@ -127,6 +127,7 @@ dependencies = [
  "ruff_text_size",
  "serde",
  "serde_json",
+ "similar",
  "toml",
 ]
 
@@ -584,6 +585,12 @@ checksum = "bf41e0cfaf7226dca15e8197172c295a782857fcb97fad1808a166870dee75a3"
 dependencies = [
  "serde",
 ]
+
+[[package]]
+name = "similar"
+version = "2.7.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bbbb5d9659141646ae647b42fe094daf6c6192d1620870b449d9557f748b2daa"
 
 [[package]]
 name = "siphasher"
