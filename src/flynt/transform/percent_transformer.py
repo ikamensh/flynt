@@ -69,6 +69,16 @@ def formatted_value(
     *,
     aggressive: int = 0,
 ) -> Union[ast.FormattedValue, ast.Constant]:
+    if fmt_spec == "c":
+        # Percent ``%c`` accepts an integer *or* a single-character string,
+        # but the f-string ``:c`` format spec only accepts an integer. As we
+        # cannot know the argument type, converting ``%c`` is unsafe and would
+        # crash at runtime for string arguments. See
+        # https://github.com/ikamensh/flynt/issues/253
+        raise ConversionRefused(
+            "Skipping %c formatting - fstrings behave differently from % formatting.",
+        )
+
     if fmt_spec in integer_specificers:
         fmt_prefix = fmt_prefix.replace(".", "0")
 

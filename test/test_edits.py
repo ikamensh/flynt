@@ -620,6 +620,37 @@ def test_unknown_mod_percend_dictionary(state: State):
     assert out == s_in
 
 
+def test_percent_c_string_no_change(state: State):
+    """Regression for https://github.com/ikamensh/flynt/issues/253
+
+    Percent ``%c`` accepts an integer *or* a single-character string, but the
+    f-string ``:c`` format spec only accepts an integer. Converting
+    ``"%c" % letter`` (str) to ``f"{letter:c}"`` therefore crashes at runtime
+    with ``ValueError: Unknown format code 'c'``. Since flynt cannot know the
+    argument type, it must leave ``%c`` formatting unchanged.
+    """
+    letter = "a"  # noqa: F841
+
+    s_in = '"%c: " % letter'
+
+    out, count = code_editor.fstringify_code_by_line(s_in, state)
+    assert count == 0
+    assert out == s_in
+    # The (unchanged) output must still run without raising.
+    assert eval(out) == eval(s_in)
+
+
+def test_percent_c_no_change_aggressive(state: State):
+    """``%c`` is unsafe to convert even in aggressive mode (see issue #253)."""
+
+    s_in = '"%c" % letter'
+
+    state.aggressive = 2
+    out, count = code_editor.fstringify_code_by_line(s_in, state)
+    assert count == 0
+    assert out == s_in
+
+
 s_in_mixed_quotes = """'one is {} '"and two is {}".format(one, two)"""
 
 
