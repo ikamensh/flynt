@@ -5,14 +5,14 @@ driving the Rust binary instead of the Python API.
 Skips/xfails mirror the original suite exactly:
 - EXCLUDED set from test/integration/utils.py
 - escaped_newline.py xfail (flynt issue #83)
-- string_in_string.py: original skips on Python >= 3.12 ("3.12 behavior is
-  preferable"); we pin the improved behavior in expected_out_rust/ instead.
-  See DIVERGENCES.md.
+- string_in_string.py: original skips on Python >= 3.12, but flynt 1.0.6 on
+  python 3.13 reproduces expected_out exactly (verified), so we include it
+  as a regular golden sample.
 """
 
 import pytest
 
-from conftest import INT_DIR, HARNESS_DIR, golden, run_pipeline
+from conftest import INT_DIR, golden, run_pipeline
 
 EXCLUDED = {
     "bom.py",
@@ -20,11 +20,8 @@ EXCLUDED = {
     "escaped_newline.py",  # not supported yet, #83 on github
     "multiline_limit.py",
 }
-SKIP_PY312 = {"string_in_string.py"}
 
-samples = sorted(
-    {p.name for p in (INT_DIR / "samples_in").glob("*.py")} - EXCLUDED - SKIP_PY312
-)
+samples = sorted({p.name for p in (INT_DIR / "samples_in").glob("*.py")} - EXCLUDED)
 concat_samples = sorted(p.name for p in (INT_DIR / "samples_in_concat").glob("*.py"))
 
 
@@ -78,13 +75,3 @@ def test_escaped_newline():
     assert out == expected
 
 
-def test_string_in_string_py312_behavior():
-    """Original suite skips this sample on >=3.12 because behavior improved.
-    We implement the improved (3.12+) behavior; pinned expected output lives
-    in harness/expected_out_rust/. Generated from python3.13 + original flynt."""
-    pin = HARNESS_DIR / "expected_out_rust" / "string_in_string.py"
-    if not pin.exists():
-        pytest.skip("pin file not yet generated (see task #10)")
-    txt_in, _ = golden("string_in_string.py")
-    out, _count = run_pipeline(txt_in)
-    assert out == pin.read_text()
