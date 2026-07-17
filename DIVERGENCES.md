@@ -16,7 +16,7 @@ states), so flynt-rs treats it as a regular golden sample. No divergence.
   port turns out to handle it correctly, in which case the test flips to pass
   and this entry documents the improvement.
 
-## 2. Generator expressions inside converted f-strings: no redundant parens
+## 2. Redundant parentheses inside converted f-strings omitted
 
 - **Python flynt**: CPython's `ast.unparse` always parenthesizes generator
   expressions, so a converted `"...".format(", ".join(x for y in z))` style
@@ -24,9 +24,13 @@ states), so flynt-rs treats it as a regular golden sample. No divergence.
 - **flynt-rs**: emits the cleaner, equally valid
   `{', '.join(q.name for q in self.qualifications.all())}` (no redundant
   parens around a sole-argument genexp).
+- **Same family**: CPython also parenthesizes a unary `not` used as a BoolOp
+  operand (`a and (not b)`); flynt-rs emits `a and not b`. One occurrence in
+  the Django corpus (`django/http/request.py`).
 - **Why better**: output is what a human would write; semantics identical.
   Not pinned by any original golden file (verified: full original integration
-  suite passes). Found in 6 of 2400 files on a Django 1.11 differential run.
+  suite passes). 16 of 2400 files on a Django 1.11 differential run differ,
+  all in this class; everything else is byte-identical to Python flynt.
 - **Knock-on effect** (1 file in 2400): because the paren-free rendering is
   2 chars shorter, a multiline chunk can fit the default 88-char limit and be
   converted where Python flynt skips it (`tests/fixtures/models.py` in Django
