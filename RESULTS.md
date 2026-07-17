@@ -39,17 +39,24 @@ Running both tools over the full Django 1.11 tree (defaults):
   6 cosmetic + 1 knock-on where the 2-chars-shorter output fits the 88-char
   limit). Everything else is byte-identical, including counters and report.
 
-## Speedup (hyperfine, Apple Silicon, single-threaded like the original)
+## Speedup (hyperfine, Apple Silicon)
+
+flynt-rs processes files in parallel (rayon; `RAYON_NUM_THREADS` to cap).
+Output is byte-identical to the sequential mode: per-file stdout is buffered
+and emitted in input order, and per-file counter states are merged, verified
+against `RAYON_NUM_THREADS=1` and against Python flynt.
 
 | Scenario | python flynt | flynt-rs | Speedup |
 |---|---:|---:|---:|
-| Django corpus, full conversion (2,400 files, 526 modified) | 4.645 s ± 0.042 | 0.671 s ± 0.007 | **6.9×** |
-| Django corpus, no-op re-run (CI/linter scenario) | 3.817 s ± 0.022 | 0.461 s ± 0.011 | **8.3×** |
-| Single large file (~4.4k lines) | 157.4 ms ± 11.2 | 14.2 ms ± 0.2 | **11.1×** |
+| Django corpus, full conversion (2,400 files, 526 modified) | 4.678 s ± 0.155 | 0.213 s ± 0.003 | **21.9×** |
+| Django corpus, no-op re-run (CI/linter scenario) | 3.628 s ± 0.011 | 0.163 s ± 0.004 | **22.2×** |
+| Single large file (~4.4k lines) | 152.1 ms ± 4.3 | 14.2 ms ± 0.3 | **10.7×** |
 
 Wall-clock includes interpreter/binary startup — that is the honest UX
-comparison. flynt-rs is single-threaded like the original; parallel file
-processing (e.g. rayon) would multiply the corpus numbers further.
+comparison. Single-threaded (`RAYON_NUM_THREADS=1`), the corpus runs in
+0.67 s / 0.46 s (6.9× / 8.3× vs Python) — parallelism contributes a further
+~3× on this machine; single-file runs are unaffected (parallelism is
+per-file).
 
 ## Divergences
 
