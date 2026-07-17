@@ -2,9 +2,9 @@
 """Generate golden fixtures for the Rust percent pipeline (task #5).
 
 Kept separate from gen_fixtures.py so the percent port owns its own fixtures
-without touching the shared generator. Run with the project venv:
+without touching the shared generator. Run with a venv holding the reference implementation (pip install 'flynt @ git+https://github.com/ikamensh/flynt@8973644' or flynt==1.0.6 + the %c fix):
 
-    .venv/bin/python flynt-rust/tests/fixtures/gen_percent_fixtures.py
+    .venv/bin/python tests/fixtures/gen_percent_fixtures.py
 
 Writes `percent.json` next to this script:
   - "transform": for each (src, aggressive), the exact flynt outcome of
@@ -27,7 +27,8 @@ from flynt.transform.percent_transformer import transform_binop
 from flynt.utils.utils import fixup_transformed
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-FLYNT = os.path.abspath(os.path.join(HERE, "..", "..", "..", "flynt"))
+# Repo root (fixtures live in <repo>/tests/fixtures; corpus in <repo>/test).
+FLYNT = os.path.abspath(os.path.join(HERE, "..", ".."))
 SAMPLE_DIRS = [
     os.path.join(FLYNT, "test", "integration", "samples_in"),
     os.path.join(FLYNT, "test", "integration", "expected_out"),

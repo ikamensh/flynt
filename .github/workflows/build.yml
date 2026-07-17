@@ -8,17 +8,61 @@ on:
     - master
     tags:
     - v*
+
 jobs:
-  build:
+  wheels:
+    name: wheel ${{ matrix.platform.name }}
+    runs-on: ${{ matrix.platform.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - { name: linux-x86_64,  runner: ubuntu-latest,  target: x86_64,  args: "--zig" }
+          - { name: linux-aarch64, runner: ubuntu-latest,  target: aarch64, args: "--zig" }
+          - { name: musl-x86_64,   runner: ubuntu-latest,  target: x86_64-unknown-linux-musl, args: "--zig" }
+          - { name: macos-x86_64,  runner: macos-latest,   target: x86_64,  args: "" }
+          - { name: macos-arm64,   runner: macos-latest,   target: aarch64, args: "" }
+          - { name: windows-x64,   runner: windows-latest, target: x64,     args: "" }
+    steps:
+      - uses: actions/checkout@v6
+      - uses: PyO3/maturin-action@v1
+        with:
+          target: ${{ matrix.platform.target }}
+          args: --release --out dist ${{ matrix.platform.args }}
+          sccache: true
+          manylinux: auto
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wheels-${{ matrix.platform.name }}
+          path: dist
+
+  sdist:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-python@v6
+      - uses: PyO3/maturin-action@v1
         with:
-          python-version: "3.11"
-      - run: pip install build
-      - run: python -m build
-      - uses: actions/upload-artifact@v5
+          command: sdist
+          args: --out dist
+      - uses: actions/upload-artifact@v4
         with:
-          name: dist
-          path: dist/*
+          name: sdist
+          path: dist
+
+  publish:
+    # Publishes to PyPI on version tags only, via trusted publishing
+    # (configure the GitHub publisher for project "flynt" on PyPI first).
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [wheels, sdist]
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist

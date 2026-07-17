@@ -2,7 +2,7 @@
 """Generate golden fixtures for the .format() pipeline differential tests.
 
 Run with the project venv (from the repo root):
-    .venv/bin/python flynt-rust/tests/fixtures/gen_format_fixtures.py
+    .venv/bin/python tests/fixtures/gen_format_fixtures.py
 
 Captures the exact behaviour of flynt 1.0.6's `transform_chunk` (on the *bare
 expression node*, matching how `CodeEditor` calls it in the real pipeline) and
@@ -24,7 +24,8 @@ from flynt.candidates.ast_call_candidates import call_candidates
 from flynt.utils.utils import ast_to_string
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-FLYNT = os.path.abspath(os.path.join(HERE, "..", "..", "..", "flynt"))
+# Repo root (fixtures live in <repo>/tests/fixtures; corpus in <repo>/test).
+FLYNT = os.path.abspath(os.path.join(HERE, "..", ".."))
 SAMPLE_DIRS = [
     os.path.join(FLYNT, "test", "integration", "samples_in"),
     os.path.join(FLYNT, "test", "integration", "expected_out"),

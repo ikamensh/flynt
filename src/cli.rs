@@ -215,6 +215,10 @@ fn parse_args(argv: &[String]) -> Result<Args, i32> {
                     a.notebook = true;
                     a.explicit.insert("notebook");
                 }
+                "help" => {
+                    print_help();
+                    return Err(0);
+                }
                 "version" => a.version = true,
                 "report" => {
                     a.report = true;
@@ -231,6 +235,10 @@ fn parse_args(argv: &[String]) -> Result<Args, i32> {
         if is_option(tok) {
             let s = &tok[1..];
             match s {
+                "h" => {
+                    print_help();
+                    return Err(0);
+                }
                 "v" => bump(&mut a.verbose, &mut a.explicit, "verbose"),
                 "q" => {
                     a.quiet = true;
@@ -460,6 +468,75 @@ fn print_usage() {
         "usage: flynt [-h] [-v | -q] [--no-multiline | -ll LINE_LENGTH] \
          [-d | --stdout] [-s] [--no-tp] [--no-tf] [-tc] [-tj] [-f] [-a] \
          [-e EXCLUDE [EXCLUDE ...]] [-nb] [--version] [--report] [src ...]"
+    );
+}
+
+/// argparse-style help (70-column wrap, matching flynt 1.x README embedding).
+fn print_help() {
+    println!(
+        r#"usage: flynt [-h] [-v | -q] [--no-multiline | -ll LINE_LENGTH] [-d |
+             --stdout] [-s] [--no-tp] [--no-tf] [-tc] [-tj] [-f]
+             [-a] [-e EXCLUDE [EXCLUDE ...]] [-nb] [--version]
+             [--report]
+             [src ...]
+
+flynt v.{version}
+
+positional arguments:
+  src                   source file(s) or directory (or a single `-`
+                        to read stdin and output to stdout)
+
+options:
+  -h, --help            show this help message and exit
+  -v, --verbose         run with verbose output
+  -q, --quiet           run without outputting statistics to stdout
+  --no-multiline        convert only single line expressions
+  -ll, --line-length LINE_LENGTH
+                        for expressions spanning multiple lines,
+                        convert only if the resulting single line
+                        will fit into the line length limit. Default
+                        value is 88 characters.
+  -d, --dry-run         Do not change the files in-place and print
+                        the diff instead. Note that this must be
+                        used in conjunction with '--fail-on-change'
+                        when used for linting purposes.
+  --stdout              Do not change the files in-place and print
+                        the result instead. This argument implies
+                        --quiet, i.e. no statistics are printed to
+                        stdout, only the resulting code. It is
+                        incompatible with --dry-run and --verbose.
+  -s, --string          Interpret the input as a Python code snippet
+                        and print the converted version. The snippet
+                        must use single quotes or escaped double
+                        quotes.
+  --no-tp, --no-transform-percent
+                        Don't transform % formatting to f-strings
+                        (default: do so)
+  --no-tf, --no-transform-format
+                        Don't transform .format formatting to
+                        f-strings (default: do so)
+  -tc, --transform-concats
+                        Replace string concatenations (defined as +
+                        operations involving string literals) with
+                        f-strings.
+  -tj, --transform-joins
+                        Replace static joins (where the joiner is a
+                        string literal and the joinee is a static-
+                        length list) with f-strings.
+  -f, --fail-on-change  Fail when changing files (for linting
+                        purposes)
+  -a, --aggressive      Include conversions with potentially changed
+                        behavior. Use -aa to omit int() wrapping for
+                        %d conversions.
+  -e, --exclude EXCLUDE [EXCLUDE ...]
+                        ignore files with given strings in it's
+                        absolute path.
+  -nb, --notebook       Also search and transform Jupyter notebooks
+                        (.ipynb files). Warning: feature in alpha
+                        and was not thoroughly tested.
+  --version             Print the current version number and exit.
+  --report              Show detailed conversion report"#,
+        version = crate::VERSION
     );
 }
 

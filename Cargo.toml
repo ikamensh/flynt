@@ -1,9 +1,13 @@
 [package]
 name = "flynt-rs"
-version = "1.0.6"
+version = "2.0.0-beta.1"
 edition = "2021"
-description = "Rust port of flynt: convert %-format and .format() strings to f-strings"
+description = "flynt: convert %-format and .format() strings to f-strings (Rust implementation)"
 license = "MIT"
+
+[[bin]]
+name = "flynt"
+path = "src/main.rs"
 
 [dependencies]
 ruff_python_parser = { git = "https://github.com/astral-sh/ruff", tag = "0.14.11" }

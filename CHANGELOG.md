@@ -1,3 +1,18 @@
+#### v.2.0.0b1
+
+* **flynt is now a native binary, rewritten in Rust.** `pip install flynt` ships
+  a platform wheel containing the `flynt` executable — same CLI, same output,
+  10–20× faster (files are processed in parallel; set `RAYON_NUM_THREADS=1` to
+  disable). Verified against the full 1.x integration suite and byte-compared
+  with 1.x over the Django 1.11 codebase (2400 files).
+* **Breaking: the Python API (`import flynt`) is gone; 2.0 is CLI-only.** If you
+  depend on `flynt.api` / `flynt.code_editor`, stay on `flynt<2`. The
+  pre-commit hook and all CLI flags are unchanged.
+* Behavior differences vs 1.x, both intentional (see DIVERGENCES.md):
+  converted f-strings no longer contain redundant parentheses around generator
+  expressions or unary `not`; everything else is byte-identical.
+* Includes the `%c` conversion refusal fix (#254 / issue #253).
+
 #### v.1.0.6
 
 * minor efficiency improvement by removing some dead code

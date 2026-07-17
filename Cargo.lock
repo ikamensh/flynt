@@ -143,7 +143,7 @@ checksum = "877a4ace8713b0bcf2a4e7eec82529c029f1d0619886d18145fea96c3ffe5c0f"
 
 [[package]]
 name = "flynt-rs"
-version = "1.0.6"
+version = "2.0.0-beta.1"
 dependencies = [
  "rayon",
  "ruff_python_ast",

@@ -5,7 +5,7 @@
 use std::process::Command;
 
 fn flynt() -> Command {
-    Command::new(env!("CARGO_BIN_EXE_flynt-rs"))
+    Command::new(env!("CARGO_BIN_EXE_flynt"))
 }
 
 // Port of test_cli.py::test_cli_version — prints only the version.
@@ -17,7 +17,6 @@ fn version_prints_only_version() {
         String::from_utf8_lossy(&out.stdout),
         format!("{}\n", env!("CARGO_PKG_VERSION"))
     );
-    assert_eq!(env!("CARGO_PKG_VERSION"), "1.0.6");
     assert!(out.stderr.is_empty());
 }
 

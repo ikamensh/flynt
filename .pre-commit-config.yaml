@@ -1,18 +1,14 @@
 repos:
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: 'e05c5c0818279e5ac248ac9e954431ba58865e61'  # frozen: v0.15.7
-    hooks:
-      - id: ruff-format
-        exclude: test/integration/(actual|expected|samples).*
-      - id: ruff-check
-        args: [--fix, --exit-non-zero-on-fix]
-        exclude: test/integration/(actual|expected|samples).*
   - repo: https://github.com/codespell-project/codespell
     rev: 2ccb47ff45ad361a21071a7eedda4c37e6ae8c5a  # frozen: v2.4.2
     hooks:
-      - id: codespell  # See pyproject.toml for args
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: a66e98df7b4aeeb3724184b332785976d062b92e  # frozen: v1.19.1
+      - id: codespell
+        exclude: test/integration/(actual|expected|samples).*|Cargo.lock
+  - repo: local
     hooks:
-      - id: mypy
-        exclude: test/integration/(actual|expected|samples).*
+      - id: cargo-fmt
+        name: cargo fmt --check
+        entry: cargo fmt --check
+        language: system
+        types: [rust]
+        pass_filenames: false

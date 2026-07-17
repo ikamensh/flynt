@@ -1,27 +1,27 @@
-"""Pytest harness driving the flynt-rs binary with the ORIGINAL flynt
-integration fixtures (../../flynt/test/integration).
+"""Pytest harness driving the flynt binary with the flynt 1.x golden
+integration fixtures (../test/integration).
 
-The binary exposes a machine mode `--harness-json` mirroring the Python
-functions the original tests call directly:
+The binary exposes a machine mode `--harness-json` mirroring the Python 1.x
+functions the original tests called directly:
     fstringify_code_by_line / fstringify_concats / fstringify_static_joins
 """
 
 import json
 import pathlib
 import subprocess
+import sys
 
 import pytest
 
 HARNESS_DIR = pathlib.Path(__file__).parent
-RUST_DIR = HARNESS_DIR.parent
-FLYNT_REPO = RUST_DIR.parent / "flynt"
-INT_DIR = FLYNT_REPO / "test" / "integration"
-BINARY = RUST_DIR / "target" / "debug" / "flynt-rs"
+REPO_DIR = HARNESS_DIR.parent
+INT_DIR = REPO_DIR / "test" / "integration"
+BINARY = REPO_DIR / "target" / "debug" / ("flynt.exe" if sys.platform == "win32" else "flynt")
 
 
 @pytest.fixture(scope="session", autouse=True)
 def build_binary():
-    subprocess.run(["cargo", "build"], cwd=RUST_DIR, check=True)
+    subprocess.run(["cargo", "build"], cwd=REPO_DIR, check=True)
 
 
 def run_pipeline(code: str, pipeline: str = "fstring", **state):

@@ -14,7 +14,7 @@ import pytest
 
 from conftest import BINARY, INT_DIR
 
-VERSION = "1.0.6"
+VERSION = "2.0.0-beta.1"  # CARGO_PKG_VERSION; PyPI equivalent is 2.0.0b1
 
 valid_snippets = [
     ("'{}'.format(x) + '{}'.format(y)", "f'{x}' + f'{y}'"),

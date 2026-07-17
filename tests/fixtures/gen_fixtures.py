@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """Generate golden fixtures for the Rust port's differential tests.
 
-Run with the project venv:
-    .venv/bin/python flynt-rust/tests/fixtures/gen_fixtures.py
+Run with a venv holding the reference implementation (pip install 'flynt @ git+https://github.com/ikamensh/flynt@8973644' or flynt==1.0.6 + the %c fix):
+    .venv/bin/python tests/fixtures/gen_fixtures.py
 
 Outputs JSON files next to this script. Each captures the *exact* behaviour of
 flynt 1.0.6's Python helpers so the Rust port can be checked byte-for-byte.
@@ -26,7 +26,8 @@ from flynt.utils.utils import (
 )
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-FLYNT = os.path.abspath(os.path.join(HERE, "..", "..", "..", "flynt"))
+# Repo root (fixtures live in <repo>/tests/fixtures; corpus in <repo>/test).
+FLYNT = os.path.abspath(os.path.join(HERE, "..", ".."))
 SAMPLE_DIRS = [
     os.path.join(FLYNT, "test", "integration", "samples_in"),
     os.path.join(FLYNT, "test", "integration", "expected_out"),

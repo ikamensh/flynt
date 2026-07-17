@@ -1,27 +1,44 @@
-# Running tests
-In order for imports to work, install package in editable mode in your environment with `pip install -e .[dev]`.
+# Development setup
+
+flynt 2.x is implemented in Rust. You need a stable Rust toolchain
+(https://rustup.rs) and, for the integration harness, `uv`
+(https://docs.astral.sh/uv/).
+
+```
+cargo build            # binary at target/debug/flynt
+cargo test             # unit + differential tests
+uv run --no-project --with pytest pytest harness -q   # integration harness
+```
 
 # Code style
-[pre-commit](https://github.com/pre-commit/pre-commit) is used, to run code checks before committing changes.
 
-If you have pre-commit installed (e.g. from the dev requirements), simply run ``pre-commit install`` to install the hooks for this repo.
+`cargo fmt` and `cargo clippy` before committing. pre-commit runs codespell.
 
 # Integration tests
 
-**When contributing any new functionality, please include appropriate integration tests.**
+**When contributing any new functionality, please include appropriate
+integration tests.**
 
-This project relies heavily on tests, as otherwise it is full of hacks (unfortunately).
-By integration test we mean taking a whole file, reading it and running high level transform function on it,
-then checking for exactly the expected output. 
+By integration test we mean taking a whole file, running the high level
+transform on it, and checking for exactly the expected output.
 
 ## How integration tests work
 
-You can see existing tests in folder `test/integration`. All files from `samples_in` folder will be processed with `flynt`,
-transformed, and result is compared with `expected_out`. Files are matched by name, i.e. transformed version of samples_in/file.py
-should exactly match expected_out/file.py. Sometimes we check for no changes to be done, then sample_in version is the same as expected_out.
-
+The golden corpus lives in `test/integration`: every file from `samples_in` is
+converted and compared byte-for-byte with the file of the same name in
+`expected_out` (plus the `_single_line`, `_concat`, and `_enable_*` variants).
+It's enough to add a file to `samples_in` and `expected_out`; the harness
+(`harness/test_golden.py`) picks it up automatically. Sometimes we check that
+no changes are made — then the sample equals the expected output.
 
 ## CLI tests
 
-When contributing CLI changes, please include a CLI test to verify they are parsed correctly.
-`test_cli.py` tests via `run_flynt_cli` function.
+When contributing CLI changes, add a case to `harness/test_cli_binary.py`,
+which runs the real binary via subprocess.
+
+## Differential tests against flynt 1.x
+
+`tests/fixtures/*.json` pin the exact behavior of the Python reference
+implementation, consumed by `tests/*_differential.rs`. To regenerate them you
+need a venv with the last Python flynt (see the header comments in
+`tests/fixtures/gen_*.py`).
