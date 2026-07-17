@@ -335,19 +335,17 @@ fn take_value(
     }
 }
 
+/// Strip at most one trailing newline from stdin input.
+///
+/// flynt 1.x did `sys.stdin.read()[:-len(os.linesep)]`, which chops characters
+/// unconditionally: on Windows it eats a real character (text-mode stdin has
+/// already collapsed `\r\n` to `\n`), and on any platform it mangles input
+/// lacking a trailing newline. Identical to 1.x for the normal Unix case;
+/// improvement documented in DIVERGENCES.md.
 fn strip_linesep(s: &str) -> String {
-    let n = LINESEP.chars().count();
-    let total = s.chars().count();
-    if total < n {
-        return String::new();
-    }
-    s.chars().take(total - n).collect()
+    let t = s.strip_suffix('\n').unwrap_or(s);
+    t.strip_suffix('\r').unwrap_or(t).to_string()
 }
-
-#[cfg(windows)]
-const LINESEP: &str = "\r\n";
-#[cfg(not(windows))]
-const LINESEP: &str = "\n";
 
 fn state_from_args(a: &Args) -> State {
     State {
@@ -662,7 +660,9 @@ mod tests {
     #[test]
     fn strip_linesep_removes_trailing_sep() {
         assert_eq!(strip_linesep("hello\n"), "hello".to_string());
-        assert_eq!(strip_linesep("x"), String::new());
+        assert_eq!(strip_linesep("hello\r\n"), "hello".to_string());
+        // Unlike flynt 1.x, input without a trailing newline is left intact.
+        assert_eq!(strip_linesep("x"), "x".to_string());
         assert_eq!(strip_linesep(""), String::new());
     }
 

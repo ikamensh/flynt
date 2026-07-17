@@ -37,4 +37,15 @@ states), so flynt-rs treats it as a regular golden sample. No divergence.
   1.11). Consistent with flynt's own rule: the limit applies to the actually
   emitted text.
 
+## 3. stdin (`flynt -`) trailing-character handling fixed
+
+- **Python flynt**: `sys.stdin.read()[:-len(os.linesep)]` chops characters
+  unconditionally — on Windows it eats the last real character (text-mode
+  stdin already collapsed `\r\n` to `\n` but `len(os.linesep)` is 2), and on
+  any platform it corrupts input that lacks a trailing newline.
+- **flynt 2.0**: strips at most one trailing newline (`\n` or `\r\n`).
+  Identical behavior for the normal Unix pipe case; correct on Windows and
+  for unterminated input.
+- **Why better**: the 1.x behavior is a plain bug; caught by Windows CI.
+
 (Entries below added during integration burn-down.)
