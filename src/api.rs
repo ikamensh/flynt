@@ -7,9 +7,11 @@
 //! Python integration tests that monkeypatch `fstringify_code_by_line`.
 
 use std::collections::HashSet;
+use std::fmt::Write as _;
 use std::path::{Component, Path, PathBuf};
 use std::time::Instant;
 
+use rayon::prelude::*;
 use similar::{ChangeTag, TextDiff};
 
 use crate::code_editor;
@@ -130,27 +132,48 @@ pub fn fstringify_file_with(
     state: &mut State,
     t: &Transforms,
 ) -> Option<FstringifyResult> {
+    let (result, printed) = process_file(filename, state, t);
+    print!("{printed}");
+    result
+}
+
+/// Core of [`fstringify_file_with`], with all would-be stdout captured in the
+/// returned buffer. This lets the parallel driver emit per-file output in the
+/// original file order, byte-identical to sequential processing.
+fn process_file(
+    filename: &str,
+    state: &mut State,
+    t: &Transforms,
+) -> (Option<FstringifyResult>, String) {
+    let mut printed = String::new();
+    let result = process_file_buffered(filename, state, t, &mut printed);
+    (result, printed)
+}
+
+fn process_file_buffered(
+    filename: &str,
+    state: &mut State,
+    t: &Transforms,
+    printed: &mut String,
+) -> Option<FstringifyResult> {
     if filename.ends_with(".ipynb") {
         if !state.process_notebooks {
             return None;
         }
-        return fstringify_notebook_with(filename, state, t);
+        return fstringify_notebook_with(filename, state, t, printed);
     }
 
     let raw = std::fs::read(filename).expect("read file");
     let (encoding, bom) = encoding_by_bom(&raw);
-    let contents = match decode(&raw, encoding, bom.as_deref()) {
-        Some(s) => s,
-        None => return None, // invalid unicode -> skip
-    };
+    let contents = decode(&raw, encoding, bom.as_deref())?; // invalid unicode -> skip
 
     let result = fstringify_code_with(&contents, state, filename, t)?;
     let new_code = &result.content;
 
     if state.dry_run && result.n_changes > 0 {
-        println!("{}", unified_diff(&contents, new_code, filename));
+        writeln!(printed, "{}", unified_diff(&contents, new_code, filename)).unwrap();
     } else if state.stdout {
-        println!("{new_code}");
+        writeln!(printed, "{new_code}").unwrap();
     } else if result.n_changes > 0 {
         let mut out = Vec::new();
         if let Some(b) = &bom {
@@ -163,10 +186,12 @@ pub fn fstringify_file_with(
 }
 
 /// Port of `_fstringify_notebook`: transform only code cells of a `.ipynb`.
+/// Would-be stdout goes into `printed` (see [`process_file`]).
 fn fstringify_notebook_with(
     filename: &str,
     state: &mut State,
     t: &Transforms,
+    printed: &mut String,
 ) -> Option<FstringifyResult> {
     let text = std::fs::read_to_string(filename).ok()?;
     let mut nb: serde_json::Value = serde_json::from_str(&text).ok()?;
@@ -199,9 +224,9 @@ fn fstringify_notebook_with(
 
     let new_dump = json_dump(&nb);
     if state.dry_run && changes > 0 {
-        println!("{}", unified_diff(&original_dump, &new_dump, filename));
+        writeln!(printed, "{}", unified_diff(&original_dump, &new_dump, filename)).unwrap();
     } else if state.stdout {
-        println!("{new_dump}");
+        writeln!(printed, "{new_dump}").unwrap();
     } else if changes > 0 {
         std::fs::write(filename, new_dump.as_bytes()).expect("write notebook");
     }
@@ -292,14 +317,35 @@ pub struct RunStats {
 }
 
 /// The testable core of [`fstringify_files`]: process files, return stats.
+///
+/// Files are processed in parallel (they are independent: each is read and
+/// written at most once, and nothing else is shared). Each file gets its own
+/// `State` fork with zeroed counters; counter sums are merged back afterwards,
+/// and per-file output is buffered and printed sequentially in the original
+/// file order — so counters, stats, and stdout are identical to a sequential
+/// run. Thread count is rayon's default (all cores); set `RAYON_NUM_THREADS`
+/// to override (e.g. `RAYON_NUM_THREADS=1` for fully sequential execution).
 pub fn run_files_with(files: &[String], state: &mut State, t: &Transforms) -> RunStats {
     let mut stats = RunStats {
         found_files: files.len(),
         ..RunStats::default()
     };
     let start = Instant::now();
-    for path in files {
-        if let Some(result) = fstringify_file_with(path, state, t) {
+
+    let base = fork_options(state);
+    let outcomes: Vec<(Option<FstringifyResult>, String, State)> = files
+        .par_iter()
+        .map(|path| {
+            let mut local = base.clone();
+            let (result, printed) = process_file(path, &mut local, t);
+            (result, printed, local)
+        })
+        .collect(); // indexed par_iter: collect preserves input order
+
+    for (result, printed, local) in outcomes {
+        print!("{printed}");
+        merge_counters(state, &local);
+        if let Some(result) = result {
             if result.n_changes > 0 {
                 stats.changed_files += 1;
                 stats.total_expressions += result.n_changes;
@@ -310,6 +356,39 @@ pub fn run_files_with(files: &[String], state: &mut State, t: &Transforms) -> Ru
     }
     stats.total_time = start.elapsed().as_secs_f64();
     stats
+}
+
+/// Copy of `state` with all statistics counters zeroed — the per-file working
+/// state for the parallel driver.
+fn fork_options(state: &State) -> State {
+    State {
+        quiet: state.quiet,
+        aggressive: state.aggressive,
+        dry_run: state.dry_run,
+        stdout: state.stdout,
+        multiline: state.multiline,
+        len_limit: state.len_limit,
+        report: state.report,
+        transform_percent: state.transform_percent,
+        transform_format: state.transform_format,
+        transform_concat: state.transform_concat,
+        transform_join: state.transform_join,
+        process_notebooks: state.process_notebooks,
+        ..State::default()
+    }
+}
+
+/// Add the statistics accumulated in `src` (one file's fork) into `dst`.
+fn merge_counters(dst: &mut State, src: &State) {
+    dst.percent_candidates += src.percent_candidates;
+    dst.percent_transforms += src.percent_transforms;
+    dst.call_candidates += src.call_candidates;
+    dst.call_transforms += src.call_transforms;
+    dst.invalid_conversions += src.invalid_conversions;
+    dst.concat_candidates += src.concat_candidates;
+    dst.concat_changes += src.concat_changes;
+    dst.join_candidates += src.join_candidates;
+    dst.join_changes += src.join_changes;
 }
 
 fn print_report(state: &State, s: &RunStats) {
