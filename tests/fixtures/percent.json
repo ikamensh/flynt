@@ -489,20 +489,20 @@
   {
    "src": "'%c' % x",
    "aggressive": 0,
-   "kind": "ok",
-   "result": "f\"{x:c}\""
+   "kind": "refused",
+   "message": "Skipping %c formatting - fstrings behave differently from % formatting."
   },
   {
    "src": "'%c' % x",
    "aggressive": 1,
-   "kind": "ok",
-   "result": "f\"{x:c}\""
+   "kind": "refused",
+   "message": "Skipping %c formatting - fstrings behave differently from % formatting."
   },
   {
    "src": "'%c' % x",
    "aggressive": 2,
-   "kind": "ok",
-   "result": "f\"{x:c}\""
+   "kind": "refused",
+   "message": "Skipping %c formatting - fstrings behave differently from % formatting."
   },
   {
    "src": "'%o' % x",

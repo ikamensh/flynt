@@ -233,6 +233,16 @@ fn formatted_value(
     val: Expr,
     aggressive: u8,
 ) -> Result<InterpolatedStringElement, FlyntError> {
+    // Percent `%c` accepts an integer *or* a single-character string, but the
+    // f-string `:c` format spec only accepts an integer. As the argument type
+    // is unknown statically, converting `%c` is unsafe at any aggressive
+    // level. https://github.com/ikamensh/flynt/issues/253
+    if conv == 'c' {
+        return Err(FlyntError::ConversionRefused(
+            "Skipping %c formatting - fstrings behave differently from % formatting.".to_string(),
+        ));
+    }
+
     // The `.`-to-`0` rewrite happens *before* i/u are translated to d, so it
     // applies to an original d/o/x/X but not to an original i/u.
     let mut prefix = prefix.to_string();
@@ -616,6 +626,22 @@ mod tests {
         assert_eq!(ok("'%d' % int(x)", 0), "f\"{int(x)}\"");
         assert_eq!(ok("'%d' % len(x)", 0), "f\"{len(x)}\"");
         assert_eq!(ok("'%i' % x", 1), "f\"{int(x)}\"");
+    }
+
+    /// Regression for flynt issue #253 (upstream PR #254): `%c` accepts an int
+    /// *or* a 1-char string, while the f-string `:c` spec only accepts an int,
+    /// so conversion is refused at every aggressive level.
+    #[test]
+    fn percent_c_refused_all_aggressive_levels() {
+        for aggressive in [0, 1, 2] {
+            assert!(
+                matches!(
+                    tf("'%c: ' % letter", aggressive),
+                    Err(FlyntError::ConversionRefused(_))
+                ),
+                "aggressive={aggressive}"
+            );
+        }
     }
 
     #[test]
