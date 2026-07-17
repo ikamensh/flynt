@@ -70,20 +70,13 @@ fn quotes_match_flynt() {
     assert!(n > 100, "expected a substantial corpus, got {n}");
 }
 
-/// Two unparse results are "delimiter-equivalent" when they differ only in the
-/// choice of f-string delimiter quote (ruff's `Generator` prefers `'` where
-/// CPython's `ast.unparse` picks `"` to avoid clashing with single-quoted inner
-/// strings). Inner string constants are single-quoted by both, so mapping every
-/// `"` to `'` collapses that difference and nothing else in this corpus.
-fn delimiter_equivalent(a: &str, b: &str) -> bool {
-    a.replace('"', "'") == b.replace('"', "'")
-}
-
 #[test]
 fn unparse_matches_flynt() {
+    // Byte-for-byte equality with CPython ast.unparse (via flynt's
+    // ast_to_string), including the f-string outer delimiter, which follows
+    // CPython's avoid-escape preference over ', ", \"\"\", '''.
     let data = fixture("unparse.json");
     let mut failures = Vec::new();
-    let mut delimiter_diffs = 0;
     let mut n = 0;
     for entry in data.as_array().unwrap() {
         let src = entry["src"].as_str().unwrap();
@@ -97,10 +90,6 @@ fn unparse_matches_flynt() {
         };
         match ast_to_string(&node) {
             Ok(got) if got == expected => {}
-            // Documented, pipeline-irrelevant divergence: the f-string outer
-            // delimiter. fixup_transformed re-sets it via set_quote_type, so it
-            // never surfaces in flynt's output (see fixup_matches_flynt).
-            Ok(got) if delimiter_equivalent(&got, expected) => delimiter_diffs += 1,
             Ok(got) => {
                 failures.push(format!("src={src:?}\n  expected={expected:?}\n  got     ={got:?}"))
             }
@@ -108,7 +97,6 @@ fn unparse_matches_flynt() {
         }
         n += 1;
     }
-    eprintln!("unparse: {n} entries, {delimiter_diffs} outer-delimiter-only diffs (normalised by set_quote_type downstream)");
     if !failures.is_empty() {
         panic!(
             "{} / {} unparse mismatches:\n{}",

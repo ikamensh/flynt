@@ -4,9 +4,9 @@
 //!
 //! Contract notes:
 //! - `ast_to_string` must match CPython `ast.unparse` output (plus flynt's
-//!   ternary-paren cleanup) on the expression subset flynt emits. We use
-//!   `ruff_python_codegen::Generator` in `Mode::AstUnparse`, which is designed
-//!   to reproduce `ast.unparse`, then apply the same post-processing flynt does.
+//!   ternary-paren cleanup) on the expression subset flynt emits. See the
+//!   "CPython-compatible unparsing" section below for how ruff's `Generator`
+//!   is steered (and, for f-strings, replaced) to achieve byte equality.
 //! - The AST-building helpers (`ast_string_node`, `ast_formatted_value`,
 //!   `ast_formatted_value_with_nested`, `new_joined_str`) are consumed by the
 //!   transform modules (tasks #5/#6/#8). Because ruff models an f-string as a
@@ -18,14 +18,15 @@
 
 use std::collections::{HashMap, HashSet};
 
-use ruff_python_ast::str::Quote;
+use ruff_python_ast::str::{Quote, TripleQuotes};
+use ruff_python_ast::str_prefix::StringLiteralPrefix;
 use ruff_python_ast::visitor::{walk_expr, Visitor};
 use ruff_python_ast::{
     self as ast, AtomicNodeIndex, ConversionFlag, Expr, ExprStringLiteral, FString, FStringFlags,
     FStringPart, InterpolatedElement, InterpolatedStringElement, InterpolatedStringElements,
     InterpolatedStringFormatSpec, StringLiteral, StringLiteralFlags, StringLiteralValue,
 };
-use ruff_python_codegen::{Generator, Indentation, Mode};
+use ruff_python_codegen::{Generator, Indentation};
 use ruff_python_parser::{parse_expression, parse_unchecked, Mode as ParseMode, ParseOptions};
 use ruff_python_ast::token::TokenKind;
 use ruff_source_file::LineEnding;
@@ -34,54 +35,328 @@ use ruff_text_size::TextRange;
 use crate::error::FlyntError;
 use crate::quotes;
 
+// ---------------------------------------------------------------------------
+// CPython-compatible unparsing
+//
+// CPython `ast.unparse` renders:
+// - plain string/bytes constants via `repr()` (single-line, `'` preference with
+//   repr's switch-to-`"` rule);
+// - f-strings via `visit_JoinedStr`: each part is rendered first, then a
+//   delimiter is chosen with an avoid-escape preference over `'`, `"`, `"""`,
+//   `'''` (constants narrow the candidates hard, expression parts softly), so
+//   literal parts never carry escaped quotes (`_str_literal_helper`).
+//
+// ruff's `Generator` instead escapes the delimiter quote inside f-string
+// literal parts unconditionally, which leaves spurious `\'` when flynt later
+// transplants the delimiter with set_quote_type (django oracle regression).
+//
+// Strategy:
+// - `prepare_for_unparse` normalises every string/bytes literal's flags to
+//   repr defaults (single quote, no triple, no raw) and stamps every *nested*
+//   f-string with the CPython-chosen delimiter, so ruff's renderer picks the
+//   right quote wherever ruff does the rendering.
+// - a top-level f-string is assembled by `unparse_fstring_cpython`, a faithful
+//   port of `visit_JoinedStr` + `_str_literal_helper`, so its body is
+//   byte-identical to CPython even for triple-quoted delimiters.
+// ---------------------------------------------------------------------------
+
 /// Unparse an expression exactly like CPython `ast.unparse`.
-///
-/// ruff's `Mode::AstUnparse` forces single-quote preference, but it does *not*
-/// propagate into f-string replacement fields (those are rendered by a nested
-/// `Generator` in the default mode, which preserves each string's original
-/// quote). CPython instead renders every inner string constant with a
-/// single-quote preference. We reconcile this by normalising every string
-/// literal's quote flag to `Single` before unparsing: the default-mode field
-/// renderer then produces `UnicodeEscape::with_preferred_quote(s, Single)` —
-/// byte-identical to what `AstUnparse` emits at the top level, and to CPython.
-fn unparse(node: &Expr) -> String {
+fn unparse(node: &Expr) -> Result<String, FlyntError> {
     let mut node = node.clone();
-    normalize_string_quotes(&mut node);
+    prepare_for_unparse(&mut node);
+    if let Expr::FString(f) = &node {
+        return unparse_fstring_cpython(f);
+    }
     let indent = Indentation::default();
-    Generator::new(&indent, LineEnding::Lf)
-        .with_mode(Mode::AstUnparse)
-        .expr(&node)
+    Ok(Generator::new(&indent, LineEnding::Lf).expr(&node))
 }
 
-/// Set the quote flag of every string/bytes/f-string literal in the tree to
-/// `Single` (see `unparse`).
-fn normalize_string_quotes(expr: &mut Expr) {
+/// repr-style flags for a plain string constant: single-quote preference (the
+/// escape layer applies repr's switch rule), single-line, no raw prefix. The
+/// legacy `u` prefix survives, as in CPython's `visit_Constant`.
+fn repr_string_flags(old: StringLiteralFlags) -> StringLiteralFlags {
+    let flags = StringLiteralFlags::empty();
+    if matches!(old.prefix(), StringLiteralPrefix::Unicode) {
+        flags.with_prefix(StringLiteralPrefix::Unicode)
+    } else {
+        flags
+    }
+}
+
+/// Normalise literal flags throughout the tree (post-order) so ruff's
+/// `Generator` reproduces CPython's rendering; see module comment above.
+fn prepare_for_unparse(expr: &mut Expr) {
+    crate::fstr_lint::for_each_child_expr_mut(expr, &mut prepare_for_unparse);
     match expr {
         Expr::StringLiteral(s) => {
             for part in s.value.iter_mut() {
-                part.flags = part.flags.with_quote_style(Quote::Single);
+                part.flags = repr_string_flags(part.flags);
             }
         }
         Expr::BytesLiteral(b) => {
             for part in b.value.iter_mut() {
-                part.flags = part.flags.with_quote_style(Quote::Single);
+                part.flags = ast::BytesLiteralFlags::empty();
             }
         }
         Expr::FString(fs) => {
             for part in fs.value.iter_mut() {
                 match part {
                     FStringPart::Literal(lit) => {
-                        lit.flags = lit.flags.with_quote_style(Quote::Single);
+                        lit.flags = repr_string_flags(lit.flags);
                     }
                     FStringPart::FString(f) => {
-                        f.flags = f.flags.with_quote_style(Quote::Single);
+                        // Children are already prepared; pick the CPython
+                        // delimiter so ruff renders nested f-strings with it.
+                        let parts = collect_fstring_parts(&f.elements);
+                        let delim = select_fstring_quote(&parts).unwrap_or("'");
+                        let (q, t) = delim_flags(delim);
+                        f.flags = FStringFlags::empty()
+                            .with_quote_style(q)
+                            .with_triple_quotes(t);
                     }
                 }
             }
         }
         _ => {}
     }
-    crate::fstr_lint::for_each_child_expr_mut(expr, &mut normalize_string_quotes);
+}
+
+/// Python `_ALL_QUOTES` order: `'`, `"`, `"""`, `'''`.
+const ALL_FSTRING_QUOTES: [&str; 4] = ["'", "\"", "\"\"\"", "'''"];
+
+fn delim_flags(delim: &str) -> (Quote, TripleQuotes) {
+    match delim {
+        "'" => (Quote::Single, TripleQuotes::No),
+        "\"" => (Quote::Double, TripleQuotes::No),
+        "\"\"\"" => (Quote::Double, TripleQuotes::Yes),
+        _ => (Quote::Single, TripleQuotes::Yes),
+    }
+}
+
+/// One rendered f-string part, mirroring CPython's buffered
+/// `(value, is_constant)` pairs in `visit_JoinedStr`:
+/// - `canonical` is the text with backslash/non-printable/`\n`/`\t` escapes but
+///   quotes UNescaped (CPython's `escape_char` output; braces already doubled);
+/// - `raw_single` additionally escapes `'` (what `repr` forced to single quotes
+///   would produce — used by the repr fallback paths).
+struct FsPart {
+    canonical: String,
+    raw_single: String,
+    is_constant: bool,
+}
+
+/// Render one f-string element through ruff (a temporary single-element
+/// f-string with default flags) and strip the `f'`…`'` wrapper.
+fn render_element_via_ruff(element: &InterpolatedStringElement) -> String {
+    let temp = FString {
+        range: TextRange::default(),
+        node_index: AtomicNodeIndex::default(),
+        elements: InterpolatedStringElements::from(vec![element.clone()]),
+        flags: FStringFlags::empty(),
+    };
+    let expr = Expr::from(temp);
+    let indent = Indentation::default();
+    let text = Generator::new(&indent, LineEnding::Lf).expr(&expr);
+    debug_assert!(text.starts_with("f'") && text.ends_with('\''));
+    text[2..text.len() - 1].to_string()
+}
+
+/// Undo the escaping of `'` that ruff's single-quote-preferred body writer may
+/// have applied, yielding CPython's `escape_char` canonical text. `\\` pairs
+/// are honoured left-to-right so escaped backslashes are never misread.
+fn unescape_single_quotes(s: &str) -> String {
+    let mut out = String::with_capacity(s.len());
+    let mut chars = s.chars();
+    while let Some(c) = chars.next() {
+        if c == '\\' {
+            match chars.next() {
+                Some('\'') => out.push('\''),
+                Some(other) => {
+                    out.push('\\');
+                    out.push(other);
+                }
+                None => out.push('\\'),
+            }
+        } else {
+            out.push(c);
+        }
+    }
+    out
+}
+
+fn literal_fs_part(value: &str) -> FsPart {
+    let rendered = render_element_via_ruff(&ast_string_node(value));
+    let canonical = unescape_single_quotes(&rendered);
+    let raw_single = canonical.replace('\'', "\\'");
+    FsPart {
+        canonical,
+        raw_single,
+        is_constant: true,
+    }
+}
+
+/// Flatten an element list into rendered parts (constants and interpolations).
+fn collect_fstring_parts(elements: &InterpolatedStringElements) -> Vec<FsPart> {
+    let mut parts = Vec::new();
+    for element in elements {
+        match element {
+            InterpolatedStringElement::Literal(lit) => parts.push(literal_fs_part(&lit.value)),
+            InterpolatedStringElement::Interpolation(_) => {
+                let body = render_element_via_ruff(element);
+                parts.push(FsPart {
+                    canonical: body.clone(),
+                    raw_single: body,
+                    is_constant: false,
+                });
+            }
+        }
+    }
+    parts
+}
+
+/// Result of `_str_literal_helper` for one constant part.
+enum HelperResult {
+    Ok {
+        text: String,
+        quotes: Vec<&'static str>,
+    },
+    /// The repr-fallback quote is disjoint from the candidates: CPython sets
+    /// `fallback_to_repr` for the whole JoinedStr.
+    GlobalFallback,
+}
+
+/// Faithful port of CPython `_str_literal_helper` with
+/// `escape_special_whitespace=True`, operating on the already-escaped
+/// `canonical` text (quote presence and `\n` checks are unaffected by content
+/// escaping, which never adds or removes quote/newline characters).
+fn str_literal_helper(part: &FsPart, quote_types: &[&'static str]) -> HelperResult {
+    let canonical = &part.canonical;
+    let mut possible: Vec<&'static str> = quote_types.to_vec();
+    if canonical.contains('\n') {
+        possible.retain(|q| q.len() == 3);
+    }
+    possible.retain(|q| !canonical.contains(q));
+    if possible.is_empty() {
+        // CPython: string = repr(original); quote = first candidate containing
+        // repr's quote char (repr picks `"` only when the text has `'` and no
+        // `"`); no such candidate -> disjoint -> global fallback.
+        let has_sq = canonical.contains('\'');
+        let has_dq = canonical.contains('"');
+        let (content, repr_quote) = if has_sq && !has_dq {
+            (canonical.clone(), '"')
+        } else {
+            (part.raw_single.clone(), '\'')
+        };
+        return match quote_types.iter().copied().find(|q| q.contains(repr_quote)) {
+            Some(q) => HelperResult::Ok {
+                text: content,
+                quotes: vec![q],
+            },
+            None => HelperResult::GlobalFallback,
+        };
+    }
+    let mut text = canonical.clone();
+    if let Some(last) = text.chars().last() {
+        // Stable sort, non-matching quotes first (Python bool sort key), then
+        // escape a final char that matches the first candidate's quote char
+        // (only reachable for triple quotes).
+        possible.sort_by_key(|q| q.starts_with(last));
+        if possible[0].starts_with(last) {
+            let cut = text.len() - last.len_utf8();
+            text = format!("{}\\{}", &text[..cut], last);
+        }
+    }
+    HelperResult::Ok {
+        text,
+        quotes: possible,
+    }
+}
+
+/// CPython `visit_JoinedStr` delimiter selection + body assembly over rendered
+/// parts. Returns `(delimiter, body)`.
+fn select_and_render_fstring(parts: &[FsPart]) -> Result<(&'static str, String), FlyntError> {
+    let mut quote_types: Vec<&'static str> = ALL_FSTRING_QUOTES.to_vec();
+    let mut helper_texts: Vec<Option<String>> = vec![None; parts.len()];
+    let mut fallback = false;
+
+    for (i, part) in parts.iter().enumerate() {
+        if part.is_constant {
+            match str_literal_helper(part, &quote_types) {
+                HelperResult::Ok { text, quotes } => {
+                    quote_types = quotes;
+                    helper_texts[i] = Some(text);
+                }
+                HelperResult::GlobalFallback => {
+                    fallback = true;
+                    break;
+                }
+            }
+        } else {
+            if part.canonical.contains('\n') {
+                let multi: Vec<&'static str> =
+                    quote_types.iter().copied().filter(|q| q.len() == 3).collect();
+                if multi.is_empty() {
+                    // CPython: `assert quote_types` fires; flynt catches the
+                    // AssertionError and refuses the conversion.
+                    return Err(FlyntError::Generic(
+                        "no multi-quote delimiter available for f-string with newline in expression"
+                            .to_string(),
+                    ));
+                }
+                quote_types = multi;
+            }
+            let new: Vec<&'static str> = quote_types
+                .iter()
+                .copied()
+                .filter(|q| !part.canonical.contains(q))
+                .collect();
+            if !new.is_empty() {
+                quote_types = new;
+            }
+        }
+    }
+
+    let mut body = String::new();
+    if fallback {
+        // Whole-string repr fallback: `'''` delimiter, every constant rendered
+        // repr-style with `'` forced (CPython's `repr('"' + value)` trick).
+        quote_types = vec!["'''"];
+        for part in parts {
+            body.push_str(if part.is_constant {
+                &part.raw_single
+            } else {
+                &part.canonical
+            });
+        }
+    } else {
+        for (i, part) in parts.iter().enumerate() {
+            match &helper_texts[i] {
+                Some(text) => body.push_str(text),
+                None => body.push_str(&part.canonical),
+            }
+        }
+    }
+    Ok((quote_types[0], body))
+}
+
+/// Delimiter only (for stamping nested f-string flags).
+fn select_fstring_quote(parts: &[FsPart]) -> Result<&'static str, FlyntError> {
+    select_and_render_fstring(parts).map(|(q, _)| q)
+}
+
+/// Assemble a top-level f-string exactly like CPython `visit_JoinedStr`.
+/// Implicitly concatenated parts are merged into one f-string, mirroring
+/// CPython's single merged `JoinedStr` node.
+fn unparse_fstring_cpython(f: &ast::ExprFString) -> Result<String, FlyntError> {
+    let mut parts: Vec<FsPart> = Vec::new();
+    for part in f.value.as_slice() {
+        match part {
+            FStringPart::Literal(lit) => parts.push(literal_fs_part(&lit.value)),
+            FStringPart::FString(fs) => parts.extend(collect_fstring_parts(&fs.elements)),
+        }
+    }
+    let (delim, body) = select_and_render_fstring(&parts)?;
+    Ok(format!("f{delim}{body}{delim}"))
 }
 
 /// Port of ast_to_string (ast.unparse + ternary-paren cleanup).
@@ -90,8 +365,19 @@ fn normalize_string_quotes(expr: &mut Expr) {
 /// in redundant parentheses, e.g. `f"{(a if c else b)}"`; flynt strips those to
 /// match its historical astor-based output. We reproduce exactly that: unparse,
 /// right-strip, then (for f-strings only) drop `{( … if … else … )}` parens.
+///
+/// Known, deliberate divergences from CPython `ast.unparse` (all in the
+/// "redundant parentheses CPython adds, ruff omits" family; semantically
+/// identical output, kept as documented improvements):
+/// - generator expressions as sole call argument: `join(g for g in x)` vs
+///   CPython's `join((g for g in x))`;
+/// - later operands of a BoolOp at lower precedence: `a and not b` vs
+///   CPython's `a and (not b)` (CPython requires increasing precedence across
+///   boolop operands);
+/// - a ternary/lambda/tuple as a replacement-field value WITH a format spec:
+///   `f'{a if b else c:>5}'` vs CPython's `f'{(a if b else c):>5}'`.
 pub fn ast_to_string(node: &Expr) -> Result<String, FlyntError> {
-    let mut txt = unparse(node).trim_end().to_string();
+    let mut txt = unparse(node)?.trim_end().to_string();
     // CPython `ast.unparse` always parenthesises a (non-empty) tuple; ruff omits
     // the parens at statement/expression top level. Restore them so top-level
     // tuples match `ast.unparse` (relevant to AstChunk, which then strips them).
@@ -834,6 +1120,60 @@ mod tests {
     }
 
     #[test]
+    fn fstring_delimiter_avoids_escaping_quotes() {
+        // The django oracle regression: single quotes in literal parts force a
+        // `"` delimiter with NO `\'` escapes in the body (CPython
+        // visit_JoinedStr avoid-escape preference).
+        assert_eq!(
+            u("f\"WHERE SEQUENCE_NAME = '{args['sq_name']}';\""),
+            "f\"WHERE SEQUENCE_NAME = '{args['sq_name']}';\""
+        );
+        // Both quote chars in the literal parts -> triple delimiter, bare
+        // quotes in the body. The stable sort prefers a delimiter whose quote
+        // char differs from the part's trailing char, hence ''' here.
+        assert_eq!(
+            u("f\"\"\"EXECUTE IMMEDIATE 'CREATE SEQUENCE \"{args['sq_name']}\"';\"\"\""),
+            "f'''EXECUTE IMMEDIATE 'CREATE SEQUENCE \"{args['sq_name']}\"';'''"
+        );
+    }
+
+    #[test]
+    fn fstring_delimiter_trailing_quote_escape() {
+        // All surviving candidates start with the part's trailing char ->
+        // triple delimiter with the final quote escaped (CPython rule).
+        assert_eq!(
+            u("f'x\\'\\'\\'y{v}z\"'"),
+            "f\"\"\"x'''y{v}z\\\"\"\"\""
+        );
+    }
+
+    #[test]
+    fn fstring_delimiter_repr_fallback() {
+        // A constant containing both triple-quote runs exhausts the candidates:
+        // CPython falls back to repr for that part (single-quote escaping).
+        assert_eq!(
+            u("f'a\\'\\'\\'b\"\"\"c{v}'"),
+            "f'a\\'\\'\\'b\"\"\"c{v}'"
+        );
+    }
+
+    #[test]
+    fn fixup_transplants_cleanly_to_triple() {
+        // End-to-end shape of the oracle defect: a synthesized f-string with
+        // single quotes around a field, transplanted to a triple-double
+        // delimiter by fixup_transformed -> no stray backslashes.
+        let els = vec![
+            ast_string_node("WHERE SEQUENCE_NAME = '"),
+            ast_formatted_value(name("args['sq_name']"), None, None).unwrap(),
+            ast_string_node("';"),
+        ];
+        let out =
+            fixup_transformed(new_joined_str(els), Some(quotes::QuoteType::TripleDouble)).unwrap();
+        assert_eq!(out, "f\"\"\"WHERE SEQUENCE_NAME = '{args['sq_name']}';\"\"\"");
+        assert!(!out.contains("\\'"));
+    }
+
+    #[test]
     fn top_level_tuple_gets_parens() {
         // ast.unparse wraps top-level tuples; ruff does not.
         assert_eq!(u("(1, 2)"), "(1, 2)");
@@ -843,9 +1183,10 @@ mod tests {
     #[test]
     fn inner_string_quotes_forced_single() {
         // Inner string constants render single-quoted like CPython, regardless
-        // of their original quote in source.
-        assert_eq!(u("f\"{d[\"a\"]}\""), "f'{d['a']}'");
-        assert_eq!(u("f\"{\" \".join(x)}\""), "f'{' '.join(x)}'");
+        // of their original quote in source; the outer delimiter then avoids
+        // the inner quotes (CPython visit_JoinedStr picks `"`).
+        assert_eq!(u("f\"{d[\"a\"]}\""), "f\"{d['a']}\"");
+        assert_eq!(u("f\"{\" \".join(x)}\""), "f\"{' '.join(x)}\"");
     }
 
     // --- helper construction tests (reference values from flynt itself) ---

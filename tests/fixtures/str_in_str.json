@@ -60,6 +60,30 @@
   "result": false
  },
  {
+  "src": "f\"WHERE SEQUENCE_NAME = '{args['sq_name']}';\"",
+  "result": true
+ },
+ {
+  "src": "f\"\\n        WHERE SEQUENCE_NAME = '{args['sq_name']}';\\n        \"",
+  "result": true
+ },
+ {
+  "src": "f\"\"\"EXECUTE IMMEDIATE 'CREATE SEQUENCE \"{args['sq_name']}\"';\"\"\"",
+  "result": true
+ },
+ {
+  "src": "f'{d[\"k\"]} said \"hi\"'",
+  "result": true
+ },
+ {
+  "src": "f'x\\'\\'\\'y{v}z\"'",
+  "result": false
+ },
+ {
+  "src": "f'a\\'\\'\\'b\"\"\"c{v}'",
+  "result": false
+ },
+ {
   "src": "f'{a + b}'",
   "result": false
  },

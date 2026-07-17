@@ -197,11 +197,11 @@ mod tests {
     #[test]
     fn nested_format_in_argument() {
         // The explicit revisit of the result rewrites the inner `.format`.
-        // Raw `ast_to_string` prefers single quotes at the outer delimiter (the
-        // real pipeline fixes this to double via `set_quote_type` in fixup).
+        // `ast_to_string` picks the outer delimiter like CPython ast.unparse:
+        // the field contains single quotes, so the outer quote is `"`.
         let (out, changed) = run(r#""Hello {}".format(d["a{}".format(key)])"#);
         assert!(changed);
-        assert_eq!(out, "f'Hello {d[f'a{key}']}'");
+        assert_eq!(out, "f\"Hello {d[f'a{key}']}\"");
     }
 
     #[test]

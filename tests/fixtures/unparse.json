@@ -60,6 +60,30 @@
   "expected": "f'prefix {x if y else z} suffix'"
  },
  {
+  "src": "f\"WHERE SEQUENCE_NAME = '{args['sq_name']}';\"",
+  "expected": "f\"WHERE SEQUENCE_NAME = '{args['sq_name']}';\""
+ },
+ {
+  "src": "f\"\\n        WHERE SEQUENCE_NAME = '{args['sq_name']}';\\n        \"",
+  "expected": "f\"\\n        WHERE SEQUENCE_NAME = '{args['sq_name']}';\\n        \""
+ },
+ {
+  "src": "f\"\"\"EXECUTE IMMEDIATE 'CREATE SEQUENCE \"{args['sq_name']}\"';\"\"\"",
+  "expected": "f'''EXECUTE IMMEDIATE 'CREATE SEQUENCE \"{args['sq_name']}\"';'''"
+ },
+ {
+  "src": "f'{d[\"k\"]} said \"hi\"'",
+  "expected": "f'''{d['k']} said \"hi\"'''"
+ },
+ {
+  "src": "f'x\\'\\'\\'y{v}z\"'",
+  "expected": "f\"\"\"x'''y{v}z\\\"\"\"\""
+ },
+ {
+  "src": "f'a\\'\\'\\'b\"\"\"c{v}'",
+  "expected": "f'a\\'\\'\\'b\"\"\"c{v}'"
+ },
+ {
   "src": "f'{a + b}'",
   "expected": "f'{a + b}'"
  },

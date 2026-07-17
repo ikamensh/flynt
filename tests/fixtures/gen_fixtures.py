@@ -119,6 +119,22 @@ def expr_sources():
         "f'{a if b else c}'",
         "f'{(a if b else c)}'",
         "f'prefix {x if y else z} suffix'",
+        # Delimiter selection (CPython visit_JoinedStr avoid-escape preference).
+        # Minimized from the django oracle/operations.py regression: literal
+        # parts with single quotes must force a `"` delimiter with NO `\'`
+        # escapes in the body.
+        "f\"WHERE SEQUENCE_NAME = '{args['sq_name']}';\"",
+        "f\"\\n        WHERE SEQUENCE_NAME = '{args['sq_name']}';\\n        \"",
+        # Literal parts with BOTH quote chars -> triple-double delimiter with
+        # bare quotes in the body (oracle line 64 shape).
+        'f"""EXECUTE IMMEDIATE \'CREATE SEQUENCE "{args[\'sq_name\']}"\';"""',
+        # Double quote in literal, single quote in the field -> triple-double.
+        "f'{d[\"k\"]} said \"hi\"'",
+        # Constant narrows to triple candidates, next constant ends with the
+        # delimiter char -> trailing-quote escape rule.
+        "f'x\\'\\'\\'y{v}z\"'",
+        # Constant containing both triple-quote runs -> per-part repr fallback.
+        "f'a\\'\\'\\'b\"\"\"c{v}'",
         # lambda / yield-ish and other precedence cases
         "f'{a + b}'", "f'{a * b + c}'", "f'{-x}'",
         "f'{func(a, b, c)}'",
