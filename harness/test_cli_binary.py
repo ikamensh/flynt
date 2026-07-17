@@ -37,7 +37,7 @@ invalid_snippets = [
 
 def run_cli(args, stdin=None):
     return subprocess.run(
-        [str(BINARY), *args], input=stdin, capture_output=True, text=True
+        [str(BINARY), *args], input=stdin, capture_output=True, text=True, encoding="utf-8"
     )
 
 
@@ -94,8 +94,8 @@ def test_cli_stdin(code_in, code_out):
 def test_cli_dry_run(sample_file, tmp_path):
     source_path = INT_DIR / "samples_in" / sample_file
     expected_path = INT_DIR / "expected_out" / sample_file
-    source_lines = source_path.read_text().splitlines(keepends=True)
-    converted_lines = expected_path.read_text().splitlines(keepends=True)
+    source_lines = source_path.read_text(encoding="utf-8").splitlines(keepends=True)
+    converted_lines = expected_path.read_text(encoding="utf-8").splitlines(keepends=True)
     work = tmp_path / sample_file
     shutil.copy2(source_path, work)
 
@@ -108,7 +108,7 @@ def test_cli_dry_run(sample_file, tmp_path):
         if line not in source_lines:
             assert f"+{line.strip()}" in p.stdout, "Converted source line missing"
     assert p.stderr == ""
-    assert work.read_text() == source_path.read_text(), "dry-run must not modify"
+    assert work.read_text(encoding="utf-8") == source_path.read_text(encoding="utf-8"), "dry-run must not modify"
 
 
 @pytest.mark.parametrize(
@@ -118,7 +118,7 @@ def test_cli_dry_run(sample_file, tmp_path):
 def test_cli_stdout(sample_file):
     source_path = INT_DIR / "samples_in" / sample_file
     expected_path = INT_DIR / "expected_out" / sample_file
-    expected_lines = [l.rstrip() for l in expected_path.read_text().splitlines()]
+    expected_lines = [l.rstrip() for l in expected_path.read_text(encoding="utf-8").splitlines()]
 
     p = run_cli(["--stdout", str(source_path)])
     assert p.returncode == 0
@@ -164,19 +164,19 @@ def test_works(tmp_path):
     src = INT_DIR / "samples_in" / "first_string.py"
     work = tmp_path / "input.py"
     shutil.copy2(src, work)
-    before = work.read_text()
+    before = work.read_text(encoding="utf-8")
     p = run_cli([*STATE_ARGS, str(work)])
     assert p.returncode == 0
-    assert work.read_text() != before
+    assert work.read_text(encoding="utf-8") != before
 
 
 def test_dry_run_leaves_file(tmp_path):
     src = INT_DIR / "samples_in" / "first_string.py"
     work = tmp_path / "input.py"
     shutil.copy2(src, work)
-    before = work.read_text()
+    before = work.read_text(encoding="utf-8")
     run_cli([*STATE_ARGS, "--dry-run", str(work)])
-    assert work.read_text() == before
+    assert work.read_text(encoding="utf-8") == before
 
 
 def test_mixed_line_endings(tmp_path):
@@ -217,7 +217,7 @@ def test_sample_notebook(tmp_path):
     shutil.copy2(src, work)
     p = run_cli(["-nb", str(work)])
     assert p.returncode == 0
-    assert json.loads(work.read_text()) == json.loads(expected.read_text())
+    assert json.loads(work.read_text(encoding="utf-8")) == json.loads(expected.read_text(encoding="utf-8"))
 
 
 def test_notebook_ignored_without_flag(tmp_path):

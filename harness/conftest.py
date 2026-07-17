@@ -33,6 +33,7 @@ def run_pipeline(code: str, pipeline: str = "fstring", **state):
         input=json.dumps(req),
         capture_output=True,
         text=True,
+        encoding="utf-8",
     )
     assert proc.returncode == 0, f"binary failed: {proc.stderr}"
     resp = json.loads(proc.stdout)
@@ -44,8 +45,8 @@ def golden(filename: str, suffix: str = "", out_suffix: str = ""):
     returns (input_text, expected_text)."""
     if not out_suffix:
         out_suffix = suffix
-    txt_in = (INT_DIR / f"samples_in{suffix}" / filename).read_text()
+    txt_in = (INT_DIR / f"samples_in{suffix}" / filename).read_text(encoding="utf-8")
     ex_path = INT_DIR / f"expected_out{out_suffix}" / filename
     if not ex_path.exists() and out_suffix:
         ex_path = INT_DIR / "expected_out" / filename
-    return txt_in, ex_path.read_text()
+    return txt_in, ex_path.read_text(encoding="utf-8")
