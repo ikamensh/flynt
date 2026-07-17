@@ -1,0 +1,2852 @@
+[
+ {
+  "src": "f'{x!r}'",
+  "quote_type": "single",
+  "result": "f'{x!r}'"
+ },
+ {
+  "src": "f'{x!r}'",
+  "quote_type": "double",
+  "result": "f\"{x!r}\""
+ },
+ {
+  "src": "f'{x!r}'",
+  "quote_type": "triple_single",
+  "result": "f'''{x!r}'''"
+ },
+ {
+  "src": "f'{x!r}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{x!r}\"\"\""
+ },
+ {
+  "src": "f'{x!r}'",
+  "quote_type": null,
+  "result": "f\"{x!r}\""
+ },
+ {
+  "src": "f'{x!s}'",
+  "quote_type": "single",
+  "result": "f'{x!s}'"
+ },
+ {
+  "src": "f'{x!s}'",
+  "quote_type": "double",
+  "result": "f\"{x!s}\""
+ },
+ {
+  "src": "f'{x!s}'",
+  "quote_type": "triple_single",
+  "result": "f'''{x!s}'''"
+ },
+ {
+  "src": "f'{x!s}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{x!s}\"\"\""
+ },
+ {
+  "src": "f'{x!s}'",
+  "quote_type": null,
+  "result": "f\"{x!s}\""
+ },
+ {
+  "src": "f'{x!a}'",
+  "quote_type": "single",
+  "result": "f'{x!a}'"
+ },
+ {
+  "src": "f'{x!a}'",
+  "quote_type": "double",
+  "result": "f\"{x!a}\""
+ },
+ {
+  "src": "f'{x!a}'",
+  "quote_type": "triple_single",
+  "result": "f'''{x!a}'''"
+ },
+ {
+  "src": "f'{x!a}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{x!a}\"\"\""
+ },
+ {
+  "src": "f'{x!a}'",
+  "quote_type": null,
+  "result": "f\"{x!a}\""
+ },
+ {
+  "src": "f'{str(x)}'",
+  "quote_type": "single",
+  "result": "f'{str(x)}'"
+ },
+ {
+  "src": "f'{str(x)}'",
+  "quote_type": "double",
+  "result": "f\"{str(x)}\""
+ },
+ {
+  "src": "f'{str(x)}'",
+  "quote_type": "triple_single",
+  "result": "f'''{str(x)}'''"
+ },
+ {
+  "src": "f'{str(x)}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{str(x)}\"\"\""
+ },
+ {
+  "src": "f'{str(x)}'",
+  "quote_type": null,
+  "result": "f\"{str(x)}\""
+ },
+ {
+  "src": "f'{repr(x)}'",
+  "quote_type": "single",
+  "result": "f'{repr(x)}'"
+ },
+ {
+  "src": "f'{repr(x)}'",
+  "quote_type": "double",
+  "result": "f\"{repr(x)}\""
+ },
+ {
+  "src": "f'{repr(x)}'",
+  "quote_type": "triple_single",
+  "result": "f'''{repr(x)}'''"
+ },
+ {
+  "src": "f'{repr(x)}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{repr(x)}\"\"\""
+ },
+ {
+  "src": "f'{repr(x)}'",
+  "quote_type": null,
+  "result": "f\"{repr(x)}\""
+ },
+ {
+  "src": "f'{x:>10}'",
+  "quote_type": "single",
+  "result": "f'{x:>10}'"
+ },
+ {
+  "src": "f'{x:>10}'",
+  "quote_type": "double",
+  "result": "f\"{x:>10}\""
+ },
+ {
+  "src": "f'{x:>10}'",
+  "quote_type": "triple_single",
+  "result": "f'''{x:>10}'''"
+ },
+ {
+  "src": "f'{x:>10}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{x:>10}\"\"\""
+ },
+ {
+  "src": "f'{x:>10}'",
+  "quote_type": null,
+  "result": "f\"{x:>10}\""
+ },
+ {
+  "src": "f'{x:.03f}'",
+  "quote_type": "single",
+  "result": "f'{x:.03f}'"
+ },
+ {
+  "src": "f'{x:.03f}'",
+  "quote_type": "double",
+  "result": "f\"{x:.03f}\""
+ },
+ {
+  "src": "f'{x:.03f}'",
+  "quote_type": "triple_single",
+  "result": "f'''{x:.03f}'''"
+ },
+ {
+  "src": "f'{x:.03f}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{x:.03f}\"\"\""
+ },
+ {
+  "src": "f'{x:.03f}'",
+  "quote_type": null,
+  "result": "f\"{x:.03f}\""
+ },
+ {
+  "src": "f'{x:{width}}'",
+  "quote_type": "single",
+  "result": "f'{x:{width}}'"
+ },
+ {
+  "src": "f'{x:{width}}'",
+  "quote_type": "double",
+  "result": "f\"{x:{width}}\""
+ },
+ {
+  "src": "f'{x:{width}}'",
+  "quote_type": "triple_single",
+  "result": "f'''{x:{width}}'''"
+ },
+ {
+  "src": "f'{x:{width}}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{x:{width}}\"\"\""
+ },
+ {
+  "src": "f'{x:{width}}'",
+  "quote_type": null,
+  "result": "f\"{x:{width}}\""
+ },
+ {
+  "src": "f'{x:{width}.{prec}f}'",
+  "quote_type": "single",
+  "result": "f'{x:{width}.{prec}f}'"
+ },
+ {
+  "src": "f'{x:{width}.{prec}f}'",
+  "quote_type": "double",
+  "result": "f\"{x:{width}.{prec}f}\""
+ },
+ {
+  "src": "f'{x:{width}.{prec}f}'",
+  "quote_type": "triple_single",
+  "result": "f'''{x:{width}.{prec}f}'''"
+ },
+ {
+  "src": "f'{x:{width}.{prec}f}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{x:{width}.{prec}f}\"\"\""
+ },
+ {
+  "src": "f'{x:{width}.{prec}f}'",
+  "quote_type": null,
+  "result": "f\"{x:{width}.{prec}f}\""
+ },
+ {
+  "src": "f\"{d['a']}\"",
+  "quote_type": "single",
+  "result": "f'{d[\\'a\\']}'"
+ },
+ {
+  "src": "f\"{d['a']}\"",
+  "quote_type": "double",
+  "result": "f\"{d['a']}\""
+ },
+ {
+  "src": "f\"{d['a']}\"",
+  "quote_type": "triple_single",
+  "result": "f'''{d['a']}'''"
+ },
+ {
+  "src": "f\"{d['a']}\"",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{d['a']}\"\"\""
+ },
+ {
+  "src": "f\"{d['a']}\"",
+  "quote_type": null,
+  "result": "f\"{d['a']}\""
+ },
+ {
+  "src": "f'{ {1, 2} }'",
+  "quote_type": "single",
+  "result": "f'{ {1, 2}}'"
+ },
+ {
+  "src": "f'{ {1, 2} }'",
+  "quote_type": "double",
+  "result": "f\"{ {1, 2}}\""
+ },
+ {
+  "src": "f'{ {1, 2} }'",
+  "quote_type": "triple_single",
+  "result": "f'''{ {1, 2}}'''"
+ },
+ {
+  "src": "f'{ {1, 2} }'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{ {1, 2}}\"\"\""
+ },
+ {
+  "src": "f'{ {1, 2} }'",
+  "quote_type": null,
+  "result": "f\"{ {1, 2}}\""
+ },
+ {
+  "src": "f'{a if b else c}'",
+  "quote_type": "single",
+  "result": "f'{a if b else c}'"
+ },
+ {
+  "src": "f'{a if b else c}'",
+  "quote_type": "double",
+  "result": "f\"{a if b else c}\""
+ },
+ {
+  "src": "f'{a if b else c}'",
+  "quote_type": "triple_single",
+  "result": "f'''{a if b else c}'''"
+ },
+ {
+  "src": "f'{a if b else c}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{a if b else c}\"\"\""
+ },
+ {
+  "src": "f'{a if b else c}'",
+  "quote_type": null,
+  "result": "f\"{a if b else c}\""
+ },
+ {
+  "src": "f'{(a if b else c)}'",
+  "quote_type": "single",
+  "result": "f'{a if b else c}'"
+ },
+ {
+  "src": "f'{(a if b else c)}'",
+  "quote_type": "double",
+  "result": "f\"{a if b else c}\""
+ },
+ {
+  "src": "f'{(a if b else c)}'",
+  "quote_type": "triple_single",
+  "result": "f'''{a if b else c}'''"
+ },
+ {
+  "src": "f'{(a if b else c)}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{a if b else c}\"\"\""
+ },
+ {
+  "src": "f'{(a if b else c)}'",
+  "quote_type": null,
+  "result": "f\"{a if b else c}\""
+ },
+ {
+  "src": "f'prefix {x if y else z} suffix'",
+  "quote_type": "single",
+  "result": "f'prefix {x if y else z} suffix'"
+ },
+ {
+  "src": "f'prefix {x if y else z} suffix'",
+  "quote_type": "double",
+  "result": "f\"prefix {x if y else z} suffix\""
+ },
+ {
+  "src": "f'prefix {x if y else z} suffix'",
+  "quote_type": "triple_single",
+  "result": "f'''prefix {x if y else z} suffix'''"
+ },
+ {
+  "src": "f'prefix {x if y else z} suffix'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"prefix {x if y else z} suffix\"\"\""
+ },
+ {
+  "src": "f'prefix {x if y else z} suffix'",
+  "quote_type": null,
+  "result": "f\"prefix {x if y else z} suffix\""
+ },
+ {
+  "src": "f\"WHERE SEQUENCE_NAME = '{args['sq_name']}';\"",
+  "quote_type": "single",
+  "result": "f'WHERE SEQUENCE_NAME = \\'{args[\\'sq_name\\']}\\';'"
+ },
+ {
+  "src": "f\"WHERE SEQUENCE_NAME = '{args['sq_name']}';\"",
+  "quote_type": "double",
+  "result": "f\"WHERE SEQUENCE_NAME = '{args['sq_name']}';\""
+ },
+ {
+  "src": "f\"WHERE SEQUENCE_NAME = '{args['sq_name']}';\"",
+  "quote_type": "triple_single",
+  "result": "f'''WHERE SEQUENCE_NAME = '{args['sq_name']}';'''"
+ },
+ {
+  "src": "f\"WHERE SEQUENCE_NAME = '{args['sq_name']}';\"",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"WHERE SEQUENCE_NAME = '{args['sq_name']}';\"\"\""
+ },
+ {
+  "src": "f\"WHERE SEQUENCE_NAME = '{args['sq_name']}';\"",
+  "quote_type": null,
+  "result": "f\"WHERE SEQUENCE_NAME = '{args['sq_name']}';\""
+ },
+ {
+  "src": "f\"\\n        WHERE SEQUENCE_NAME = '{args['sq_name']}';\\n        \"",
+  "quote_type": "single",
+  "result": "f'\\n        WHERE SEQUENCE_NAME = \\'{args[\\'sq_name\\']}\\';\\n        '"
+ },
+ {
+  "src": "f\"\\n        WHERE SEQUENCE_NAME = '{args['sq_name']}';\\n        \"",
+  "quote_type": "double",
+  "result": "f\"\\n        WHERE SEQUENCE_NAME = '{args['sq_name']}';\\n        \""
+ },
+ {
+  "src": "f\"\\n        WHERE SEQUENCE_NAME = '{args['sq_name']}';\\n        \"",
+  "quote_type": "triple_single",
+  "result": "f'''\\n        WHERE SEQUENCE_NAME = '{args['sq_name']}';\\n        '''"
+ },
+ {
+  "src": "f\"\\n        WHERE SEQUENCE_NAME = '{args['sq_name']}';\\n        \"",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"\\n        WHERE SEQUENCE_NAME = '{args['sq_name']}';\\n        \"\"\""
+ },
+ {
+  "src": "f\"\\n        WHERE SEQUENCE_NAME = '{args['sq_name']}';\\n        \"",
+  "quote_type": null,
+  "result": "f\"\\n        WHERE SEQUENCE_NAME = '{args['sq_name']}';\\n        \""
+ },
+ {
+  "src": "f\"\"\"EXECUTE IMMEDIATE 'CREATE SEQUENCE \"{args['sq_name']}\"';\"\"\"",
+  "quote_type": "single",
+  "result": "f'EXECUTE IMMEDIATE \\'CREATE SEQUENCE \"{args[\\'sq_name\\']}\"\\';'"
+ },
+ {
+  "src": "f\"\"\"EXECUTE IMMEDIATE 'CREATE SEQUENCE \"{args['sq_name']}\"';\"\"\"",
+  "quote_type": "double",
+  "result": "f\"EXECUTE IMMEDIATE 'CREATE SEQUENCE \\\"{args['sq_name']}\\\"';\""
+ },
+ {
+  "src": "f\"\"\"EXECUTE IMMEDIATE 'CREATE SEQUENCE \"{args['sq_name']}\"';\"\"\"",
+  "quote_type": "triple_single",
+  "result": "f'''EXECUTE IMMEDIATE 'CREATE SEQUENCE \"{args['sq_name']}\"';'''"
+ },
+ {
+  "src": "f\"\"\"EXECUTE IMMEDIATE 'CREATE SEQUENCE \"{args['sq_name']}\"';\"\"\"",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"EXECUTE IMMEDIATE 'CREATE SEQUENCE \"{args['sq_name']}\"';\"\"\""
+ },
+ {
+  "src": "f\"\"\"EXECUTE IMMEDIATE 'CREATE SEQUENCE \"{args['sq_name']}\"';\"\"\"",
+  "quote_type": null,
+  "result": "f\"EXECUTE IMMEDIATE 'CREATE SEQUENCE \\\"{args['sq_name']}\\\"';\""
+ },
+ {
+  "src": "f'{d[\"k\"]} said \"hi\"'",
+  "quote_type": "single",
+  "result": "f'{d[\\'k\\']} said \"hi\"'"
+ },
+ {
+  "src": "f'{d[\"k\"]} said \"hi\"'",
+  "quote_type": "double",
+  "result": "f\"{d['k']} said \\\"hi\\\"\""
+ },
+ {
+  "src": "f'{d[\"k\"]} said \"hi\"'",
+  "quote_type": "triple_single",
+  "result": "f'''{d['k']} said \"hi\"'''"
+ },
+ {
+  "src": "f'{d[\"k\"]} said \"hi\"'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{d['k']} said \"hi\"\"\"\""
+ },
+ {
+  "src": "f'{d[\"k\"]} said \"hi\"'",
+  "quote_type": null,
+  "result": "f\"{d['k']} said \\\"hi\\\"\""
+ },
+ {
+  "src": "f'x\\'\\'\\'y{v}z\"'",
+  "quote_type": "single",
+  "result": "f'x\\'\\'\\'y{v}z\"'"
+ },
+ {
+  "src": "f'x\\'\\'\\'y{v}z\"'",
+  "quote_type": "double",
+  "result": "f\"x'''y{v}z\\\"\""
+ },
+ {
+  "src": "f'x\\'\\'\\'y{v}z\"'",
+  "quote_type": "triple_single",
+  "result": "f'''x'''y{v}z\\\"'''"
+ },
+ {
+  "src": "f'x\\'\\'\\'y{v}z\"'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"x'''y{v}z\"\"\"\""
+ },
+ {
+  "src": "f'x\\'\\'\\'y{v}z\"'",
+  "quote_type": null,
+  "result": "f\"x'''y{v}z\\\"\""
+ },
+ {
+  "src": "f'a\\'\\'\\'b\"\"\"c{v}'",
+  "quote_type": "single",
+  "result": "f'a\\'\\'\\'b\"\"\"c{v}'"
+ },
+ {
+  "src": "f'a\\'\\'\\'b\"\"\"c{v}'",
+  "quote_type": "double",
+  "result": "f\"a\\'\\'\\'b\\\"\\\"\\\"c{v}\""
+ },
+ {
+  "src": "f'a\\'\\'\\'b\"\"\"c{v}'",
+  "quote_type": "triple_single",
+  "result": "f'''a\\'\\'\\'b\"\"\"c{v}'''"
+ },
+ {
+  "src": "f'a\\'\\'\\'b\"\"\"c{v}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"a\\'\\'\\'b\"\"\"c{v}\"\"\""
+ },
+ {
+  "src": "f'a\\'\\'\\'b\"\"\"c{v}'",
+  "quote_type": null,
+  "result": "f\"a\\'\\'\\'b\\\"\\\"\\\"c{v}\""
+ },
+ {
+  "src": "f'{a + b}'",
+  "quote_type": "single",
+  "result": "f'{a + b}'"
+ },
+ {
+  "src": "f'{a + b}'",
+  "quote_type": "double",
+  "result": "f\"{a + b}\""
+ },
+ {
+  "src": "f'{a + b}'",
+  "quote_type": "triple_single",
+  "result": "f'''{a + b}'''"
+ },
+ {
+  "src": "f'{a + b}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{a + b}\"\"\""
+ },
+ {
+  "src": "f'{a + b}'",
+  "quote_type": null,
+  "result": "f\"{a + b}\""
+ },
+ {
+  "src": "f'{a * b + c}'",
+  "quote_type": "single",
+  "result": "f'{a * b + c}'"
+ },
+ {
+  "src": "f'{a * b + c}'",
+  "quote_type": "double",
+  "result": "f\"{a * b + c}\""
+ },
+ {
+  "src": "f'{a * b + c}'",
+  "quote_type": "triple_single",
+  "result": "f'''{a * b + c}'''"
+ },
+ {
+  "src": "f'{a * b + c}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{a * b + c}\"\"\""
+ },
+ {
+  "src": "f'{a * b + c}'",
+  "quote_type": null,
+  "result": "f\"{a * b + c}\""
+ },
+ {
+  "src": "f'{-x}'",
+  "quote_type": "single",
+  "result": "f'{-x}'"
+ },
+ {
+  "src": "f'{-x}'",
+  "quote_type": "double",
+  "result": "f\"{-x}\""
+ },
+ {
+  "src": "f'{-x}'",
+  "quote_type": "triple_single",
+  "result": "f'''{-x}'''"
+ },
+ {
+  "src": "f'{-x}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{-x}\"\"\""
+ },
+ {
+  "src": "f'{-x}'",
+  "quote_type": null,
+  "result": "f\"{-x}\""
+ },
+ {
+  "src": "f'{func(a, b, c)}'",
+  "quote_type": "single",
+  "result": "f'{func(a, b, c)}'"
+ },
+ {
+  "src": "f'{func(a, b, c)}'",
+  "quote_type": "double",
+  "result": "f\"{func(a, b, c)}\""
+ },
+ {
+  "src": "f'{func(a, b, c)}'",
+  "quote_type": "triple_single",
+  "result": "f'''{func(a, b, c)}'''"
+ },
+ {
+  "src": "f'{func(a, b, c)}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{func(a, b, c)}\"\"\""
+ },
+ {
+  "src": "f'{func(a, b, c)}'",
+  "quote_type": null,
+  "result": "f\"{func(a, b, c)}\""
+ },
+ {
+  "src": "f'{obj.attr.method()}'",
+  "quote_type": "single",
+  "result": "f'{obj.attr.method()}'"
+ },
+ {
+  "src": "f'{obj.attr.method()}'",
+  "quote_type": "double",
+  "result": "f\"{obj.attr.method()}\""
+ },
+ {
+  "src": "f'{obj.attr.method()}'",
+  "quote_type": "triple_single",
+  "result": "f'''{obj.attr.method()}'''"
+ },
+ {
+  "src": "f'{obj.attr.method()}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{obj.attr.method()}\"\"\""
+ },
+ {
+  "src": "f'{obj.attr.method()}'",
+  "quote_type": null,
+  "result": "f\"{obj.attr.method()}\""
+ },
+ {
+  "src": "f'{d[0]}'",
+  "quote_type": "single",
+  "result": "f'{d[0]}'"
+ },
+ {
+  "src": "f'{d[0]}'",
+  "quote_type": "double",
+  "result": "f\"{d[0]}\""
+ },
+ {
+  "src": "f'{d[0]}'",
+  "quote_type": "triple_single",
+  "result": "f'''{d[0]}'''"
+ },
+ {
+  "src": "f'{d[0]}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{d[0]}\"\"\""
+ },
+ {
+  "src": "f'{d[0]}'",
+  "quote_type": null,
+  "result": "f\"{d[0]}\""
+ },
+ {
+  "src": "f'{x}{y}{z}'",
+  "quote_type": "single",
+  "result": "f'{x}{y}{z}'"
+ },
+ {
+  "src": "f'{x}{y}{z}'",
+  "quote_type": "double",
+  "result": "f\"{x}{y}{z}\""
+ },
+ {
+  "src": "f'{x}{y}{z}'",
+  "quote_type": "triple_single",
+  "result": "f'''{x}{y}{z}'''"
+ },
+ {
+  "src": "f'{x}{y}{z}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{x}{y}{z}\"\"\""
+ },
+ {
+  "src": "f'{x}{y}{z}'",
+  "quote_type": null,
+  "result": "f\"{x}{y}{z}\""
+ },
+ {
+  "src": "f'{ {\"k\": v} }'",
+  "quote_type": "single",
+  "result": "f'{ {\\'k\\': v}}'"
+ },
+ {
+  "src": "f'{ {\"k\": v} }'",
+  "quote_type": "double",
+  "result": "f\"{ {'k': v}}\""
+ },
+ {
+  "src": "f'{ {\"k\": v} }'",
+  "quote_type": "triple_single",
+  "result": "f'''{ {'k': v}}'''"
+ },
+ {
+  "src": "f'{ {\"k\": v} }'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{ {'k': v}}\"\"\""
+ },
+ {
+  "src": "f'{ {\"k\": v} }'",
+  "quote_type": null,
+  "result": "f\"{ {'k': v}}\""
+ },
+ {
+  "src": "f'{{literal}}'",
+  "quote_type": "single",
+  "result": "f'{{literal}}'"
+ },
+ {
+  "src": "f'{{literal}}'",
+  "quote_type": "double",
+  "result": "f\"{{literal}}\""
+ },
+ {
+  "src": "f'{{literal}}'",
+  "quote_type": "triple_single",
+  "result": "f'''{{literal}}'''"
+ },
+ {
+  "src": "f'{{literal}}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{{literal}}\"\"\""
+ },
+ {
+  "src": "f'{{literal}}'",
+  "quote_type": null,
+  "result": "f\"{{literal}}\""
+ },
+ {
+  "src": "f'{x}%'",
+  "quote_type": "single",
+  "result": "f'{x}%'"
+ },
+ {
+  "src": "f'{x}%'",
+  "quote_type": "double",
+  "result": "f\"{x}%\""
+ },
+ {
+  "src": "f'{x}%'",
+  "quote_type": "triple_single",
+  "result": "f'''{x}%'''"
+ },
+ {
+  "src": "f'{x}%'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{x}%\"\"\""
+ },
+ {
+  "src": "f'{x}%'",
+  "quote_type": null,
+  "result": "f\"{x}%\""
+ },
+ {
+  "src": "f'°{x}°'",
+  "quote_type": "single",
+  "result": "f'°{x}°'"
+ },
+ {
+  "src": "f'°{x}°'",
+  "quote_type": "double",
+  "result": "f\"°{x}°\""
+ },
+ {
+  "src": "f'°{x}°'",
+  "quote_type": "triple_single",
+  "result": "f'''°{x}°'''"
+ },
+ {
+  "src": "f'°{x}°'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"°{x}°\"\"\""
+ },
+ {
+  "src": "f'°{x}°'",
+  "quote_type": null,
+  "result": "f\"°{x}°\""
+ },
+ {
+  "src": "f'{a} hello'",
+  "quote_type": "single",
+  "result": "f'{a} hello'"
+ },
+ {
+  "src": "f'{a} hello'",
+  "quote_type": "double",
+  "result": "f\"{a} hello\""
+ },
+ {
+  "src": "f'{a} hello'",
+  "quote_type": "triple_single",
+  "result": "f'''{a} hello'''"
+ },
+ {
+  "src": "f'{a} hello'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{a} hello\"\"\""
+ },
+ {
+  "src": "f'{a} hello'",
+  "quote_type": null,
+  "result": "f\"{a} hello\""
+ },
+ {
+  "src": "f'Need more {self.missing} to activate {self.active}'",
+  "quote_type": "single",
+  "result": "f'Need more {self.missing} to activate {self.active}'"
+ },
+ {
+  "src": "f'Need more {self.missing} to activate {self.active}'",
+  "quote_type": "double",
+  "result": "f\"Need more {self.missing} to activate {self.active}\""
+ },
+ {
+  "src": "f'Need more {self.missing} to activate {self.active}'",
+  "quote_type": "triple_single",
+  "result": "f'''Need more {self.missing} to activate {self.active}'''"
+ },
+ {
+  "src": "f'Need more {self.missing} to activate {self.active}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"Need more {self.missing} to activate {self.active}\"\"\""
+ },
+ {
+  "src": "f'Need more {self.missing} to activate {self.active}'",
+  "quote_type": null,
+  "result": "f\"Need more {self.missing} to activate {self.active}\""
+ },
+ {
+  "src": "f'my string {var}, but also {f} and {cada_bra}'",
+  "quote_type": "single",
+  "result": "f'my string {var}, but also {f} and {cada_bra}'"
+ },
+ {
+  "src": "f'my string {var}, but also {f} and {cada_bra}'",
+  "quote_type": "double",
+  "result": "f\"my string {var}, but also {f} and {cada_bra}\""
+ },
+ {
+  "src": "f'my string {var}, but also {f} and {cada_bra}'",
+  "quote_type": "triple_single",
+  "result": "f'''my string {var}, but also {f} and {cada_bra}'''"
+ },
+ {
+  "src": "f'my string {var}, but also {f} and {cada_bra}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"my string {var}, but also {f} and {cada_bra}\"\"\""
+ },
+ {
+  "src": "f'my string {var}, but also {f} and {cada_bra}'",
+  "quote_type": null,
+  "result": "f\"my string {var}, but also {f} and {cada_bra}\""
+ },
+ {
+  "src": "f'{{}}my string {var:.2f}{{}}'",
+  "quote_type": "single",
+  "result": "f'{{}}my string {var:.2f}{{}}'"
+ },
+ {
+  "src": "f'{{}}my string {var:.2f}{{}}'",
+  "quote_type": "double",
+  "result": "f\"{{}}my string {var:.2f}{{}}\""
+ },
+ {
+  "src": "f'{{}}my string {var:.2f}{{}}'",
+  "quote_type": "triple_single",
+  "result": "f'''{{}}my string {var:.2f}{{}}'''"
+ },
+ {
+  "src": "f'{{}}my string {var:.2f}{{}}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{{}}my string {var:.2f}{{}}\"\"\""
+ },
+ {
+  "src": "f'{{}}my string {var:.2f}{{}}'",
+  "quote_type": null,
+  "result": "f\"{{}}my string {var:.2f}{{}}\""
+ },
+ {
+  "src": "f'.2f'",
+  "quote_type": "single",
+  "result": "f'.2f'"
+ },
+ {
+  "src": "f'.2f'",
+  "quote_type": "double",
+  "result": "f\".2f\""
+ },
+ {
+  "src": "f'.2f'",
+  "quote_type": "triple_single",
+  "result": "f'''.2f'''"
+ },
+ {
+  "src": "f'.2f'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\".2f\"\"\""
+ },
+ {
+  "src": "f'.2f'",
+  "quote_type": null,
+  "result": "f\".2f\""
+ },
+ {
+  "src": "f'{row_idx}'",
+  "quote_type": "single",
+  "result": "f'{row_idx}'"
+ },
+ {
+  "src": "f'{row_idx}'",
+  "quote_type": "double",
+  "result": "f\"{row_idx}\""
+ },
+ {
+  "src": "f'{row_idx}'",
+  "quote_type": "triple_single",
+  "result": "f'''{row_idx}'''"
+ },
+ {
+  "src": "f'{row_idx}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{row_idx}\"\"\""
+ },
+ {
+  "src": "f'{row_idx}'",
+  "quote_type": null,
+  "result": "f\"{row_idx}\""
+ },
+ {
+  "src": "f'{test} ({datetime.datetime.now():%B %d, %Y})'",
+  "quote_type": "single",
+  "result": "f'{test} ({datetime.datetime.now():%B %d, %Y})'"
+ },
+ {
+  "src": "f'{test} ({datetime.datetime.now():%B %d, %Y})'",
+  "quote_type": "double",
+  "result": "f\"{test} ({datetime.datetime.now():%B %d, %Y})\""
+ },
+ {
+  "src": "f'{test} ({datetime.datetime.now():%B %d, %Y})'",
+  "quote_type": "triple_single",
+  "result": "f'''{test} ({datetime.datetime.now():%B %d, %Y})'''"
+ },
+ {
+  "src": "f'{test} ({datetime.datetime.now():%B %d, %Y})'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{test} ({datetime.datetime.now():%B %d, %Y})\"\"\""
+ },
+ {
+  "src": "f'{test} ({datetime.datetime.now():%B %d, %Y})'",
+  "quote_type": null,
+  "result": "f\"{test} ({datetime.datetime.now():%B %d, %Y})\""
+ },
+ {
+  "src": "f'%B %d, %Y'",
+  "quote_type": "single",
+  "result": "f'%B %d, %Y'"
+ },
+ {
+  "src": "f'%B %d, %Y'",
+  "quote_type": "double",
+  "result": "f\"%B %d, %Y\""
+ },
+ {
+  "src": "f'%B %d, %Y'",
+  "quote_type": "triple_single",
+  "result": "f'''%B %d, %Y'''"
+ },
+ {
+  "src": "f'%B %d, %Y'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"%B %d, %Y\"\"\""
+ },
+ {
+  "src": "f'%B %d, %Y'",
+  "quote_type": null,
+  "result": "f\"%B %d, %Y\""
+ },
+ {
+  "src": "f'Search: finished in {vm.search_time_elapsed_ms:,} ms.'",
+  "quote_type": "single",
+  "result": "f'Search: finished in {vm.search_time_elapsed_ms:,} ms.'"
+ },
+ {
+  "src": "f'Search: finished in {vm.search_time_elapsed_ms:,} ms.'",
+  "quote_type": "double",
+  "result": "f\"Search: finished in {vm.search_time_elapsed_ms:,} ms.\""
+ },
+ {
+  "src": "f'Search: finished in {vm.search_time_elapsed_ms:,} ms.'",
+  "quote_type": "triple_single",
+  "result": "f'''Search: finished in {vm.search_time_elapsed_ms:,} ms.'''"
+ },
+ {
+  "src": "f'Search: finished in {vm.search_time_elapsed_ms:,} ms.'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"Search: finished in {vm.search_time_elapsed_ms:,} ms.\"\"\""
+ },
+ {
+  "src": "f'Search: finished in {vm.search_time_elapsed_ms:,} ms.'",
+  "quote_type": null,
+  "result": "f\"Search: finished in {vm.search_time_elapsed_ms:,} ms.\""
+ },
+ {
+  "src": "f','",
+  "quote_type": "single",
+  "result": "f','"
+ },
+ {
+  "src": "f','",
+  "quote_type": "double",
+  "result": "f\",\""
+ },
+ {
+  "src": "f','",
+  "quote_type": "triple_single",
+  "result": "f''','''"
+ },
+ {
+  "src": "f','",
+  "quote_type": "triple_double",
+  "result": "f\"\"\",\"\"\""
+ },
+ {
+  "src": "f','",
+  "quote_type": null,
+  "result": "f\",\""
+ },
+ {
+  "src": "f'{Bar + 1}'",
+  "quote_type": "single",
+  "result": "f'{Bar + 1}'"
+ },
+ {
+  "src": "f'{Bar + 1}'",
+  "quote_type": "double",
+  "result": "f\"{Bar + 1}\""
+ },
+ {
+  "src": "f'{Bar + 1}'",
+  "quote_type": "triple_single",
+  "result": "f'''{Bar + 1}'''"
+ },
+ {
+  "src": "f'{Bar + 1}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{Bar + 1}\"\"\""
+ },
+ {
+  "src": "f'{Bar + 1}'",
+  "quote_type": null,
+  "result": "f\"{Bar + 1}\""
+ },
+ {
+  "src": "f'{var:f}'",
+  "quote_type": "single",
+  "result": "f'{var:f}'"
+ },
+ {
+  "src": "f'{var:f}'",
+  "quote_type": "double",
+  "result": "f\"{var:f}\""
+ },
+ {
+  "src": "f'{var:f}'",
+  "quote_type": "triple_single",
+  "result": "f'''{var:f}'''"
+ },
+ {
+  "src": "f'{var:f}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{var:f}\"\"\""
+ },
+ {
+  "src": "f'{var:f}'",
+  "quote_type": null,
+  "result": "f\"{var:f}\""
+ },
+ {
+  "src": "f'{foo}'",
+  "quote_type": "single",
+  "result": "f'{foo}'"
+ },
+ {
+  "src": "f'{foo}'",
+  "quote_type": "double",
+  "result": "f\"{foo}\""
+ },
+ {
+  "src": "f'{foo}'",
+  "quote_type": "triple_single",
+  "result": "f'''{foo}'''"
+ },
+ {
+  "src": "f'{foo}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{foo}\"\"\""
+ },
+ {
+  "src": "f'{foo}'",
+  "quote_type": null,
+  "result": "f\"{foo}\""
+ },
+ {
+  "src": "f'f'",
+  "quote_type": "single",
+  "result": "f'f'"
+ },
+ {
+  "src": "f'f'",
+  "quote_type": "double",
+  "result": "f\"f\""
+ },
+ {
+  "src": "f'f'",
+  "quote_type": "triple_single",
+  "result": "f'''f'''"
+ },
+ {
+  "src": "f'f'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"f\"\"\""
+ },
+ {
+  "src": "f'f'",
+  "quote_type": null,
+  "result": "f\"f\""
+ },
+ {
+  "src": "f'=== Images[{a}]: {b} === Rest: \"{c}\"'",
+  "quote_type": "single",
+  "result": "f'=== Images[{a}]: {b} === Rest: \"{c}\"'"
+ },
+ {
+  "src": "f'=== Images[{a}]: {b} === Rest: \"{c}\"'",
+  "quote_type": "double",
+  "result": "f\"=== Images[{a}]: {b} === Rest: \\\"{c}\\\"\""
+ },
+ {
+  "src": "f'=== Images[{a}]: {b} === Rest: \"{c}\"'",
+  "quote_type": "triple_single",
+  "result": "f'''=== Images[{a}]: {b} === Rest: \"{c}\"'''"
+ },
+ {
+  "src": "f'=== Images[{a}]: {b} === Rest: \"{c}\"'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"=== Images[{a}]: {b} === Rest: \"{c}\"\"\"\""
+ },
+ {
+  "src": "f'=== Images[{a}]: {b} === Rest: \"{c}\"'",
+  "quote_type": null,
+  "result": "f\"=== Images[{a}]: {b} === Rest: \\\"{c}\\\"\""
+ },
+ {
+  "src": "f'    some {arg}\\n'",
+  "quote_type": "single",
+  "result": "f'    some {arg}\\n'"
+ },
+ {
+  "src": "f'    some {arg}\\n'",
+  "quote_type": "double",
+  "result": "f\"    some {arg}\\n\""
+ },
+ {
+  "src": "f'    some {arg}\\n'",
+  "quote_type": "triple_single",
+  "result": "f'''    some {arg}\\n'''"
+ },
+ {
+  "src": "f'    some {arg}\\n'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"    some {arg}\\n\"\"\""
+ },
+ {
+  "src": "f'    some {arg}\\n'",
+  "quote_type": null,
+  "result": "f\"    some {arg}\\n\""
+ },
+ {
+  "src": "f'            some {arg}\\n'",
+  "quote_type": "single",
+  "result": "f'            some {arg}\\n'"
+ },
+ {
+  "src": "f'            some {arg}\\n'",
+  "quote_type": "double",
+  "result": "f\"            some {arg}\\n\""
+ },
+ {
+  "src": "f'            some {arg}\\n'",
+  "quote_type": "triple_single",
+  "result": "f'''            some {arg}\\n'''"
+ },
+ {
+  "src": "f'            some {arg}\\n'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"            some {arg}\\n\"\"\""
+ },
+ {
+  "src": "f'            some {arg}\\n'",
+  "quote_type": null,
+  "result": "f\"            some {arg}\\n\""
+ },
+ {
+  "src": "f'                some {arg}\\n        lorem ipsum\\n        '",
+  "quote_type": "single",
+  "result": "f'                some {arg}\\n        lorem ipsum\\n        '"
+ },
+ {
+  "src": "f'                some {arg}\\n        lorem ipsum\\n        '",
+  "quote_type": "double",
+  "result": "f\"                some {arg}\\n        lorem ipsum\\n        \""
+ },
+ {
+  "src": "f'                some {arg}\\n        lorem ipsum\\n        '",
+  "quote_type": "triple_single",
+  "result": "f'''                some {arg}\\n        lorem ipsum\\n        '''"
+ },
+ {
+  "src": "f'                some {arg}\\n        lorem ipsum\\n        '",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"                some {arg}\\n        lorem ipsum\\n        \"\"\""
+ },
+ {
+  "src": "f'                some {arg}\\n        lorem ipsum\\n        '",
+  "quote_type": null,
+  "result": "f\"                some {arg}\\n        lorem ipsum\\n        \""
+ },
+ {
+  "src": "f'my string {var}, but also {what} and {cada_bra}'",
+  "quote_type": "single",
+  "result": "f'my string {var}, but also {what} and {cada_bra}'"
+ },
+ {
+  "src": "f'my string {var}, but also {what} and {cada_bra}'",
+  "quote_type": "double",
+  "result": "f\"my string {var}, but also {what} and {cada_bra}\""
+ },
+ {
+  "src": "f'my string {var}, but also {what} and {cada_bra}'",
+  "quote_type": "triple_single",
+  "result": "f'''my string {var}, but also {what} and {cada_bra}'''"
+ },
+ {
+  "src": "f'my string {var}, but also {what} and {cada_bra}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"my string {var}, but also {what} and {cada_bra}\"\"\""
+ },
+ {
+  "src": "f'my string {var}, but also {what} and {cada_bra}'",
+  "quote_type": null,
+  "result": "f\"my string {var}, but also {what} and {cada_bra}\""
+ },
+ {
+  "src": "f'_{i:03X}'",
+  "quote_type": "single",
+  "result": "f'_{i:03X}'"
+ },
+ {
+  "src": "f'_{i:03X}'",
+  "quote_type": "double",
+  "result": "f\"_{i:03X}\""
+ },
+ {
+  "src": "f'_{i:03X}'",
+  "quote_type": "triple_single",
+  "result": "f'''_{i:03X}'''"
+ },
+ {
+  "src": "f'_{i:03X}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"_{i:03X}\"\"\""
+ },
+ {
+  "src": "f'_{i:03X}'",
+  "quote_type": null,
+  "result": "f\"_{i:03X}\""
+ },
+ {
+  "src": "f'{coord[1]:f} {coord[0]:f}'",
+  "quote_type": "single",
+  "result": "f'{coord[1]:f} {coord[0]:f}'"
+ },
+ {
+  "src": "f'{coord[1]:f} {coord[0]:f}'",
+  "quote_type": "double",
+  "result": "f\"{coord[1]:f} {coord[0]:f}\""
+ },
+ {
+  "src": "f'{coord[1]:f} {coord[0]:f}'",
+  "quote_type": "triple_single",
+  "result": "f'''{coord[1]:f} {coord[0]:f}'''"
+ },
+ {
+  "src": "f'{coord[1]:f} {coord[0]:f}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{coord[1]:f} {coord[0]:f}\"\"\""
+ },
+ {
+  "src": "f'{coord[1]:f} {coord[0]:f}'",
+  "quote_type": null,
+  "result": "f\"{coord[1]:f} {coord[0]:f}\""
+ },
+ {
+  "src": "f'{i:.03f}'",
+  "quote_type": "single",
+  "result": "f'{i:.03f}'"
+ },
+ {
+  "src": "f'{i:.03f}'",
+  "quote_type": "double",
+  "result": "f\"{i:.03f}\""
+ },
+ {
+  "src": "f'{i:.03f}'",
+  "quote_type": "triple_single",
+  "result": "f'''{i:.03f}'''"
+ },
+ {
+  "src": "f'{i:.03f}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{i:.03f}\"\"\""
+ },
+ {
+  "src": "f'{i:.03f}'",
+  "quote_type": null,
+  "result": "f\"{i:.03f}\""
+ },
+ {
+  "src": "f'03X'",
+  "quote_type": "single",
+  "result": "f'03X'"
+ },
+ {
+  "src": "f'03X'",
+  "quote_type": "double",
+  "result": "f\"03X\""
+ },
+ {
+  "src": "f'03X'",
+  "quote_type": "triple_single",
+  "result": "f'''03X'''"
+ },
+ {
+  "src": "f'03X'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"03X\"\"\""
+ },
+ {
+  "src": "f'03X'",
+  "quote_type": null,
+  "result": "f\"03X\""
+ },
+ {
+  "src": "f'.03f'",
+  "quote_type": "single",
+  "result": "f'.03f'"
+ },
+ {
+  "src": "f'.03f'",
+  "quote_type": "double",
+  "result": "f\".03f\""
+ },
+ {
+  "src": "f'.03f'",
+  "quote_type": "triple_single",
+  "result": "f'''.03f'''"
+ },
+ {
+  "src": "f'.03f'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\".03f\"\"\""
+ },
+ {
+  "src": "f'.03f'",
+  "quote_type": null,
+  "result": "f\".03f\""
+ },
+ {
+  "src": "f'Hello {flask.request.args[name]}!'",
+  "quote_type": "single",
+  "result": "f'Hello {flask.request.args[name]}!'"
+ },
+ {
+  "src": "f'Hello {flask.request.args[name]}!'",
+  "quote_type": "double",
+  "result": "f\"Hello {flask.request.args[name]}!\""
+ },
+ {
+  "src": "f'Hello {flask.request.args[name]}!'",
+  "quote_type": "triple_single",
+  "result": "f'''Hello {flask.request.args[name]}!'''"
+ },
+ {
+  "src": "f'Hello {flask.request.args[name]}!'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"Hello {flask.request.args[name]}!\"\"\""
+ },
+ {
+  "src": "f'Hello {flask.request.args[name]}!'",
+  "quote_type": null,
+  "result": "f\"Hello {flask.request.args[name]}!\""
+ },
+ {
+  "src": "f'\\x1b[1m{s}\\x1b[0m'",
+  "quote_type": "single",
+  "result": "f'\\x1b[1m{s}\\x1b[0m'"
+ },
+ {
+  "src": "f'\\x1b[1m{s}\\x1b[0m'",
+  "quote_type": "double",
+  "result": "f\"\\x1b[1m{s}\\x1b[0m\""
+ },
+ {
+  "src": "f'\\x1b[1m{s}\\x1b[0m'",
+  "quote_type": "triple_single",
+  "result": "f'''\\x1b[1m{s}\\x1b[0m'''"
+ },
+ {
+  "src": "f'\\x1b[1m{s}\\x1b[0m'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"\\x1b[1m{s}\\x1b[0m\"\"\""
+ },
+ {
+  "src": "f'\\x1b[1m{s}\\x1b[0m'",
+  "quote_type": null,
+  "result": "f\"\\x1b[1m{s}\\x1b[0m\""
+ },
+ {
+  "src": "f'\\x1b[2m{s}\\x1b[0m'",
+  "quote_type": "single",
+  "result": "f'\\x1b[2m{s}\\x1b[0m'"
+ },
+ {
+  "src": "f'\\x1b[2m{s}\\x1b[0m'",
+  "quote_type": "double",
+  "result": "f\"\\x1b[2m{s}\\x1b[0m\""
+ },
+ {
+  "src": "f'\\x1b[2m{s}\\x1b[0m'",
+  "quote_type": "triple_single",
+  "result": "f'''\\x1b[2m{s}\\x1b[0m'''"
+ },
+ {
+  "src": "f'\\x1b[2m{s}\\x1b[0m'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"\\x1b[2m{s}\\x1b[0m\"\"\""
+ },
+ {
+  "src": "f'\\x1b[2m{s}\\x1b[0m'",
+  "quote_type": null,
+  "result": "f\"\\x1b[2m{s}\\x1b[0m\""
+ },
+ {
+  "src": "f'{line}\\n'",
+  "quote_type": "single",
+  "result": "f'{line}\\n'"
+ },
+ {
+  "src": "f'{line}\\n'",
+  "quote_type": "double",
+  "result": "f\"{line}\\n\""
+ },
+ {
+  "src": "f'{line}\\n'",
+  "quote_type": "triple_single",
+  "result": "f'''{line}\\n'''"
+ },
+ {
+  "src": "f'{line}\\n'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{line}\\n\"\"\""
+ },
+ {
+  "src": "f'{line}\\n'",
+  "quote_type": null,
+  "result": "f\"{line}\\n\""
+ },
+ {
+  "src": "f'{line[:-1]}'",
+  "quote_type": "single",
+  "result": "f'{line[:-1]}'"
+ },
+ {
+  "src": "f'{line[:-1]}'",
+  "quote_type": "double",
+  "result": "f\"{line[:-1]}\""
+ },
+ {
+  "src": "f'{line[:-1]}'",
+  "quote_type": "triple_single",
+  "result": "f'''{line[:-1]}'''"
+ },
+ {
+  "src": "f'{line[:-1]}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{line[:-1]}\"\"\""
+ },
+ {
+  "src": "f'{line[:-1]}'",
+  "quote_type": null,
+  "result": "f\"{line[:-1]}\""
+ },
+ {
+  "src": "f'a\\xa0{a}'",
+  "quote_type": "single",
+  "result": "f'a\\xa0{a}'"
+ },
+ {
+  "src": "f'a\\xa0{a}'",
+  "quote_type": "double",
+  "result": "f\"a\\xa0{a}\""
+ },
+ {
+  "src": "f'a\\xa0{a}'",
+  "quote_type": "triple_single",
+  "result": "f'''a\\xa0{a}'''"
+ },
+ {
+  "src": "f'a\\xa0{a}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"a\\xa0{a}\"\"\""
+ },
+ {
+  "src": "f'a\\xa0{a}'",
+  "quote_type": null,
+  "result": "f\"a\\xa0{a}\""
+ },
+ {
+  "src": "f'{n} hello, world'",
+  "quote_type": "single",
+  "result": "f'{n} hello, world'"
+ },
+ {
+  "src": "f'{n} hello, world'",
+  "quote_type": "double",
+  "result": "f\"{n} hello, world\""
+ },
+ {
+  "src": "f'{n} hello, world'",
+  "quote_type": "triple_single",
+  "result": "f'''{n} hello, world'''"
+ },
+ {
+  "src": "f'{n} hello, world'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{n} hello, world\"\"\""
+ },
+ {
+  "src": "f'{n} hello, world'",
+  "quote_type": null,
+  "result": "f\"{n} hello, world\""
+ },
+ {
+  "src": "f'{n} non-str {True}'",
+  "quote_type": "single",
+  "result": "f'{n} non-str {True}'"
+ },
+ {
+  "src": "f'{n} non-str {True}'",
+  "quote_type": "double",
+  "result": "f\"{n} non-str {True}\""
+ },
+ {
+  "src": "f'{n} non-str {True}'",
+  "quote_type": "triple_single",
+  "result": "f'''{n} non-str {True}'''"
+ },
+ {
+  "src": "f'{n} non-str {True}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{n} non-str {True}\"\"\""
+ },
+ {
+  "src": "f'{n} non-str {True}'",
+  "quote_type": null,
+  "result": "f\"{n} non-str {True}\""
+ },
+ {
+  "src": "f'{n} with quote \"x\"'",
+  "quote_type": "single",
+  "result": "f'{n} with quote \"x\"'"
+ },
+ {
+  "src": "f'{n} with quote \"x\"'",
+  "quote_type": "double",
+  "result": "f\"{n} with quote \\\"x\\\"\""
+ },
+ {
+  "src": "f'{n} with quote \"x\"'",
+  "quote_type": "triple_single",
+  "result": "f'''{n} with quote \"x\"'''"
+ },
+ {
+  "src": "f'{n} with quote \"x\"'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{n} with quote \"x\"\"\"\""
+ },
+ {
+  "src": "f'{n} with quote \"x\"'",
+  "quote_type": null,
+  "result": "f\"{n} with quote \\\"x\\\"\""
+ },
+ {
+  "src": "f'Flask Documentation ({version})'",
+  "quote_type": "single",
+  "result": "f'Flask Documentation ({version})'"
+ },
+ {
+  "src": "f'Flask Documentation ({version})'",
+  "quote_type": "double",
+  "result": "f\"Flask Documentation ({version})\""
+ },
+ {
+  "src": "f'Flask Documentation ({version})'",
+  "quote_type": "triple_single",
+  "result": "f'''Flask Documentation ({version})'''"
+ },
+ {
+  "src": "f'Flask Documentation ({version})'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"Flask Documentation ({version})\"\"\""
+ },
+ {
+  "src": "f'Flask Documentation ({version})'",
+  "quote_type": null,
+  "result": "f\"Flask Documentation ({version})\""
+ },
+ {
+  "src": "f'Detected multiple Flask applications in module \"{var1}\". Use \"FLASK_APP={var2}:name\" to specify the correct one.'",
+  "quote_type": "single",
+  "result": "f'Detected multiple Flask applications in module \"{var1}\". Use \"FLASK_APP={var2}:name\" to specify the correct one.'"
+ },
+ {
+  "src": "f'Detected multiple Flask applications in module \"{var1}\". Use \"FLASK_APP={var2}:name\" to specify the correct one.'",
+  "quote_type": "double",
+  "result": "f\"Detected multiple Flask applications in module \\\"{var1}\\\". Use \\\"FLASK_APP={var2}:name\\\" to specify the correct one.\""
+ },
+ {
+  "src": "f'Detected multiple Flask applications in module \"{var1}\". Use \"FLASK_APP={var2}:name\" to specify the correct one.'",
+  "quote_type": "triple_single",
+  "result": "f'''Detected multiple Flask applications in module \"{var1}\". Use \"FLASK_APP={var2}:name\" to specify the correct one.'''"
+ },
+ {
+  "src": "f'Detected multiple Flask applications in module \"{var1}\". Use \"FLASK_APP={var2}:name\" to specify the correct one.'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"Detected multiple Flask applications in module \"{var1}\". Use \"FLASK_APP={var2}:name\" to specify the correct one.\"\"\""
+ },
+ {
+  "src": "f'Detected multiple Flask applications in module \"{var1}\". Use \"FLASK_APP={var2}:name\" to specify the correct one.'",
+  "quote_type": null,
+  "result": "f\"Detected multiple Flask applications in module \\\"{var1}\\\". Use \\\"FLASK_APP={var2}:name\\\" to specify the correct one.\""
+ },
+ {
+  "src": "f'Hello {var}'",
+  "quote_type": "single",
+  "result": "f'Hello {var}'"
+ },
+ {
+  "src": "f'Hello {var}'",
+  "quote_type": "double",
+  "result": "f\"Hello {var}\""
+ },
+ {
+  "src": "f'Hello {var}'",
+  "quote_type": "triple_single",
+  "result": "f'''Hello {var}'''"
+ },
+ {
+  "src": "f'Hello {var}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"Hello {var}\"\"\""
+ },
+ {
+  "src": "f'Hello {var}'",
+  "quote_type": null,
+  "result": "f\"Hello {var}\""
+ },
+ {
+  "src": "f'Hello {var} {a} {b}'",
+  "quote_type": "single",
+  "result": "f'Hello {var} {a} {b}'"
+ },
+ {
+  "src": "f'Hello {var} {a} {b}'",
+  "quote_type": "double",
+  "result": "f\"Hello {var} {a} {b}\""
+ },
+ {
+  "src": "f'Hello {var} {a} {b}'",
+  "quote_type": "triple_single",
+  "result": "f'''Hello {var} {a} {b}'''"
+ },
+ {
+  "src": "f'Hello {var} {a} {b}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"Hello {var} {a} {b}\"\"\""
+ },
+ {
+  "src": "f'Hello {var} {a} {b}'",
+  "quote_type": null,
+  "result": "f\"Hello {var} {a} {b}\""
+ },
+ {
+  "src": "f\"\\n{d['something']}\\n\"",
+  "quote_type": "single",
+  "result": "f'\\n{d[\\'something\\']}\\n'"
+ },
+ {
+  "src": "f\"\\n{d['something']}\\n\"",
+  "quote_type": "double",
+  "result": "f\"\\n{d['something']}\\n\""
+ },
+ {
+  "src": "f\"\\n{d['something']}\\n\"",
+  "quote_type": "triple_single",
+  "result": "f'''\\n{d['something']}\\n'''"
+ },
+ {
+  "src": "f\"\\n{d['something']}\\n\"",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"\\n{d['something']}\\n\"\"\""
+ },
+ {
+  "src": "f\"\\n{d['something']}\\n\"",
+  "quote_type": null,
+  "result": "f\"\\n{d['something']}\\n\""
+ },
+ {
+  "src": "f'Arithmetic on {self.__class__} objects with different sizes not permitted'",
+  "quote_type": "single",
+  "result": "f'Arithmetic on {self.__class__} objects with different sizes not permitted'"
+ },
+ {
+  "src": "f'Arithmetic on {self.__class__} objects with different sizes not permitted'",
+  "quote_type": "double",
+  "result": "f\"Arithmetic on {self.__class__} objects with different sizes not permitted\""
+ },
+ {
+  "src": "f'Arithmetic on {self.__class__} objects with different sizes not permitted'",
+  "quote_type": "triple_single",
+  "result": "f'''Arithmetic on {self.__class__} objects with different sizes not permitted'''"
+ },
+ {
+  "src": "f'Arithmetic on {self.__class__} objects with different sizes not permitted'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"Arithmetic on {self.__class__} objects with different sizes not permitted\"\"\""
+ },
+ {
+  "src": "f'Arithmetic on {self.__class__} objects with different sizes not permitted'",
+  "quote_type": null,
+  "result": "f\"Arithmetic on {self.__class__} objects with different sizes not permitted\""
+ },
+ {
+  "src": "f'\\n# This is an example configuration\\n# Hash lines are comments\\n\\n[flake8]\\nmax-line-length={length}\\ninline-quotes=\"{quotes}\"\\n'",
+  "quote_type": "single",
+  "result": "f'\\n# This is an example configuration\\n# Hash lines are comments\\n\\n[flake8]\\nmax-line-length={length}\\ninline-quotes=\"{quotes}\"\\n'"
+ },
+ {
+  "src": "f'\\n# This is an example configuration\\n# Hash lines are comments\\n\\n[flake8]\\nmax-line-length={length}\\ninline-quotes=\"{quotes}\"\\n'",
+  "quote_type": "double",
+  "result": "f\"\\n# This is an example configuration\\n# Hash lines are comments\\n\\n[flake8]\\nmax-line-length={length}\\ninline-quotes=\\\"{quotes}\\\"\\n\""
+ },
+ {
+  "src": "f'\\n# This is an example configuration\\n# Hash lines are comments\\n\\n[flake8]\\nmax-line-length={length}\\ninline-quotes=\"{quotes}\"\\n'",
+  "quote_type": "triple_single",
+  "result": "f'''\\n# This is an example configuration\\n# Hash lines are comments\\n\\n[flake8]\\nmax-line-length={length}\\ninline-quotes=\"{quotes}\"\\n'''"
+ },
+ {
+  "src": "f'\\n# This is an example configuration\\n# Hash lines are comments\\n\\n[flake8]\\nmax-line-length={length}\\ninline-quotes=\"{quotes}\"\\n'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"\\n# This is an example configuration\\n# Hash lines are comments\\n\\n[flake8]\\nmax-line-length={length}\\ninline-quotes=\"{quotes}\"\\n\"\"\""
+ },
+ {
+  "src": "f'\\n# This is an example configuration\\n# Hash lines are comments\\n\\n[flake8]\\nmax-line-length={length}\\ninline-quotes=\"{quotes}\"\\n'",
+  "quote_type": null,
+  "result": "f\"\\n# This is an example configuration\\n# Hash lines are comments\\n\\n[flake8]\\nmax-line-length={length}\\ninline-quotes=\\\"{quotes}\\\"\\n\""
+ },
+ {
+  "src": "f'my string {cada_bra} and {f}'",
+  "quote_type": "single",
+  "result": "f'my string {cada_bra} and {f}'"
+ },
+ {
+  "src": "f'my string {cada_bra} and {f}'",
+  "quote_type": "double",
+  "result": "f\"my string {cada_bra} and {f}\""
+ },
+ {
+  "src": "f'my string {cada_bra} and {f}'",
+  "quote_type": "triple_single",
+  "result": "f'''my string {cada_bra} and {f}'''"
+ },
+ {
+  "src": "f'my string {cada_bra} and {f}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"my string {cada_bra} and {f}\"\"\""
+ },
+ {
+  "src": "f'my string {cada_bra} and {f}'",
+  "quote_type": null,
+  "result": "f\"my string {cada_bra} and {f}\""
+ },
+ {
+  "src": "f'{a:f} {b}'",
+  "quote_type": "single",
+  "result": "f'{a:f} {b}'"
+ },
+ {
+  "src": "f'{a:f} {b}'",
+  "quote_type": "double",
+  "result": "f\"{a:f} {b}\""
+ },
+ {
+  "src": "f'{a:f} {b}'",
+  "quote_type": "triple_single",
+  "result": "f'''{a:f} {b}'''"
+ },
+ {
+  "src": "f'{a:f} {b}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{a:f} {b}\"\"\""
+ },
+ {
+  "src": "f'{a:f} {b}'",
+  "quote_type": null,
+  "result": "f\"{a:f} {b}\""
+ },
+ {
+  "src": "f'{a:f} {b:f} {c:e} {d:g} {e}'",
+  "quote_type": "single",
+  "result": "f'{a:f} {b:f} {c:e} {d:g} {e}'"
+ },
+ {
+  "src": "f'{a:f} {b:f} {c:e} {d:g} {e}'",
+  "quote_type": "double",
+  "result": "f\"{a:f} {b:f} {c:e} {d:g} {e}\""
+ },
+ {
+  "src": "f'{a:f} {b:f} {c:e} {d:g} {e}'",
+  "quote_type": "triple_single",
+  "result": "f'''{a:f} {b:f} {c:e} {d:g} {e}'''"
+ },
+ {
+  "src": "f'{a:f} {b:f} {c:e} {d:g} {e}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{a:f} {b:f} {c:e} {d:g} {e}\"\"\""
+ },
+ {
+  "src": "f'{a:f} {b:f} {c:e} {d:g} {e}'",
+  "quote_type": null,
+  "result": "f\"{a:f} {b:f} {c:e} {d:g} {e}\""
+ },
+ {
+  "src": "f'e'",
+  "quote_type": "single",
+  "result": "f'e'"
+ },
+ {
+  "src": "f'e'",
+  "quote_type": "double",
+  "result": "f\"e\""
+ },
+ {
+  "src": "f'e'",
+  "quote_type": "triple_single",
+  "result": "f'''e'''"
+ },
+ {
+  "src": "f'e'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"e\"\"\""
+ },
+ {
+  "src": "f'e'",
+  "quote_type": null,
+  "result": "f\"e\""
+ },
+ {
+  "src": "f'g'",
+  "quote_type": "single",
+  "result": "f'g'"
+ },
+ {
+  "src": "f'g'",
+  "quote_type": "double",
+  "result": "f\"g\""
+ },
+ {
+  "src": "f'g'",
+  "quote_type": "triple_single",
+  "result": "f'''g'''"
+ },
+ {
+  "src": "f'g'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"g\"\"\""
+ },
+ {
+  "src": "f'g'",
+  "quote_type": null,
+  "result": "f\"g\""
+ },
+ {
+  "src": "f'{d ** 2}'",
+  "quote_type": "single",
+  "result": "f'{d ** 2}'"
+ },
+ {
+  "src": "f'{d ** 2}'",
+  "quote_type": "double",
+  "result": "f\"{d ** 2}\""
+ },
+ {
+  "src": "f'{d ** 2}'",
+  "quote_type": "triple_single",
+  "result": "f'''{d ** 2}'''"
+ },
+ {
+  "src": "f'{d ** 2}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{d ** 2}\"\"\""
+ },
+ {
+  "src": "f'{d ** 2}'",
+  "quote_type": null,
+  "result": "f\"{d ** 2}\""
+ },
+ {
+  "src": "f'{a!r} {a} {a!a}'",
+  "quote_type": "single",
+  "result": "f'{a!r} {a} {a!a}'"
+ },
+ {
+  "src": "f'{a!r} {a} {a!a}'",
+  "quote_type": "double",
+  "result": "f\"{a!r} {a} {a!a}\""
+ },
+ {
+  "src": "f'{a!r} {a} {a!a}'",
+  "quote_type": "triple_single",
+  "result": "f'''{a!r} {a} {a!a}'''"
+ },
+ {
+  "src": "f'{a!r} {a} {a!a}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{a!r} {a} {a!a}\"\"\""
+ },
+ {
+  "src": "f'{a!r} {a} {a!a}'",
+  "quote_type": null,
+  "result": "f\"{a!r} {a} {a!a}\""
+ },
+ {
+  "src": "f\"{di1['key']},{di2['key']}\"",
+  "quote_type": "single",
+  "result": "f'{di1[\\'key\\']},{di2[\\'key\\']}'"
+ },
+ {
+  "src": "f\"{di1['key']},{di2['key']}\"",
+  "quote_type": "double",
+  "result": "f\"{di1['key']},{di2['key']}\""
+ },
+ {
+  "src": "f\"{di1['key']},{di2['key']}\"",
+  "quote_type": "triple_single",
+  "result": "f'''{di1['key']},{di2['key']}'''"
+ },
+ {
+  "src": "f\"{di1['key']},{di2['key']}\"",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{di1['key']},{di2['key']}\"\"\""
+ },
+ {
+  "src": "f\"{di1['key']},{di2['key']}\"",
+  "quote_type": null,
+  "result": "f\"{di1['key']},{di2['key']}\""
+ },
+ {
+  "src": "f\"^(\\\\s*{pattern}\\\\s*=\\\\s*')(.+?)(')\"",
+  "quote_type": "single",
+  "result": "f'^(\\\\s*{pattern}\\\\s*=\\\\s*\\')(.+?)(\\')'"
+ },
+ {
+  "src": "f\"^(\\\\s*{pattern}\\\\s*=\\\\s*')(.+?)(')\"",
+  "quote_type": "double",
+  "result": "f\"^(\\\\s*{pattern}\\\\s*=\\\\s*')(.+?)(')\""
+ },
+ {
+  "src": "f\"^(\\\\s*{pattern}\\\\s*=\\\\s*')(.+?)(')\"",
+  "quote_type": "triple_single",
+  "result": "f'''^(\\\\s*{pattern}\\\\s*=\\\\s*')(.+?)(')'''"
+ },
+ {
+  "src": "f\"^(\\\\s*{pattern}\\\\s*=\\\\s*')(.+?)(')\"",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"^(\\\\s*{pattern}\\\\s*=\\\\s*')(.+?)(')\"\"\""
+ },
+ {
+  "src": "f\"^(\\\\s*{pattern}\\\\s*=\\\\s*')(.+?)(')\"",
+  "quote_type": null,
+  "result": "f\"^(\\\\s*{pattern}\\\\s*=\\\\s*')(.+?)(')\""
+ },
+ {
+  "src": "f'Exception on {request.path} [{request.method}]'",
+  "quote_type": "single",
+  "result": "f'Exception on {request.path} [{request.method}]'"
+ },
+ {
+  "src": "f'Exception on {request.path} [{request.method}]'",
+  "quote_type": "double",
+  "result": "f\"Exception on {request.path} [{request.method}]\""
+ },
+ {
+  "src": "f'Exception on {request.path} [{request.method}]'",
+  "quote_type": "triple_single",
+  "result": "f'''Exception on {request.path} [{request.method}]'''"
+ },
+ {
+  "src": "f'Exception on {request.path} [{request.method}]'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"Exception on {request.path} [{request.method}]\"\"\""
+ },
+ {
+  "src": "f'Exception on {request.path} [{request.method}]'",
+  "quote_type": null,
+  "result": "f\"Exception on {request.path} [{request.method}]\""
+ },
+ {
+  "src": "f'my string {var}'",
+  "quote_type": "single",
+  "result": "f'my string {var}'"
+ },
+ {
+  "src": "f'my string {var}'",
+  "quote_type": "double",
+  "result": "f\"my string {var}\""
+ },
+ {
+  "src": "f'my string {var}'",
+  "quote_type": "triple_single",
+  "result": "f'''my string {var}'''"
+ },
+ {
+  "src": "f'my string {var}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"my string {var}\"\"\""
+ },
+ {
+  "src": "f'my string {var}'",
+  "quote_type": null,
+  "result": "f\"my string {var}\""
+ },
+ {
+  "src": "f'my string {var:.2f}'",
+  "quote_type": "single",
+  "result": "f'my string {var:.2f}'"
+ },
+ {
+  "src": "f'my string {var:.2f}'",
+  "quote_type": "double",
+  "result": "f\"my string {var:.2f}\""
+ },
+ {
+  "src": "f'my string {var:.2f}'",
+  "quote_type": "triple_single",
+  "result": "f'''my string {var:.2f}'''"
+ },
+ {
+  "src": "f'my string {var:.2f}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"my string {var:.2f}\"\"\""
+ },
+ {
+  "src": "f'my string {var:.2f}'",
+  "quote_type": null,
+  "result": "f\"my string {var:.2f}\""
+ },
+ {
+  "src": "f'Test: {var}'",
+  "quote_type": "single",
+  "result": "f'Test: {var}'"
+ },
+ {
+  "src": "f'Test: {var}'",
+  "quote_type": "double",
+  "result": "f\"Test: {var}\""
+ },
+ {
+  "src": "f'Test: {var}'",
+  "quote_type": "triple_single",
+  "result": "f'''Test: {var}'''"
+ },
+ {
+  "src": "f'Test: {var}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"Test: {var}\"\"\""
+ },
+ {
+  "src": "f'Test: {var}'",
+  "quote_type": null,
+  "result": "f\"Test: {var}\""
+ },
+ {
+  "src": "f'{var} my string'",
+  "quote_type": "single",
+  "result": "f'{var} my string'"
+ },
+ {
+  "src": "f'{var} my string'",
+  "quote_type": "double",
+  "result": "f\"{var} my string\""
+ },
+ {
+  "src": "f'{var} my string'",
+  "quote_type": "triple_single",
+  "result": "f'''{var} my string'''"
+ },
+ {
+  "src": "f'{var} my string'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{var} my string\"\"\""
+ },
+ {
+  "src": "f'{var} my string'",
+  "quote_type": null,
+  "result": "f\"{var} my string\""
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\n\"",
+  "quote_type": "single",
+  "result": "f'echo \\'{self.FLUSH_CMD}\\'\\n'"
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\n\"",
+  "quote_type": "double",
+  "result": "f\"echo '{self.FLUSH_CMD}'\\n\""
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\n\"",
+  "quote_type": "triple_single",
+  "result": "f'''echo '{self.FLUSH_CMD}'\\n'''"
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\n\"",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"echo '{self.FLUSH_CMD}'\\n\"\"\""
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\n\"",
+  "quote_type": null,
+  "result": "f\"echo '{self.FLUSH_CMD}'\\n\""
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\\\n\"",
+  "quote_type": "single",
+  "result": "f'echo \\'{self.FLUSH_CMD}\\'\\\\n'"
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\\\n\"",
+  "quote_type": "double",
+  "result": "f\"echo '{self.FLUSH_CMD}'\\\\n\""
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\\\n\"",
+  "quote_type": "triple_single",
+  "result": "f'''echo '{self.FLUSH_CMD}'\\\\n'''"
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\\\n\"",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"echo '{self.FLUSH_CMD}'\\\\n\"\"\""
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\\\n\"",
+  "quote_type": null,
+  "result": "f\"echo '{self.FLUSH_CMD}'\\\\n\""
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\r\"",
+  "quote_type": "single",
+  "result": "f'echo \\'{self.FLUSH_CMD}\\'\\r'"
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\r\"",
+  "quote_type": "double",
+  "result": "f\"echo '{self.FLUSH_CMD}'\\r\""
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\r\"",
+  "quote_type": "triple_single",
+  "result": "f'''echo '{self.FLUSH_CMD}'\\r'''"
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\r\"",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"echo '{self.FLUSH_CMD}'\\r\"\"\""
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\r\"",
+  "quote_type": null,
+  "result": "f\"echo '{self.FLUSH_CMD}'\\r\""
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\\\r\"",
+  "quote_type": "single",
+  "result": "f'echo \\'{self.FLUSH_CMD}\\'\\\\r'"
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\\\r\"",
+  "quote_type": "double",
+  "result": "f\"echo '{self.FLUSH_CMD}'\\\\r\""
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\\\r\"",
+  "quote_type": "triple_single",
+  "result": "f'''echo '{self.FLUSH_CMD}'\\\\r'''"
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\\\r\"",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"echo '{self.FLUSH_CMD}'\\\\r\"\"\""
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\\\r\"",
+  "quote_type": null,
+  "result": "f\"echo '{self.FLUSH_CMD}'\\\\r\""
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\t\"",
+  "quote_type": "single",
+  "result": "f'echo \\'{self.FLUSH_CMD}\\'\\t'"
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\t\"",
+  "quote_type": "double",
+  "result": "f\"echo '{self.FLUSH_CMD}'\\t\""
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\t\"",
+  "quote_type": "triple_single",
+  "result": "f'''echo '{self.FLUSH_CMD}'\\t'''"
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\t\"",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"echo '{self.FLUSH_CMD}'\\t\"\"\""
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\t\"",
+  "quote_type": null,
+  "result": "f\"echo '{self.FLUSH_CMD}'\\t\""
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\\\t\"",
+  "quote_type": "single",
+  "result": "f'echo \\'{self.FLUSH_CMD}\\'\\\\t'"
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\\\t\"",
+  "quote_type": "double",
+  "result": "f\"echo '{self.FLUSH_CMD}'\\\\t\""
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\\\t\"",
+  "quote_type": "triple_single",
+  "result": "f'''echo '{self.FLUSH_CMD}'\\\\t'''"
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\\\t\"",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"echo '{self.FLUSH_CMD}'\\\\t\"\"\""
+ },
+ {
+  "src": "f\"echo '{self.FLUSH_CMD}'\\\\t\"",
+  "quote_type": null,
+  "result": "f\"echo '{self.FLUSH_CMD}'\\\\t\""
+ },
+ {
+  "src": "f'echo \"SCREEN_EXIT:$?\" ; echo \"{END_OF_STREAM}\"\\n'",
+  "quote_type": "single",
+  "result": "f'echo \"SCREEN_EXIT:$?\" ; echo \"{END_OF_STREAM}\"\\n'"
+ },
+ {
+  "src": "f'echo \"SCREEN_EXIT:$?\" ; echo \"{END_OF_STREAM}\"\\n'",
+  "quote_type": "double",
+  "result": "f\"echo \\\"SCREEN_EXIT:$?\\\" ; echo \\\"{END_OF_STREAM}\\\"\\n\""
+ },
+ {
+  "src": "f'echo \"SCREEN_EXIT:$?\" ; echo \"{END_OF_STREAM}\"\\n'",
+  "quote_type": "triple_single",
+  "result": "f'''echo \"SCREEN_EXIT:$?\" ; echo \"{END_OF_STREAM}\"\\n'''"
+ },
+ {
+  "src": "f'echo \"SCREEN_EXIT:$?\" ; echo \"{END_OF_STREAM}\"\\n'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"echo \"SCREEN_EXIT:$?\" ; echo \"{END_OF_STREAM}\"\\n\"\"\""
+ },
+ {
+  "src": "f'echo \"SCREEN_EXIT:$?\" ; echo \"{END_OF_STREAM}\"\\n'",
+  "quote_type": null,
+  "result": "f\"echo \\\"SCREEN_EXIT:$?\\\" ; echo \\\"{END_OF_STREAM}\\\"\\n\""
+ },
+ {
+  "src": "f'echo \"{START_STREAM}\"'",
+  "quote_type": "single",
+  "result": "f'echo \"{START_STREAM}\"'"
+ },
+ {
+  "src": "f'echo \"{START_STREAM}\"'",
+  "quote_type": "double",
+  "result": "f\"echo \\\"{START_STREAM}\\\"\""
+ },
+ {
+  "src": "f'echo \"{START_STREAM}\"'",
+  "quote_type": "triple_single",
+  "result": "f'''echo \"{START_STREAM}\"'''"
+ },
+ {
+  "src": "f'echo \"{START_STREAM}\"'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"echo \"{START_STREAM}\"\"\"\""
+ },
+ {
+  "src": "f'echo \"{START_STREAM}\"'",
+  "quote_type": null,
+  "result": "f\"echo \\\"{START_STREAM}\\\"\""
+ },
+ {
+  "src": "f\"{'Crossvalidation':>50} \\t {mean_ser:>6} \\t {mean_per:>6}\\n\"",
+  "quote_type": "single",
+  "result": "f'{\\'Crossvalidation\\':>50} \\t {mean_ser:>6} \\t {mean_per:>6}\\n'"
+ },
+ {
+  "src": "f\"{'Crossvalidation':>50} \\t {mean_ser:>6} \\t {mean_per:>6}\\n\"",
+  "quote_type": "double",
+  "result": "f\"{'Crossvalidation':>50} \\t {mean_ser:>6} \\t {mean_per:>6}\\n\""
+ },
+ {
+  "src": "f\"{'Crossvalidation':>50} \\t {mean_ser:>6} \\t {mean_per:>6}\\n\"",
+  "quote_type": "triple_single",
+  "result": "f'''{'Crossvalidation':>50} \\t {mean_ser:>6} \\t {mean_per:>6}\\n'''"
+ },
+ {
+  "src": "f\"{'Crossvalidation':>50} \\t {mean_ser:>6} \\t {mean_per:>6}\\n\"",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{'Crossvalidation':>50} \\t {mean_ser:>6} \\t {mean_per:>6}\\n\"\"\""
+ },
+ {
+  "src": "f\"{'Crossvalidation':>50} \\t {mean_ser:>6} \\t {mean_per:>6}\\n\"",
+  "quote_type": null,
+  "result": "f\"{'Crossvalidation':>50} \\t {mean_ser:>6} \\t {mean_per:>6}\\n\""
+ },
+ {
+  "src": "f'>50'",
+  "quote_type": "single",
+  "result": "f'>50'"
+ },
+ {
+  "src": "f'>50'",
+  "quote_type": "double",
+  "result": "f\">50\""
+ },
+ {
+  "src": "f'>50'",
+  "quote_type": "triple_single",
+  "result": "f'''>50'''"
+ },
+ {
+  "src": "f'>50'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\">50\"\"\""
+ },
+ {
+  "src": "f'>50'",
+  "quote_type": null,
+  "result": "f\">50\""
+ },
+ {
+  "src": "f'>6'",
+  "quote_type": "single",
+  "result": "f'>6'"
+ },
+ {
+  "src": "f'>6'",
+  "quote_type": "double",
+  "result": "f\">6\""
+ },
+ {
+  "src": "f'>6'",
+  "quote_type": "triple_single",
+  "result": "f'''>6'''"
+ },
+ {
+  "src": "f'>6'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\">6\"\"\""
+ },
+ {
+  "src": "f'>6'",
+  "quote_type": null,
+  "result": "f\">6\""
+ },
+ {
+  "src": "f\"beautiful numbers to follow: {' '.join(lst)}\"",
+  "quote_type": "single",
+  "result": "f'beautiful numbers to follow: {\\' \\'.join(lst)}'"
+ },
+ {
+  "src": "f\"beautiful numbers to follow: {' '.join(lst)}\"",
+  "quote_type": "double",
+  "result": "f\"beautiful numbers to follow: {' '.join(lst)}\""
+ },
+ {
+  "src": "f\"beautiful numbers to follow: {' '.join(lst)}\"",
+  "quote_type": "triple_single",
+  "result": "f'''beautiful numbers to follow: {' '.join(lst)}'''"
+ },
+ {
+  "src": "f\"beautiful numbers to follow: {' '.join(lst)}\"",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"beautiful numbers to follow: {' '.join(lst)}\"\"\""
+ },
+ {
+  "src": "f\"beautiful numbers to follow: {' '.join(lst)}\"",
+  "quote_type": null,
+  "result": "f\"beautiful numbers to follow: {' '.join(lst)}\""
+ },
+ {
+  "src": "f\"beautiful numbers to follow: {','.join(lst)}\"",
+  "quote_type": "single",
+  "result": "f'beautiful numbers to follow: {\\',\\'.join(lst)}'"
+ },
+ {
+  "src": "f\"beautiful numbers to follow: {','.join(lst)}\"",
+  "quote_type": "double",
+  "result": "f\"beautiful numbers to follow: {','.join(lst)}\""
+ },
+ {
+  "src": "f\"beautiful numbers to follow: {','.join(lst)}\"",
+  "quote_type": "triple_single",
+  "result": "f'''beautiful numbers to follow: {','.join(lst)}'''"
+ },
+ {
+  "src": "f\"beautiful numbers to follow: {','.join(lst)}\"",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"beautiful numbers to follow: {','.join(lst)}\"\"\""
+ },
+ {
+  "src": "f\"beautiful numbers to follow: {','.join(lst)}\"",
+  "quote_type": null,
+  "result": "f\"beautiful numbers to follow: {','.join(lst)}\""
+ },
+ {
+  "src": "f'Flask-{version}.tex'",
+  "quote_type": "single",
+  "result": "f'Flask-{version}.tex'"
+ },
+ {
+  "src": "f'Flask-{version}.tex'",
+  "quote_type": "double",
+  "result": "f\"Flask-{version}.tex\""
+ },
+ {
+  "src": "f'Flask-{version}.tex'",
+  "quote_type": "triple_single",
+  "result": "f'''Flask-{version}.tex'''"
+ },
+ {
+  "src": "f'Flask-{version}.tex'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"Flask-{version}.tex\"\"\""
+ },
+ {
+  "src": "f'Flask-{version}.tex'",
+  "quote_type": null,
+  "result": "f\"Flask-{version}.tex\""
+ },
+ {
+  "src": "f'line 1 {x} line 2 {y}'",
+  "quote_type": "single",
+  "result": "f'line 1 {x} line 2 {y}'"
+ },
+ {
+  "src": "f'line 1 {x} line 2 {y}'",
+  "quote_type": "double",
+  "result": "f\"line 1 {x} line 2 {y}\""
+ },
+ {
+  "src": "f'line 1 {x} line 2 {y}'",
+  "quote_type": "triple_single",
+  "result": "f'''line 1 {x} line 2 {y}'''"
+ },
+ {
+  "src": "f'line 1 {x} line 2 {y}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"line 1 {x} line 2 {y}\"\"\""
+ },
+ {
+  "src": "f'line 1 {x} line 2 {y}'",
+  "quote_type": null,
+  "result": "f\"line 1 {x} line 2 {y}\""
+ },
+ {
+  "src": "f'line 1234567890 1234567890 1234567890 1234567890 {x} 1234567890 1234567890 1234567890 1234567890  {y}'",
+  "quote_type": "single",
+  "result": "f'line 1234567890 1234567890 1234567890 1234567890 {x} 1234567890 1234567890 1234567890 1234567890  {y}'"
+ },
+ {
+  "src": "f'line 1234567890 1234567890 1234567890 1234567890 {x} 1234567890 1234567890 1234567890 1234567890  {y}'",
+  "quote_type": "double",
+  "result": "f\"line 1234567890 1234567890 1234567890 1234567890 {x} 1234567890 1234567890 1234567890 1234567890  {y}\""
+ },
+ {
+  "src": "f'line 1234567890 1234567890 1234567890 1234567890 {x} 1234567890 1234567890 1234567890 1234567890  {y}'",
+  "quote_type": "triple_single",
+  "result": "f'''line 1234567890 1234567890 1234567890 1234567890 {x} 1234567890 1234567890 1234567890 1234567890  {y}'''"
+ },
+ {
+  "src": "f'line 1234567890 1234567890 1234567890 1234567890 {x} 1234567890 1234567890 1234567890 1234567890  {y}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"line 1234567890 1234567890 1234567890 1234567890 {x} 1234567890 1234567890 1234567890 1234567890  {y}\"\"\""
+ },
+ {
+  "src": "f'line 1234567890 1234567890 1234567890 1234567890 {x} 1234567890 1234567890 1234567890 1234567890  {y}'",
+  "quote_type": null,
+  "result": "f\"line 1234567890 1234567890 1234567890 1234567890 {x} 1234567890 1234567890 1234567890 1234567890  {y}\""
+ },
+ {
+  "src": "f\"Feels like: {data['main']['feels_like']}°F\"",
+  "quote_type": "single",
+  "result": "f'Feels like: {data[\\'main\\'][\\'feels_like\\']}°F'"
+ },
+ {
+  "src": "f\"Feels like: {data['main']['feels_like']}°F\"",
+  "quote_type": "double",
+  "result": "f\"Feels like: {data['main']['feels_like']}°F\""
+ },
+ {
+  "src": "f\"Feels like: {data['main']['feels_like']}°F\"",
+  "quote_type": "triple_single",
+  "result": "f'''Feels like: {data['main']['feels_like']}°F'''"
+ },
+ {
+  "src": "f\"Feels like: {data['main']['feels_like']}°F\"",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"Feels like: {data['main']['feels_like']}°F\"\"\""
+ },
+ {
+  "src": "f\"Feels like: {data['main']['feels_like']}°F\"",
+  "quote_type": null,
+  "result": "f\"Feels like: {data['main']['feels_like']}°F\""
+ },
+ {
+  "src": "f\"Feels like: {data['main']['feels_like']}\\\\u00B0F\"",
+  "quote_type": "single",
+  "result": "f'Feels like: {data[\\'main\\'][\\'feels_like\\']}\\\\u00B0F'"
+ },
+ {
+  "src": "f\"Feels like: {data['main']['feels_like']}\\\\u00B0F\"",
+  "quote_type": "double",
+  "result": "f\"Feels like: {data['main']['feels_like']}\\\\u00B0F\""
+ },
+ {
+  "src": "f\"Feels like: {data['main']['feels_like']}\\\\u00B0F\"",
+  "quote_type": "triple_single",
+  "result": "f'''Feels like: {data['main']['feels_like']}\\\\u00B0F'''"
+ },
+ {
+  "src": "f\"Feels like: {data['main']['feels_like']}\\\\u00B0F\"",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"Feels like: {data['main']['feels_like']}\\\\u00B0F\"\"\""
+ },
+ {
+  "src": "f\"Feels like: {data['main']['feels_like']}\\\\u00B0F\"",
+  "quote_type": null,
+  "result": "f\"Feels like: {data['main']['feels_like']}\\\\u00B0F\""
+ },
+ {
+  "src": "f'{blah1}b'",
+  "quote_type": "single",
+  "result": "f'{blah1}b'"
+ },
+ {
+  "src": "f'{blah1}b'",
+  "quote_type": "double",
+  "result": "f\"{blah1}b\""
+ },
+ {
+  "src": "f'{blah1}b'",
+  "quote_type": "triple_single",
+  "result": "f'''{blah1}b'''"
+ },
+ {
+  "src": "f'{blah1}b'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{blah1}b\"\"\""
+ },
+ {
+  "src": "f'{blah1}b'",
+  "quote_type": null,
+  "result": "f\"{blah1}b\""
+ },
+ {
+  "src": "f'{CR}{LF}Goodbye{CR}{LF}'",
+  "quote_type": "single",
+  "result": "f'{CR}{LF}Goodbye{CR}{LF}'"
+ },
+ {
+  "src": "f'{CR}{LF}Goodbye{CR}{LF}'",
+  "quote_type": "double",
+  "result": "f\"{CR}{LF}Goodbye{CR}{LF}\""
+ },
+ {
+  "src": "f'{CR}{LF}Goodbye{CR}{LF}'",
+  "quote_type": "triple_single",
+  "result": "f'''{CR}{LF}Goodbye{CR}{LF}'''"
+ },
+ {
+  "src": "f'{CR}{LF}Goodbye{CR}{LF}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{CR}{LF}Goodbye{CR}{LF}\"\"\""
+ },
+ {
+  "src": "f'{CR}{LF}Goodbye{CR}{LF}'",
+  "quote_type": null,
+  "result": "f\"{CR}{LF}Goodbye{CR}{LF}\""
+ },
+ {
+  "src": "f'{a[0]} World'",
+  "quote_type": "single",
+  "result": "f'{a[0]} World'"
+ },
+ {
+  "src": "f'{a[0]} World'",
+  "quote_type": "double",
+  "result": "f\"{a[0]} World\""
+ },
+ {
+  "src": "f'{a[0]} World'",
+  "quote_type": "triple_single",
+  "result": "f'''{a[0]} World'''"
+ },
+ {
+  "src": "f'{a[0]} World'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{a[0]} World\"\"\""
+ },
+ {
+  "src": "f'{a[0]} World'",
+  "quote_type": null,
+  "result": "f\"{a[0]} World\""
+ },
+ {
+  "src": "f'The line limit we set is 120 and this line is more than 87 characters long{thing}'",
+  "quote_type": "single",
+  "result": "f'The line limit we set is 120 and this line is more than 87 characters long{thing}'"
+ },
+ {
+  "src": "f'The line limit we set is 120 and this line is more than 87 characters long{thing}'",
+  "quote_type": "double",
+  "result": "f\"The line limit we set is 120 and this line is more than 87 characters long{thing}\""
+ },
+ {
+  "src": "f'The line limit we set is 120 and this line is more than 87 characters long{thing}'",
+  "quote_type": "triple_single",
+  "result": "f'''The line limit we set is 120 and this line is more than 87 characters long{thing}'''"
+ },
+ {
+  "src": "f'The line limit we set is 120 and this line is more than 87 characters long{thing}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"The line limit we set is 120 and this line is more than 87 characters long{thing}\"\"\""
+ },
+ {
+  "src": "f'The line limit we set is 120 and this line is more than 87 characters long{thing}'",
+  "quote_type": null,
+  "result": "f\"The line limit we set is 120 and this line is more than 87 characters long{thing}\""
+ },
+ {
+  "src": "f'blah{thing}blah{otherThing}is {x:f}'",
+  "quote_type": "single",
+  "result": "f'blah{thing}blah{otherThing}is {x:f}'"
+ },
+ {
+  "src": "f'blah{thing}blah{otherThing}is {x:f}'",
+  "quote_type": "double",
+  "result": "f\"blah{thing}blah{otherThing}is {x:f}\""
+ },
+ {
+  "src": "f'blah{thing}blah{otherThing}is {x:f}'",
+  "quote_type": "triple_single",
+  "result": "f'''blah{thing}blah{otherThing}is {x:f}'''"
+ },
+ {
+  "src": "f'blah{thing}blah{otherThing}is {x:f}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"blah{thing}blah{otherThing}is {x:f}\"\"\""
+ },
+ {
+  "src": "f'blah{thing}blah{otherThing}is {x:f}'",
+  "quote_type": null,
+  "result": "f\"blah{thing}blah{otherThing}is {x:f}\""
+ },
+ {
+  "src": "f'{a} World'",
+  "quote_type": "single",
+  "result": "f'{a} World'"
+ },
+ {
+  "src": "f'{a} World'",
+  "quote_type": "double",
+  "result": "f\"{a} World\""
+ },
+ {
+  "src": "f'{a} World'",
+  "quote_type": "triple_single",
+  "result": "f'''{a} World'''"
+ },
+ {
+  "src": "f'{a} World'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{a} World\"\"\""
+ },
+ {
+  "src": "f'{a} World'",
+  "quote_type": null,
+  "result": "f\"{a} World\""
+ },
+ {
+  "src": "f'Finally, {a} World'",
+  "quote_type": "single",
+  "result": "f'Finally, {a} World'"
+ },
+ {
+  "src": "f'Finally, {a} World'",
+  "quote_type": "double",
+  "result": "f\"Finally, {a} World\""
+ },
+ {
+  "src": "f'Finally, {a} World'",
+  "quote_type": "triple_single",
+  "result": "f'''Finally, {a} World'''"
+ },
+ {
+  "src": "f'Finally, {a} World'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"Finally, {a} World\"\"\""
+ },
+ {
+  "src": "f'Finally, {a} World'",
+  "quote_type": null,
+  "result": "f\"Finally, {a} World\""
+ },
+ {
+  "src": "f'{dumps(data)}\\n'",
+  "quote_type": "single",
+  "result": "f'{dumps(data)}\\n'"
+ },
+ {
+  "src": "f'{dumps(data)}\\n'",
+  "quote_type": "double",
+  "result": "f\"{dumps(data)}\\n\""
+ },
+ {
+  "src": "f'{dumps(data)}\\n'",
+  "quote_type": "triple_single",
+  "result": "f'''{dumps(data)}\\n'''"
+ },
+ {
+  "src": "f'{dumps(data)}\\n'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"{dumps(data)}\\n\"\"\""
+ },
+ {
+  "src": "f'{dumps(data)}\\n'",
+  "quote_type": null,
+  "result": "f\"{dumps(data)}\\n\""
+ },
+ {
+  "src": "f'/{basename.rstrip(123)}'",
+  "quote_type": "single",
+  "result": "f'/{basename.rstrip(123)}'"
+ },
+ {
+  "src": "f'/{basename.rstrip(123)}'",
+  "quote_type": "double",
+  "result": "f\"/{basename.rstrip(123)}\""
+ },
+ {
+  "src": "f'/{basename.rstrip(123)}'",
+  "quote_type": "triple_single",
+  "result": "f'''/{basename.rstrip(123)}'''"
+ },
+ {
+  "src": "f'/{basename.rstrip(123)}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"/{basename.rstrip(123)}\"\"\""
+ },
+ {
+  "src": "f'/{basename.rstrip(123)}'",
+  "quote_type": null,
+  "result": "f\"/{basename.rstrip(123)}\""
+ },
+ {
+  "src": "f'/{basename}'",
+  "quote_type": "single",
+  "result": "f'/{basename}'"
+ },
+ {
+  "src": "f'/{basename}'",
+  "quote_type": "double",
+  "result": "f\"/{basename}\""
+ },
+ {
+  "src": "f'/{basename}'",
+  "quote_type": "triple_single",
+  "result": "f'''/{basename}'''"
+ },
+ {
+  "src": "f'/{basename}'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"/{basename}\"\"\""
+ },
+ {
+  "src": "f'/{basename}'",
+  "quote_type": null,
+  "result": "f\"/{basename}\""
+ },
+ {
+  "src": "f'foo bar'",
+  "quote_type": "single",
+  "result": "f'foo bar'"
+ },
+ {
+  "src": "f'foo bar'",
+  "quote_type": "double",
+  "result": "f\"foo bar\""
+ },
+ {
+  "src": "f'foo bar'",
+  "quote_type": "triple_single",
+  "result": "f'''foo bar'''"
+ },
+ {
+  "src": "f'foo bar'",
+  "quote_type": "triple_double",
+  "result": "f\"\"\"foo bar\"\"\""
+ },
+ {
+  "src": "f'foo bar'",
+  "quote_type": null,
+  "result": "f\"foo bar\""
+ }
+]

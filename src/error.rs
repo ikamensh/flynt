@@ -1,0 +1,23 @@
+//! Port of src/flynt/exceptions.py.
+
+#[derive(Debug)]
+pub enum FlyntError {
+    /// Transformation is possible but refused (edge case we don't support).
+    ConversionRefused(String),
+    /// String nesting too deep to inline.
+    StringEmbeddingTooDeep,
+    /// Generic flynt error (Python: FlyntException).
+    Generic(String),
+}
+
+impl std::fmt::Display for FlyntError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            FlyntError::ConversionRefused(msg) => write!(f, "conversion refused: {msg}"),
+            FlyntError::StringEmbeddingTooDeep => write!(f, "string embedding too deep"),
+            FlyntError::Generic(msg) => write!(f, "{msg}"),
+        }
+    }
+}
+
+impl std::error::Error for FlyntError {}
