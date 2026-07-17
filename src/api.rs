@@ -224,7 +224,12 @@ fn fstringify_notebook_with(
 
     let new_dump = json_dump(&nb);
     if state.dry_run && changes > 0 {
-        writeln!(printed, "{}", unified_diff(&original_dump, &new_dump, filename)).unwrap();
+        writeln!(
+            printed,
+            "{}",
+            unified_diff(&original_dump, &new_dump, filename)
+        )
+        .unwrap();
     } else if state.stdout {
         writeln!(printed, "{new_dump}").unwrap();
     } else if changes > 0 {
@@ -250,10 +255,9 @@ fn json_dump(v: &serde_json::Value) -> String {
 /// single string.
 fn join_source(source: Option<&serde_json::Value>) -> String {
     match source {
-        Some(serde_json::Value::Array(items)) => items
-            .iter()
-            .filter_map(|v| v.as_str())
-            .collect::<String>(),
+        Some(serde_json::Value::Array(items)) => {
+            items.iter().filter_map(|v| v.as_str()).collect::<String>()
+        }
         Some(serde_json::Value::String(s)) => s.clone(),
         _ => String::new(),
     }
@@ -397,8 +401,14 @@ fn print_report(state: &State, s: &RunStats) {
         "\nExecution time:                            {:.3}s",
         s.total_time
     );
-    println!("Files checked:                             {}", s.found_files);
-    println!("Files modified:                            {}", s.changed_files);
+    println!(
+        "Files checked:                             {}",
+        s.found_files
+    );
+    println!(
+        "Files modified:                            {}",
+        s.changed_files
+    );
     if s.changed_files > 0 {
         let cc_reduction = s.total_cc_original as i64 - s.total_cc_new as i64;
         let cc_percent = cc_reduction as f64 / s.total_cc_original as f64;
@@ -454,7 +464,10 @@ fn print_report(state: &State, s: &RunStats) {
             println!("No static string joins attempted.");
         }
 
-        println!("F-string expressions created:              {}", s.total_expressions);
+        println!(
+            "F-string expressions created:              {}",
+            s.total_expressions
+        );
 
         if state.invalid_conversions > 0 {
             println!(
@@ -471,13 +484,13 @@ fn print_report(state: &State, s: &RunStats) {
 fn print_summary(s: &RunStats) {
     if s.changed_files > 0 {
         println!(
-            "Modified {} of {} files in {:.2}s",
+            "Modified {} of {} files in {:.2}s (at rust speed 🦀)",
             s.changed_files, s.found_files, s.total_time
         );
     } else {
         let plural = if s.found_files != 1 { "s" } else { "" };
         println!(
-            "No changes made to {} file{} in {:.2}s",
+            "No changes made to {} file{} in {:.2}s (at rust speed 🦀)",
             s.found_files, plural, s.total_time
         );
     }
@@ -602,7 +615,7 @@ fn decode(raw: &[u8], encoding: &str, bom: Option<&[u8]>) -> Option<String> {
         "utf-16" => {
             let le = bom != Some(BOM_UTF16_BE);
             let body = &raw[bom.map_or(0, |b| b.len())..];
-            if body.len() % 2 != 0 {
+            if !body.len().is_multiple_of(2) {
                 return None;
             }
             let units: Vec<u16> = body
@@ -620,7 +633,7 @@ fn decode(raw: &[u8], encoding: &str, bom: Option<&[u8]>) -> Option<String> {
         "utf-32" => {
             let le = bom != Some(BOM_UTF32_BE);
             let body = &raw[bom.map_or(0, |b| b.len())..];
-            if body.len() % 4 != 0 {
+            if !body.len().is_multiple_of(4) {
                 return None;
             }
             body.chunks_exact(4)
@@ -969,7 +982,8 @@ mod tests {
         let dir = temp_dir("nb_off");
         let nb = dir.join("t.ipynb");
         write_notebook(&nb);
-        let result = fstringify_file_with(nb.to_str().unwrap(), &mut State::default(), &fakes_noop());
+        let result =
+            fstringify_file_with(nb.to_str().unwrap(), &mut State::default(), &fakes_noop());
         assert!(result.is_none());
         // untouched
         let data: serde_json::Value =

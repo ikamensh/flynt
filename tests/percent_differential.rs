@@ -15,8 +15,8 @@ use serde_json::Value;
 
 fn fixture() -> Value {
     let path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/percent.json");
-    let text = std::fs::read_to_string(&path)
-        .unwrap_or_else(|e| panic!("read {}: {e}", path.display()));
+    let text =
+        std::fs::read_to_string(&path).unwrap_or_else(|e| panic!("read {}: {e}", path.display()));
     serde_json::from_str(&text).unwrap()
 }
 
@@ -24,8 +24,10 @@ fn fixture() -> Value {
 /// matching how the fixtures were produced.
 fn run(src: &str, aggressive: u8) -> Result<String, FlyntError> {
     let node = parse_expr(src).map_err(|e| FlyntError::Generic(format!("parse {src:?}: {e}")))?;
-    let mut state = State::default();
-    state.aggressive = aggressive;
+    let state = State {
+        aggressive,
+        ..State::default()
+    };
     let result = transform_binop(&node, &state)?;
     fixup_transformed(result, None)
 }
@@ -92,7 +94,10 @@ fn candidate_counts_match_flynt() {
         let got = percent_candidates(code, &mut state).len();
         assert_eq!(got, expected, "percent_candidates count for {code:?}");
         // The returned length must also equal the state increment.
-        assert_eq!(state.percent_candidates, expected, "state increment for {code:?}");
+        assert_eq!(
+            state.percent_candidates, expected,
+            "state increment for {code:?}"
+        );
         n += 1;
     }
     assert!(n > 50, "expected a substantial candidate corpus, got {n}");

@@ -1,11 +1,13 @@
 name: Build
 on:
+  workflow_dispatch:
   pull_request:
     branches:
     - master
   push:
     branches:
     - master
+    - rust-2.0
     tags:
     - v*
 
@@ -17,20 +19,34 @@ jobs:
       fail-fast: false
       matrix:
         platform:
-          - { name: linux-x86_64,  runner: ubuntu-latest,  target: x86_64,  args: "--zig" }
-          - { name: linux-aarch64, runner: ubuntu-latest,  target: aarch64, args: "--zig" }
-          - { name: musl-x86_64,   runner: ubuntu-latest,  target: x86_64-unknown-linux-musl, args: "--zig" }
-          - { name: macos-x86_64,  runner: macos-latest,   target: x86_64,  args: "" }
-          - { name: macos-arm64,   runner: macos-latest,   target: aarch64, args: "" }
-          - { name: windows-x64,   runner: windows-latest, target: x64,     args: "" }
+          # smoke: the built wheel can run natively on this runner.
+          - { name: linux-x86_64,  runner: ubuntu-latest,  target: x86_64,  smoke: true }
+          - { name: linux-aarch64, runner: ubuntu-latest,  target: aarch64, smoke: false }
+          - { name: musl-x86_64,   runner: ubuntu-latest,  target: x86_64-unknown-linux-musl, smoke: false }
+          - { name: macos-x86_64,  runner: macos-13,       target: x86_64,  smoke: true }
+          - { name: macos-arm64,   runner: macos-latest,   target: aarch64, smoke: true }
+          - { name: windows-x64,   runner: windows-latest, target: x64,     smoke: true }
     steps:
       - uses: actions/checkout@v6
       - uses: PyO3/maturin-action@v1
         with:
           target: ${{ matrix.platform.target }}
-          args: --release --out dist ${{ matrix.platform.args }}
+          args: --release --out dist
           sccache: true
           manylinux: auto
+      - name: Smoke test wheel
+        if: matrix.platform.smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION=$(grep -m1 '^version' Cargo.toml | cut -d'"' -f2)
+          python3 -m venv smoke-venv
+          if [ -e smoke-venv/Scripts/pip.exe ]; then BIN=smoke-venv/Scripts; else BIN=smoke-venv/bin; fi
+          "$BIN/pip" install --quiet dist/*.whl
+          "$BIN/flynt" --version | grep -x "$VERSION"
+          printf 'a = "%%s" %% x\n' > smoke.py
+          "$BIN/flynt" -q smoke.py
+          grep -q 'a = f"{x}"' smoke.py
       - uses: actions/upload-artifact@v4
         with:
           name: wheels-${{ matrix.platform.name }}

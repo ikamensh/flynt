@@ -89,7 +89,10 @@ fn clen(s: &str) -> usize {
 
 /// Chars `[start, end)` of `s` (Python `s[start:end]`, out-of-range clamped).
 fn cslice(s: &str, start: usize, end: usize) -> String {
-    s.chars().skip(start).take(end.saturating_sub(start)).collect()
+    s.chars()
+        .skip(start)
+        .take(end.saturating_sub(start))
+        .collect()
 }
 
 /// Chars from `start` onward (Python `s[start:]`).
@@ -218,7 +221,12 @@ impl<'a> EditEngine<'a> {
 
     /// Port of `edit`. Fill/try each chunk, append the rest, join, and drop the
     /// final synthetic char (Python `"".join(results)[:-1]`).
-    fn edit<F>(mut self, chunks: Vec<Chunk>, state: &mut State, mut transform_func: F) -> (String, usize)
+    fn edit<F>(
+        mut self,
+        chunks: Vec<Chunk>,
+        state: &mut State,
+        mut transform_func: F,
+    ) -> (String, usize)
     where
         F: FnMut(&Expr, &mut State, QuoteType) -> (String, bool),
     {
@@ -284,17 +292,24 @@ impl<'a> EditEngine<'a> {
         let start_line = c.start_line;
         let start_idx = self.byte_to_char_idx(c.start_line, c.start_col);
         if start_line == self.last_line {
-            self.results
-                .push(cslice(self.src_lines[self.last_line], self.last_idx, start_idx));
+            self.results.push(cslice(
+                self.src_lines[self.last_line],
+                self.last_idx,
+                start_idx,
+            ));
         } else {
-            self.results
-                .push(format!("{}\n", cslice_from(self.src_lines[self.last_line], self.last_idx)));
+            self.results.push(format!(
+                "{}\n",
+                cslice_from(self.src_lines[self.last_line], self.last_idx)
+            ));
             self.last_line += 1;
             while self.last_line < start_line {
-                self.results.push(format!("{}\n", self.src_lines[self.last_line]));
+                self.results
+                    .push(format!("{}\n", self.src_lines[self.last_line]));
                 self.last_line += 1;
             }
-            self.results.push(cslice(self.src_lines[start_line], 0, start_idx));
+            self.results
+                .push(cslice(self.src_lines[start_line], 0, start_idx));
         }
         self.last_idx = start_idx;
     }
@@ -334,11 +349,11 @@ impl<'a> EditEngine<'a> {
 
         // Quote detection on the unstripped snippet; on failure fall back to
         // double quote and an empty escape map (Python's try/except).
-        let (quote_type, escape_map) = match (get_quote_type(&snippet), unicode_escape_map(&snippet))
-        {
-            (Ok(q), Ok(m)) => (q, m),
-            _ => (QuoteType::Double, HashMap::new()),
-        };
+        let (quote_type, escape_map) =
+            match (get_quote_type(&snippet), unicode_escape_map(&snippet)) {
+                (Ok(q), Ok(m)) => (q, m),
+                _ => (QuoteType::Double, HashMap::new()),
+            };
 
         let (mut converted, changed) = transform_func(&chunk.node, state, quote_type);
         if changed && !escape_map.is_empty() && !is_raw {
@@ -374,10 +389,13 @@ impl<'a> EditEngine<'a> {
                 snippet_quote,
                 Some(QuoteType::TripleDouble) | Some(QuoteType::TripleSingle)
             ) {
-                let mut lines: Vec<String> = converted.split("\\n").map(|s| s.to_string()).collect();
+                let mut lines: Vec<String> =
+                    converted.split("\\n").map(|s| s.to_string()).collect();
                 let last = lines.len() - 1;
                 lines[last].push_str(&rest);
-                let fit = lines.iter().all(|l| clen(l) + start_char_col <= self.len_limit);
+                let fit = lines
+                    .iter()
+                    .all(|l| clen(l) + start_char_col <= self.len_limit);
                 converted = converted.replace("\\n", "\n");
                 fit
             } else {
@@ -442,11 +460,14 @@ impl<'a> EditEngine<'a> {
 
     /// Port of `add_rest`: emit the tail of the current line and every line after.
     fn add_rest(&mut self) {
-        self.results
-            .push(format!("{}\n", cslice_from(self.src_lines[self.last_line], self.last_idx)));
+        self.results.push(format!(
+            "{}\n",
+            cslice_from(self.src_lines[self.last_line], self.last_idx)
+        ));
         self.last_line += 1;
         while self.src_lines.len() > self.last_line {
-            self.results.push(format!("{}\n", self.src_lines[self.last_line]));
+            self.results
+                .push(format!("{}\n", self.src_lines[self.last_line]));
             self.last_line += 1;
         }
     }
@@ -472,10 +493,17 @@ mod tests {
 
     /// Drive the engine directly with injected chunks + a constant fake
     /// transform, so these tests do not depend on candidates/transform modules.
-    fn run(code: &str, len_limit: Option<usize>, chunks: Vec<Chunk>, repl: &str, changed: bool) -> (String, usize) {
+    fn run(
+        code: &str,
+        len_limit: Option<usize>,
+        chunks: Vec<Chunk>,
+        repl: &str,
+        changed: bool,
+    ) -> (String, usize) {
         let mut state = State::default();
         let repl = repl.to_string();
-        EditEngine::new(code, len_limit).edit(chunks, &mut state, |_n, _s, _q| (repl.clone(), changed))
+        EditEngine::new(code, len_limit)
+            .edit(chunks, &mut state, |_n, _s, _q| (repl.clone(), changed))
     }
 
     // Reference values below are pinned against flynt 1.0.6's CodeEditor driven
@@ -544,7 +572,13 @@ mod tests {
     #[test]
     fn multiline_non_triple_skipped_when_too_long() {
         let code = "z = ('a' %\n b)";
-        let out = run(code, Some(1), vec![chunk_for(code, "'a' %\n b")], "REPL", true);
+        let out = run(
+            code,
+            Some(1),
+            vec![chunk_for(code, "'a' %\n b")],
+            "REPL",
+            true,
+        );
         assert_eq!(out, ("z = ('a' %\n b)".to_string(), 0));
     }
 
@@ -552,7 +586,13 @@ mod tests {
     fn single_line_ignores_length_limit() {
         // contract_lines == 0 -> lines_fit is always true, len limit not checked.
         let code = "y = 'a' % b";
-        let out = run(code, Some(1), vec![chunk_for(code, "'a' % b")], "REPLACEMENTLONG", true);
+        let out = run(
+            code,
+            Some(1),
+            vec![chunk_for(code, "'a' % b")],
+            "REPLACEMENTLONG",
+            true,
+        );
         assert_eq!(out, ("y = REPLACEMENTLONG".to_string(), 1));
     }
 
@@ -561,21 +601,39 @@ mod tests {
         let code = "\"\"\"line1\n{}\nline3\"\"\".format(x)";
         // Converted carries literal `\n`; the triple branch turns them into real
         // newlines and keeps the physical lines.
-        let out = run(code, None, vec![chunk_for(code, code)], "f\"\"\"A\\nB\\nC\"\"\"", true);
+        let out = run(
+            code,
+            None,
+            vec![chunk_for(code, code)],
+            "f\"\"\"A\\nB\\nC\"\"\"",
+            true,
+        );
         assert_eq!(out, ("f\"\"\"A\nB\nC\"\"\"".to_string(), 1));
     }
 
     #[test]
     fn triple_quote_skipped_when_a_line_exceeds_limit() {
         let code = "\"\"\"line1\n{}\nline3\"\"\".format(x)";
-        let out = run(code, Some(3), vec![chunk_for(code, code)], "f\"\"\"A\\nBBBBB\\nC\"\"\"", true);
+        let out = run(
+            code,
+            Some(3),
+            vec![chunk_for(code, code)],
+            "f\"\"\"A\\nBBBBB\\nC\"\"\"",
+            true,
+        );
         assert_eq!(out, (code.to_string(), 0));
     }
 
     #[test]
     fn triple_quote_accepted_under_generous_limit() {
         let code = "\"\"\"line1\n{}\nline3\"\"\".format(x)";
-        let out = run(code, Some(200), vec![chunk_for(code, code)], "f\"\"\"A\\nBBBBB\\nC\"\"\"", true);
+        let out = run(
+            code,
+            Some(200),
+            vec![chunk_for(code, code)],
+            "f\"\"\"A\\nBBBBB\\nC\"\"\"",
+            true,
+        );
         assert_eq!(out, ("f\"\"\"A\nBBBBB\nC\"\"\"".to_string(), 1));
     }
 
@@ -584,7 +642,13 @@ mod tests {
         // `a = ('foo {}'.format(\n    var)).bar` -> the outer `(...)` collapses
         // and the trailing `.bar` (after the skipped `)`) is preserved.
         let code = "a = ('foo {}'.format(\n    var)).bar";
-        let out = run(code, None, vec![chunk_for(code, "'foo {}'.format(\n    var)")], "REPL", true);
+        let out = run(
+            code,
+            None,
+            vec![chunk_for(code, "'foo {}'.format(\n    var)")],
+            "REPL",
+            true,
+        );
         assert_eq!(out, ("a = REPL.bar".to_string(), 1));
     }
 
@@ -593,7 +657,13 @@ mod tests {
         // The fragment before the chunk is the line's leading whitespace, not
         // `(` (which is on the previous physical line), so parens stay.
         let code = "a = (\n 'foo {}'.format(var)\n)";
-        let out = run(code, None, vec![chunk_for(code, "'foo {}'.format(var)")], "REPL", true);
+        let out = run(
+            code,
+            None,
+            vec![chunk_for(code, "'foo {}'.format(var)")],
+            "REPL",
+            true,
+        );
         assert_eq!(out, ("a = (\n REPL\n)".to_string(), 1));
     }
 
@@ -607,7 +677,13 @@ mod tests {
     #[test]
     fn comment_in_chunk_is_skipped() {
         let code = "x = ('a'  # c\n % b)";
-        let out = run(code, None, vec![chunk_for(code, "'a'  # c\n % b")], "REPL", true);
+        let out = run(
+            code,
+            None,
+            vec![chunk_for(code, "'a'  # c\n % b")],
+            "REPL",
+            true,
+        );
         assert_eq!(out, (code.to_string(), 0));
     }
 
@@ -632,7 +708,13 @@ mod tests {
         let out = run(code, None, vec![chunk_for(code, "r'%s' % b")], "f'X'", true);
         assert_eq!(out, ("rf'X'".to_string(), 1));
 
-        let out = run(code, None, vec![chunk_for(code, "r'%s' % b")], "f'\\\\n'", true);
+        let out = run(
+            code,
+            None,
+            vec![chunk_for(code, "r'%s' % b")],
+            "f'\\\\n'",
+            true,
+        );
         // f'\\n' -> collapse -> f'\n' -> prefix -> rf'\n'
         assert_eq!(out, ("rf'\\n'".to_string(), 1));
     }
@@ -642,7 +724,13 @@ mod tests {
         // The source escape `°` decodes to '°'; the fake output's real '°'
         // is restored to `°`.
         let code = "x = \"pre\\u00B0post\" % y";
-        let out = run(code, None, vec![chunk_for(code, "\"pre\\u00B0post\" % y")], "f\"A°B\"", true);
+        let out = run(
+            code,
+            None,
+            vec![chunk_for(code, "\"pre\\u00B0post\" % y")],
+            "f\"A°B\"",
+            true,
+        );
         assert_eq!(out, ("x = f\"A\\u00B0B\"".to_string(), 1));
     }
 

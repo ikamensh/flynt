@@ -45,7 +45,9 @@ struct HarnessRequest {
 pub fn run_harness_json() -> i32 {
     let mut input = String::new();
     use std::io::Read;
-    std::io::stdin().read_to_string(&mut input).expect("read stdin");
+    std::io::stdin()
+        .read_to_string(&mut input)
+        .expect("read stdin");
     let req: HarnessRequest = serde_json::from_str(&input).expect("bad harness request");
 
     let mut state = State {
@@ -321,11 +323,7 @@ fn bump8(count: &mut u8, explicit: &mut HashSet<&'static str>, key: &'static str
     *count += 1;
     explicit.insert(key);
 }
-fn take_value(
-    inline: Option<String>,
-    argv: &[String],
-    i: &mut usize,
-) -> Result<String, i32> {
+fn take_value(inline: Option<String>, argv: &[String], i: &mut usize) -> Result<String, i32> {
     match inline {
         Some(v) => Ok(v),
         None => {
@@ -583,7 +581,9 @@ pub fn run(args: Vec<String>) -> i32 {
         }
         let mut input = String::new();
         use std::io::Read;
-        std::io::stdin().read_to_string(&mut input).expect("read stdin");
+        std::io::stdin()
+            .read_to_string(&mut input)
+            .expect("read stdin");
         let trimmed = strip_linesep(&input);
         return match api::fstringify_code(&trimmed, &mut state, "<stdin>") {
             Some(r) => {
@@ -594,7 +594,7 @@ pub fn run(args: Vec<String>) -> i32 {
         };
     }
 
-    let mut salutation = format!("Running flynt v.{}", crate::VERSION);
+    let mut salutation = format!("Running flynt v.{} 🦀 (rust)", crate::VERSION);
     if let Some(toml_file) = pyproject::find_pyproject_toml(&parsed.src) {
         salutation.push_str(&format!("\nUsing config file at {}", toml_file.display()));
         let cfg = pyproject::parse_pyproject_toml(&toml_file);
@@ -654,7 +654,10 @@ mod tests {
     // Port of test_cli.py invalid-snippet case (no core needed: parse fails).
     #[test]
     fn string_invalid_snippet_returns_input() {
-        assert_eq!(run_args(&["-s", "This ! isn't <> valid .. Python $ code"]), 0);
+        assert_eq!(
+            run_args(&["-s", "This ! isn't <> valid .. Python $ code"]),
+            0
+        );
     }
 
     #[test]

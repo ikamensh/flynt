@@ -208,8 +208,7 @@ fn transform_dict(
                     // the whole candidate is skipped upstream.
                     map.remove(&m.key)
                 };
-                looked_up
-                    .ok_or_else(|| FlyntError::Generic(format!("KeyError: '{}'", m.key)))?
+                looked_up.ok_or_else(|| FlyntError::Generic(format!("KeyError: '{}'", m.key)))?
             }
             None => make_subscript(right, &m.key),
         };
@@ -596,8 +595,10 @@ mod tests {
     /// via `fixup_transformed` (the byte-for-byte contract vs. Python).
     fn tf(src: &str, aggressive: u8) -> Result<String, FlyntError> {
         let node = parse_expr(src).unwrap();
-        let mut state = State::default();
-        state.aggressive = aggressive;
+        let state = State {
+            aggressive,
+            ..State::default()
+        };
         let result = transform_binop(&node, &state)?;
         fixup_transformed(result, None)
     }
@@ -611,7 +612,10 @@ mod tests {
         assert_eq!(ok("'%s' % x", 0), "f\"{x}\"");
         assert_eq!(ok("'%s and %s' % (a, b)", 0), "f\"{a} and {b}\"");
         assert_eq!(ok("'%s and %s' % [a, b]", 0), "f\"{a} and {b}\"");
-        assert_eq!(ok("'application \"%s\"' % obj.name", 0), "f\"application \\\"{obj.name}\\\"\"");
+        assert_eq!(
+            ok("'application \"%s\"' % obj.name", 0),
+            "f\"application \\\"{obj.name}\\\"\""
+        );
     }
 
     #[test]
@@ -715,7 +719,9 @@ mod tests {
     fn is_percent_stringify_guard() {
         assert!(is_percent_stringify(&parse_expr("'%s' % x").unwrap()));
         assert!(is_percent_stringify(&parse_expr("'%s' % (a, b)").unwrap()));
-        assert!(is_percent_stringify(&parse_expr("'%(k)s' % {'k': v}").unwrap()));
+        assert!(is_percent_stringify(
+            &parse_expr("'%(k)s' % {'k': v}").unwrap()
+        ));
         // Set RHS is not eligible.
         assert!(!is_percent_stringify(&parse_expr("'%s' % {x}").unwrap()));
         // non-% operator / non-literal left

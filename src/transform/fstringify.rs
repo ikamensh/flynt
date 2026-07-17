@@ -48,7 +48,12 @@ impl Transformer<'_> {
         self.state.call_candidates += 1;
 
         if let Expr::Call(call) = &*expr {
-            if call.arguments.args.iter().any(|a| matches!(a, Expr::Starred(_))) {
+            if call
+                .arguments
+                .args
+                .iter()
+                .any(|a| matches!(a, Expr::Starred(_)))
+            {
                 // `*args` bail — no way to preserve unpacking semantics.
                 return;
             }

@@ -146,7 +146,9 @@ fn home_dir() -> PathBuf {
     let key = "USERPROFILE";
     #[cfg(not(windows))]
     let key = "HOME";
-    std::env::var(key).map(PathBuf::from).unwrap_or_else(|_| PathBuf::from("/"))
+    std::env::var(key)
+        .map(PathBuf::from)
+        .unwrap_or_else(|_| PathBuf::from("/"))
 }
 
 /// Parse a pyproject/flynt toml, pulling out the `[tool.flynt]` section (or the

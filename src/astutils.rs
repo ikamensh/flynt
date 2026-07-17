@@ -20,6 +20,7 @@ use std::collections::{HashMap, HashSet};
 
 use ruff_python_ast::str::{Quote, TripleQuotes};
 use ruff_python_ast::str_prefix::StringLiteralPrefix;
+use ruff_python_ast::token::TokenKind;
 use ruff_python_ast::visitor::{walk_expr, Visitor};
 use ruff_python_ast::{
     self as ast, AtomicNodeIndex, ConversionFlag, Expr, ExprStringLiteral, FString, FStringFlags,
@@ -28,7 +29,6 @@ use ruff_python_ast::{
 };
 use ruff_python_codegen::{Generator, Indentation};
 use ruff_python_parser::{parse_expression, parse_unchecked, Mode as ParseMode, ParseOptions};
-use ruff_python_ast::token::TokenKind;
 use ruff_source_file::LineEnding;
 use ruff_text_size::TextRange;
 
@@ -293,8 +293,11 @@ fn select_and_render_fstring(parts: &[FsPart]) -> Result<(&'static str, String),
             }
         } else {
             if part.canonical.contains('\n') {
-                let multi: Vec<&'static str> =
-                    quote_types.iter().copied().filter(|q| q.len() == 3).collect();
+                let multi: Vec<&'static str> = quote_types
+                    .iter()
+                    .copied()
+                    .filter(|q| q.len() == 3)
+                    .collect();
                 if multi.is_empty() {
                     // CPython: `assert quote_types` fires; flynt catches the
                     // AssertionError and refuses the conversion.
@@ -817,7 +820,7 @@ fn formatted_value_impl(
 
     // Auto-convert str(x)/repr(x) with no spec into a conversion flag.
     let mut conversion = conversion.map(str::to_string);
-    if fmt_str.map_or(true, str::is_empty) && conversion.is_none() {
+    if fmt_str.is_none_or(str::is_empty) && conversion.is_none() {
         if let Expr::Call(call) = &val {
             if let Expr::Name(name) = call.func.as_ref() {
                 let id = name.id.as_str();
@@ -906,14 +909,16 @@ fn build_format_spec(
             let value = var_map.get(&key).cloned().ok_or_else(|| {
                 FlyntError::Generic(format!("format spec references unknown field {key:?}"))
             })?;
-            parts.push(InterpolatedStringElement::Interpolation(InterpolatedElement {
-                range: dummy_range(),
-                node_index: AtomicNodeIndex::default(),
-                expression: Box::new(value),
-                debug_text: None,
-                conversion: ConversionFlag::None,
-                format_spec: None,
-            }));
+            parts.push(InterpolatedStringElement::Interpolation(
+                InterpolatedElement {
+                    range: dummy_range(),
+                    node_index: AtomicNodeIndex::default(),
+                    expression: Box::new(value),
+                    debug_text: None,
+                    conversion: ConversionFlag::None,
+                    format_spec: None,
+                },
+            ));
         }
     }
     Ok((
@@ -1070,8 +1075,14 @@ mod tests {
     #[test]
     fn ternary_paren_strip_basic() {
         // Both parenthesised and not collapse to the no-paren form.
-        assert_eq!(strip_ternary_parens("f'{(a if b else c)}'"), "f'{a if b else c}'");
-        assert_eq!(strip_ternary_parens("f'{a if b else c}'"), "f'{a if b else c}'");
+        assert_eq!(
+            strip_ternary_parens("f'{(a if b else c)}'"),
+            "f'{a if b else c}'"
+        );
+        assert_eq!(
+            strip_ternary_parens("f'{a if b else c}'"),
+            "f'{a if b else c}'"
+        );
     }
 
     #[test]
@@ -1141,20 +1152,14 @@ mod tests {
     fn fstring_delimiter_trailing_quote_escape() {
         // All surviving candidates start with the part's trailing char ->
         // triple delimiter with the final quote escaped (CPython rule).
-        assert_eq!(
-            u("f'x\\'\\'\\'y{v}z\"'"),
-            "f\"\"\"x'''y{v}z\\\"\"\"\""
-        );
+        assert_eq!(u("f'x\\'\\'\\'y{v}z\"'"), "f\"\"\"x'''y{v}z\\\"\"\"\"");
     }
 
     #[test]
     fn fstring_delimiter_repr_fallback() {
         // A constant containing both triple-quote runs exhausts the candidates:
         // CPython falls back to repr for that part (single-quote escaping).
-        assert_eq!(
-            u("f'a\\'\\'\\'b\"\"\"c{v}'"),
-            "f'a\\'\\'\\'b\"\"\"c{v}'"
-        );
+        assert_eq!(u("f'a\\'\\'\\'b\"\"\"c{v}'"), "f'a\\'\\'\\'b\"\"\"c{v}'");
     }
 
     #[test]
@@ -1169,7 +1174,10 @@ mod tests {
         ];
         let out =
             fixup_transformed(new_joined_str(els), Some(quotes::QuoteType::TripleDouble)).unwrap();
-        assert_eq!(out, "f\"\"\"WHERE SEQUENCE_NAME = '{args['sq_name']}';\"\"\"");
+        assert_eq!(
+            out,
+            "f\"\"\"WHERE SEQUENCE_NAME = '{args['sq_name']}';\"\"\""
+        );
         assert!(!out.contains("\\'"));
     }
 
@@ -1211,11 +1219,15 @@ mod tests {
     #[test]
     fn helper_format_spec_and_conversion() {
         assert_eq!(
-            build(vec![ast_formatted_value(name("a"), Some(">10"), None).unwrap()]),
+            build(vec![
+                ast_formatted_value(name("a"), Some(">10"), None).unwrap()
+            ]),
             "f'{a:>10}'"
         );
         assert_eq!(
-            build(vec![ast_formatted_value(name("a"), None, Some("!r")).unwrap()]),
+            build(vec![
+                ast_formatted_value(name("a"), None, Some("!r")).unwrap()
+            ]),
             "f'{a!r}'"
         );
     }
@@ -1223,11 +1235,15 @@ mod tests {
     #[test]
     fn helper_str_repr_auto_conversion() {
         assert_eq!(
-            build(vec![ast_formatted_value(name("str(x)"), None, None).unwrap()]),
+            build(vec![
+                ast_formatted_value(name("str(x)"), None, None).unwrap()
+            ]),
             "f'{x!s}'"
         );
         assert_eq!(
-            build(vec![ast_formatted_value(name("repr(x)"), None, None).unwrap()]),
+            build(vec![
+                ast_formatted_value(name("repr(x)"), None, None).unwrap()
+            ]),
             "f'{x!r}'"
         );
     }
@@ -1263,7 +1279,10 @@ mod tests {
                 .unwrap();
         assert_eq!(build(vec![node]), "f'{a:{w}.{p}f}'");
         assert_eq!(consumed, 2);
-        assert_eq!(used, HashSet::from([FieldKey::Index(0), FieldKey::Index(1)]));
+        assert_eq!(
+            used,
+            HashSet::from([FieldKey::Index(0), FieldKey::Index(1)])
+        );
     }
 
     #[test]

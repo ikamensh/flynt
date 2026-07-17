@@ -16,8 +16,8 @@ fn fixture(name: &str) -> Value {
     let path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .join("tests/fixtures")
         .join(name);
-    let text = std::fs::read_to_string(&path)
-        .unwrap_or_else(|e| panic!("read {}: {e}", path.display()));
+    let text =
+        std::fs::read_to_string(&path).unwrap_or_else(|e| panic!("read {}: {e}", path.display()));
     serde_json::from_str(&text).unwrap()
 }
 
@@ -90,9 +90,9 @@ fn unparse_matches_flynt() {
         };
         match ast_to_string(&node) {
             Ok(got) if got == expected => {}
-            Ok(got) => {
-                failures.push(format!("src={src:?}\n  expected={expected:?}\n  got     ={got:?}"))
-            }
+            Ok(got) => failures.push(format!(
+                "src={src:?}\n  expected={expected:?}\n  got     ={got:?}"
+            )),
             Err(e) => failures.push(format!("ERR {src:?}: {e}")),
         }
         n += 1;
@@ -156,7 +156,11 @@ fn str_in_str_matches_flynt() {
             failures.push(format!("src={src:?} expected={expected} got={got}"));
         }
     }
-    assert!(failures.is_empty(), "str_in_str mismatches:\n{}", failures.join("\n"));
+    assert!(
+        failures.is_empty(),
+        "str_in_str mismatches:\n{}",
+        failures.join("\n")
+    );
 }
 
 #[test]
@@ -165,7 +169,11 @@ fn contains_comment_matches_flynt() {
     for entry in data.as_array().unwrap() {
         let code = entry["code"].as_str().unwrap();
         let expected = entry["result"].as_bool().unwrap();
-        assert_eq!(contains_comment(code), expected, "contains_comment({code:?})");
+        assert_eq!(
+            contains_comment(code),
+            expected,
+            "contains_comment({code:?})"
+        );
     }
 }
 
@@ -198,7 +206,11 @@ fn stdlib_parse_matches_flynt() {
             }
         }
     }
-    assert!(failures.is_empty(), "stdlib_parse mismatches:\n{}", failures.join("\n"));
+    assert!(
+        failures.is_empty(),
+        "stdlib_parse mismatches:\n{}",
+        failures.join("\n")
+    );
 }
 
 #[test]

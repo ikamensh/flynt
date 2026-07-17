@@ -280,11 +280,7 @@ fn validate_field(cs: &[char], mut i: usize) -> Result<usize, FlyntError> {
         match cs[i] {
             '}' => return Ok(i + 1),
             ':' => {} // fall through to format-spec parsing
-            _ => {
-                return Err(fmt_value_error(
-                    "expected ':' after conversion specifier",
-                ))
-            }
+            _ => return Err(fmt_value_error("expected ':' after conversion specifier")),
         }
     }
     // Format spec (term == ':' or after a conversion): brace-count to the close.
@@ -411,12 +407,18 @@ mod tests {
 
     #[test]
     fn basic_positional() {
-        assert_eq!(conv(r#""{} {}".format(a, b)"#, false).unwrap(), "f'{a} {b}'");
+        assert_eq!(
+            conv(r#""{} {}".format(a, b)"#, false).unwrap(),
+            "f'{a} {b}'"
+        );
     }
 
     #[test]
     fn reordered_positional() {
-        assert_eq!(conv(r#""{1} {0}".format(a, b)"#, false).unwrap(), "f'{b} {a}'");
+        assert_eq!(
+            conv(r#""{1} {0}".format(a, b)"#, false).unwrap(),
+            "f'{b} {a}'"
+        );
     }
 
     #[test]
@@ -451,7 +453,10 @@ mod tests {
 
     #[test]
     fn reused_variable_ok_aggressive() {
-        assert_eq!(conv(r#""{0} {0}".format(arg)"#, true).unwrap(), "f'{arg} {arg}'");
+        assert_eq!(
+            conv(r#""{0} {0}".format(arg)"#, true).unwrap(),
+            "f'{arg} {arg}'"
+        );
     }
 
     #[test]
@@ -474,7 +479,10 @@ mod tests {
 
     #[test]
     fn nested_format_spec() {
-        assert_eq!(conv(r#""{:{}}".format(x, y)"#, false).unwrap(), "f'{x:{y}}'");
+        assert_eq!(
+            conv(r#""{:{}}".format(x, y)"#, false).unwrap(),
+            "f'{x:{y}}'"
+        );
         assert_eq!(
             conv(r#""{:{fill}}".format(x, fill=c)"#, false).unwrap(),
             "f'{x:{c}}'"
@@ -500,12 +508,19 @@ mod tests {
     #[test]
     fn validate_matches_formatter_errors() {
         // Valid strings pass.
-        for ok in ["{}", "{{}}", "{x}", "{x!r}", "{x:>5}", "{x:{w}}", "{0[a]}", "{{lit}}"] {
+        for ok in [
+            "{}", "{{}}", "{x}", "{x!r}", "{x:>5}", "{x:{w}}", "{0[a]}", "{{lit}}",
+        ] {
             assert!(validate_format_string(ok).is_ok(), "{ok:?} should be valid");
         }
         // Malformed strings are rejected (mirrors Formatter.parse ValueError).
-        for bad in ["{", "}", "a{b", "a}b", "{x", "{}}", "{{}", "{ {1} }", "{x!rq}"] {
-            assert!(validate_format_string(bad).is_err(), "{bad:?} should be invalid");
+        for bad in [
+            "{", "}", "a{b", "a}b", "{x", "{}}", "{{}", "{ {1} }", "{x!rq}",
+        ] {
+            assert!(
+                validate_format_string(bad).is_err(),
+                "{bad:?} should be invalid"
+            );
         }
     }
 }

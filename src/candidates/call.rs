@@ -69,7 +69,7 @@ pub fn call_candidates(code: &str, state: &mut State) -> Vec<Chunk> {
     finder.candidates
 }
 
-fn visit_stmt<'a>(finder: &mut CallFmtFinder, stmt: &'a Stmt) {
+fn visit_stmt(finder: &mut CallFmtFinder, stmt: &Stmt) {
     finder.visit_stmt(stmt);
 }
 

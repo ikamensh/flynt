@@ -141,7 +141,10 @@ mod tests {
     fn get_quote_type_basic() {
         assert_eq!(get_quote_type("'abra'").unwrap(), QuoteType::Single);
         assert_eq!(get_quote_type("\"bobro\"").unwrap(), QuoteType::Double);
-        assert_eq!(get_quote_type("'''abra'''").unwrap(), QuoteType::TripleSingle);
+        assert_eq!(
+            get_quote_type("'''abra'''").unwrap(),
+            QuoteType::TripleSingle
+        );
         assert_eq!(
             get_quote_type("\"\"\"bobro\"\"\"").unwrap(),
             QuoteType::TripleDouble
@@ -183,14 +186,21 @@ mod tests {
         for code in ["'abra'", "\"bobro\"", "'''abra'''", "\"\"\"bobro\"\"\""] {
             for qt in ALL_QUOTE_TYPES {
                 let converted = set_quote_type(code, qt);
-                assert_eq!(get_quote_type(&converted).unwrap(), qt, "code={code} qt={qt:?}");
+                assert_eq!(
+                    get_quote_type(&converted).unwrap(),
+                    qt,
+                    "code={code} qt={qt:?}"
+                );
             }
         }
     }
 
     #[test]
     fn set_single() {
-        assert_eq!(set_quote_type("\"alpha123\"", QuoteType::Single), "'alpha123'");
+        assert_eq!(
+            set_quote_type("\"alpha123\"", QuoteType::Single),
+            "'alpha123'"
+        );
     }
 
     #[test]
