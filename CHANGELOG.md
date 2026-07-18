@@ -6,8 +6,13 @@
   disable). Verified against the full 1.x integration suite and byte-compared
   with 1.x over the Django 1.11 codebase (2400 files).
 * **Breaking: the Python API (`import flynt`) is gone; 2.0 is CLI-only.** If you
-  depend on `flynt.api` / `flynt.code_editor`, stay on `flynt<2`. The
-  pre-commit hook and all CLI flags are unchanged.
+  depend on `flynt.api` / `flynt.code_editor`, stay on `flynt<2`. All CLI
+  flags are unchanged, and `python -m flynt` still works (the wheel ships a
+  tiny shim that runs the binary). Accessing attributes of `import flynt`
+  raises an error explaining the removal.
+* **pre-commit:** keep `rev: '1.0.6'` during the beta — a 2.0 `rev` builds
+  from source and needs a Rust toolchain. A wheel-backed hook comes with 2.0
+  final.
 * Behavior differences vs 1.x, both intentional (see DIVERGENCES.md):
   converted f-strings no longer contain redundant parentheses around generator
   expressions or unary `not`; everything else is byte-identical.

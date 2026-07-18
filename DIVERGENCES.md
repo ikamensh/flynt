@@ -48,4 +48,13 @@ states), so flynt-rs treats it as a regular golden sample. No divergence.
   for unterminated input.
 - **Why better**: the 1.x behavior is a plain bug; caught by Windows CI.
 
+## 4. Help/usage text line-wrapping (cosmetic)
+
+- **Python flynt**: argparse wraps `--help` and usage-on-error output to the
+  terminal width (80 columns when piped).
+- **flynt 2.0**: `--help` is a fixed 70-column snapshot (the README
+  embedding); usage-on-error is emitted on a single line.
+- Same words, different line breaks; exit codes and error text identical
+  (verified by a 24-case CLI parity matrix against 1.0.6).
+
 (Entries below added during integration burn-down.)

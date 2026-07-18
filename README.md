@@ -131,12 +131,17 @@ add flynt to your [pre-commit](https://www.pre-commit.com) hooks.
 Add a new section to `.pre-commit-config.yaml`:
 ```
 -   repo: https://github.com/ikamensh/flynt/
-    rev: ''
+    rev: '1.0.6'
     hooks:
     -   id: flynt
 ```
 
 This will run flynt on all modified files before committing.
+
+> **Note (2.0 beta):** keep `rev: '1.0.6'` for now. Pointing `rev` at a 2.0
+> checkout makes pre-commit build flynt from source, which requires a Rust
+> toolchain. A wheel-backed hook (installing the prebuilt binary from PyPI)
+> will ship with the final 2.0 release.
 
 You can skip conversion of certain lines by adding `# noqa [: anything else] flynt [anything else]` or `# flynt: skip`
 

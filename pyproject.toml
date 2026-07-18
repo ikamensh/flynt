@@ -30,3 +30,6 @@ Homepage = "https://github.com/ikamensh/flynt"
 
 [tool.maturin]
 bindings = "bin"
+# Ships a tiny `flynt` python package next to the binary (uv/ruff pattern):
+# `python -m flynt` execs the binary; `import flynt` explains the API removal.
+python-source = "python"

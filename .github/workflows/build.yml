@@ -23,6 +23,7 @@ jobs:
           - { name: linux-x86_64,  runner: ubuntu-latest,  target: x86_64,  smoke: true }
           - { name: linux-aarch64, runner: ubuntu-latest,  target: aarch64, smoke: false }
           - { name: musl-x86_64,   runner: ubuntu-latest,  target: x86_64-unknown-linux-musl, smoke: false }
+          - { name: musl-aarch64,  runner: ubuntu-latest,  target: aarch64-unknown-linux-musl, smoke: false }
           # Cross-compiled on arm64: macos-13 (Intel) runners are scarce/phasing out.
           - { name: macos-x86_64,  runner: macos-latest,   target: x86_64,  smoke: false }
           - { name: macos-arm64,   runner: macos-latest,   target: aarch64, smoke: true }
@@ -45,6 +46,16 @@ jobs:
           if [ -e smoke-venv/Scripts/pip.exe ]; then BIN=smoke-venv/Scripts; else BIN=smoke-venv/bin; fi
           "$BIN/pip" install --quiet dist/*.whl
           "$BIN/flynt" --version | grep -x "$VERSION"
+          "$BIN/python" -m flynt --version | grep -x "$VERSION"
+          "$BIN/python" -c "
+          import flynt
+          try:
+              flynt.main
+          except AttributeError as e:
+              assert 'flynt<2' in str(e), e
+          else:
+              raise SystemExit('import flynt should not expose an API')
+          "
           printf 'a = "%%s" %% x\n' > smoke.py
           "$BIN/flynt" -q smoke.py
           grep -q 'a = f"{x}"' smoke.py

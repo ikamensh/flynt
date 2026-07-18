@@ -244,11 +244,16 @@ fn fstringify_notebook_with(
     })
 }
 
-/// `json.dumps(nb, ensure_ascii=False, indent=1)` equivalent. Exact formatting
-/// is not pinned by any test (notebook equality is structural), so pretty JSON
-/// suffices while staying human-readable for dry-run diffs.
+/// `json.dumps(nb, ensure_ascii=False, indent=1)` equivalent. One-space
+/// indent matches nbformat/Jupyter output, so a notebook converted by flynt
+/// and later re-saved in Jupyter doesn't produce indentation-only diffs.
 fn json_dump(v: &serde_json::Value) -> String {
-    serde_json::to_string_pretty(v).expect("serialize notebook")
+    use serde::Serialize;
+    let formatter = serde_json::ser::PrettyFormatter::with_indent(b" ");
+    let mut out = Vec::new();
+    let mut ser = serde_json::Serializer::with_formatter(&mut out, formatter);
+    v.serialize(&mut ser).expect("serialize notebook");
+    String::from_utf8(out).expect("notebook json is utf-8")
 }
 
 /// `"".join(cell.get("source", []))` — source may be a list of strings or a

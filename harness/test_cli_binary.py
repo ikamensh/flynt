@@ -217,7 +217,12 @@ def test_sample_notebook(tmp_path):
     shutil.copy2(src, work)
     p = run_cli(["-nb", str(work)])
     assert p.returncode == 0
-    assert json.loads(work.read_text(encoding="utf-8")) == json.loads(expected.read_text(encoding="utf-8"))
+    written = work.read_text(encoding="utf-8")
+    assert json.loads(written) == json.loads(expected.read_text(encoding="utf-8"))
+    # Byte-level: flynt 1.x wrote json.dumps(..., ensure_ascii=False, indent=1)
+    # (the nbformat/Jupyter convention); a different indent would make Jupyter
+    # re-saves produce indentation-only diffs.
+    assert written == json.dumps(json.loads(written), ensure_ascii=False, indent=1)
 
 
 def test_notebook_ignored_without_flag(tmp_path):
