@@ -33,3 +33,7 @@ bindings = "bin"
 # Ships a tiny `flynt` python package next to the binary (uv/ruff pattern):
 # `python -m flynt` execs the binary; `import flynt` explains the API removal.
 python-source = "python"
+
+[tool.codespell]
+# Rust identifiers and README wording, not typos.
+ignore-words-list = ["hass", "thats", "ser", "clen", "nd", "unparseable"]
