@@ -1,0 +1,42 @@
+# Post-release verification: install the given version from PyPI on real
+# runners (incl. an arm64 Linux VM) and exercise the wheel's three contracts.
+# Complements build.yml's pre-upload smoke, which never sees the published
+# package. Dispatch: gh workflow run verify-pypi.yml -f version=2.0.0b1
+name: Verify PyPI release
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "PyPI version to verify (e.g. 2.0.0b1)"
+        required: true
+
+jobs:
+  install:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, ubuntu-24.04-arm, macos-latest, windows-latest]
+    steps:
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check --only-binary=:all: --pre "flynt==${{ inputs.version }}"
+          flynt --version
+          python -m flynt --version
+          printf 'a = "%%s" %% x\n' > s.py
+          flynt -q s.py
+          grep -q 'a = f"{x}"' s.py
+          python -c "
+          import flynt
+          try:
+              flynt.main
+          except AttributeError as e:
+              assert 'flynt<2' in str(e), e
+          else:
+              raise SystemExit('import flynt should not expose an API')
+          "
