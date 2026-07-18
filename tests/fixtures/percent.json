@@ -1,0 +1,2342 @@
+{
+ "transform": [
+  {
+   "src": "'%s' % x",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{x}\""
+  },
+  {
+   "src": "'%s' % x",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{x}\""
+  },
+  {
+   "src": "'%s' % x",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{x}\""
+  },
+  {
+   "src": "'%s' % obj.attr",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{obj.attr}\""
+  },
+  {
+   "src": "'%s' % obj.attr",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{obj.attr}\""
+  },
+  {
+   "src": "'%s' % obj.attr",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{obj.attr}\""
+  },
+  {
+   "src": "'%s' % d['k']",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{d['k']}\""
+  },
+  {
+   "src": "'%s' % d['k']",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{d['k']}\""
+  },
+  {
+   "src": "'%s' % d['k']",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{d['k']}\""
+  },
+  {
+   "src": "'%s' % f(y)",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{f(y)}\""
+  },
+  {
+   "src": "'%s' % f(y)",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{f(y)}\""
+  },
+  {
+   "src": "'%s' % f(y)",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{f(y)}\""
+  },
+  {
+   "src": "'%s' % (a + b)",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{a + b}\""
+  },
+  {
+   "src": "'%s' % (a + b)",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{a + b}\""
+  },
+  {
+   "src": "'%s' % (a + b)",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{a + b}\""
+  },
+  {
+   "src": "'%s' % (a if c else b)",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{a if c else b}\""
+  },
+  {
+   "src": "'%s' % (a if c else b)",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{a if c else b}\""
+  },
+  {
+   "src": "'%s' % (a if c else b)",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{a if c else b}\""
+  },
+  {
+   "src": "'%s' % 'hi'",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"hi\""
+  },
+  {
+   "src": "'%s' % 'hi'",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"hi\""
+  },
+  {
+   "src": "'%s' % 'hi'",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"hi\""
+  },
+  {
+   "src": "'%s and %s' % (a, b)",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{a} and {b}\""
+  },
+  {
+   "src": "'%s and %s' % (a, b)",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{a} and {b}\""
+  },
+  {
+   "src": "'%s and %s' % (a, b)",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{a} and {b}\""
+  },
+  {
+   "src": "'%s and %s' % [a, b]",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{a} and {b}\""
+  },
+  {
+   "src": "'%s and %s' % [a, b]",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{a} and {b}\""
+  },
+  {
+   "src": "'%s and %s' % [a, b]",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{a} and {b}\""
+  },
+  {
+   "src": "'%s %s %s' % (a, b, c)",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{a} {b} {c}\""
+  },
+  {
+   "src": "'%s %s %s' % (a, b, c)",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{a} {b} {c}\""
+  },
+  {
+   "src": "'%s %s %s' % (a, b, c)",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{a} {b} {c}\""
+  },
+  {
+   "src": "'%s %s' % (a,)",
+   "aggressive": 0,
+   "kind": "refused",
+   "message": "This expression involves tuple unpacking."
+  },
+  {
+   "src": "'%s %s' % (a,)",
+   "aggressive": 1,
+   "kind": "refused",
+   "message": "This expression involves tuple unpacking."
+  },
+  {
+   "src": "'%s %s' % (a,)",
+   "aggressive": 2,
+   "kind": "refused",
+   "message": "This expression involves tuple unpacking."
+  },
+  {
+   "src": "'%s' % (a, b)",
+   "aggressive": 0,
+   "kind": "refused",
+   "message": "This expression involves tuple unpacking."
+  },
+  {
+   "src": "'%s' % (a, b)",
+   "aggressive": 1,
+   "kind": "refused",
+   "message": "This expression involves tuple unpacking."
+  },
+  {
+   "src": "'%s' % (a, b)",
+   "aggressive": 2,
+   "kind": "refused",
+   "message": "This expression involves tuple unpacking."
+  },
+  {
+   "src": "'%d' % x",
+   "aggressive": 0,
+   "kind": "refused",
+   "message": "Skipping %d formatting - fstrings behave differently from % formatting."
+  },
+  {
+   "src": "'%d' % x",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{int(x)}\""
+  },
+  {
+   "src": "'%d' % x",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{x}\""
+  },
+  {
+   "src": "'%d' % int(x)",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{int(x)}\""
+  },
+  {
+   "src": "'%d' % int(x)",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{int(x)}\""
+  },
+  {
+   "src": "'%d' % int(x)",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{int(x)}\""
+  },
+  {
+   "src": "'%d' % len(x)",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{len(x)}\""
+  },
+  {
+   "src": "'%d' % len(x)",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{len(x)}\""
+  },
+  {
+   "src": "'%d' % len(x)",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{len(x)}\""
+  },
+  {
+   "src": "'%i' % x",
+   "aggressive": 0,
+   "kind": "refused",
+   "message": "Skipping %d formatting - fstrings behave differently from % formatting."
+  },
+  {
+   "src": "'%i' % x",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{int(x)}\""
+  },
+  {
+   "src": "'%i' % x",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{x}\""
+  },
+  {
+   "src": "'%u' % x",
+   "aggressive": 0,
+   "kind": "refused",
+   "message": "Skipping %d formatting - fstrings behave differently from % formatting."
+  },
+  {
+   "src": "'%u' % x",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{int(x)}\""
+  },
+  {
+   "src": "'%u' % x",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{x}\""
+  },
+  {
+   "src": "'%5d' % x",
+   "aggressive": 0,
+   "kind": "refused",
+   "message": "Skipping %d formatting - fstrings behave differently from % formatting."
+  },
+  {
+   "src": "'%5d' % x",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{int(x):5}\""
+  },
+  {
+   "src": "'%5d' % x",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{x:5}\""
+  },
+  {
+   "src": "'%d and %d' % (a, b)",
+   "aggressive": 0,
+   "kind": "refused",
+   "message": "Skipping %d formatting - fstrings behave differently from % formatting."
+  },
+  {
+   "src": "'%d and %d' % (a, b)",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{int(a)} and {int(b)}\""
+  },
+  {
+   "src": "'%d and %d' % (a, b)",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{a} and {b}\""
+  },
+  {
+   "src": "'%03X' % x",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{x:03X}\""
+  },
+  {
+   "src": "'%03X' % x",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{x:03X}\""
+  },
+  {
+   "src": "'%03X' % x",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{x:03X}\""
+  },
+  {
+   "src": "'%03x' % x",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{x:03x}\""
+  },
+  {
+   "src": "'%03x' % x",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{x:03x}\""
+  },
+  {
+   "src": "'%03x' % x",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{x:03x}\""
+  },
+  {
+   "src": "'%.03f' % x",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{x:.03f}\""
+  },
+  {
+   "src": "'%.03f' % x",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{x:.03f}\""
+  },
+  {
+   "src": "'%.03f' % x",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{x:.03f}\""
+  },
+  {
+   "src": "'%f' % x",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{x:f}\""
+  },
+  {
+   "src": "'%f' % x",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{x:f}\""
+  },
+  {
+   "src": "'%f' % x",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{x:f}\""
+  },
+  {
+   "src": "'%e' % x",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{x:e}\""
+  },
+  {
+   "src": "'%e' % x",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{x:e}\""
+  },
+  {
+   "src": "'%e' % x",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{x:e}\""
+  },
+  {
+   "src": "'%E' % x",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{x:E}\""
+  },
+  {
+   "src": "'%E' % x",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{x:E}\""
+  },
+  {
+   "src": "'%E' % x",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{x:E}\""
+  },
+  {
+   "src": "'%g' % x",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{x:g}\""
+  },
+  {
+   "src": "'%g' % x",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{x:g}\""
+  },
+  {
+   "src": "'%g' % x",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{x:g}\""
+  },
+  {
+   "src": "'%G' % x",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{x:G}\""
+  },
+  {
+   "src": "'%G' % x",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{x:G}\""
+  },
+  {
+   "src": "'%G' % x",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{x:G}\""
+  },
+  {
+   "src": "'%c' % x",
+   "aggressive": 0,
+   "kind": "refused",
+   "message": "Skipping %c formatting - fstrings behave differently from % formatting."
+  },
+  {
+   "src": "'%c' % x",
+   "aggressive": 1,
+   "kind": "refused",
+   "message": "Skipping %c formatting - fstrings behave differently from % formatting."
+  },
+  {
+   "src": "'%c' % x",
+   "aggressive": 2,
+   "kind": "refused",
+   "message": "Skipping %c formatting - fstrings behave differently from % formatting."
+  },
+  {
+   "src": "'%o' % x",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{x:o}\""
+  },
+  {
+   "src": "'%o' % x",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{x:o}\""
+  },
+  {
+   "src": "'%o' % x",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{x:o}\""
+  },
+  {
+   "src": "'%.3x' % x",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{x:03x}\""
+  },
+  {
+   "src": "'%.3x' % x",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{x:03x}\""
+  },
+  {
+   "src": "'%.3x' % x",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{x:03x}\""
+  },
+  {
+   "src": "'%+d' % int(x)",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{int(x):+}\""
+  },
+  {
+   "src": "'%+d' % int(x)",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{int(x):+}\""
+  },
+  {
+   "src": "'%+d' % int(x)",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{int(x):+}\""
+  },
+  {
+   "src": "'%5.2f' % x",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{x:5.2f}\""
+  },
+  {
+   "src": "'%5.2f' % x",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{x:5.2f}\""
+  },
+  {
+   "src": "'%5.2f' % x",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{x:5.2f}\""
+  },
+  {
+   "src": "'%ld' % int(x)",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{int(x)}\""
+  },
+  {
+   "src": "'%ld' % int(x)",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{int(x)}\""
+  },
+  {
+   "src": "'%ld' % int(x)",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{int(x)}\""
+  },
+  {
+   "src": "'%hd' % int(x)",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{int(x)}\""
+  },
+  {
+   "src": "'%hd' % int(x)",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{int(x)}\""
+  },
+  {
+   "src": "'%hd' % int(x)",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{int(x)}\""
+  },
+  {
+   "src": "'%lf' % x",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{x:f}\""
+  },
+  {
+   "src": "'%lf' % x",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{x:f}\""
+  },
+  {
+   "src": "'%lf' % x",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{x:f}\""
+  },
+  {
+   "src": "'%r' % x",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{x!r}\""
+  },
+  {
+   "src": "'%r' % x",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{x!r}\""
+  },
+  {
+   "src": "'%r' % x",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{x!r}\""
+  },
+  {
+   "src": "'%a' % x",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{x!a}\""
+  },
+  {
+   "src": "'%a' % x",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{x!a}\""
+  },
+  {
+   "src": "'%a' % x",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{x!a}\""
+  },
+  {
+   "src": "'%s' % x",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{x}\""
+  },
+  {
+   "src": "'%s' % x",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{x}\""
+  },
+  {
+   "src": "'%s' % x",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{x}\""
+  },
+  {
+   "src": "'%-5s' % x",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{x:5}\""
+  },
+  {
+   "src": "'%-5s' % x",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{x:5}\""
+  },
+  {
+   "src": "'%-5s' % x",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{x:5}\""
+  },
+  {
+   "src": "'%5s' % x",
+   "aggressive": 0,
+   "kind": "refused",
+   "message": "Default text alignment has changed between percent fmt and fstrings. Proceeding would result in changed code behaviour."
+  },
+  {
+   "src": "'%5s' % x",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{x:>5}\""
+  },
+  {
+   "src": "'%5s' % x",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{x:>5}\""
+  },
+  {
+   "src": "'%20r' % x",
+   "aggressive": 0,
+   "kind": "refused",
+   "message": "Default text alignment has changed between percent fmt and fstrings. Proceeding would result in changed code behaviour."
+  },
+  {
+   "src": "'%20r' % x",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{x!r:20}\""
+  },
+  {
+   "src": "'%20r' % x",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{x!r:20}\""
+  },
+  {
+   "src": "'%20a' % x",
+   "aggressive": 0,
+   "kind": "refused",
+   "message": "Default text alignment has changed between percent fmt and fstrings. Proceeding would result in changed code behaviour."
+  },
+  {
+   "src": "'%20a' % x",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{x!a:20}\""
+  },
+  {
+   "src": "'%20a' % x",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{x!a:20}\""
+  },
+  {
+   "src": "'%-10s and %s' % (a, b)",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{a:10} and {b}\""
+  },
+  {
+   "src": "'%-10s and %s' % (a, b)",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{a:10} and {b}\""
+  },
+  {
+   "src": "'%-10s and %s' % (a, b)",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{a:10} and {b}\""
+  },
+  {
+   "src": "'100%% done %s' % x",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"100% done {x}\""
+  },
+  {
+   "src": "'100%% done %s' % x",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"100% done {x}\""
+  },
+  {
+   "src": "'100%% done %s' % x",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"100% done {x}\""
+  },
+  {
+   "src": "'%%d' % (x,)",
+   "aggressive": 0,
+   "kind": "refused",
+   "message": "Skipping %d formatting - fstrings behave differently from % formatting."
+  },
+  {
+   "src": "'%%d' % (x,)",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"%{int(x)}\""
+  },
+  {
+   "src": "'%%d' % (x,)",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"%{x}\""
+  },
+  {
+   "src": "'%%s' % (x,)",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"%{x}\""
+  },
+  {
+   "src": "'%%s' % (x,)",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"%{x}\""
+  },
+  {
+   "src": "'%%s' % (x,)",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"%{x}\""
+  },
+  {
+   "src": "'a%%b%s' % x",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"a%b{x}\""
+  },
+  {
+   "src": "'a%%b%s' % x",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"a%b{x}\""
+  },
+  {
+   "src": "'a%%b%s' % x",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"a%b{x}\""
+  },
+  {
+   "src": "'%s%%' % x",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{x}%\""
+  },
+  {
+   "src": "'%s%%' % x",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{x}%\""
+  },
+  {
+   "src": "'%s%%' % x",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{x}%\""
+  },
+  {
+   "src": "'%(k)s' % d",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{d['k']}\""
+  },
+  {
+   "src": "'%(k)s' % d",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{d['k']}\""
+  },
+  {
+   "src": "'%(k)s' % d",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{d['k']}\""
+  },
+  {
+   "src": "'val: %(k)s' % d",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"val: {d['k']}\""
+  },
+  {
+   "src": "'val: %(k)s' % d",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"val: {d['k']}\""
+  },
+  {
+   "src": "'val: %(k)s' % d",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"val: {d['k']}\""
+  },
+  {
+   "src": "'%(a)s %(b)d' % d",
+   "aggressive": 0,
+   "kind": "refused",
+   "message": "Skipping %d formatting - fstrings behave differently from % formatting."
+  },
+  {
+   "src": "'%(a)s %(b)d' % d",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{d['a']} {int(d['b'])}\""
+  },
+  {
+   "src": "'%(a)s %(b)d' % d",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{d['a']} {d['b']}\""
+  },
+  {
+   "src": "'%(a)s %(a)s' % d",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{d['a']} {d['a']}\""
+  },
+  {
+   "src": "'%(a)s %(a)s' % d",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{d['a']} {d['a']}\""
+  },
+  {
+   "src": "'%(a)s %(a)s' % d",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{d['a']} {d['a']}\""
+  },
+  {
+   "src": "'%(name)-10s' % d",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{d['name']:10}\""
+  },
+  {
+   "src": "'%(name)-10s' % d",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{d['name']:10}\""
+  },
+  {
+   "src": "'%(name)-10s' % d",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{d['name']:10}\""
+  },
+  {
+   "src": "'%(k)03d' % d",
+   "aggressive": 0,
+   "kind": "refused",
+   "message": "Skipping %d formatting - fstrings behave differently from % formatting."
+  },
+  {
+   "src": "'%(k)03d' % d",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{int(d['k']):03}\""
+  },
+  {
+   "src": "'%(k)03d' % d",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{d['k']:03}\""
+  },
+  {
+   "src": "'%(k)z' % d",
+   "aggressive": 0,
+   "kind": "refused",
+   "message": "This expression involves tuple unpacking."
+  },
+  {
+   "src": "'%(k)z' % d",
+   "aggressive": 1,
+   "kind": "refused",
+   "message": "This expression involves tuple unpacking."
+  },
+  {
+   "src": "'%(k)z' % d",
+   "aggressive": 2,
+   "kind": "refused",
+   "message": "This expression involves tuple unpacking."
+  },
+  {
+   "src": "'%(a)s %s' % d",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{d['a']} %s\""
+  },
+  {
+   "src": "'%(a)s %s' % d",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{d['a']} %s\""
+  },
+  {
+   "src": "'%(a)s %s' % d",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{d['a']} %s\""
+  },
+  {
+   "src": "'%(k)s' % {'k': v}",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{v}\""
+  },
+  {
+   "src": "'%(k)s' % {'k': v}",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{v}\""
+  },
+  {
+   "src": "'%(k)s' % {'k': v}",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{v}\""
+  },
+  {
+   "src": "'%(a)s %(b)s' % {'a': x, 'b': y}",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{x} {y}\""
+  },
+  {
+   "src": "'%(a)s %(b)s' % {'a': x, 'b': y}",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{x} {y}\""
+  },
+  {
+   "src": "'%(a)s %(b)s' % {'a': x, 'b': y}",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{x} {y}\""
+  },
+  {
+   "src": "'%(k)s %(k)s' % {'k': v}",
+   "aggressive": 0,
+   "kind": "error"
+  },
+  {
+   "src": "'%(k)s %(k)s' % {'k': v}",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{v} {v}\""
+  },
+  {
+   "src": "'%(k)s %(k)s' % {'k': v}",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{v} {v}\""
+  },
+  {
+   "src": "'%(a)s' % {'a': x, 'b': y}",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{x}\""
+  },
+  {
+   "src": "'%(a)s' % {'a': x, 'b': y}",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{x}\""
+  },
+  {
+   "src": "'%(a)s' % {'a': x, 'b': y}",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{x}\""
+  },
+  {
+   "src": "'%(a)s %(b)s' % {'a': x}",
+   "aggressive": 0,
+   "kind": "error"
+  },
+  {
+   "src": "'%(a)s %(b)s' % {'a': x}",
+   "aggressive": 1,
+   "kind": "error"
+  },
+  {
+   "src": "'%(a)s %(b)s' % {'a': x}",
+   "aggressive": 2,
+   "kind": "error"
+  },
+  {
+   "src": "'%s' % {x}",
+   "aggressive": 0,
+   "kind": "refused",
+   "message": "Unsupported `node.right` class: <class 'ast.Set'>"
+  },
+  {
+   "src": "'%s' % {x}",
+   "aggressive": 1,
+   "kind": "refused",
+   "message": "Unsupported `node.right` class: <class 'ast.Set'>"
+  },
+  {
+   "src": "'%s' % {x}",
+   "aggressive": 2,
+   "kind": "refused",
+   "message": "Unsupported `node.right` class: <class 'ast.Set'>"
+  },
+  {
+   "src": "'%s' % (i for i in xs)",
+   "aggressive": 0,
+   "kind": "refused",
+   "message": "Unsupported `node.right` class: <class 'ast.GeneratorExp'>"
+  },
+  {
+   "src": "'%s' % (i for i in xs)",
+   "aggressive": 1,
+   "kind": "refused",
+   "message": "Unsupported `node.right` class: <class 'ast.GeneratorExp'>"
+  },
+  {
+   "src": "'%s' % (i for i in xs)",
+   "aggressive": 2,
+   "kind": "refused",
+   "message": "Unsupported `node.right` class: <class 'ast.GeneratorExp'>"
+  },
+  {
+   "src": "'%f' % var",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{var:f}\""
+  },
+  {
+   "src": "'%f' % var",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{var:f}\""
+  },
+  {
+   "src": "'%f' % var",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{var:f}\""
+  },
+  {
+   "src": "'Setting %20r must be uppercase.' % name",
+   "aggressive": 0,
+   "kind": "refused",
+   "message": "Default text alignment has changed between percent fmt and fstrings. Proceeding would result in changed code behaviour."
+  },
+  {
+   "src": "'Setting %20r must be uppercase.' % name",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"Setting {name!r:20} must be uppercase.\""
+  },
+  {
+   "src": "'Setting %20r must be uppercase.' % name",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"Setting {name!r:20} must be uppercase.\""
+  },
+  {
+   "src": "'_%03X' % i",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"_{i:03X}\""
+  },
+  {
+   "src": "'_%03X' % i",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"_{i:03X}\""
+  },
+  {
+   "src": "'_%03X' % i",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"_{i:03X}\""
+  },
+  {
+   "src": "'%f %f' % (coord[1], coord[0])",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{coord[1]:f} {coord[0]:f}\""
+  },
+  {
+   "src": "'%f %f' % (coord[1], coord[0])",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{coord[1]:f} {coord[0]:f}\""
+  },
+  {
+   "src": "'%f %f' % (coord[1], coord[0])",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{coord[1]:f} {coord[0]:f}\""
+  },
+  {
+   "src": "'%i' % i",
+   "aggressive": 0,
+   "kind": "refused",
+   "message": "Skipping %d formatting - fstrings behave differently from % formatting."
+  },
+  {
+   "src": "'%i' % i",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{int(i)}\""
+  },
+  {
+   "src": "'%i' % i",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{i}\""
+  },
+  {
+   "src": "'%.03f' % i",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{i:.03f}\""
+  },
+  {
+   "src": "'%.03f' % i",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{i:.03f}\""
+  },
+  {
+   "src": "'%.03f' % i",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{i:.03f}\""
+  },
+  {
+   "src": "'Hello %s!' % flask.request.args[name]",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"Hello {flask.request.args[name]}!\""
+  },
+  {
+   "src": "'Hello %s!' % flask.request.args[name]",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"Hello {flask.request.args[name]}!\""
+  },
+  {
+   "src": "'Hello %s!' % flask.request.args[name]",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"Hello {flask.request.args[name]}!\""
+  },
+  {
+   "src": "'\\x1b[2m%s\\x1b[0m' % s",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"\\x1b[2m{s}\\x1b[0m\""
+  },
+  {
+   "src": "'\\x1b[2m%s\\x1b[0m' % s",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"\\x1b[2m{s}\\x1b[0m\""
+  },
+  {
+   "src": "'\\x1b[2m%s\\x1b[0m' % s",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"\\x1b[2m{s}\\x1b[0m\""
+  },
+  {
+   "src": "'%s\\n' % line",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{line}\\n\""
+  },
+  {
+   "src": "'%s\\n' % line",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{line}\\n\""
+  },
+  {
+   "src": "'%s\\n' % line",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{line}\\n\""
+  },
+  {
+   "src": "'%s' % line[:-1]",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{line[:-1]}\""
+  },
+  {
+   "src": "'%s' % line[:-1]",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{line[:-1]}\""
+  },
+  {
+   "src": "'%s' % line[:-1]",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{line[:-1]}\""
+  },
+  {
+   "src": "'a\\xa0%s' % a",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"a\\xa0{a}\""
+  },
+  {
+   "src": "'a\\xa0%s' % a",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"a\\xa0{a}\""
+  },
+  {
+   "src": "'a\\xa0%s' % a",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"a\\xa0{a}\""
+  },
+  {
+   "src": "'Hello %s' % var",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"Hello {var}\""
+  },
+  {
+   "src": "'Hello %s' % var",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"Hello {var}\""
+  },
+  {
+   "src": "'Hello %s' % var",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"Hello {var}\""
+  },
+  {
+   "src": "'\\n%(something)s\\n' % d",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"\\n{d['something']}\\n\""
+  },
+  {
+   "src": "'\\n%(something)s\\n' % d",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"\\n{d['something']}\\n\""
+  },
+  {
+   "src": "'\\n%(something)s\\n' % d",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"\\n{d['something']}\\n\""
+  },
+  {
+   "src": "'Arithmetic on %s objects with different sizes not permitted' % self.__class__",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"Arithmetic on {self.__class__} objects with different sizes not permitted\""
+  },
+  {
+   "src": "'Arithmetic on %s objects with different sizes not permitted' % self.__class__",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"Arithmetic on {self.__class__} objects with different sizes not permitted\""
+  },
+  {
+   "src": "'Arithmetic on %s objects with different sizes not permitted' % self.__class__",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"Arithmetic on {self.__class__} objects with different sizes not permitted\""
+  },
+  {
+   "src": "'Python %s on %s\\nApp: %s [%s]\\nInstance: %s' % (sys.version, sys.platform, app.import_name, app.env, app.instance_path)",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"Python {sys.version} on {sys.platform}\\nApp: {app.import_name} [{app.env}]\\nInstance: {app.instance_path}\""
+  },
+  {
+   "src": "'Python %s on %s\\nApp: %s [%s]\\nInstance: %s' % (sys.version, sys.platform, app.import_name, app.env, app.instance_path)",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"Python {sys.version} on {sys.platform}\\nApp: {app.import_name} [{app.env}]\\nInstance: {app.instance_path}\""
+  },
+  {
+   "src": "'Python %s on %s\\nApp: %s [%s]\\nInstance: %s' % (sys.version, sys.platform, app.import_name, app.env, app.instance_path)",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"Python {sys.version} on {sys.platform}\\nApp: {app.import_name} [{app.env}]\\nInstance: {app.instance_path}\""
+  },
+  {
+   "src": "'%(num)f %(string)s' % {'num': a, 'string': b}",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{a:f} {b}\""
+  },
+  {
+   "src": "'%(num)f %(string)s' % {'num': a, 'string': b}",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{a:f} {b}\""
+  },
+  {
+   "src": "'%(num)f %(string)s' % {'num': a, 'string': b}",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{a:f} {b}\""
+  },
+  {
+   "src": "'%f %f %e %g %s' % (a, b, c, d, e)",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{a:f} {b:f} {c:e} {d:g} {e}\""
+  },
+  {
+   "src": "'%f %f %e %g %s' % (a, b, c, d, e)",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{a:f} {b:f} {c:e} {d:g} {e}\""
+  },
+  {
+   "src": "'%f %f %e %g %s' % (a, b, c, d, e)",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{a:f} {b:f} {c:e} {d:g} {e}\""
+  },
+  {
+   "src": "'%s' % d ** 2",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{d ** 2}\""
+  },
+  {
+   "src": "'%s' % d ** 2",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{d ** 2}\""
+  },
+  {
+   "src": "'%s' % d ** 2",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{d ** 2}\""
+  },
+  {
+   "src": "'%r %s %a' % (a, a, a)",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{a!r} {a} {a!a}\""
+  },
+  {
+   "src": "'%r %s %a' % (a, a, a)",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{a!r} {a} {a!a}\""
+  },
+  {
+   "src": "'%r %s %a' % (a, a, a)",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{a!r} {a} {a!a}\""
+  },
+  {
+   "src": "'%s,%s' % (di1['key'], di2['key'])",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"{di1['key']},{di2['key']}\""
+  },
+  {
+   "src": "'%s,%s' % (di1['key'], di2['key'])",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"{di1['key']},{di2['key']}\""
+  },
+  {
+   "src": "'%s,%s' % (di1['key'], di2['key'])",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"{di1['key']},{di2['key']}\""
+  },
+  {
+   "src": "\"^(\\\\s*%s\\\\s*=\\\\s*')(.+?)(')\" % pattern",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"^(\\\\s*{pattern}\\\\s*=\\\\s*')(.+?)(')\""
+  },
+  {
+   "src": "\"^(\\\\s*%s\\\\s*=\\\\s*')(.+?)(')\" % pattern",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"^(\\\\s*{pattern}\\\\s*=\\\\s*')(.+?)(')\""
+  },
+  {
+   "src": "\"^(\\\\s*%s\\\\s*=\\\\s*')(.+?)(')\" % pattern",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"^(\\\\s*{pattern}\\\\s*=\\\\s*')(.+?)(')\""
+  },
+  {
+   "src": "'Exception on %s [%s]' % (request.path, request.method)",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"Exception on {request.path} [{request.method}]\""
+  },
+  {
+   "src": "'Exception on %s [%s]' % (request.path, request.method)",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"Exception on {request.path} [{request.method}]\""
+  },
+  {
+   "src": "'Exception on %s [%s]' % (request.path, request.method)",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"Exception on {request.path} [{request.method}]\""
+  },
+  {
+   "src": "'Test: %s' % var",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"Test: {var}\""
+  },
+  {
+   "src": "'Test: %s' % var",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"Test: {var}\""
+  },
+  {
+   "src": "'Test: %s' % var",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"Test: {var}\""
+  },
+  {
+   "src": "\"echo '%s'\\n\" % self.FLUSH_CMD",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"echo '{self.FLUSH_CMD}'\\n\""
+  },
+  {
+   "src": "\"echo '%s'\\n\" % self.FLUSH_CMD",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"echo '{self.FLUSH_CMD}'\\n\""
+  },
+  {
+   "src": "\"echo '%s'\\n\" % self.FLUSH_CMD",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"echo '{self.FLUSH_CMD}'\\n\""
+  },
+  {
+   "src": "\"echo '%s'\\\\n\" % self.FLUSH_CMD",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"echo '{self.FLUSH_CMD}'\\\\n\""
+  },
+  {
+   "src": "\"echo '%s'\\\\n\" % self.FLUSH_CMD",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"echo '{self.FLUSH_CMD}'\\\\n\""
+  },
+  {
+   "src": "\"echo '%s'\\\\n\" % self.FLUSH_CMD",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"echo '{self.FLUSH_CMD}'\\\\n\""
+  },
+  {
+   "src": "\"echo '%s'\\r\" % self.FLUSH_CMD",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"echo '{self.FLUSH_CMD}'\\r\""
+  },
+  {
+   "src": "\"echo '%s'\\r\" % self.FLUSH_CMD",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"echo '{self.FLUSH_CMD}'\\r\""
+  },
+  {
+   "src": "\"echo '%s'\\r\" % self.FLUSH_CMD",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"echo '{self.FLUSH_CMD}'\\r\""
+  },
+  {
+   "src": "\"echo '%s'\\\\r\" % self.FLUSH_CMD",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"echo '{self.FLUSH_CMD}'\\\\r\""
+  },
+  {
+   "src": "\"echo '%s'\\\\r\" % self.FLUSH_CMD",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"echo '{self.FLUSH_CMD}'\\\\r\""
+  },
+  {
+   "src": "\"echo '%s'\\\\r\" % self.FLUSH_CMD",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"echo '{self.FLUSH_CMD}'\\\\r\""
+  },
+  {
+   "src": "\"echo '%s'\\t\" % self.FLUSH_CMD",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"echo '{self.FLUSH_CMD}'\\t\""
+  },
+  {
+   "src": "\"echo '%s'\\t\" % self.FLUSH_CMD",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"echo '{self.FLUSH_CMD}'\\t\""
+  },
+  {
+   "src": "\"echo '%s'\\t\" % self.FLUSH_CMD",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"echo '{self.FLUSH_CMD}'\\t\""
+  },
+  {
+   "src": "\"echo '%s'\\\\t\" % self.FLUSH_CMD",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"echo '{self.FLUSH_CMD}'\\\\t\""
+  },
+  {
+   "src": "\"echo '%s'\\\\t\" % self.FLUSH_CMD",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"echo '{self.FLUSH_CMD}'\\\\t\""
+  },
+  {
+   "src": "\"echo '%s'\\\\t\" % self.FLUSH_CMD",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"echo '{self.FLUSH_CMD}'\\\\t\""
+  },
+  {
+   "src": "'is %f' % x",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"is {x:f}\""
+  },
+  {
+   "src": "'is %f' % x",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"is {x:f}\""
+  },
+  {
+   "src": "'is %f' % x",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"is {x:f}\""
+  },
+  {
+   "src": "'%s %s' % ('foo', 'bar')",
+   "aggressive": 0,
+   "kind": "ok",
+   "result": "f\"foo bar\""
+  },
+  {
+   "src": "'%s %s' % ('foo', 'bar')",
+   "aggressive": 1,
+   "kind": "ok",
+   "result": "f\"foo bar\""
+  },
+  {
+   "src": "'%s %s' % ('foo', 'bar')",
+   "aggressive": 2,
+   "kind": "ok",
+   "result": "f\"foo bar\""
+  }
+ ],
+ "candidates": [
+  {
+   "code": "a = '%s\\n' % var",
+   "count": 1
+  },
+  {
+   "code": "print('{}'.format(x), '%d' % var)",
+   "count": 1
+  },
+  {
+   "code": "src_info = 'application \"%s\"' % obj.name",
+   "count": 1
+  },
+  {
+   "code": "['%s' % a, '%d' % b, '%r' % c]",
+   "count": 3
+  },
+  {
+   "code": "f(a % b, '%s' % c)",
+   "count": 1
+  },
+  {
+   "code": "x = (a % b) + ('%s' % c)",
+   "count": 1
+  },
+  {
+   "code": "'%s' % {x}",
+   "count": 1
+  },
+  {
+   "code": "no_percent = 'plain'",
+   "count": 0
+  },
+  {
+   "code": "from exceptions import PydolonsError\n\nclass CantAffordActiveError(PydolonsError):\n\n    def __init__(self, active, missing):\n        assert missing in [\"mana\", \"stamina\", \"health\"]\n        self.active = active\n        self.missing = missing\n\n    def __repr__(self):\n        return \"Need more {} to activate {}\".format(self.missing, self.active)",
+   "count": 0
+  },
+  {
+   "code": "var, f, cada_bra, what = 1, 2, 3, 4\na = \"my string {first}, but also {second} and {foo}\".format(first=var, second=f, foo=cada_bra)\n",
+   "count": 0
+  },
+  {
+   "code": "var = 5\nclass Mysterios(object):\n    a = \"{{}}my string {:.2f}{{}}\".format(var)\n\nprint(Mysterios.a)",
+   "count": 0
+  },
+  {
+   "code": "def write_row(self, xf, row, row_idx):\n\n    attrs = {'r': '{}'.format(row_idx)}",
+   "count": 0
+  },
+  {
+   "code": "import datetime\n\ndef a():\n    test = 'Test'\n    return \"{name} ({date:%B %d, %Y})\".format( name=test, date=datetime.datetime.now() )",
+   "count": 0
+  },
+  {
+   "code": "log.notice(\"Search: finished in {0:,} ms.\".format(vm.search_time_elapsed_ms))",
+   "count": 0
+  },
+  {
+   "code": "print(\"{}\".format(Bar + 1), '%f' % var, \"{s}\".format(s=foo))",
+   "count": 1
+  },
+  {
+   "code": "a, b, c = 1, 2, 3\nt1 = \"=== Images[{}]: {} === Rest: \\\"{}\\\"\".format(a, b, c)\n",
+   "count": 0
+  },
+  {
+   "code": "from textwrap import dedent\n\ndef f():\n    arg = \"text\"\n    return dedent(\n        \"\"\"\\\n        \\\n        some {}\n        lorem ipsum\n        \"\"\".format(arg)\n    )\n\n\ndef f_extra():\n    arg = \"text\"\n    return \"\"\"\\\n    some {}\\n\"\"\".format(arg)\n\n\ndef f_multiple():\n    arg = \"text\"\n    return \"\"\"\\\n    \\\n    \\\n    some {}\\n\"\"\".format(arg)\n\n\ndef f_single_quotes():\n    arg = \"text\"\n    return '''\\\n    some {}\\n'''.format(arg)\n",
+   "count": 0
+  },
+  {
+   "code": "a = \"my string {}, but also {} and {}\".format(var, f, cada_bra)\nb = \"my string {}, but also {} and {}\".format(var, what, cada_bra)\n",
+   "count": 0
+  },
+  {
+   "code": "name = 'mari'\n\na = \"Setting %20r must be uppercase.\" % name\n\nprint(a)\n\ni = 10\nb = '_%03X' % i\nprint(b)\n\ncoord = (1, 2)\nc = '%f %f' % (coord[1], coord[0])\nprint(c)\n\nd = '%i' % i\ne = '%.03f' % i\n\nprint(d,e)\n\nprint(f\"{a} hello\")",
+   "count": 5
+  },
+  {
+   "code": "a = \"my string {}, but also \" \\\n    \"{} and {}\".format(var, f, cada_bra)\n",
+   "count": 0
+  },
+  {
+   "code": "var, f, cada_bra = 1, 2, 3\n\na = (\"my string {}, \" # first part\n\"{} and {}\".format(var, f, cada_bra) )\n\nprint(a)\n",
+   "count": 0
+  },
+  {
+   "code": "var, f, cada_bra = 1, 2, 3\n\na = (\"my string {}, \" # first part\n\"{f} and {var}\".format(cada_bra, var=var, f=f) )\n\nprint(a)\n",
+   "count": 0
+  },
+  {
+   "code": "var, f, cada_bra = 1, 2, 3\n\na = (\"my string {var}, \" # first part\n\"{f} and {var}\".format(var=var, f=f) )\n\nprint(a)\n",
+   "count": 0
+  },
+  {
+   "code": "@pytest.fixture\ndef site_packages(modules_tmpdir, monkeypatch):\n    \"\"\"Create a fake site-packages.\"\"\"\n    rv = (\n        modules_tmpdir.mkdir(\"lib\")\n        .mkdir(\"python{x[0]}.{x[1]}\".format(x=sys.version_info))\n        .mkdir(\"site-packages\")\n    )\n    monkeypatch.syspath_prepend(str(rv))\n    return rv",
+   "count": 0
+  },
+  {
+   "code": "def test_context_binding(app):\n    @app.route(\"/\")\n    def index():\n        return \"Hello %s!\" % flask.request.args[name]",
+   "count": 1
+  },
+  {
+   "code": "def f():\n    return (\n        \"\"\"\n        some {}\n        lorem ipsum\n        \"\"\".format(\"text\")\n    )\n",
+   "count": 0
+  },
+  {
+   "code": "s = \"wot?\"\nprint(\"\\033[1m{0}\\033[0m\".format(s))\nprint(\"\\033[2m%s\\033[0m\" % s)\n",
+   "count": 1
+  },
+  {
+   "code": "def percent_conditional(line):\n    return \"%s\\n\" % line if not line.endswith('\\\\') or line.endswith('\\\\\\\\') else \"%s\" % line[:-1]\n\nmsg = \"{}\\nPossible solutions:\\n{}\".format(msg, \"\\n\".join(solutions))\n\ndef format_values(node, values):\n    return '{}({})'.format(node.__class__.__name__, ',\\n    '.join(values))\n\nself.assertEqual(len(expected), len(result),\n    \"Unmatched lines. Got:\\n{}\\nExpected:\\n{}\".format(\"\\n\".join(expected), \"\\n\".join(result)))\n\nself.assertEqual(len(result_lines), len(expected_lines),\n    \"Unmatched lines. Got:\\n{}\\nExpected:\\n{}\".format(\"\\n\".join(result_lines), expected))\n\ncode.putln(\"\\\"{}.{}\\\",\".format(self.full_module_name, classname.replace('\"', '')))\n\n\"{}\".format(b\"\\n\")\n",
+   "count": 2
+  },
+  {
+   "code": "a = \"aaa\"\nx = \"a\\xA0%s\" % a\n",
+   "count": 1
+  },
+  {
+   "code": "n = 5\nx = \"{} hello, {}\".format(n, \"world\")\nx = \"{} non-str {}\".format(n, True)\nx = \"{} with quote {}\".format(n, '\"x\"')\n\nx = \"hello, {}\".format(\"world\")\nx = \"with quote {}\".format('\"x\"')\n",
+   "count": 0
+  },
+  {
+   "code": "from __future__ import print_function\n\nfrom pallets_sphinx_themes import get_version\nfrom pallets_sphinx_themes import ProjectLink\n\n# Project --------------------------------------------------------------\n\nproject = \"Flask\"\ncopyright = \"2010 Pallets Team\"\nauthor = \"Pallets Team\"\nrelease, version = get_version(\"Flask\")\n\n# General --------------------------------------------------------------\n\nmaster_doc = \"index\"\nextensions = [\n    \"sphinx.ext.autodoc\",\n    \"sphinx.ext.intersphinx\",\n    \"sphinxcontrib.log_cabinet\",\n    \"pallets_sphinx_themes\",\n]\nintersphinx_mapping = {\n    \"python\": (\"https://docs.python.org/3/\", None),\n    \"werkzeug\": (\"http://werkzeug.pocoo.org/docs/\", None),\n    \"click\": (\"https://click.palletsprojects.com/\", None),\n    \"jinja\": (\"http://jinja.pocoo.org/docs/\", None),\n    \"itsdangerous\": (\"https://itsdangerous.palletsprojects.com/\", None),\n    \"sqlalchemy\": (\"https://docs.sqlalchemy.org/\", None),\n    \"wtforms\": (\"https://wtforms.readthedocs.io/en/stable/\", None),\n    \"blinker\": (\"https://pythonhosted.org/blinker/\", None),\n}\n\n# HTML -----------------------------------------------------------------\n\nhtml_theme = \"flask\"\nhtml_theme_options = {\"index_sidebar_logo\": False}\nhtml_context = {\n    \"project_links\": [\n        ProjectLink(\"Donate to Pallets\", \"https://palletsprojects.com/donate\"),\n        ProjectLink(\"Flask Website\", \"https://palletsprojects.com/p/flask/\"),\n        ProjectLink(\"PyPI releases\", \"https://pypi.org/project/Flask/\"),\n        ProjectLink(\"Source Code\", \"https://github.com/pallets/flask/\"),\n        ProjectLink(\"Issue Tracker\", \"https://github.com/pallets/flask/issues/\"),\n    ]\n}\nhtml_sidebars = {\n    \"index\": [\"project.html\", \"localtoc.html\", \"versions.html\", \"searchbox.html\"],\n    \"**\": [\"localtoc.html\", \"relations.html\", \"versions.html\", \"searchbox.html\"],\n}\nsinglehtml_sidebars = {\"index\": [\"project.html\", \"versions.html\", \"localtoc.html\"]}\nhtml_static_path = [\"_static\"]\nhtml_favicon = \"_static/flask-icon.png\"\nhtml_logo = \"_static/flask-logo-sidebar.png\"\nhtml_title = \"Flask Documentation ({})\".format(version)\nhtml_show_sourcelink = False\nhtml_domain_indices = False\n\n# LaTeX ----------------------------------------------------------------",
+   "count": 0
+  },
+  {
+   "code": "raise NoAppException(\n            'Detected multiple Flask applications in module \"{}\". Use '\n            '\"FLASK_APP={}:name\" to specify the correct '\n            'one.'.format(var1, var2)\n        )",
+   "count": 0
+  },
+  {
+   "code": "var = 12345\nmy_string = (\"Hello %s\"\n             %\n             var)\nvar2 = \"Some Value\"",
+   "count": 1
+  },
+  {
+   "code": "var, a, b = 12345, 4, \"Beew\"\nmy_string = \"Hello {} {} {}\".format(var,\n                                     a,\n                                     b\n                                     )  # Ok\nvar2 = \"Some Value\"",
+   "count": 0
+  },
+  {
+   "code": "var, a, b = 12345, 4, \"Beew\"\nmy_string = (\"Hello %s %s %s\".format(var,\n                                     a,\n                                     b # <<<< busted\n                                     ))\nvar2 = \"Some Value\"",
+   "count": 0
+  },
+  {
+   "code": "d = {\"something\": \"what\"}\n\nresp = \"\"\"\n%(something)s\n\"\"\" % d\n\nprint(resp)",
+   "count": 1
+  },
+  {
+   "code": "raise ValueError('Arithmetic on %s objects with different '\n                 'sizes not permitted' % self.__class__)\n",
+   "count": 1
+  },
+  {
+   "code": "length, quotes = 15, 20\ntext = \"\"\"\n# This is an example configuration\n# Hash lines are comments\n\n[flake8]\nmax-line-length={0}\ninline-quotes=\"{1}\"\n\"\"\".format(length, quotes)",
+   "count": 0
+  },
+  {
+   "code": "app = _app_ctx_stack.top.app\nbanner = \"Python %s on %s\\nApp: %s [%s]\\nInstance: %s\" % (\n    sys.version,\n    sys.platform,\n    app.import_name,\n    app.env,\n    app.instance_path,\n)\nctx = {}",
+   "count": 1
+  },
+  {
+   "code": "raise NoAppException(\n            'Detected multiple Flask applications in module \"{module}\". Use '\n            '\"FLASK_APP={module}:name\" to specify the correct '\n            'one.'.format(module=module.__name__)\n        )",
+   "count": 0
+  },
+  {
+   "code": "var, f, cada_bra, what = 1, 2, 3, 4\na = \"my string {}, but also {} and {}\".format(var, f, cada_bra)\nb = \"my string {}, but also {} and {}\".format(var, what, cada_bra)\n",
+   "count": 0
+  },
+  {
+   "code": "var, f, cada_bra, what = 1, 2, 3, 4\na = \"my string {first} and {second}\".format(second=f, first=cada_bra)\n",
+   "count": 0
+  },
+  {
+   "code": "\"\"\" This is a beautiful python module in that it is very simple.\"\"\"\n\na = 2 + 2",
+   "count": 0
+  },
+  {
+   "code": "\"\"\" This is a beautiful python module in that it is very simple.\"\"\"\n\na = 2 + 2 # result should be 4",
+   "count": 0
+  },
+  {
+   "code": "print('\\40'.join(('a', 'b')))\n",
+   "count": 0
+  },
+  {
+   "code": "a = 2\nb = \"wuga\"\nprint('%(num)f %(string)s' % {\"num\": a, \"string\": b})\n",
+   "count": 1
+  },
+  {
+   "code": "a, b, c, d, e = tuple(range(5))\nprint('%f %f %e %g %s' % (a,b,c,d,e))",
+   "count": 1
+  },
+  {
+   "code": "d = 10\na = '%s' % d ** 2\nprint(a)",
+   "count": 1
+  },
+  {
+   "code": "a = 'abra'\nprint('%r %s %a' % (a, a, a))\n\n\n",
+   "count": 1
+  },
+  {
+   "code": "foo = '%s,%s' % (\n    di1['key'],\n    di2['key']\n)\n",
+   "count": 1
+  },
+  {
+   "code": "def set_filename_version(filename, version_number, pattern):\n    changed = []\n\n    def inject_version(match):\n        before, old, after = match.groups()\n        changed.append(True)\n        return before + version_number + after\n\n    with open(filename) as f:\n        contents = re.sub(\n            r\"^(\\s*%s\\s*=\\s*')(.+?)(')\" % pattern,\n            inject_version,\n            f.read(),\n            flags=re.DOTALL | re.MULTILINE,\n        )",
+   "count": 1
+  },
+  {
+   "code": "def log_exception(self, exc_info):\n    \"\"\"Logs an exception.  This is called by :meth:`handle_exception`\n    if debugging is disabled and right before the handler is called.\n    The default implementation logs the exception as error on the\n    :attr:`logger`.\n\n    .. versionadded:: 0.8\n    \"\"\"\n    self.logger.error(\n        \"Exception on %s [%s]\" % (request.path, request.method), exc_info=exc_info\n    )",
+   "count": 1
+  },
+  {
+   "code": "var = 5\na = \"my string {}\".format(var)\n",
+   "count": 0
+  },
+  {
+   "code": "var = 5 # comment 1\na = \"my string {}\".format(var) # comment 2\n",
+   "count": 0
+  },
+  {
+   "code": "\"\"\"\nThis is an awesome source file that should under no conditions get ruined!\n\"\"\"\n\nvar = 5\na = \"my string {}\".format(var)\n",
+   "count": 0
+  },
+  {
+   "code": "var = 5\na = \"my string {:.2f}\".format(var)",
+   "count": 0
+  },
+  {
+   "code": "var = 5\na = \"{{}}my string {:.2f}{{}}\".format(var)\nprint(a)\n",
+   "count": 0
+  },
+  {
+   "code": "var = 5\nif var % 3 == 0:\n    a = \"my string {}\".format(var)\n",
+   "count": 0
+  },
+  {
+   "code": "var = 5\na = \"Test: %s\" % var\n",
+   "count": 1
+  },
+  {
+   "code": "var = 5\na = \"Test: %s\" % var # cool formatting!\n",
+   "count": 1
+  },
+  {
+   "code": "var = 5\na = \"{} my string\".format(var)\n",
+   "count": 0
+  },
+  {
+   "code": "\"echo '{}'\\n\".format(self.FLUSH_CMD)\n\"echo '{}'\\\\n\".format(self.FLUSH_CMD)\n\"echo '%s'\\n\" % self.FLUSH_CMD\n\"echo '%s'\\\\n\" % self.FLUSH_CMD\n",
+   "count": 2
+  },
+  {
+   "code": "\"echo '{}'\\r\".format(self.FLUSH_CMD)\n\"echo '{}'\\\\r\".format(self.FLUSH_CMD)\n\"echo '%s'\\r\" % self.FLUSH_CMD\n\"echo '%s'\\\\r\" % self.FLUSH_CMD\n",
+   "count": 2
+  },
+  {
+   "code": "\"echo '{}'\\t\".format(self.FLUSH_CMD)\n\"echo '{}'\\\\t\".format(self.FLUSH_CMD)\n\"echo '%s'\\t\" % self.FLUSH_CMD\n\"echo '%s'\\\\t\" % self.FLUSH_CMD\n",
+   "count": 2
+  },
+  {
+   "code": "OUTPUT_FILE = \"{home}/{name}.txt\"\nSTATUS_CMD = \"echo \\\"SCREEN_EXIT:$?\\\" ; echo \\\"{EOS}\\\"\\n\".format(EOS=END_OF_STREAM)\nENTRY_CMD = \"echo \\\"{}\\\"\".format(START_STREAM)\nSCREEN_TIMEOUT = 3600  # seconds",
+   "count": 0
+  },
+  {
+   "code": "var, f, cada_bra, what = 1, 2, 3, 4\na = \"my string {}, but also {} and {foo}\".format(var, f, foo=cada_bra)\n",
+   "count": 0
+  },
+  {
+   "code": "# Should not change unless explicitly requested\nfoo = \"x\".join([1, 2, 3])\n",
+   "count": 0
+  },
+  {
+   "code": "mean_ser, mean_per = 1, 2\nscores = \"{:>50} \\t {:>6} \\t {:>6}\\n\".format(\"Crossvalidation\",\n                                                  mean_ser, mean_per)\nprint(scores)\n",
+   "count": 0
+  },
+  {
+   "code": "lst = [2, 3, 4]\na = \"beautiful numbers to follow: {}\".format(\" \".join(lst))\na = \"beautiful numbers to follow: {}\".format(\"\\t\".join(lst))\na = \"beautiful numbers to follow: {}\".format(' '.join(lst))\na = \"beautiful numbers to follow: {}\".format('\\n'.join(lst))\n\n\nb = 'beautiful numbers to follow: {}'.format(\" \".join(lst))\nb = 'beautiful numbers to follow: {}'.format(\"\\n\".join(lst))\nb = 'beautiful numbers to follow: {}'.format(' '.join(lst))\nb = 'beautiful numbers to follow: {}'.format(','.join(lst))",
+   "count": 0
+  },
+  {
+   "code": "latex_documents = [\n    (master_doc, \"Flask-{}.tex\".format(version), html_title, author, \"manual\")\n]",
+   "count": 0
+  },
+  {
+   "code": "x, y = 1, 2\na = ('line 1 {}'\n     ' line 2 {}'.format(x, y))\n\nb = ('line 1234567890 1234567890 1234567890 1234567890 {}'\n     ' 1234567890 1234567890 1234567890 1234567890  {}'.format(x, y))",
+   "count": 0
+  },
+  {
+   "code": "print(\"Feels like: {}°F\".format(data[\"main\"][\"feels_like\"]))\n",
+   "count": 0
+  },
+  {
+   "code": "print(\"Feels like: {}\\\\u00B0F\".format(data[\"main\"][\"feels_like\"]))\n",
+   "count": 0
+  },
+  {
+   "code": "from exceptions import PydolonsError\n\nclass CantAffordActiveError(PydolonsError):\n\n    def __init__(self, active, missing):\n        assert missing in [\"mana\", \"stamina\", \"health\"]\n        self.active = active\n        self.missing = missing\n\n    def __repr__(self):\n        return f\"Need more {self.missing} to activate {self.active}\"",
+   "count": 0
+  },
+  {
+   "code": "var, f, cada_bra, what = 1, 2, 3, 4\na = f\"my string {var}, but also {f} and {cada_bra}\"\n",
+   "count": 0
+  },
+  {
+   "code": "var = 5\nclass Mysterios:\n    a = f\"{{}}my string {var:.2f}{{}}\"\n\nprint(Mysterios.a)",
+   "count": 0
+  },
+  {
+   "code": "def write_row(self, xf, row, row_idx):\n\n    attrs = {'r': f'{row_idx}'}",
+   "count": 0
+  },
+  {
+   "code": "import datetime\n\ndef a():\n    test = 'Test'\n    return f\"{test} ({datetime.datetime.now():%B %d, %Y})\"",
+   "count": 0
+  },
+  {
+   "code": "log.notice(f\"Search: finished in {vm.search_time_elapsed_ms:,} ms.\")",
+   "count": 0
+  },
+  {
+   "code": "print(f\"{Bar + 1}\", f'{var:f}', f\"{foo}\")",
+   "count": 0
+  },
+  {
+   "code": "a, b, c = 1, 2, 3\nt1 = f\"=== Images[{a}]: {b} === Rest: \\\"{c}\\\"\"\n",
+   "count": 0
+  },
+  {
+   "code": "from textwrap import dedent\n\ndef f():\n    arg = \"text\"\n    return dedent(\n        f\"\"\"\\\n        \\\n        some {arg}\n        lorem ipsum\n        \"\"\"\n    )\n\n\ndef f_extra():\n    arg = \"text\"\n    return f\"\"\"\\\n    some {arg}\\n\"\"\"\n\n\ndef f_multiple():\n    arg = \"text\"\n    return f\"\"\"\\\n    \\\n    \\\n    some {arg}\\n\"\"\"\n\n\ndef f_single_quotes():\n    arg = \"text\"\n    return f'''\\\n    some {arg}\\n'''\n",
+   "count": 0
+  },
+  {
+   "code": "a = f\"my string {var}, but also {f} and {cada_bra}\"\nb = f\"my string {var}, but also {what} and {cada_bra}\"\n",
+   "count": 0
+  },
+  {
+   "code": "name = 'mari'\n\na = \"Setting %20r must be uppercase.\" % name\n\nprint(a)\n\ni = 10\nb = f'_{i:03X}'\nprint(b)\n\ncoord = (1, 2)\nc = f'{coord[1]:f} {coord[0]:f}'\nprint(c)\n\nd = '%i' % i\ne = f'{i:.03f}'\n\nprint(d,e)\n\nprint(f\"{a} hello\")",
+   "count": 2
+  },
+  {
+   "code": "a = f\"my string {var}, but also {f} and {cada_bra}\"\n",
+   "count": 0
+  },
+  {
+   "code": "var, f, cada_bra = 1, 2, 3\n\na = (\"my string {}, \" # first part\n\"{} and {}\".format(var, f, cada_bra) )\n\nprint(a)\n",
+   "count": 0
+  },
+  {
+   "code": "var, f, cada_bra = 1, 2, 3\n\na = (\"my string {}, \" # first part\n\"{f} and {var}\".format(cada_bra, var=var, f=f) )\n\nprint(a)\n",
+   "count": 0
+  },
+  {
+   "code": "var, f, cada_bra = 1, 2, 3\n\na = (\"my string {var}, \" # first part\n\"{f} and {var}\".format(var=var, f=f) )\n\nprint(a)\n",
+   "count": 0
+  },
+  {
+   "code": "@pytest.fixture\ndef site_packages(modules_tmpdir, monkeypatch):\n    \"\"\"Create a fake site-packages.\"\"\"\n    rv = (\n        modules_tmpdir.mkdir(\"lib\")\n        .mkdir(\"python{x[0]}.{x[1]}\".format(x=sys.version_info))\n        .mkdir(\"site-packages\")\n    )\n    monkeypatch.syspath_prepend(str(rv))\n    return rv",
+   "count": 0
+  },
+  {
+   "code": "def test_context_binding(app):\n    @app.route(\"/\")\n    def index():\n        return f\"Hello {flask.request.args[name]}!\"",
+   "count": 0
+  },
+  {
+   "code": "def f():\n    return (\n        \"\"\"\n        some text\n        lorem ipsum\n        \"\"\"\n    )\n",
+   "count": 0
+  },
+  {
+   "code": "s = \"wot?\"\nprint(f\"\\x1b[1m{s}\\x1b[0m\")\nprint(f\"\\x1b[2m{s}\\x1b[0m\")\n",
+   "count": 0
+  },
+  {
+   "code": "def percent_conditional(line):\n    return f\"{line}\\n\" if not line.endswith('\\\\') or line.endswith('\\\\\\\\') else f\"{line[:-1]}\"\n\nmsg = \"{}\\nPossible solutions:\\n{}\".format(msg, \"\\n\".join(solutions))\n\ndef format_values(node, values):\n    return '{}({})'.format(node.__class__.__name__, ',\\n    '.join(values))\n\nself.assertEqual(len(expected), len(result),\n    \"Unmatched lines. Got:\\n{}\\nExpected:\\n{}\".format(\"\\n\".join(expected), \"\\n\".join(result)))\n\nself.assertEqual(len(result_lines), len(expected_lines),\n    \"Unmatched lines. Got:\\n{}\\nExpected:\\n{}\".format(\"\\n\".join(result_lines), expected))\n\ncode.putln(\"\\\"{}.{}\\\",\".format(self.full_module_name, classname.replace('\"', '')))\n\n\"{}\".format(b\"\\n\")\n",
+   "count": 0
+  },
+  {
+   "code": "a = \"aaa\"\nx = f\"a\\xa0{a}\"\n",
+   "count": 0
+  },
+  {
+   "code": "n = 5\nx = f\"{n} hello, world\"\nx = f\"{n} non-str {True}\"\nx = f\"{n} with quote \\\"x\\\"\"\n\nx = \"hello, world\"\nx = \"with quote \\\"x\\\"\"\n",
+   "count": 0
+  },
+  {
+   "code": "from __future__ import print_function\n\nfrom pallets_sphinx_themes import get_version\nfrom pallets_sphinx_themes import ProjectLink\n\n# Project --------------------------------------------------------------\n\nproject = \"Flask\"\ncopyright = \"2010 Pallets Team\"\nauthor = \"Pallets Team\"\nrelease, version = get_version(\"Flask\")\n\n# General --------------------------------------------------------------\n\nmaster_doc = \"index\"\nextensions = [\n    \"sphinx.ext.autodoc\",\n    \"sphinx.ext.intersphinx\",\n    \"sphinxcontrib.log_cabinet\",\n    \"pallets_sphinx_themes\",\n]\nintersphinx_mapping = {\n    \"python\": (\"https://docs.python.org/3/\", None),\n    \"werkzeug\": (\"http://werkzeug.pocoo.org/docs/\", None),\n    \"click\": (\"https://click.palletsprojects.com/\", None),\n    \"jinja\": (\"http://jinja.pocoo.org/docs/\", None),\n    \"itsdangerous\": (\"https://itsdangerous.palletsprojects.com/\", None),\n    \"sqlalchemy\": (\"https://docs.sqlalchemy.org/\", None),\n    \"wtforms\": (\"https://wtforms.readthedocs.io/en/stable/\", None),\n    \"blinker\": (\"https://pythonhosted.org/blinker/\", None),\n}\n\n# HTML -----------------------------------------------------------------\n\nhtml_theme = \"flask\"\nhtml_theme_options = {\"index_sidebar_logo\": False}\nhtml_context = {\n    \"project_links\": [\n        ProjectLink(\"Donate to Pallets\", \"https://palletsprojects.com/donate\"),\n        ProjectLink(\"Flask Website\", \"https://palletsprojects.com/p/flask/\"),\n        ProjectLink(\"PyPI releases\", \"https://pypi.org/project/Flask/\"),\n        ProjectLink(\"Source Code\", \"https://github.com/pallets/flask/\"),\n        ProjectLink(\"Issue Tracker\", \"https://github.com/pallets/flask/issues/\"),\n    ]\n}\nhtml_sidebars = {\n    \"index\": [\"project.html\", \"localtoc.html\", \"versions.html\", \"searchbox.html\"],\n    \"**\": [\"localtoc.html\", \"relations.html\", \"versions.html\", \"searchbox.html\"],\n}\nsinglehtml_sidebars = {\"index\": [\"project.html\", \"versions.html\", \"localtoc.html\"]}\nhtml_static_path = [\"_static\"]\nhtml_favicon = \"_static/flask-icon.png\"\nhtml_logo = \"_static/flask-logo-sidebar.png\"\nhtml_title = f\"Flask Documentation ({version})\"\nhtml_show_sourcelink = False\nhtml_domain_indices = False\n\n# LaTeX ----------------------------------------------------------------",
+   "count": 0
+  },
+  {
+   "code": "raise NoAppException(\n            f'Detected multiple Flask applications in module \"{var1}\". Use \"FLASK_APP={var2}:name\" to specify the correct one.'\n        )",
+   "count": 0
+  },
+  {
+   "code": "var = 12345\nmy_string = f\"Hello {var}\"\nvar2 = \"Some Value\"",
+   "count": 0
+  },
+  {
+   "code": "var, a, b = 12345, 4, \"Beew\"\nmy_string = f\"Hello {var} {a} {b}\"  # Ok\nvar2 = \"Some Value\"",
+   "count": 0
+  },
+  {
+   "code": "var, a, b = 12345, 4, \"Beew\"\nmy_string = (\"Hello %s %s %s\".format(var,\n                                     a,\n                                     b # <<<< busted\n                                     ))\nvar2 = \"Some Value\"",
+   "count": 0
+  },
+  {
+   "code": "d = {\"something\": \"what\"}\n\nresp = f\"\"\"\n{d['something']}\n\"\"\"\n\nprint(resp)",
+   "count": 0
+  },
+  {
+   "code": "raise ValueError(f'Arithmetic on {self.__class__} objects with different sizes not permitted')\n",
+   "count": 0
+  },
+  {
+   "code": "length, quotes = 15, 20\ntext = f\"\"\"\n# This is an example configuration\n# Hash lines are comments\n\n[flake8]\nmax-line-length={length}\ninline-quotes=\"{quotes}\"\n\"\"\"",
+   "count": 0
+  },
+  {
+   "code": "app = _app_ctx_stack.top.app\nbanner = \"Python %s on %s\\nApp: %s [%s]\\nInstance: %s\" % (\n    sys.version,\n    sys.platform,\n    app.import_name,\n    app.env,\n    app.instance_path,\n)\nctx = {}",
+   "count": 1
+  },
+  {
+   "code": "raise NoAppException(\n            'Detected multiple Flask applications in module \"{module}\". Use '\n            '\"FLASK_APP={module}:name\" to specify the correct '\n            'one.'.format(module=module.__name__)\n        )",
+   "count": 0
+  },
+  {
+   "code": "var, f, cada_bra, what = 1, 2, 3, 4\na = f\"my string {var}, but also {f} and {cada_bra}\"\nb = f\"my string {var}, but also {what} and {cada_bra}\"\n",
+   "count": 0
+  },
+  {
+   "code": "var, f, cada_bra, what = 1, 2, 3, 4\na = f\"my string {cada_bra} and {f}\"\n",
+   "count": 0
+  },
+  {
+   "code": "\"\"\" This is a beautiful python module in that it is very simple.\"\"\"\n\na = 2 + 2",
+   "count": 0
+  },
+  {
+   "code": "\"\"\" This is a beautiful python module in that it is very simple.\"\"\"\n\na = 2 + 2 # result should be 4",
+   "count": 0
+  },
+  {
+   "code": "print('\\40'.join(('a', 'b')))\n",
+   "count": 0
+  },
+  {
+   "code": "a = 2\nb = \"wuga\"\nprint(f'{a:f} {b}')\n",
+   "count": 0
+  },
+  {
+   "code": "a, b, c, d, e = tuple(range(5))\nprint(f'{a:f} {b:f} {c:e} {d:g} {e}')",
+   "count": 0
+  },
+  {
+   "code": "d = 10\na = f'{d ** 2}'\nprint(a)",
+   "count": 0
+  },
+  {
+   "code": "a = 'abra'\nprint(f'{a!r} {a} {a!a}')\n\n\n",
+   "count": 0
+  },
+  {
+   "code": "foo = f\"{di1['key']},{di2['key']}\"\n",
+   "count": 0
+  },
+  {
+   "code": "def set_filename_version(filename, version_number, pattern):\n    changed = []\n\n    def inject_version(match):\n        before, old, after = match.groups()\n        changed.append(True)\n        return before + version_number + after\n\n    with open(filename) as f:\n        contents = re.sub(\n            rf\"^(\\s*{pattern}\\s*=\\s*')(.+?)(')\",\n            inject_version,\n            f.read(),\n            flags=re.DOTALL | re.MULTILINE,\n        )",
+   "count": 0
+  },
+  {
+   "code": "def log_exception(self, exc_info):\n    \"\"\"Logs an exception.  This is called by :meth:`handle_exception`\n    if debugging is disabled and right before the handler is called.\n    The default implementation logs the exception as error on the\n    :attr:`logger`.\n\n    .. versionadded:: 0.8\n    \"\"\"\n    self.logger.error(\n        f\"Exception on {request.path} [{request.method}]\", exc_info=exc_info\n    )",
+   "count": 0
+  },
+  {
+   "code": "var = 5\na = f\"my string {var}\"\n",
+   "count": 0
+  },
+  {
+   "code": "var = 5 # comment 1\na = f\"my string {var}\" # comment 2\n",
+   "count": 0
+  },
+  {
+   "code": "\"\"\"\nThis is an awesome source file that should under no conditions get ruined!\n\"\"\"\n\nvar = 5\na = f\"my string {var}\"\n",
+   "count": 0
+  },
+  {
+   "code": "var = 5\na = f\"my string {var:.2f}\"",
+   "count": 0
+  },
+  {
+   "code": "var = 5\na = f\"{{}}my string {var:.2f}{{}}\"\nprint(a)\n",
+   "count": 0
+  },
+  {
+   "code": "var = 5\nif var % 3 == 0:\n    a = f\"my string {var}\"\n",
+   "count": 0
+  },
+  {
+   "code": "var = 5\na = f\"Test: {var}\"\n",
+   "count": 0
+  },
+  {
+   "code": "var = 5\na = f\"Test: {var}\" # cool formatting!\n",
+   "count": 0
+  },
+  {
+   "code": "var = 5\na = f\"{var} my string\"\n",
+   "count": 0
+  },
+  {
+   "code": "f\"echo '{self.FLUSH_CMD}'\\n\"\nf\"echo '{self.FLUSH_CMD}'\\\\n\"\nf\"echo '{self.FLUSH_CMD}'\\n\"\nf\"echo '{self.FLUSH_CMD}'\\\\n\"\n",
+   "count": 0
+  },
+  {
+   "code": "f\"echo '{self.FLUSH_CMD}'\\r\"\nf\"echo '{self.FLUSH_CMD}'\\\\r\"\nf\"echo '{self.FLUSH_CMD}'\\r\"\nf\"echo '{self.FLUSH_CMD}'\\\\r\"\n",
+   "count": 0
+  },
+  {
+   "code": "f\"echo '{self.FLUSH_CMD}'\\t\"\nf\"echo '{self.FLUSH_CMD}'\\\\t\"\nf\"echo '{self.FLUSH_CMD}'\\t\"\nf\"echo '{self.FLUSH_CMD}'\\\\t\"\n",
+   "count": 0
+  },
+  {
+   "code": "OUTPUT_FILE = \"{home}/{name}.txt\"\nSTATUS_CMD = f\"echo \\\"SCREEN_EXIT:$?\\\" ; echo \\\"{END_OF_STREAM}\\\"\\n\"\nENTRY_CMD = f\"echo \\\"{START_STREAM}\\\"\"\nSCREEN_TIMEOUT = 3600  # seconds",
+   "count": 0
+  },
+  {
+   "code": "var, f, cada_bra, what = 1, 2, 3, 4\na = f\"my string {var}, but also {f} and {cada_bra}\"\n",
+   "count": 0
+  },
+  {
+   "code": "# Should not change unless explicitly requested\nfoo = \"x\".join([1, 2, 3])\n",
+   "count": 0
+  },
+  {
+   "code": "mean_ser, mean_per = 1, 2\nscores = f\"{'Crossvalidation':>50} \\t {mean_ser:>6} \\t {mean_per:>6}\\n\"\nprint(scores)\n",
+   "count": 0
+  },
+  {
+   "code": "lst = [2, 3, 4]\na = f\"beautiful numbers to follow: {' '.join(lst)}\"\na = \"beautiful numbers to follow: {}\".format(\"\\t\".join(lst))\na = f\"beautiful numbers to follow: {' '.join(lst)}\"\na = \"beautiful numbers to follow: {}\".format('\\n'.join(lst))\n\n\nb = f\"beautiful numbers to follow: {' '.join(lst)}\"\nb = 'beautiful numbers to follow: {}'.format(\"\\n\".join(lst))\nb = f\"beautiful numbers to follow: {' '.join(lst)}\"\nb = f\"beautiful numbers to follow: {','.join(lst)}\"",
+   "count": 0
+  },
+  {
+   "code": "latex_documents = [\n    (master_doc, f\"Flask-{version}.tex\", html_title, author, \"manual\")\n]",
+   "count": 0
+  },
+  {
+   "code": "x, y = 1, 2\na = f'line 1 {x} line 2 {y}'\n\nb = f'line 1234567890 1234567890 1234567890 1234567890 {x} 1234567890 1234567890 1234567890 1234567890  {y}'",
+   "count": 0
+  },
+  {
+   "code": "print(f\"Feels like: {data['main']['feels_like']}°F\")\n",
+   "count": 0
+  },
+  {
+   "code": "print(f\"Feels like: {data['main']['feels_like']}\\\\u00B0F\")\n",
+   "count": 0
+  },
+  {
+   "code": "#!/usr/bin/env python3\n\nblah1 = 'a'\nblah2 = blah1 \\\n        + 'b'\nprint(blah2)",
+   "count": 0
+  },
+  {
+   "code": "CR = '\\r'\nLF = '\\n'\nwriter.write(CR + LF + \"Goodbye\" + CR + LF)\n",
+   "count": 0
+  },
+  {
+   "code": "\"\"\"\nThis module will be transformed... into something far greater.\n\"\"\"\n\na = \"Hello\"\n\nmsg = a[0] + \" World\"  # awesome comment, right?\n\nprint(msg)\n",
+   "count": 0
+  },
+  {
+   "code": "res = \"here\" + r\"\\there\"\n\n",
+   "count": 0
+  },
+  {
+   "code": "thing = '1'\nprint('The line limit we set is 120 and this line is more than 87 characters long' + thing)\n",
+   "count": 0
+  },
+  {
+   "code": "#!/usr/bin/env python3\n\"\"\"\nThis module will be transformed... into something far greater.\n\"\"\"\n\nx = 42\nthing = 1\notherThing = '2'\nprint('blah{}'.format(thing) + 'blah' + otherThing + \"is %f\" % x)",
+   "count": 1
+  },
+  {
+   "code": "\"\"\"\nThis module will be transformed... into something far greater.\n\"\"\"\n\na = \"Hello\"\n\nmsg = a + \" World\"\n\nmsg2 = \"Finally, \" + a + \" World\"\n\n\nprint(msg)\n",
+   "count": 0
+  },
+  {
+   "code": "print( dumps(data) + \"\\n\" )",
+   "count": 0
+  },
+  {
+   "code": "@property\ndef static_url_path(self):\n    \"\"\"The URL prefix that the static route will be accessible from.\n\n    If it was not configured during init, it is derived from\n    :attr:`static_folder`.\n    \"\"\"\n    if self._static_url_path is not None:\n        return self._static_url_path\n\n    if self.static_folder is not None:\n        basename = os.path.basename(self.static_folder)\n        return \"/\" + basename.rstrip(123)",
+   "count": 0
+  },
+  {
+   "code": "@property\ndef static_url_path(self):\n    \"\"\"The URL prefix that the static route will be accessible from.\n\n    If it was not configured during init, it is derived from\n    :attr:`static_folder`.\n    \"\"\"\n    if self._static_url_path is not None:\n        return self._static_url_path\n\n    if self.static_folder is not None:\n        basename = os.path.basename(self.static_folder)\n        return (\"/\" + basename).rstrip(\"/\")",
+   "count": 0
+  },
+  {
+   "code": "#!/usr/bin/env python3\n\nblah1 = 'a'\nblah2 = (blah1\n         + 'b')\nprint(blah2)",
+   "count": 0
+  },
+  {
+   "code": "#!/usr/bin/env python3\n\nimport re\n\n\nspam = \"%s %s\" % (\"foo\", \"bar\")\n\nindividual_tests = [\n    re.sub(r\"\\.py$\", \"\", test) + \".py\" for test in [\"a.py\", \"b.py\", \"c*\"] if not test.endswith('*')\n]\n\nspam2 = \"%s %s\" % (\"foo\", \"bar\")\n\n",
+   "count": 2
+  },
+  {
+   "code": "#!/usr/bin/env python3\n\nblah1 = 'a'\nblah2 = f\"{blah1}b\"\nprint(blah2)",
+   "count": 0
+  },
+  {
+   "code": "CR = '\\r'\nLF = '\\n'\nwriter.write(f\"{CR}{LF}Goodbye{CR}{LF}\")\n",
+   "count": 0
+  },
+  {
+   "code": "\"\"\"\nThis module will be transformed... into something far greater.\n\"\"\"\n\na = \"Hello\"\n\nmsg = f\"{a[0]} World\"  # awesome comment, right?\n\nprint(msg)\n",
+   "count": 0
+  },
+  {
+   "code": "res = \"here\\\\there\"\n\n",
+   "count": 0
+  },
+  {
+   "code": "thing = '1'\nprint(f\"The line limit we set is 120 and this line is more than 87 characters long{thing}\")\n",
+   "count": 0
+  },
+  {
+   "code": "#!/usr/bin/env python3\n\"\"\"\nThis module will be transformed... into something far greater.\n\"\"\"\n\nx = 42\nthing = 1\notherThing = '2'\nprint(f\"blah{thing}blah{otherThing}is {x:f}\")",
+   "count": 0
+  },
+  {
+   "code": "\"\"\"\nThis module will be transformed... into something far greater.\n\"\"\"\n\na = \"Hello\"\n\nmsg = f\"{a} World\"\n\nmsg2 = f\"Finally, {a} World\"\n\n\nprint(msg)\n",
+   "count": 0
+  },
+  {
+   "code": "print( f\"{dumps(data)}\\n\" )",
+   "count": 0
+  },
+  {
+   "code": "@property\ndef static_url_path(self):\n    \"\"\"The URL prefix that the static route will be accessible from.\n\n    If it was not configured during init, it is derived from\n    :attr:`static_folder`.\n    \"\"\"\n    if self._static_url_path is not None:\n        return self._static_url_path\n\n    if self.static_folder is not None:\n        basename = os.path.basename(self.static_folder)\n        return f\"/{basename.rstrip(123)}\"",
+   "count": 0
+  },
+  {
+   "code": "@property\ndef static_url_path(self):\n    \"\"\"The URL prefix that the static route will be accessible from.\n\n    If it was not configured during init, it is derived from\n    :attr:`static_folder`.\n    \"\"\"\n    if self._static_url_path is not None:\n        return self._static_url_path\n\n    if self.static_folder is not None:\n        basename = os.path.basename(self.static_folder)\n        return (f\"/{basename}\").rstrip(\"/\")",
+   "count": 0
+  },
+  {
+   "code": "#!/usr/bin/env python3\n\nblah1 = 'a'\nblah2 = f\"{blah1}b\"\nprint(blah2)",
+   "count": 0
+  },
+  {
+   "code": "#!/usr/bin/env python3\n\nimport re\n\n\nspam = f\"foo bar\"\n\nindividual_tests = [\n    re.sub(r\"\\.py$\", \"\", test) + \".py\" for test in [\"a.py\", \"b.py\", \"c*\"] if not test.endswith('*')\n]\n\nspam2 = f\"foo bar\"\n\n",
+   "count": 0
+  }
+ ]
+}

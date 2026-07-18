@@ -1,0 +1,78 @@
+[
+ {
+  "code": "\"hello {}\".format(x)",
+  "count": 1,
+  "candidates": [
+   "'hello {}'.format(x)"
+  ]
+ },
+ {
+  "code": "template = 'Hello {0}'\nresult = template.format(name)",
+  "count": 0,
+  "candidates": []
+ },
+ {
+  "code": "'{}'.format(a)\n'{}'.format(b)",
+  "count": 2,
+  "candidates": [
+   "'{}'.format(a)",
+   "'{}'.format(b)"
+  ]
+ },
+ {
+  "code": "f\"{a}\".format(x)",
+  "count": 0,
+  "candidates": []
+ },
+ {
+  "code": "b\"{}\".format(x)",
+  "count": 0,
+  "candidates": []
+ },
+ {
+  "code": "\"Hello {}\".format(d[\"a{}\".format(key)])",
+  "count": 1,
+  "candidates": [
+   "'Hello {}'.format(d['a{}'.format(key)])"
+  ]
+ },
+ {
+  "code": "x = '{}'.format(1)\ny = '%s' % z\nw = '{}'.format(2)",
+  "count": 2,
+  "candidates": [
+   "'{}'.format(1)",
+   "'{}'.format(2)"
+  ]
+ },
+ {
+  "code": "print('{} and {}'.format(a, b))\n'{}'.format(c)",
+  "count": 2,
+  "candidates": [
+   "'{} and {}'.format(a, b)",
+   "'{}'.format(c)"
+  ]
+ },
+ {
+  "code": "no_candidates_here = 1 + 2",
+  "count": 0,
+  "candidates": []
+ },
+ {
+  "code": "obj.format(x)",
+  "count": 0,
+  "candidates": []
+ },
+ {
+  "code": "'{}'.upper().format(x)",
+  "count": 0,
+  "candidates": []
+ },
+ {
+  "code": "['{}'.format(a), '{}'.format(b)]",
+  "count": 2,
+  "candidates": [
+   "'{}'.format(a)",
+   "'{}'.format(b)"
+  ]
+ }
+]

@@ -1,24 +1,99 @@
 name: Build
 on:
+  workflow_dispatch:
   pull_request:
     branches:
     - master
   push:
     branches:
     - master
+    - rust-2.0
     tags:
     - v*
+
 jobs:
-  build:
+  wheels:
+    name: wheel ${{ matrix.platform.name }}
+    runs-on: ${{ matrix.platform.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          # smoke: the built wheel can run natively on this runner.
+          - { name: linux-x86_64,  runner: ubuntu-latest,  target: x86_64,  smoke: true }
+          - { name: linux-aarch64, runner: ubuntu-latest,  target: aarch64, smoke: false }
+          # compat musllinux_1_2: with the default "auto", maturin tags musl
+          # builds as manylinux — pip on Alpine/musl never matches those, and
+          # the aarch64 filename collides with the glibc wheel's.
+          - { name: musl-x86_64,   runner: ubuntu-latest,  target: x86_64-unknown-linux-musl, smoke: false, compat: musllinux_1_2 }
+          - { name: musl-aarch64,  runner: ubuntu-latest,  target: aarch64-unknown-linux-musl, smoke: false, compat: musllinux_1_2 }
+          # Cross-compiled on arm64: macos-13 (Intel) runners are scarce/phasing out.
+          - { name: macos-x86_64,  runner: macos-latest,   target: x86_64,  smoke: false }
+          - { name: macos-arm64,   runner: macos-latest,   target: aarch64, smoke: true }
+          - { name: windows-x64,   runner: windows-latest, target: x64,     smoke: true }
+    steps:
+      - uses: actions/checkout@v6
+      - uses: PyO3/maturin-action@v1
+        with:
+          target: ${{ matrix.platform.target }}
+          args: --release --out dist
+          sccache: true
+          manylinux: ${{ matrix.platform.compat || 'auto' }}
+      - name: Smoke test wheel
+        if: matrix.platform.smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION=$(grep -m1 '^version' Cargo.toml | cut -d'"' -f2)
+          python3 -m venv smoke-venv
+          if [ -e smoke-venv/Scripts/pip.exe ]; then BIN=smoke-venv/Scripts; else BIN=smoke-venv/bin; fi
+          "$BIN/pip" install --quiet dist/*.whl
+          "$BIN/flynt" --version | grep -x "$VERSION"
+          "$BIN/python" -m flynt --version | grep -x "$VERSION"
+          "$BIN/python" -c "
+          import flynt
+          try:
+              flynt.main
+          except AttributeError as e:
+              assert 'flynt<2' in str(e), e
+          else:
+              raise SystemExit('import flynt should not expose an API')
+          "
+          printf 'a = "%%s" %% x\n' > smoke.py
+          "$BIN/flynt" -q smoke.py
+          grep -q 'a = f"{x}"' smoke.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wheels-${{ matrix.platform.name }}
+          path: dist
+
+  sdist:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-python@v6
+      - uses: PyO3/maturin-action@v1
         with:
-          python-version: "3.11"
-      - run: pip install build
-      - run: python -m build
-      - uses: actions/upload-artifact@v5
+          command: sdist
+          args: --out dist
+      - uses: actions/upload-artifact@v4
         with:
-          name: dist
-          path: dist/*
+          name: sdist
+          path: dist
+
+  publish:
+    # Publishes to PyPI on version tags only, via trusted publishing
+    # (configure the GitHub publisher for project "flynt" on PyPI first).
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [wheels, sdist]
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist

@@ -16,9 +16,17 @@ F-Strings:
 
 > Not only are they more readable, more concise, and less prone to error than other ways of formatting, but they are also faster!
 
+### flynt 2.0: now a native binary 🦀
+
+Since 2.0, flynt is implemented in Rust and ships as a native executable in the
+PyPI wheel — same CLI and output as 1.x, **10–20× faster**, with parallel file
+processing. The Python import API was removed (CLI-only); if you need
+`import flynt`, pin `flynt<2`. Details: [CHANGELOG](CHANGELOG.md),
+[RESULTS.md](RESULTS.md), [DIVERGENCES.md](DIVERGENCES.md).
+
 ### Installation
 
-`pip install flynt`. It requires Python version 3.9+.
+`pip install flynt` (2.0 betas: `pip install --pre flynt`).
 
 ### Usage
 
@@ -43,7 +51,7 @@ usage: flynt [-h] [-v | -q] [--no-multiline | -ll LINE_LENGTH] [-d |
              [--report]
              [src ...]
 
-flynt v.1.0.3
+flynt v.2.0.0-beta.1
 
 positional arguments:
   src                   source file(s) or directory (or a single `-`
@@ -81,14 +89,11 @@ options:
   -tc, --transform-concats
                         Replace string concatenations (defined as +
                         operations involving string literals) with
-                        f-strings. Available only if flynt is
-                        installed with a 3.9+ interpreter.
+                        f-strings.
   -tj, --transform-joins
                         Replace static joins (where the joiner is a
                         string literal and the joinee is a static-
-                        length list) with f-strings. Available only
-                        if flynt is installed with a 3.9+
-                        interpreter.
+                        length list) with f-strings.
   -f, --fail-on-change  Fail when changing files (for linting
                         purposes)
   -a, --aggressive      Include conversions with potentially changed
@@ -126,12 +131,17 @@ add flynt to your [pre-commit](https://www.pre-commit.com) hooks.
 Add a new section to `.pre-commit-config.yaml`:
 ```
 -   repo: https://github.com/ikamensh/flynt/
-    rev: ''
+    rev: '1.0.6'
     hooks:
     -   id: flynt
 ```
 
 This will run flynt on all modified files before committing.
+
+> **Note (2.0 beta):** keep `rev: '1.0.6'` for now. Pointing `rev` at a 2.0
+> checkout makes pre-commit build flynt from source, which requires a Rust
+> toolchain. A wheel-backed hook (installing the prebuilt binary from PyPI)
+> will ship with the final 2.0 release.
 
 You can skip conversion of certain lines by adding `# noqa [: anything else] flynt [anything else]` or `# flynt: skip`
 
