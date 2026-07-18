@@ -22,8 +22,11 @@ jobs:
           # smoke: the built wheel can run natively on this runner.
           - { name: linux-x86_64,  runner: ubuntu-latest,  target: x86_64,  smoke: true }
           - { name: linux-aarch64, runner: ubuntu-latest,  target: aarch64, smoke: false }
-          - { name: musl-x86_64,   runner: ubuntu-latest,  target: x86_64-unknown-linux-musl, smoke: false }
-          - { name: musl-aarch64,  runner: ubuntu-latest,  target: aarch64-unknown-linux-musl, smoke: false }
+          # compat musllinux_1_2: with the default "auto", maturin tags musl
+          # builds as manylinux — pip on Alpine/musl never matches those, and
+          # the aarch64 filename collides with the glibc wheel's.
+          - { name: musl-x86_64,   runner: ubuntu-latest,  target: x86_64-unknown-linux-musl, smoke: false, compat: musllinux_1_2 }
+          - { name: musl-aarch64,  runner: ubuntu-latest,  target: aarch64-unknown-linux-musl, smoke: false, compat: musllinux_1_2 }
           # Cross-compiled on arm64: macos-13 (Intel) runners are scarce/phasing out.
           - { name: macos-x86_64,  runner: macos-latest,   target: x86_64,  smoke: false }
           - { name: macos-arm64,   runner: macos-latest,   target: aarch64, smoke: true }
@@ -35,7 +38,7 @@ jobs:
           target: ${{ matrix.platform.target }}
           args: --release --out dist
           sccache: true
-          manylinux: auto
+          manylinux: ${{ matrix.platform.compat || 'auto' }}
       - name: Smoke test wheel
         if: matrix.platform.smoke
         shell: bash
