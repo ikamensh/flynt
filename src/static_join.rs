@@ -32,7 +32,7 @@ pub fn join_candidates(code: &str, state: &mut State) -> Vec<Chunk> {
     };
     let mut hound = JoinHound::default();
     hound.visit_body(&parsed.syntax().body);
-    hound.victims.sort_by_key(|chunk| chunk.range.start());
+    crate::chunk::sort_dedup(&mut hound.victims);
     state.join_candidates += hound.victims.len();
     hound.victims
 }

@@ -34,7 +34,7 @@ pub fn concat_candidates(code: &str, state: &mut State) -> Vec<Chunk> {
     };
     let mut hound = ConcatHound::default();
     hound.visit_body(&parsed.syntax().body);
-    hound.victims.sort_by_key(|chunk| chunk.range.start());
+    crate::chunk::sort_dedup(&mut hound.victims);
     state.concat_candidates += hound.victims.len();
     hound.victims
 }

@@ -21,3 +21,16 @@ impl Chunk {
         Self { node, range }
     }
 }
+
+/// Sort candidates into source order and drop same-range duplicates.
+///
+/// ruff 0.14.11's `walk_stmt` visits an `elif` clause's test expression twice
+/// (once inline in the `StmtIf` arm, once more via `walk_elif_else_clause`),
+/// so a candidate inside an `elif` condition gets collected twice — and a
+/// double-applied edit duplicates the replacement text in the output. An
+/// identical range is by construction the same node, so deduping is safe for
+/// every collector.
+pub fn sort_dedup(chunks: &mut Vec<Chunk>) {
+    chunks.sort_by_key(|c| (c.range.start(), c.range.end()));
+    chunks.dedup_by_key(|c| c.range);
+}

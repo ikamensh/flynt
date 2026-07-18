@@ -61,9 +61,7 @@ pub fn call_candidates(code: &str, state: &mut State) -> Vec<Chunk> {
 
     // Source order (top-to-bottom, left-to-right). Evaluation-order traversal can
     // yield a different sequence for siblings; CodeEditor requires source order.
-    finder
-        .candidates
-        .sort_by_key(|c| (c.range.start(), c.range.end()));
+    crate::chunk::sort_dedup(&mut finder.candidates);
 
     state.call_candidates += finder.candidates.len();
     finder.candidates

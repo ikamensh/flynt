@@ -39,6 +39,28 @@ Running both tools over the full Django 1.11 tree (defaults):
   6 cosmetic + 1 knock-on where the 2-chars-shorter output fits the 88-char
   limit). Everything else is byte-identical, including counters and report.
 
+## Extended differential: 3 corpora × 3 flag variants (pre-release)
+
+Before the 2.0.0b1 release, both tools were run over Django 1.11 (2,398
+files), rich (213 files, modern 3.8+ syntax), and cpython 3.13 `Lib/`
+(2,549 files incl. match statements, PEP 604/695/701 syntax and
+intentionally malformed test data), each with defaults, `-a`, and
+`-tc -tj`. For every run: file trees compared byte-for-byte, every changed
+file re-parsed with CPython 3.13 (`ast.parse`), and flynt-rs re-run to prove
+idempotency (second run changes nothing).
+
+- **Every file-level difference falls in a documented DIVERGENCES.md class**
+  (redundant parens #2, `%c` refusal, nested-spec conversions #5, 1.x
+  whole-file bail-out #6). No parse failures, no idempotency failures.
+- This sweep caught one real bug before release: ruff 0.14.11's `walk_stmt`
+  visits `elif` condition expressions twice, so candidates there were
+  converted twice (`elif f"{opt}="f"{opt}=" in ...` on `Lib/getopt.py`).
+  Fixed by same-range dedup in `chunk::sort_dedup`; regression-tested for
+  all four pipelines in `harness/test_elif_dedup.py`.
+- A 24-case CLI parity matrix (exit codes, stdout/stderr, tree effects for
+  help/version/errors/stdin/config/notebook/etc.) matches 1.0.6 modulo
+  documented cosmetics; notebook JSON output is byte-identical (indent=1).
+
 ## Speedup (hyperfine, Apple Silicon)
 
 flynt-rs processes files in parallel (rayon; `RAYON_NUM_THREADS` to cap).

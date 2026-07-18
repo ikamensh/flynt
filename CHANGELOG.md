@@ -13,10 +13,14 @@
 * **pre-commit:** keep `rev: '1.0.6'` during the beta — a 2.0 `rev` builds
   from source and needs a Rust toolchain. A wheel-backed hook comes with 2.0
   final.
-* Behavior differences vs 1.x, both intentional (see DIVERGENCES.md):
-  converted f-strings no longer contain redundant parentheses around generator
-  expressions or unary `not`; everything else is byte-identical.
-* Includes the `%c` conversion refusal fix (#254 / issue #253).
+* Behavior differences vs 1.x, all intentional (see DIVERGENCES.md):
+  converted f-strings no longer contain redundant parentheses (generator
+  expressions, unary `not`, tuple displays); `%c` conversions are refused
+  (upstream #254 / issue #253 — 1.x's `f"{x:c}"` breaks on `str` input);
+  nested format-spec placeholders (`"{:.{p}f}".format(v, p=prec)`) now
+  convert; a transformer error no longer silently discards all other
+  conversions in the same file. Everything else is byte-identical over the
+  Django 1.11, cpython 3.13 Lib, and rich corpora.
 
 #### v.1.0.6
 

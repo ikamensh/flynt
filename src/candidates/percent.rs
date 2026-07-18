@@ -58,10 +58,9 @@ pub fn percent_candidates(code: &str, state: &mut State) -> Vec<Chunk> {
         finder.visit_stmt(stmt);
     }
 
-    state.percent_candidates += finder.candidates.len();
-
     let mut chunks = finder.candidates;
-    chunks.sort_by_key(|c| c.range.start());
+    crate::chunk::sort_dedup(&mut chunks);
+    state.percent_candidates += chunks.len();
     chunks
 }
 

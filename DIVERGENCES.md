@@ -26,7 +26,10 @@ states), so flynt-rs treats it as a regular golden sample. No divergence.
   parens around a sole-argument genexp).
 - **Same family**: CPython also parenthesizes a unary `not` used as a BoolOp
   operand (`a and (not b)`); flynt-rs emits `a and not b`. One occurrence in
-  the Django corpus (`django/http/request.py`).
+  the Django corpus (`django/http/request.py`). Also tuple displays before a
+  conversion: `"_Feature" + repr((a, b, c))` renders as `f"_Feature{a, b, c!r}"`
+  (cpython `Lib/__future__.py`); `!r` binds to the whole expression, so the
+  value is identical to the parenthesized form.
 - **Why better**: output is what a human would write; semantics identical.
   Not pinned by any original golden file (verified: full original integration
   suite passes). 16 of 2400 files on a Django 1.11 differential run differ,
@@ -56,5 +59,26 @@ states), so flynt-rs treats it as a regular golden sample. No divergence.
   embedding); usage-on-error is emitted on a single line.
 - Same words, different line breaks; exit codes and error text identical
   (verified by a 24-case CLI parity matrix against 1.0.6).
+
+## 5. Nested format-spec placeholders in `.format()` are converted
+
+- **Python flynt**: refuses `"{:.{p}f}".format(v, p=prec)` (keyword used only
+  inside a nested format spec); worse, for the duplicate-use case
+  `"{x:{x}}".format(x=a)` it emits `f'{a:{{x}}}'`, which raises at runtime
+  (the spec becomes the literal text `{x}`).
+- **flynt 2.0**: converts the safe cases (`f"{v:.{prec}f}"` — found on
+  `rich/filesize.py`) and refuses the duplicate-use case like every other
+  duplicate, so no broken output.
+- **Why better**: more conversions, all semantics-preserving; the one case
+  1.x "converted" was a bug.
+
+## 6. No whole-file bail-outs on transformer errors
+
+- **Python flynt**: an internal exception in one pipeline (e.g. its static-join
+  transformer crashing on cpython's `Lib/smtplib.py` under `-tc -tj`) is caught
+  per *file*, so the file is silently left with **zero** conversions — including
+  the safe `%`-format ones other pipelines had already produced.
+- **flynt 2.0**: pipelines refuse per candidate; a refused candidate never
+  discards the rest of the file's conversions.
 
 (Entries below added during integration burn-down.)
