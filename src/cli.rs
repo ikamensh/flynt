@@ -348,6 +348,7 @@ fn strip_linesep(s: &str) -> String {
 fn state_from_args(a: &Args) -> State {
     State {
         aggressive: a.aggressive,
+        verbose: a.verbose,
         dry_run: a.dry_run,
         stdout: a.stdout,
         len_limit: Some(a.line_length.max(0) as usize),
@@ -459,6 +460,38 @@ fn set_bool(dst: &mut bool, v: &toml::Value) {
     }
 }
 
+/// Effective options as one compact `key=value` line (config already merged).
+/// Replaces 1.x's `Namespace(...)` dump; internal bookkeeping is not shown.
+fn format_options(a: &Args) -> String {
+    let exclude = match &a.exclude {
+        Some(v) => format!("{v:?}"),
+        None => "None".to_string(),
+    };
+    format!(
+        "verbose={} quiet={} no_multiline={} line_length={} dry_run={} stdout={} \
+         string={} transform_percent={} transform_format={} transform_concats={} \
+         transform_joins={} fail_on_change={} aggressive={} exclude={} notebook={} \
+         report={} src={:?}",
+        a.verbose,
+        a.quiet,
+        a.no_multiline,
+        a.line_length,
+        a.dry_run,
+        a.stdout,
+        a.string,
+        a.transform_percent,
+        a.transform_format,
+        a.transform_concats,
+        a.transform_joins,
+        a.fail_on_change,
+        a.aggressive,
+        exclude,
+        a.notebook,
+        a.report,
+        a.src,
+    )
+}
+
 fn print_usage() {
     println!(
         "usage: flynt [-h] [-v | -q] [--no-multiline | -ll LINE_LENGTH] \
@@ -484,7 +517,10 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
-  -v, --verbose         run with verbose output
+  -v, --verbose         run with verbose output: list modified
+                        files and the reason each skipped candidate
+                        was not converted (-vv also lists files
+                        scanned without changes)
   -q, --quiet           run without outputting statistics to stdout
   --no-multiline        convert only single line expressions
   -ll, --line-length LINE_LENGTH
@@ -606,7 +642,7 @@ pub fn run(args: Vec<String>) -> i32 {
         println!("{salutation}");
     }
     if parsed.verbose > 0 {
-        println!("Using following options: {parsed:?}");
+        println!("Using options: {}", format_options(&parsed));
     }
     if parsed.dry_run {
         println!("Running flynt in dry-run mode. No files will be changed.");

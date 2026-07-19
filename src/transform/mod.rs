@@ -25,9 +25,10 @@ pub fn transform_chunk(node: &Expr, state: &mut State, quote_type: QuoteType) ->
     let (converted, changed) = match fstringify::fstringify_node(node, state) {
         Ok(v) => v,
         // ConversionRefused and every other error collapse to the same
-        // observable result (only the Python log level differs).
-        Err(_) => {
+        // observable result; the reason surfaces as a -v diagnostic.
+        Err(e) => {
             state.invalid_conversions += 1;
+            state.pend_reason(e.reason());
             return (String::new(), false);
         }
     };
@@ -44,8 +45,9 @@ pub fn transform_chunk(node: &Expr, state: &mut State, quote_type: QuoteType) ->
 
     let new_code = match fixup_transformed(converted, Some(qt)) {
         Ok(c) => c,
-        Err(_) => {
+        Err(e) => {
             state.invalid_conversions += 1;
+            state.pend_reason(e.reason());
             return (String::new(), false);
         }
     };
@@ -53,6 +55,7 @@ pub fn transform_chunk(node: &Expr, state: &mut State, quote_type: QuoteType) ->
     // Safety: the generated snippet must be valid Python (Python: `ast.parse`).
     if ruff_python_parser::parse_module(&new_code).is_err() {
         state.invalid_conversions += 1;
+        state.pend_reason("conversion produced invalid code; not converted");
         return (String::new(), false);
     }
 

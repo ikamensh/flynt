@@ -81,4 +81,24 @@ states), so flynt-rs treats it as a regular golden sample. No divergence.
 - **flynt 2.0**: pipelines refuse per candidate; a refused candidate never
   discards the rest of the file's conversions.
 
+## 7. Verbose output redesigned (2.0.0b2)
+
+- **Python flynt `-v`**: prints `fstringifying <file>...modified|no change`
+  for every file, refusal reasons with **no file/line attribution** (they
+  float between file lines and can't be matched to code), the raw argparse
+  `Namespace(...)` dump, and full tracebacks for internal refusal exceptions.
+- **flynt 2.0**: `-v` prints a compact effective-options line, the modified
+  files, and located diagnostics — `file:line: reason` — so every message is
+  clickable and greppable; `-vv` additionally lists files scanned without
+  changes (for debugging discovery/excludes). The line-length diagnostic
+  names the smallest `-ll` value that would convert the chunk instead of
+  1.x's literal `Pass -ll 999 ... (999 is an example)` placeholder. No
+  tracebacks, ever — internal refusals are one-line reasons like any other.
+- **Why better**: at 2.0 speed (whole corpora in fractions of a second, files
+  processed in parallel) the per-file lines' 1.x role as a progress indicator
+  is obsolete; what verbose output is actually for is attribution ("which
+  files changed") and actionable explanation ("why was this skipped, which
+  flag changes that"). Default (non-verbose) output is unchanged and remains
+  pinned by the golden suite.
+
 (Entries below added during integration burn-down.)

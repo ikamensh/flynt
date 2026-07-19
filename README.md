@@ -51,7 +51,7 @@ usage: flynt [-h] [-v | -q] [--no-multiline | -ll LINE_LENGTH] [-d |
              [--report]
              [src ...]
 
-flynt v.2.0.0-beta.1
+flynt v.2.0.0-beta.2
 
 positional arguments:
   src                   source file(s) or directory (or a single `-`
@@ -59,7 +59,10 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
-  -v, --verbose         run with verbose output
+  -v, --verbose         run with verbose output: list modified
+                        files and the reason each skipped candidate
+                        was not converted (-vv also lists files
+                        scanned without changes)
   -q, --quiet           run without outputting statistics to stdout
   --no-multiline        convert only single line expressions
   -ll, --line-length LINE_LENGTH

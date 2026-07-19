@@ -87,6 +87,16 @@ fn clen(s: &str) -> usize {
     s.chars().count()
 }
 
+/// Compress a source chunk to a one-line, ≤40-char preview for diagnostics.
+fn short_snippet(s: &str) -> String {
+    let one_line = s.split_whitespace().collect::<Vec<_>>().join(" ");
+    if clen(&one_line) <= 40 {
+        one_line
+    } else {
+        format!("{}…", cslice(&one_line, 0, 39))
+    }
+}
+
 /// Chars `[start, end)` of `s` (Python `s[start:end]`, out-of-range clamped).
 fn cslice(s: &str, start: usize, end: usize) -> String {
     s.chars()
@@ -356,6 +366,10 @@ impl<'a> EditEngine<'a> {
             };
 
         let (mut converted, changed) = transform_func(&chunk.node, state, quote_type);
+        // Reasons recorded inside the transform get this chunk's location.
+        for reason in std::mem::take(&mut state.pending_reasons) {
+            state.diag(c.start_line + 1, reason);
+        }
         if changed && !escape_map.is_empty() && !is_raw {
             converted = apply_unicode_escape_map(&converted, escape_map);
         }
@@ -365,7 +379,7 @@ impl<'a> EditEngine<'a> {
             let end_line = c.start_line + contract_lines; // == c.end_line
             let end_c = self.byte_to_char_idx(end_line, c.end_col);
             let rest = cslice_from(self.src_lines[end_line], end_c);
-            self.maybe_replace(c, contract_lines, converted, rest, is_raw);
+            self.maybe_replace(c, contract_lines, converted, rest, is_raw, state);
         }
     }
 
@@ -378,11 +392,16 @@ impl<'a> EditEngine<'a> {
         mut converted: String,
         rest: String,
         is_raw: bool,
+        state: &mut State,
     ) {
         let start_char_col = self.byte_to_char_idx(c.start_line, c.start_col);
 
         // `len(line) <= len_limit - start_col`  <=>  `len(line) + start_col <= len_limit`
         // (rearranged to stay non-negative when len_limit is 0 or usize::MAX).
+        // `needed_limit` is the smallest -ll value that would let this chunk
+        // convert — reported in the -v diagnostic instead of 1.x's
+        // "Pass -ll 999 (999 is an example)" placeholder.
+        let mut needed_limit = 0usize;
         let lines_fit = if contract_lines != 0 {
             let snippet_quote = get_quote_type(&self.code_in_chunk(c)).ok();
             if matches!(
@@ -393,21 +412,35 @@ impl<'a> EditEngine<'a> {
                     converted.split("\\n").map(|s| s.to_string()).collect();
                 let last = lines.len() - 1;
                 lines[last].push_str(&rest);
-                let fit = lines
+                needed_limit = lines
                     .iter()
-                    .all(|l| clen(l) + start_char_col <= self.len_limit);
+                    .map(|l| clen(l) + start_char_col)
+                    .max()
+                    .unwrap_or(0);
                 converted = converted.replace("\\n", "\n");
-                fit
+                needed_limit <= self.len_limit
             } else {
-                clen(&converted) + clen(&rest) + start_char_col <= self.len_limit
+                needed_limit = clen(&converted) + clen(&rest) + start_char_col;
+                needed_limit <= self.len_limit
             }
         } else {
             true
         };
 
         if contract_lines != 0 && !lines_fit {
-            // Python logs a warning here; message content is not asserted by any
-            // golden test and no log crate is a dependency, so this is a no-op.
+            // In no-multiline mode (len_limit == 0) skipping is the point;
+            // only a real limit earns a diagnostic.
+            if self.len_limit > 0 {
+                state.diag(
+                    c.start_line + 1,
+                    format!(
+                        "Skipping conversion of {} due to line length limit {}; pass -ll {} to convert it.",
+                        short_snippet(&self.code_in_chunk(c)),
+                        self.len_limit,
+                        needed_limit
+                    ),
+                );
+            }
             return;
         }
 

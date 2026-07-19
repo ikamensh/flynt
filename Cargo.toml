@@ -1,6 +1,6 @@
 [package]
 name = "flynt-rs"
-version = "2.0.0-beta.1"
+version = "2.0.0-beta.2"
 edition = "2021"
 description = "flynt: convert %-format and .format() strings to f-strings (Rust implementation)"
 license = "MIT"

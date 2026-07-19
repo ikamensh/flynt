@@ -4,7 +4,7 @@ Run it as ``flynt`` or ``python -m flynt``. If you need the 1.x API
 (``flynt.api``, ``flynt.code_editor``, ...), pin ``flynt<2``.
 """
 
-__version__ = "2.0.0b1"
+__version__ = "2.0.0b2"
 
 
 def __getattr__(name):

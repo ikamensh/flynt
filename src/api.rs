@@ -167,7 +167,14 @@ fn process_file_buffered(
     let (encoding, bom) = encoding_by_bom(&raw);
     let contents = decode(&raw, encoding, bom.as_deref())?; // invalid unicode -> skip
 
-    let result = fstringify_code_with(&contents, state, filename, t)?;
+    let result = fstringify_code_with(&contents, state, filename, t);
+    emit_verbose(
+        filename,
+        state,
+        result.as_ref().is_some_and(|r| r.n_changes > 0),
+        printed,
+    );
+    let result = result?;
     let new_code = &result.content;
 
     if state.dry_run && result.n_changes > 0 {
@@ -222,6 +229,11 @@ fn fstringify_notebook_with(
         }
     }
 
+    // Diagnostic lines are relative to individual cell sources, not the
+    // .ipynb file — drop them rather than print misleading locations.
+    state.diagnostics.clear();
+    emit_verbose(filename, state, changes > 0, printed);
+
     let new_dump = json_dump(&nb);
     if state.dry_run && changes > 0 {
         writeln!(
@@ -242,6 +254,28 @@ fn fstringify_notebook_with(
         new_length: new_dump.chars().count(),
         content: new_dump,
     })
+}
+
+/// Verbose reporting for one processed file, written into its output buffer:
+/// `-v` lists modified files and per-candidate refusal diagnostics
+/// (`file:line: reason`); `-vv` also lists files scanned without changes.
+/// Always drains the per-file diagnostic buffers so the file's fork of
+/// `State` leaves nothing behind.
+fn emit_verbose(filename: &str, state: &mut State, changed: bool, printed: &mut String) {
+    let mut diags = std::mem::take(&mut state.diagnostics);
+    state.pending_reasons.clear();
+    if state.verbose == 0 || state.quiet {
+        return;
+    }
+    if changed {
+        writeln!(printed, "fstringifying {filename}...modified").unwrap();
+    } else if state.verbose >= 2 {
+        writeln!(printed, "fstringifying {filename}...no change").unwrap();
+    }
+    diags.sort_by_key(|d| d.line);
+    for d in diags {
+        writeln!(printed, "{filename}:{}: {}", d.line, d.message).unwrap();
+    }
 }
 
 /// `json.dumps(nb, ensure_ascii=False, indent=1)` equivalent. One-space
@@ -372,6 +406,7 @@ pub fn run_files_with(files: &[String], state: &mut State, t: &Transforms) -> Ru
 fn fork_options(state: &State) -> State {
     State {
         quiet: state.quiet,
+        verbose: state.verbose,
         aggressive: state.aggressive,
         dry_run: state.dry_run,
         stdout: state.stdout,

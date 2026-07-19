@@ -1,3 +1,12 @@
+#### v.2.0.0b2 (unreleased)
+
+* Verbose output redesigned (see DIVERGENCES.md #7): `-v` shows modified
+  files and per-candidate refusal diagnostics as `file:line: reason`;
+  `-vv` also lists files scanned without changes. The line-length skip
+  message now names the actual `-ll` value that would allow the conversion.
+  No more `Namespace(...)`/struct dumps or tracebacks. Default output is
+  unchanged.
+
 #### v.2.0.0b1
 
 * **flynt is now a native binary, rewritten in Rust.** `pip install flynt` ships
