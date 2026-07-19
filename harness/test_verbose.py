@@ -43,11 +43,12 @@ def test_default_output_has_no_verbose_lines(tmp_path):
 
 
 def test_line_length_diag_reports_real_ll_value(tmp_path):
-    # Converted form is `abc = f"{x} {y}"` (16 chars incl. the 6-char indent
-    # of column 0... the chunk starts at col 6), so -ll 10 refuses it and the
-    # diagnostic must name 16 — the smallest limit that would convert.
+    # Converted form is `abc = f"{x} {y}"` — 16 chars: the chunk starts at
+    # col 6, the converted snippet is 10 chars. So -ll 10 refuses it and the
+    # diagnostic must name 16, the smallest limit that would convert. LF is
+    # pinned: a CRLF file measures one char wider (the \r), and honestly so.
     (tmp_path / "long.py").write_text(
-        'abc = "{} {}".format(\n    x,\n    y,\n)\n', encoding="utf-8"
+        'abc = "{} {}".format(\n    x,\n    y,\n)\n', encoding="utf-8", newline="\n"
     )
     out = run_cli(["-v", "-ll", "10", str(tmp_path)]).stdout
     assert "long.py:1: Skipping conversion of" in out
