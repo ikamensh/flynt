@@ -28,9 +28,9 @@ use crate::state::State;
 /// Conversion characters accepted after an optional `[hlL]` length modifier.
 /// Mirrors `FORMATS = "diouxXeEfFgGcrsa"`.
 const FORMATS: &str = "diouxXeEfFgGcrsa";
-/// `integer_specificers = "dxXob"` — the specifiers for which a `.` in the
-/// prefix is rewritten to `0`. (`b` is unreachable from the input regex.)
-const INTEGER_SPECIFIERS: &str = "dxXob";
+/// Integer conversions whose precision cannot be represented by an f-string
+/// format specifier without changing width or sign handling.
+const INTEGER_SPECIFIERS: &str = "diouxX";
 
 // --- public API ------------------------------------------------------------
 
@@ -242,11 +242,14 @@ fn formatted_value(
         ));
     }
 
-    // The `.`-to-`0` rewrite happens *before* i/u are translated to d, so it
-    // applies to an original d/o/x/X but not to an original i/u.
-    let mut prefix = prefix.to_string();
-    if INTEGER_SPECIFIERS.contains(conv) {
-        prefix = prefix.replace('.', "0");
+    // Percent precision counts digits excluding the sign, separately from
+    // field width. Replacing `.` with `0` conflates the two (e.g. %4.4x
+    // becomes :404x), and zero padding alone differs for negative integers.
+    if INTEGER_SPECIFIERS.contains(conv) && prefix.contains('.') {
+        return Err(FlyntError::ConversionRefused(
+            "Skipping integer precision - fstrings behave differently from % formatting."
+                .to_string(),
+        ));
     }
 
     // conversion_methods: r -> !r, a -> !a, s -> (no flag).
@@ -276,7 +279,7 @@ fn formatted_value(
                     .to_string(),
             ));
         }
-        return ast_formatted_value(val, Some(&prefix), conv_method);
+        return ast_formatted_value(val, Some(prefix), conv_method);
     }
 
     // translate_conversion_types: i, u -> d.
@@ -299,7 +302,7 @@ fn formatted_value(
             }
         }
         // The explicit `d` type is removed: fmt_str = prefix + "".
-        return ast_formatted_value(val, Some(&prefix), None);
+        return ast_formatted_value(val, Some(prefix), None);
     }
 
     // e/E/f/F/g/G/c: append the type after the prefix.
@@ -653,8 +656,24 @@ mod tests {
         assert_eq!(ok("'%03X' % x", 0), "f\"{x:03X}\"");
         assert_eq!(ok("'%.03f' % x", 0), "f\"{x:.03f}\"");
         assert_eq!(ok("'%f' % x", 0), "f\"{x:f}\"");
-        // integer specifier: `.` in prefix rewritten to `0`.
-        assert_eq!(ok("'%.3x' % x", 0), "f\"{x:03x}\"");
+    }
+
+    #[test]
+    fn integer_precision_refused_all_aggressive_levels() {
+        for aggressive in [0, 1, 2] {
+            for conv in INTEGER_SPECIFIERS.chars() {
+                for prefix in [".4", "4.4", "+8.4", "-8.4", "08.4", ".0", "."] {
+                    let source = format!("'%{prefix}{conv}' % (value,)");
+                    assert!(
+                        matches!(
+                            tf(&source, aggressive),
+                            Err(FlyntError::ConversionRefused(_))
+                        ),
+                        "source={source:?}, aggressive={aggressive}"
+                    );
+                }
+            }
+        }
     }
 
     #[test]

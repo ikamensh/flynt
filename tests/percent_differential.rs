@@ -42,6 +42,14 @@ fn transform_matches_flynt() {
         let aggressive = entry["aggressive"].as_u64().unwrap() as u8;
         let kind = entry["kind"].as_str().unwrap();
         let got = run(src, aggressive);
+        // The reference's integer-precision conversion is unsafe for negative
+        // values. Keep the original fixture, but assert the documented #255
+        // divergence at every aggressive level (see DIVERGENCES.md).
+        if src == "'%.3x' % x" {
+            assert!(matches!(got, Err(FlyntError::ConversionRefused(_))));
+            n += 1;
+            continue;
+        }
         match kind {
             "ok" => {
                 let expected = entry["result"].as_str().unwrap();

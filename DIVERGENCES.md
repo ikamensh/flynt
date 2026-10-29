@@ -101,4 +101,16 @@ states), so flynt-rs treats it as a regular golden sample. No divergence.
   flag changes that"). Default (non-verbose) output is unchanged and remains
   pinned by the golden suite.
 
+## 8. Integer precision in percent formatting is not converted
+
+- **Python flynt**: rewrites a precision dot to a zero for `d`, `o`, `x`, and
+  `X`. For example, `%4.4x` becomes `:404x`, changing four zero-padded digits
+  into a 404-character field. Even without a width, `%.4x` and `:04x` differ
+  for negative integers because percent precision excludes the sign.
+- **flynt 2.0**: leaves integer-precision formatting (`d`, `i`, `u`, `o`, `x`,
+  `X`) unchanged at every aggressive level. Precision and field width do not
+  have equivalent general f-string format specifiers. Integer formats without
+  precision and floating-point formats are unaffected.
+- **Why better**: avoids silently changing runtime results (issue #255).
+
 (Entries below added during integration burn-down.)
